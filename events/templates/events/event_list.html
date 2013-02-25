@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    {% block calendar %}
+        <div id="calendar">
+            <iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showPrint=0&amp;showCalendars=0&amp;showTz=0&amp;height=400&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=telemark.styret%40gmail.com&amp;color=%232952A3&amp;ctz=Europe%2FOslo" style=" border-width:0 " width="690" height="400" frameborder="0" scrolling="no"></iframe>
+        </div>
+    {% endblock %}
+
+    {% block events %}
+
+        {% for event in event_list %}
+
+            <div class="event">
+                {% include "events/event_header.html" %}
+
+                <p>{{ event.summary|safe }} <a class="read_more" href="{{ event.get_absolute_url }}">Les mer &rarr;</a></p>
+
+                {% include "events/event_registration.html" %}
+
+            </div>
+
+        {% empty %}
+
+            <p>Vi har ikke planlagt noe i tiden fremover enda, det kommer sikkert noe snart!</p>
+
+        {% endfor %}
+
+    {% endblock %}
+
+{% endblock %}

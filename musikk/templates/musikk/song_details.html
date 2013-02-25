@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+
+{% block content %}
+    <h1>{{ song.artist }} - {{ song.title }}</h1>
+
+    <progress min=0 max=100 value={{ song.popularity }}>{{ song.popularity }}%</progress>
+
+    <button class="vote_up" id="{{ song.id }}">
+        <a href="{% url 'vote_on_song' song.id %}">Stem opp!</a>
+    </button>
+
+{% endblock %}
+
+{% block extrascripts %}
+    <script>
+        $(".vote_up").click(function(){
+            var song_id = $(this).attr('id');
+            vote(song_id);
+        })
+    </script>
+    {% include 'musikk/musikk.js' %}
+{% endblock %}

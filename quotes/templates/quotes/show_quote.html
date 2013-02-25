@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'quotes/single_quote.html' %}
+
+    <br style="clear:both;">
+
+    {% include 'social_plugins.html' with thing=quote %}
+{% endblock %}

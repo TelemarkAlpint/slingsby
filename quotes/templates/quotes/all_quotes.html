@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Minneverdige sitater</h1>
+
+    <p>
+        Dette er en samling uttalelser av eller om våre medlemmer vi syns fortjener å bevares for ettertiden, enten på grunn
+        av deres skarpe obersvasjoner, logiske kortslutninger eller snertne kommentarer.
+    </p>
+
+    <p>
+        Har du hørt noen si noe som bør bevares? Foreslå det som en quote da vel! Sørg for at du er logget inn, og klikk
+        på det lille "+"-tegnet ved quotes i sidebaren.
+    </p>
+
+    <ul class="quote_list">
+    {% for quote in all_quotes %}
+        <li>
+            {% include 'quotes/single_quote.html' %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

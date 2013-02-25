@@ -1,0 +1,23 @@
+{% load url from future %}
+{% load shorten %}
+{% load macros %}
+
+<!DOCTYPE html>
+<html>
+<head>
+{% block header %}
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ title|default:"NTNUI Telemark/Alpint" }}{% endblock %}</title>
+
+    {% block extrastyles %}{% endblock %}
+    {% block preload_scripts %}{% endblock %}
+{% endblock %}
+</head>
+
+<body>
+
+<div id="wrapper">
+    <header class="non-select">
+
+</body>
+</html>

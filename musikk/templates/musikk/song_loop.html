@@ -1,0 +1,19 @@
+{% load shorten %}
+
+<li data-filter="{{ song.artist }} {{ song.title }}">
+    <a href="{{ song.get_absolute_url }}" class="song_rating">
+        <div class="rating" style="width: 30px;border: 1px solid black;height: 10px;display: inline-block;">
+            <div style="width: {{ song.popularity }}%;background-color: green;height: 10px;">
+            </div>
+        </div>
+    </a>
+    <span title="{{ song.artist }}">{{ song.artist|shorten:19 }}</span> -
+    <a href="{{ song_dir }}{{ song.filename|urlencode }}.mp3" title="{{ song.title }}">{{ song.title|truncatechars:20 }}</a>
+    {% if user.is_authenticated %}
+        {% if song.id not in songs_voted_on %}
+            <img id="{{ song.id }}" alt="Stem opp!" title="Stem opp {{ song.title }}!" class="clickable song_vote_button" src="{{ GRAPHICS_DIR }}up.png">
+        {% else %}
+            <img src="{{ GRAPHICS_DIR }}check.png">
+        {% endif %}
+    {% endif %}
+</li>

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for gear in all_gear %}
+        <div class="gear">
+            <h2>{{ gear.name }}</h2>
+            <span class="gear_id">{{ gear.gear_id }}</span>
+            <p>
+                {{ gear.description }}
+            </p>
+
+            {% for res in gear.reservations %}
+                <p>
+                    {{ res }}
+                </p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}

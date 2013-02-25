@@ -1,0 +1,50 @@
+application: telemarkalpint
+version: 58
+runtime: python27
+api_version: 1
+threadsafe: false
+
+builtins:
+- remote_api: on
+
+inbound_services:
+- warmup
+
+handlers:
+- url: /favicon\.ico
+  static_files: static/favicon.ico
+  upload: static/favicon\.ico
+
+- url: /robots\.txt
+  static_files: static/robots.txt
+  upload: static/robots\.txt
+
+- url: /_ah/queue/deferred
+  script: djangoappengine.deferred.handler.application
+  login: admin
+
+- url: /_ah/stats/.*
+  script: djangoappengine.appstats.application
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
+- url: /tasks/.*
+  script: djangoappengine.main.application
+  login: admin
+
+- url: /.*
+  script: djangoappengine.main.application
+  secure: optional
+
+error_handlers:
+    - error_code: timeout
+      file: templates/timeout.html
+
+    - error_code: over_quota
+      file: templates/over_quota.html
+
+libraries:
+- name: pycrypto
+  version: "2.6"

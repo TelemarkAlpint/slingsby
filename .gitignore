@@ -1,0 +1,15 @@
+.DS_Store
+*.pyc
+.project
+.pydevproject
+.settings/*
+secrets.py
+auth/*
+TODO.txt
+
+autoload/*
+dbindexer/*
+django/*
+djangotoolbox/*
+djangoappengine/*
+docutils/*

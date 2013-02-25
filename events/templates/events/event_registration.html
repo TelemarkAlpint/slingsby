@@ -1,0 +1,44 @@
+{% if event.has_registration %}
+    {% if user.is_authenticated %}
+        <form class="inline" action="{% url upload.toggle_event_participation %}" method="post">
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+            {% if event.is_open_for_registration %}
+                {% if event.registration_closes %}
+                    <p class="event_info">Påmeldingen stenger {{ event.registration_closes_as_string }}.</p>
+                {% endif %}
+                {% if user.id in event.get_participants_id %}
+                    {% if event.binding_registration %}
+                        <input type="submit" value="Du er påmeldt!" disabled>
+                    {% else %}
+                        <input type="submit" value="Meld meg av!">
+                    {% endif %}
+                {% else %}
+                    {% if event.is_full %}
+                        <span>Beklager, eventet er fullt.</span>
+                    {% else %}
+                        {% if event.is_registration_closed %}
+                            <span>Påmeldingen har stengt.</span>
+                        {% endif %}
+                        {% if event.binding_registration %}
+                            <input type="submit" value="Meld meg på (bindende!)">
+                        {% else %}
+                            <input type="submit" value="Meld meg på!">
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if event.is_registration_closed %}
+                    <p class="event_info">Påmeldingen har stengt.</p>
+                {% endif %}
+                {% if event.binding_registration %}
+                    <input type="submit" value="Meld meg på! (bindende)" disabled>
+                {% else %}
+                    <input type="submit" value="Meld meg på!" disabled>
+                {% endif %}
+            {% endif %}
+        </form>
+
+    {% else %}
+        <span class="event_info">Du er ikke innlogget. <a href="{{ LOGIN_URL }}">Logg inn</a> med NTNUI-brukeren din for å melde deg på events.</span>
+    {% endif %}
+{% endif %}

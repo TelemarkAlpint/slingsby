@@ -1,0 +1,29 @@
+                <div class="eventheader">
+                    <h2>{{ event.name }} </h2>
+                    {% if event.has_registration %}
+                        {% if event.has_opened %}
+                            {% if not event.number_of_spots %}
+                                <span class="event_extras">Antall påmeldte: {{ event.num_participants }}</span>
+                            {% else %}
+                                <meter max="{{ event.number_of_spots }}" value="{{ event.num_participants }}" title="{{ event.num_participants }} / {{ event.number_of_spots}}">
+                                    {#{ event.num_participants }} / {{ event.number_of_spots}#}
+                                </meter>
+                                    {% comment %}
+                                    <div class="progressbar" style="display: none">
+                                        <div class="progress" style="width:{{ event.percentage_filled }}%" >
+                                            <div class="progresstext">
+                                                {{ event.num_participants }} / {{ event.number_of_spots}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endcomment %}
+
+                            {% endif %}
+                        {% else %}
+                            <span class="event_extras">Påmeldingen åpner {{ event.registration_opens_as_string }}<span class="countdown"></span></span>
+                        {% endif %}
+                    {% else %}
+                        <span class="event_extras">Åpent for alle!</span>
+                    {% endif %}
+                </div>
+                <span class="event_info"> {{ event.location }} - {{ event.duration_as_string }}.</span>

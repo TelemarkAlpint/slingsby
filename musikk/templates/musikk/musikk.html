@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+
+    <p>
+        Her kan du være med å bestemme musikken som snurres på mandagstrening! Hvis du har en syykt fet låt som er helmaks å trene til,
+        foreslå den nedenfor, så skal vi se om vi finner den! Spillelistene oppdateres omtrent hver uke.
+    </p>
+
+    <p>
+        På trening kjører vi 40-45s intervaller, så optimalt sett bør sangene ha hvertfall ett så langt "bra" parti.
+    </p>
+
+    {% if user.is_authenticated %}
+        <h2>Foreslå ny sang</h2>
+            <form action="{% url 'musikk.views.upload_song' %}" method="post">
+                {{ song_form.as_p }}
+                <input class="submit" type="submit" value="Foreslå!" >
+            </form>
+    {% endif %}
+
+    {% if user.is_staff and new_songforms %}
+        <h2>Nye forslag</h2>
+
+        <p>
+        Dette er sangene som er foreslått, men som vi ikke har fått tak i enda. Hvis du sitter på en av disse, finn et parti på omtrent
+        40-45s som er bra å trene til, og lagre dette partiet som både MP3 og OGG (teknisk ansvarlig kan hjelpe til med dette).
+        Deretter er det bare å trykke inn filnavnet, uten filendelsen, så vil den bli tilgjengelig for folk å stemme på.
+        Startpunkt i sekunder er det som er foreslått av brukeren, og trenger overhodet ikke å stemme, det er kun til hjelp når du skal lage fila.
+        </p>
+
+        {% for form in new_songforms %}
+            <form class="inline" action="{% url 'approve_song' form.instance.id %}" method="post">
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Registrer sang">
+            </form>
+
+            <form class="inline" action="{% url 'delete_song' form.instance.id %}" method="post">
+                <input type="submit" value="Slett forslag">
+            </form>
+
+        {% endfor %}
+    {% endif %}
+
+    <h1>Sanger på topp akkurat nå</h1>
+
+    <table id="toplist">
+    {% for song in top_songs %}
+        <tr>
+        <td class="left">
+            <a href="{{ song.get_absolute_url }}" class="song_rating">
+                <div class="rating" style="width: 40px;border: 1px solid black;height: 10px;display: inline-block;">
+                    <div style="width: {{ song.popularity }}%;background-color: green;height: 10px;"></div>
+                    </div>
+            </a>
+            {{ song.artist }} - {{ song.title }}
+        </td>
+        <td class="right">
+            <audio controls preload="auto">
+                <source src="{{ song_dir }}{{ song.filename|urlencode }}.ogg" type="audio/ogg">
+                <source src="{{ song_dir }}{{ song.filename|urlencode }}.mp3" type="audio/mp3">
+                Nettleseren din støtter dessverre ikke HTML5-lyd. Vi beklager dette, men kan varmt anbefale både
+                <a href="https://www.google.com/chrome">Chrome</a> og <a href="http://firefox.no/">Firefox</a>.
+            </audio>
+        </td>
+        </tr>
+    {% empty %}
+        <li>Ingen sanger har fått nok stemmer til å komme på topplista enda.</li>
+    {% endfor %}
+    </table>
+
+    <p>Lista oppdateres én gang om dagen.</p>
+
+
+    <h1>Alle sanger</h1>
+
+    <p>
+        Dette er alle sangene dere kan stemme på. Savner du noe? Foreslå flere på toppen av siden da vel! Den grønne baren angir <a href="#rating">sangens rating</a>, logg inn for å avgi din stemme!
+        Du kan stemme én gang på hver sang hver dag. Ratingen oppdateres én gang om dagen.
+    </p>
+
+    <input id="song_filter" type="text" placeholder="Søk i sangene" data-children="div.multicolumn ul li ul li">
+
+    <div class="multicolumn">
+        <ul><li>
+        <ul>
+        {% for song in all_songs_first_half %}
+            {% include "musikk/song_loop.html" %}
+        {% empty %}
+            <li>Ingen sanger er lastet opp enda!</li>
+        {% endfor %}
+        <li id="song_filter_empty" style="display: none">Beklager, ingen sanger matchet søket ditt!</li>
+        </ul>
+        </li><li>
+        <ul>
+        {% for song in all_songs_second_half %}
+            {% include "musikk/song_loop.html" %}
+        {% endfor %}
+        </ul>
+        </li></ul>
+    </div>
+    <p id="song_help_text">
+        Ratingen beregnes slik:<br>
+        Når en sang mottar en stemme, økes den sangens rating med 1, mens alle andre sangers rating blir ganget med
+        en eksponentialfaktor på 0.9917. Dette gjør at nye stemmer vektlegges mer enn gamle, og gjør det
+        lettere å få inn nye sanger på lista. <br>
+        En stemme er dermed halvert i verdi når det har kommet inn 0.5 = 0.9917<sup>x</sup>, x = ln(0.5)/ln(0.9917) ≈ 83 nye stemmer.
+    </p>
+{% endblock %}
+
+{% block extrascripts %}
+    <script>
+        {% include 'musikk/musikk.js' %}
+    </script>
+{% endblock %}

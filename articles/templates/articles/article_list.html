@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load disqus_identifier %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    {% for article in article_list %}
+        {% if user.is_superuser or article.is_visible %}
+            <article>
+                {% include 'articles/article_view_heading.html' %}
+                {{ article.content|safe }}
+                <span>Del og diskuter: </span><a href="{{ article.get_absolute_url }}#disqus_thread">Del og diskuter &rarr;</a></span>
+                {% include 'articles/article_view_ending.html' %}
+            </article>
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}
+
+{% block extrascripts %}
+    <script type="text/javascript">
+        var disqus_shortname = 'telemarkalpint';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+
+{% endblock %}

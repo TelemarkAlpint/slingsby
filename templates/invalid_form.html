@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <p>
+    Beklager, men opplastingen din feilet på ett eller flere punkter. Vennligst korriger dette i skjemaet under.
+    </p>
+    <form action="{{ upload_handler_url }}" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Send inn">
+    </form>
+
+{% endblock %}

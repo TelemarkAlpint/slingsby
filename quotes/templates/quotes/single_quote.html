@@ -1,0 +1,14 @@
+{# Make sure the context has a "quote" object #}
+
+<div class="quote sidebar_box" data-quote-id="{{ quote.id }}">
+    {% if quote.topic %}
+        <h3>Om {{ quote.topic }}</h3>
+    {% endif %}
+    <div class="quote_content">
+        <pre>{{ quote.quote }}</pre>
+    </div>
+    <span class="quote_author">- {{ quote.author}}</span>
+    {% if user.is_authenticated and suggest_button %}
+        <span id="suggest_quote">+</span>
+    {% endif %}
+</div>

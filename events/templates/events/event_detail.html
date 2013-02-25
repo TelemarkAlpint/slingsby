@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block og_description %}{{ event.summary }}{% endblock %}
+{% block og_title %}{{ event.name }}{% endblock %}
+
+{% block content %}
+    <div class="event">
+        {% include "events/event_header.html" %}
+
+        {% autoescape off %}
+            <p>
+                {{ event.summary }}
+            </p>
+
+            {{ event.description }}
+
+        {% endautoescape %}
+
+        {% include "events/event_registration.html" %}
+
+        {% if user.is_authenticated and event.has_registration %}
+            <div class="participants">
+                <h4>Påmeldte</h4>
+                <ul>
+                {% for user in event.get_participating_users %}
+                    <li> {{ user.profile.full_name_or_username }}</li>
+                {% empty %}
+                    <li><i>Ingen påmeldte enda!</i></li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if user.is_superuser and event.has_registration %}
+            <p>E-post-adresser: {{ event.get_participating_emails|join:", " }}</p>
+        {% endif %}
+
+     </div>
+
+     {% include 'social_plugins.html' with thing=event %}
+
+{% endblock %}
+
+{% block extrascripts %}
+    {% if event.use_countdown %}
+        <script>
+          $(function(){
+            var count = {{ event.seconds_to_registration_opening }};
+            countdown = setInterval(function(){
+              if (count == 0) {
+                history.go(0);
+                clearInterval(countdown);
+              }
+              if (count > 59){
+                  var sec = count % 60;
+                  var min = Math.floor(count / 60);
+                  $("span.countdown").html(' (' + min + 'min og ' + sec + ' sekunder til!)');
+              }else {
+                  $("span.countdown").html(' (' + count + ' sekunder til!)');
+              }
+              count--;
+            }, 1000);
+          });
+        </script>
+    {% endif %}
+{% endblock %}
