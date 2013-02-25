@@ -10,17 +10,10 @@ from events.models import Event, EventFullException, \
 from general import cache, feedback, reverse_with_params, add_params
 from quotes.models import QuoteForm
 from musikk.models import SongSuggestionForm, ReadySongForm, Song
-from simple_forum.models import CategoryForm, PostForm
 from users.models import UserProfileForm
 import logging
 
 logger = logging.getLogger(__name__)
-
-def upload_category(request):
-    return upload(request, CategoryForm, reverse('upload.upload_category'), reverse('forum'))
-
-def upload_post(request):
-    return upload(request, PostForm, reverse('upload.upload_post'), reverse('forum'))
 
 def upload_quote(request):
     redirect = reverse_with_params(feedback_code=feedback.QUOTE_THANKS)
