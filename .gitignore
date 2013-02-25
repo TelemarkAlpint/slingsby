@@ -6,10 +6,3 @@
 secrets.py
 auth/*
 TODO.txt
-
-autoload/*
-dbindexer/*
-django/*
-djangotoolbox/*
-djangoappengine/*
-docutils/*
