@@ -3,7 +3,7 @@ Slingsby
 
 A Django-powered webengine!
 
-Slingsby was also the first man to conquer Store Vengetind in Romsdalen, along with hundreds of summits
+[Slingsby](http://en.wikipedia.org/wiki/William_Slingsby) was also the first man to conquer Store Vengetind in Romsdalen, along with hundreds of summits
 in Jotunheimen. One of the  hardest ski routes in Romsdalen, down the east side of Store Vengetind, is
 named after his ascent.
 
