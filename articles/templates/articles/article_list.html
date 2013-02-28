@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load disqus_identifier %}
+{% load url from future %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -8,7 +9,7 @@
 
     {% for article in articles %}
         {% if user.is_superuser or article.is_visible %}
-            <article>
+            <article data-datetime="{{ article.published_date.isoformat }}">
                 {% include 'articles/article_view_heading.html' %}
                 {{ article.content|safe }}
                 <span>Del og diskuter: </span><a href="{{ article.get_absolute_url }}#disqus_thread">Del og diskuter &rarr;</a></span>
@@ -18,10 +19,15 @@
 
     {% endfor %}
 
+    <img id="loading_image" src="{{ STATIC_DIR }}gfx/wait.gif" alt="Loading more articles..." style="display: none">
+
 {% endblock %}
 
 {% block extrascripts %}
-    <script type="text/javascript">
+    <script src="{{ STATIC_DIR }}js/handlebars.runtime-1.0.0.js"></script>
+    <script src="{{ STATIC_DIR }}js/handlebars_templates/articles.js"></script>
+
+    <script>
         var disqus_shortname = 'telemarkalpint';
         (function () {
             var s = document.createElement('script'); s.async = true;
@@ -29,6 +35,38 @@
             s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
             (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
         }());
-    </script>
 
+        // Load more articles if approaching the end
+        $(function(){
+            $(document).scroll(function (e) {
+
+                var intBottomMargin = 500; //Pixels from bottom when script should trigger
+
+                //if less than intBottomMargin px from bottom
+                if ($(window).scrollTop() >= $(document).height() - $(window).height() - intBottomMargin) {
+                    loadAjaxData();
+                }
+
+            });
+        });
+
+        function loadAjaxData(){
+            var loading_image = $("#loading_image");
+            if (loading_image.is(":hidden")){
+                loading_image.show();
+                var last_article_datetime = $('article:last').attr("data-datetime");
+                var url = "{% url 'all_articles' %}?limit=5&before=" + last_article_datetime;
+                $.ajax(url, {
+                    dataType: "json",
+                    success: function(data, status, xhr){
+                        var html = Handlebars.templates.articles(data);
+                        $("#content").append(html);
+                    },
+                    complete: function(xhr, status){
+                        loading_image.hide();
+                    }
+                })
+            }
+        }
+    </script>
 {% endblock %}

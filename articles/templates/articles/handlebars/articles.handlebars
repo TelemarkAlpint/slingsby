@@ -1,0 +1,17 @@
+{{#each articles}}
+
+    <article data-datetime="{{ this.published_date }}">
+        <h1>{{ this.title }}</h1>
+
+        {{{ this.content }}}
+
+        <p>
+            <span class="byline">Skrevet av {{ this.author }}{{ this.published_date_as_string }}. </span>
+
+            {{#if this.last_edited}}
+                <span class="byline">Sist endret av {{ this.last_edited_by }}{{ this.last_edited_datestring }}</span>
+            {{/if}}
+        </p>
+    </article>
+
+{{/each}}

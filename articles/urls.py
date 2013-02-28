@@ -7,7 +7,7 @@ urlpatterns = patterns('articles.views',
     url(r'^$', 'latest_articles', name='frontpage'),
     url(r'^artikkel/(\d+)/$', lambda req, pk: HttpResponsePermanentRedirect(reverse('article_detail', args=[str(pk)]))), #Deprecated!
     url(r'^articles/(\d+)/$', 'show_article', name='article_detail'),
-    url(r'^articles/$', 'all_articles'),
+    url(r'^articles/$', 'all_articles', name='all_articles'),
                         )
 
 urls = []

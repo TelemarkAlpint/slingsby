@@ -40,6 +40,7 @@ class Article(models.Model):
         data = {
                 'id': self.id,
                 'published_date': self.published_date.isoformat(),
+                'published_date_as_string': self.get_dateline(),
                 'title': self.title,
                 'content': self.content,
                 'author': self.author.profile.username,
@@ -49,14 +50,13 @@ class Article(models.Model):
         if self.last_edited:
             data['last_edited'] =  self.last_edited.isoformat()
             data['last_edited_by'] =  self.last_edited_by.profile.username
+            data['last_edited_as_string'] = self.get_editline()
         return data
 
     def get_absolute_url(self):
         return reverse('article_detail', args=[str(self.id)])
 
-    def get_dateline(self, date=None):
-        if not date:
-            date = self.published_date
+    def _format_date_as_string(self, date):
         date = utc_to_nor(date)
         days_passed = time.days_since(date)
         if days_passed == 0:
@@ -68,13 +68,17 @@ class Article(models.Model):
         else:
             string = ' den %s' % date.strftime('%d.%m.%y')
         string += ', kl %s' % date.strftime('%H:%M')
-        return SafeUnicode(string)
+        return string
+
+    def get_dateline(self):
+        dateline = 'Skrevet av %s%s.' % (self.author, self._format_date_as_string(utc_to_nor(self.published_date)))
+        return SafeUnicode(dateline)
 
     def get_editline(self):
+        editline = ''
         if self.last_edited:
-            return self.get_dateline(self.last_edited)
-        else:
-            return ''
+            editline = 'Sist endret av %s%s.' % (self.last_edited_by, self._format_date_as_string(utc_to_nor(self.last_edited)))
+        return SafeUnicode(editline)
 
     def is_visible(self):
         has_been_published = is_past(self.published_date)

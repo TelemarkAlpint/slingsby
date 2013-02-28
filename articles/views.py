@@ -3,8 +3,12 @@ from django.db.models.signals import post_save, post_delete
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from dateutil.parser import parse
 from general.cache import CachedQuery
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 class SingleArticlePageQuery(CachedQuery):
     queryset = SubPageArticle.objects.all().values_list('slug', 'subpage_name')
@@ -25,10 +29,24 @@ def latest_articles(request):
               }
     return direct_to_template(request, 'articles/article_list.html', values)
 
+def _get_filtered_articles(request):
+    before = request.GET.get('before')
+    if before is None:
+        articles = AllArticlesQuery.get_cached()
+    else:
+        published_date_filter = parse(before)
+        articles = Article.objects.filter(published_date__lt=published_date_filter)
+    num_limit = int(request.GET.get('limit', '0'))
+    if num_limit:
+        articles = articles[:num_limit]
+    return articles
+
 def all_articles(request):
-    articles = AllArticlesQuery.get_cached()
+    articles = _get_filtered_articles(request)
     if request.prefer_json:
-        json_data = [a.__json__() for a in articles]
+        json_data = {
+                     'articles': [a.__json__() for a in articles],
+                     }
         return HttpResponse(json.dumps(json_data), mimetype='application/json')
     values = {
               'articles': articles,
