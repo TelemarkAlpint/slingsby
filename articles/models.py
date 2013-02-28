@@ -7,16 +7,12 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.forms import ModelForm
-from django.http import HttpRequest
 from django.utils.safestring import SafeUnicode
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from general import time, validate_text, make_title
-from general.cache import CachedQuery
-from general.constants import BASE_URL
 from general.time import utc_to_nor, nor_to_utc, is_past
 from general.widgets import WidgEditorWidget, NORDateTimeWidget
-import logging
 
 class Article(models.Model):
     """
@@ -40,12 +36,23 @@ class Article(models.Model):
     def __unicode__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('artikkel_detail', args=[str(self.id)])
+    def __json__(self):
+        data = {
+                'id': self.id,
+                'published_date': self.published_date.isoformat(),
+                'title': self.title,
+                'content': self.content,
+                'author': self.author.profile.username,
+                }
+        if self.social_summary:
+            data['summary'] = self.social_summary
+        if self.last_edited:
+            data['last_edited'] =  self.last_edited.isoformat()
+            data['last_edited_by'] =  self.last_edited_by.profile.username
+        return data
 
-    def get_full_url(self):
-        logging.info(HttpRequest.build_absolute_uri())
-        return BASE_URL + self.get_absolute_url()
+    def get_absolute_url(self):
+        return reverse('article_detail', args=[str(self.id)])
 
     def get_dateline(self, date=None):
         if not date:
@@ -143,8 +150,3 @@ def register_new_url(sender, **kwargs):
     urlpatterns += patterns('',
         url(r'^%s$' % subpage.slug, ArticleDetailView.as_view(), {'pk': subpage.article.id}),
                            )
-
-class SingleArticlePageQuery(CachedQuery):
-    keyword = 'subpages'
-    queryset = SubPageArticle.objects.all().values_list('slug', 'subpage_name')
-post_save.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)

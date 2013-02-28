@@ -1,10 +1,13 @@
-from articles.models import ArticleListView, ArticleDetailView, SubPageArticle
+from articles.models import ArticleDetailView, SubPageArticle
 from django.conf.urls.defaults import patterns, url
+from django.core.urlresolvers import reverse
+from django.http import HttpResponsePermanentRedirect
 
-urlpatterns = patterns('',
-    url(r'^$', ArticleListView.as_view(), name='main'),
-    url(r'^artikkel/(?P<pk>\d+)', ArticleDetailView.as_view()),
-    url(r'^articles/(?P<pk>\d+)', ArticleDetailView.as_view(), name='artikkel_detail'),
+urlpatterns = patterns('articles.views',
+    url(r'^$', 'latest_articles', name='frontpage'),
+    url(r'^artikkel/(\d+)/$', lambda req, pk: HttpResponsePermanentRedirect(reverse('article_detail', args=[str(pk)]))), #Deprecated!
+    url(r'^articles/(\d+)/$', 'show_article', name='artikkel_detail'),
+    url(r'^articles/$', 'all_articles'),
                         )
 
 urls = []

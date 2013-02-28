@@ -66,6 +66,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.debug',
     'general.context_processors.default',
+    'quotes.context_processors.default',
 )
 
 # Used for the query debugger that's run in dev mode.
