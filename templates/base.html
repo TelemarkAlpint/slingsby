@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 <html>
-<head>
+<head prefix="og: http://ogp.me/ns#">
 {% block header %}
     <meta charset="UTF-8">
     <!--
@@ -26,12 +26,11 @@
     {% endblock %}
     <meta property="og:description" content="{% block og_description %}Norges største idrettslag inviterer deg med på ski! Bli med til alpene, Vassfjellet, på trening, på skifilmkvelder og mye moro!{% endblock %}" />
     <meta property="og:title" content="{% block og_title %}NTNUI Telemark/Alpint{% endblock %}" />
-    <meta property="og:type" content="sports_team" />
+    <meta property="og:type" content="{% block og_type %}sports_team{% endblock %}" />
     <meta property="og:url" content="{{ request.get_full_path }}" />
-    <meta property="og:image" content="http://org.ntnu.no/telemark/static/gfx/logo_svart_tekst.png" />
+    <meta property="og:image" content="{% block og_image %}http://org.ntnu.no/telemark/static/gfx/logo_svart_tekst.png{% endblock %}" />
     <meta property="og:site_name" content="NTNUI Telemark/Alpint" />
     <meta property="fb:admins" content="902380388" />
-
     {% block extrastyles %}{% endblock %}
     {% block preload_scripts %}{% endblock %}
 {% endblock %}
@@ -45,7 +44,7 @@
             <nav>
                   <ul>
                     <li>
-                        <a href="{% url 'main' %}">Hjem</a>
+                        <a href="{% url 'frontpage' %}">Hjem</a>
                     </li>
                     <li>
                         <a href="{% url 'program' %}">Program</a>
@@ -99,7 +98,7 @@
         {% block sidebar %}
 
             <div id="sidebar">
-                <a href="{% url 'main' %}" class="non-select"><img class="non-select" id="logo" src="{{ GRAPHICS_DIR }}logo.png" alt="Logo" /></a>
+                <a href="{% url 'frontpage' %}" class="non-select"><img class="non-select" id="logo" src="{{ GRAPHICS_DIR }}logo.png" alt="Logo" /></a>
 
                 <nav>
                     <ul>
@@ -132,26 +131,28 @@
                             </div>
                         {% endif %}
 
-                        {% for suggested_q in suggested_quotes %}
+                        {% if user.is_staff %}
+                            {% for suggested_q in suggested_quotes %}
 
-                            <div class="suggested_quote sidebar_box">
-                                {% if suggested_q.topic %}
-                                    <h4>Om {{ suggested_q.topic }}</h4>
-                                {% endif %}
-                                <div id="quote_content">
-                                    <pre>{{ suggested_q.quote }}</pre>
+                                <div class="suggested_quote sidebar_box">
+                                    {% if suggested_q.topic %}
+                                        <h4>Om {{ suggested_q.topic }}</h4>
+                                    {% endif %}
+                                    <div id="quote_content">
+                                        <pre>{{ suggested_q.quote }}</pre>
+                                    </div>
+                                    <span id="quote_author">- {{ suggested_q.author }}</span>
                                 </div>
-                                <span id="quote_author">- {{ suggested_q.author }}</span>
-                            </div>
-                            <form class="quote_confirm" action="{% url 'approve_quote' suggested_q.id %}" method="post">
-                                <input type="image" src="{{ GRAPHICS_DIR }}confirm.png" alt="Godkjenn">
-                            </form>
-                            <span class="quote_descr">Akseptér sitatet over?</span>
-                            <form class="quote_reject" action="{% url 'delete_quote' suggested_q.id %}" method="post">
-                                <input type="image" src="{{ GRAPHICS_DIR }}reject.png" alt="Slett">
-                            </form>
+                                <form class="quote_confirm" action="{% url 'approve_quote' suggested_q.id %}" method="post">
+                                    <input type="image" src="{{ GRAPHICS_DIR }}confirm.png" alt="Godkjenn">
+                                </form>
+                                <span class="quote_descr">Akseptér sitatet over?</span>
+                                <form class="quote_reject" action="{% url 'delete_quote' suggested_q.id %}" method="post">
+                                    <input type="image" src="{{ GRAPHICS_DIR }}reject.png" alt="Slett">
+                                </form>
 
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
 
                     {% endif %}
                 {% endblock quote %}
@@ -198,9 +199,7 @@
 
             {% endif %}
 
-            {% block content %}
-
-            {% endblock %}
+            {% block content %}{% endblock %}
 
             {% if debug %}
                 <div id="debug">
@@ -270,6 +269,7 @@
           load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
         });
 
+        // Add click handling for the statusbar in the header
         $(function(){
             $('#status .clickable').click(function(){
                 var clickSymbol = '&#9660;' // BLACK DOWN POINTING TRIANGLE
@@ -286,6 +286,7 @@
                 //$(this).find('.click_symbol').html(clickSymbol);
             });
         });
+
     </script>
 
     {# <script type="text/javascript">if (window != top) top.location = window.location;</script>#}

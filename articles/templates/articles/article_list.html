@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    {% for article in article_list %}
+    {% for article in articles %}
         {% if user.is_superuser or article.is_visible %}
             <article>
                 {% include 'articles/article_view_heading.html' %}
