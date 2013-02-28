@@ -3,12 +3,10 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import permalink
-from django.db.models.signals import post_save
 from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
 from django.views.generic.list import ListView
 from general import time, validate_text, make_title
-from general.cache import CachedQuery
 from general.widgets import WidgEditorWidget
 
 _COUNTDOWN_TIME_IN_S = 1800
@@ -44,6 +42,8 @@ class Event(models.Model):
                 'id': self.id,
                 'has_registration': self.has_registration,
                 'number_of_spots': self.number_of_spots,
+                'summary': self.summary,
+                'description': self.description,
         }
         if self.has_registration:
             fields['registration_opens'] = self.registration_opens.isoformat() if self.registration_opens else None
@@ -122,22 +122,38 @@ class Event(models.Model):
         seconds = max(time.seconds_to(self.registration_opens), 0)
         return seconds
 
-    def add_user(self, user):
-        if self.is_full():
-            raise EventFullException('%s tried to register to the event %s, which is full.' % (user, self))
-        if self.is_user_participant(user):
-            raise UserAlreadyRegisteredException('''%s tried to register to the event %s, which he is already
-                                                    participating''' % (user, self))
+    def _add_user(self, user):
         participants = self.get_participants_id()
         participants.append(user.id)
         self.update_participating_users(participants)
+
+    def add_user(self, user):
+        """ Add the user to the event, if possible.
+
+        Possible causes if this fails is that the event is not yet open
+        for registration, the event is full, or the user is allready registered."""
+
+        if not self.is_open_for_registration():
+            raise UserAddError("%s isn't open for registration yet! Registration opens %s."
+                               % (self.name, self.registration_opens_as_string()))
+        if self.is_full():
+            raise UserAddError('All %d spots are taken!' % self.number_of_spots)
+        if self.is_user_participant(user):
+            raise UserAddError('%s is already registered to %s!' % (user, self.name))
+        self._add_user(user)
     add_user.alters_data = True
 
+    def _remove_user(self, user):
+        participants = self.get_participants_id()
+        participants.remove(user.id)
+        self.update_participating_users(participants)
+
     def remove_user(self, user):
-        if self.is_user_participant(user):
-            participants = self.get_participants_id()
-            participants.remove(user.id)
-            self.update_participating_users(participants)
+        if not self.is_user_participant(user):
+            raise NotRegisteredError(event=self, action='Remove user')
+        if self.binding_registration:
+            raise EventError('You cannot unregister from a binding event!')
+        self._remove_user(user)
     remove_user.alters_data = True
 
     def get_participants_id(self):
@@ -145,9 +161,6 @@ class Event(models.Model):
         if self.participants_by_id:
             user_ids = map(int, self.participants_by_id.split(','))
         return user_ids
-
-    def get_id(self):
-        return int(self.id)
 
     def get_participating_users(self):
         if not self.has_opened():
@@ -168,12 +181,6 @@ class Event(models.Model):
         for user in users:
             emails.append(user.email)
         return emails
-
-class NextEventsQuery(CachedQuery):
-    keyword = 'next_events'
-    queryset = Event.objects.filter(startdate__gte=time.now())[:3]
-    timeout_in_s = 3600
-post_save.connect(NextEventsQuery.empty_on_save, sender=Event)
 
 class EventForm(ModelForm):
     class Meta:
@@ -206,9 +213,28 @@ class EventListView(ListView):
         context['title'] = make_title('Program')
         return context
 
-class EventFullException(Exception):
+class EventError(Exception):
+    """ Base class for event-related exceptions. """
     pass
 
-class UserAlreadyRegisteredException(Exception):
-    pass
+class UserAddError(EventError):
+    """ Raised if something failed trying to add a user to an event.
 
+    Possible causes might be the event being full, not having opened up
+    for registration yet, or the user already being signed up for the event. """
+
+    def __init__(self, reason):
+        self.reason = reason
+
+    def __str__(self):
+        return 'Failed to add user to event: %s' % repr(self.reason)
+
+class NotRegisteredError(EventError):
+    """ Raised if the user tried to do something one has to be signed up to the event to do."""
+
+    def __init__(self, event, message):
+        self.event = event
+        self.message = message
+
+    def __str__(self):
+        return 'User is not signed up for %s, so the following could not be performed: %s' % (self.event, self.message)

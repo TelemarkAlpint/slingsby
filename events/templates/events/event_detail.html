@@ -17,23 +17,27 @@
 
         {% endautoescape %}
 
-        {% include "events/event_registration.html" %}
+        {% if event.has_registration %}
 
-        {% if user.is_authenticated and event.has_registration %}
-            <div class="participants">
-                <h4>Påmeldte</h4>
-                <ul>
-                {% for user in event.get_participating_users %}
-                    <li> {{ user.profile.full_name_or_username }}</li>
-                {% empty %}
-                    <li><i>Ingen påmeldte enda!</i></li>
-                {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+            {% include "events/event_registration.html" %}
 
-        {% if user.is_superuser and event.has_registration %}
-            <p>E-post-adresser: {{ event.get_participating_emails|join:", " }}</p>
+            {% if user.is_authenticated %}
+                <div class="participants">
+                    <h4>Påmeldte</h4>
+                    <ul>
+                    {% for user in event.get_participating_users %}
+                        <li> {{ user.profile.full_name_or_username }}</li>
+                    {% empty %}
+                        <li><i>Ingen påmeldte enda!</i></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if user.is_staff %}
+                <p>E-post-adresser: {{ event.get_participating_emails|join:", " }}</p>
+            {% endif %}
+
         {% endif %}
 
      </div>

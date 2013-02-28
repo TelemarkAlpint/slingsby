@@ -1,9 +1,24 @@
-from django.http import HttpResponse
+# coding: utf-8
+
+from django.db.models.signals import post_save
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.utils.safestring import SafeUnicode
+from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template
-from events.models import Event
-from general import make_title
+from events.models import Event, UserAddError, EventError
+from general import make_title, add_params, feedback, time
+from general.cache import CachedQuery
 import json
+import logging
+
+logger = logging.getLogger(__name__)
+
+class NextEventsQuery(CachedQuery):
+    keyword = 'next_events'
+    queryset = Event.objects.filter(startdate__gte=time.now())[:3]
+    timeout_in_s = 3600
+post_save.connect(NextEventsQuery.empty_on_save, sender=Event)
 
 def detail(request, event_id):
     event_id = int(event_id)
@@ -15,3 +30,35 @@ def detail(request, event_id):
               'title': make_title(event.name),
               }
     return direct_to_template(request, 'events/event_detail.html', values)
+
+@require_POST
+def join_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    redirect = event.get_absolute_url()
+    user = request.user
+    try:
+        event.add_user(user)
+    except UserAddError as error:
+        logging.info(error)
+        logger.info('%s meldte seg på eventet %s.', user, event)
+    redirect = add_params(redirect, feedback.EVENT_SIGN_ON.format_string(event))
+    return HttpResponseRedirect(redirect)
+
+@require_POST
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    user = request.user
+    try:
+        event.remove_user(user)
+        redirect = add_params(event.get_absolute_url(),
+                              feedback.EVENT_SIGN_OFF.format_string(event))
+        logger.info('%s meldte seg av eventet %s.', user, event)
+        logger.info('Redirect: ' + redirect)
+        return HttpResponseRedirect(redirect)
+    except EventError as error:
+        logger.warning(error)
+        logger.warning('%s tried to unregister from the binding event "%s"' % (user.username, event.name))
+        return direct_to_template(request, 'infopage.html',
+                                    {'content': SafeUnicode('''Beklager, men dette eventet har bindende påmelding. Ta
+                                    kontakt med arrkom hvis du absolutt ikke har mulighet til å stille,
+                                    så vil vi se om vi kan gjøre noe med det.''')})

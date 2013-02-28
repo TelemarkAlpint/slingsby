@@ -5,8 +5,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import SafeUnicode
 from django.views.generic.simple import direct_to_template
-from events.models import Event, EventFullException, \
-    UserAlreadyRegisteredException
 from general import cache, feedback, reverse_with_params, add_params
 from quotes.models import QuoteForm
 from musikk.models import SongSuggestionForm, ReadySongForm, Song
@@ -48,29 +46,3 @@ def submit_full_name(req):
     inst = req.user.profile
     redir = reverse_with_params('profil', feedback.NAME_COMP)
     return upload(req, UserProfileForm, reverse('submit_full_name'), redir, inst)
-
-def toggle_event_participation(request):
-    redirect = request.POST.get('redirect', 'program')
-    event = Event.objects.get(id=request.POST['event_id'])
-    user = request.user
-    if event.is_user_participant(user):
-        if not event.binding_registration:
-            event.remove_user(user)
-            redirect = add_params(redirect,
-                                  feedback.EVENT_SIGN_OFF.format_string(event))
-            logger.info('%s meldte seg av eventet %s.', user, event)
-        else:
-            logger.warning('%s tried to unregister from the binding event "%s"' % (user.username, event.name))
-            logger.warning('Current POST data: %s' % str(request.POST))
-            return direct_to_template(request, 'infopage.html',
-                                        {'content': SafeUnicode('''Beklager, men dette eventet har bindende p&aring;melding. Ta
-                                        kontakt med arrkom hvis du absolutt ikke har mulighet til &aring; stille,
-                                        s&aring; vil vi se om vi kan gj&oslash;re noe med det.''')})
-    else:
-        try:
-            event.add_user(user)
-            redirect = add_params(redirect, feedback.EVENT_SIGN_ON.format_string(event))
-            logger.info('%s meldte seg på eventet %s.', user, event)
-        except (EventFullException, UserAlreadyRegisteredException) as e:
-            logger.warning(e.message)
-    return HttpResponseRedirect('/%s' % redirect)
