@@ -2,6 +2,12 @@
 
 {% load url from future %}
 
+{% block og_description %}
+    Stem opp dine favorittsanger til mandagstrening? Er det kanskje {{ song.title }} av {{ song.artist }}
+    som får deg til yte det lille ekstra?{% endblock %}
+{% block og_title %}{{ song.artist }} - {{ song.title }} :: NTNUI Telemark/Alpint{% endblock %}
+{% block og_type %}music.song{% endblock %}
+
 {% block content %}
     <h1>{{ song.artist }} - {{ song.title }}</h1>
 
@@ -10,6 +16,8 @@
     <button class="vote_up" id="{{ song.id }}">
         <a href="{% url 'vote_on_song' song.id %}">Stem opp!</a>
     </button>
+
+    {% include 'social_plugins.html' with thing=song %}
 
 {% endblock %}
 
@@ -20,5 +28,7 @@
             vote(song_id);
         })
     </script>
-    {% include 'musikk/musikk.js' %}
+    <script>
+        {% include 'musikk/musikk.js' %}
+    </script>
 {% endblock %}
