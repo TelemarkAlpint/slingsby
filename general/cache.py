@@ -88,7 +88,7 @@ class CachedQuery(object):
         if cls.do_not_cache:
             return cls.queryset.all()
         objects = get(cls.__name__)
-        if objects:
+        if objects is not None:
             return objects
         else:
             return cls.update_cache()
