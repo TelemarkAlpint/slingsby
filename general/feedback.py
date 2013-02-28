@@ -7,27 +7,27 @@ _all_feedbacks = {}
 class Feedback():
     urlcode = ''
     feedback = ''
-    
+
     def __init__(self, urlcode, feedback):
         feedback = SafeUnicode(feedback)
         _all_feedbacks[urlcode] = feedback
         self.urlcode = urlcode
         self.feedback = feedback
-        
+
     def format_string(self, *args):
         new_code = self.urlcode + str(hash(str(args)))
         _all_feedbacks[new_code] = self.feedback % args
         return new_code
-    
+
     def __unicode__(self):
         return self.urlcode
-    
+
     def __str__(self):
         return self.urlcode
-    
+
 def get_feedback(urlcode):
     return _all_feedbacks.get(urlcode)
-    
+
 
 MUSIC_READY = Feedback('ready', u'Ny sang lastet opp i databasen, tusen takk!')
 
