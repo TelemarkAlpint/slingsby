@@ -47,9 +47,3 @@ class QuoteForm(ModelForm):
         widgets = {
             'quote': Textarea(attrs={'cols': 20, 'rows': 5})
         }
-
-def default_quote():
-    quote = Quote()
-    quote.quote = 'Ingen quotes er lastet opp enda.'
-    quote.author = 'Trist teknisk ansvarlig'
-    return quote
