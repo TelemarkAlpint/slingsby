@@ -20,7 +20,7 @@ About
 -----
 
 Our servers are running on Google App Engine, with static files hosted on org.ntnu.no. We're running
-Django-nonrel for the time being, but we're eventually aiming for Django 1.4 and Google Cloud SQL.
+Django-nonrel for the time being, but we're eventually aiming for Django 1.5 and Google Cloud SQL.
 
 ### Goals
 
@@ -37,6 +37,9 @@ On possible controversy might be that we don't document much code. I'm a huge fa
 self-documenting. If you cannot express yourself clearly in code, you're not doing it simple enough or you do not understand what you're doing well
 enough. Others might disagree, but with short functions with descriptive names, this has worked for us so far.
 
+We also strive towards implementing as mush as possible with native HTML5 elements, like audio and video. We also hope to provide more responsive
+pages soon, enhancing the mobile experience.
+
 Dependencies
 ------------
 
@@ -46,3 +49,5 @@ Dependencies
 * Modernizr 2.0.6
 * WidgEditor 2008-03-01
 * Zoombox
+* dateutil 1.5
+* Handlebars 1.0.0-rc3
