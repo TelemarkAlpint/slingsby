@@ -1,0 +1,39 @@
+#zoombox iframe,#zoombox img{border:none;}#zoombox .zoombox_mask{background-color:#000;position:fixed;width:100%;z-index:90;height:100%;top:0;left:0;}
+#zoombox .zoombox_container{position:absolute;z-index:100;}#zoombox .relative{position:relative;}
+#zoombox .zoombox_prev{position:absolute;top:0;left:0;width:50%;height:100%;cursor:pointer;filter:alpha(opacity=0);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-moz-opacity:0;opacity:0;}
+#zoombox .zoombox_prev:hover{filter:alpha(opacity=100);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);-moz-opacity:1;opacity:1;}
+#zoombox .zoombox_next{position:absolute;top:0;right:0;width:50%;height:100%;filter:alpha(opacity=0);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-moz-opacity:0;opacity:0;}
+#zoombox .zoombox_close,#zoombox .zoombox_next,#zoombox .zoombox_prev{cursor:pointer;}
+#zoombox .multimedia .zoombox_next,#zoombox .multimedia .zoombox_prev{display:none;}
+#zoombox .zoombox_next:hover{filter:alpha(opacity=100);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);-moz-opacity:1;opacity:1;}
+#zoombox .zoombox_gallery{position:fixed;z-index:120;bottom:-60px;left:0;right:0;text-align:center;filter:alpha(opacity=85);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=85);-moz-opacity:.85;opacity:.85;cursor:pointer;width:auto;background-color:#050505;height:60px;overflow:hidden;display:none;}
+#zoombox .zoombox_gallery img{height:50px;padding:5px;filter:alpha(opacity=30);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=30);-moz-opacity:.3;opacity:.3;}
+#zoombox .zoombox_gallery img:hover,#zoombox .zoombox_gallery img.current{filter:alpha(opacity=100);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);-moz-opacity:1;opacity:1;}
+#zoombox_loader{position:absolute;height:40px;width:40px;cursor:pointer;top:50%;left:50%;margin:-20px 0 0 -20px;z-index:110;}
+.zoombox .zoombox_container{background:#000;color:#666;-moz-box-shadow:0 0 10px #000;-webkit-box-shadow:0 0 10px #000;-o-box-shadow:0 0 10px #000;box-shadow:0 0 10px #000;-moz-box-shadow:0 0 10px #000;-webkit-box-shadow:0 0 10px #000;-o-box-shadow:0 0 10px #000;box-shadow:0 0 10px #000;}
+.zoombox .content{background:#000;}.zoombox .zoombox_title{color:#FFF;position:absolute;left:-1px;top:-22px;-moz-text-shadow:1px 1px #000;-webkit-text-shadow:1px 1px #000;-o-text-shadow:1px 1px #000;text-shadow:1px 1px #000;-moz-text-shadow:1px 1px #000;-webkit-text-shadow:1px 1px #000;-o-text-shadow:1px 1px #000;text-shadow:1px 1px #000;}
+.zoombox .zoombox_close{background:url("../gfx/zoombox/close.png") no-repeat;width:30px;height:30px;position:absolute;right:-15px;top:-15px;}
+#zoombox.zoombox .zoombox_next{background:url("../gfx/zoombox/next.png") no-repeat right center;}
+#zoombox.zoombox .zoombox_prev{background:url("../gfx/zoombox/prev.png") no-repeat left center;}
+.lightbox .zoombox_container{background:#FFF;margin-left:-30px;padding:10px 10px 37px;color:#666;}
+.lightbox .zoombox_close{background:url("../gfx/zoombox/lightclose.gif") no-repeat left top;width:66px;height:22px;top:auto;position:absolute;right:12px;bottom:6px;}
+.lightbox .zoombox_title{text-align:left;}.lightbox .zoombox_next{background:url("../gfx/zoombox/lightnext.gif") no-repeat right 50px;}
+.lightbox .zoombox_prev{background:url("../gfx/zoombox/lightprev.gif") no-repeat left 50px;}
+#zoombox.lightbox .zoombox_gallery{left:10px!important;right:10px;bottom:36px;}.prettyphoto .zoombox_container{border:10px solid #0B0A0A;-moz-border-radius:10px;-webkit-border-radius:10px;-khtml-border-radius:10px;border-radius:10px 10px 10px 10px;background:#FFF;padding:10px 10px 37px;margin-left:-20px;color:#797979;}
+.prettyphoto .zoombox_title{text-align:left;}.prettyphoto .zoombox_close{background:url("../gfx/zoombox/ppsprite.png");width:27px;height:24px;top:auto;position:absolute;right:6px;bottom:8px;}
+.prettyphoto .zoombox_next{background:url("../gfx/zoombox/ppnext.png") no-repeat right center;}
+.prettyphoto .zoombox_prev{background:url("../gfx/zoombox/ppprev.png") no-repeat left center;}
+.prettyphoto .multimedia .zoombox_next,.prettyphoto .multimedia .zoombox_prev{display:none;}
+#zoombox.prettyphoto .zoombox_gallery{left:10px!important;right:10px;bottom:36px;}
+.darkprettyphoto .zoombox_container{-moz-border-radius:10px;-webkit-border-radius:10px;-khtml-border-radius:10px;border-radius:10px 10px 10px 10px;background:#0C0C0C;padding:10px 10px 37px;margin-left:-30px;color:#828282;}
+.darkprettyphoto .zoombox_title{text-align:left;}.darkprettyphoto .zoombox_close{background:url("../gfx/zoombox/ppsprite.png");width:27px;height:24px;top:auto;position:absolute;right:2px;bottom:6px;}
+.darkprettyphoto .zoombox_next{background:url("../gfx/zoombox/ppnext.png") no-repeat right center;}
+.darkprettyphoto .zoombox_prev{background:url("../gfx/zoombox/ppprev.png") no-repeat left center;}
+.darkprettyphoto .multimedia .zoombox_next,.darkprettyphoto .multimedia .zoombox_prev{display:none;}
+#zoombox.darkprettyphoto .zoombox_gallery{left:10px!important;right:10px;bottom:36px;}
+.simple .zoombox_container{background:#000;}.simple .zoombox_title{color:#FFF;position:absolute;left:-1px;top:-22px;-moz-text-shadow:1px 1px #000;-webkit-text-shadow:1px 1px #000;-o-text-shadow:1px 1px #000;text-shadow:1px 1px #000;-moz-text-shadow:1px 1px #000;-webkit-text-shadow:1px 1px #000;-o-text-shadow:1px 1px #000;text-shadow:1px 1px #000;}
+#zoombox.simple .zoombox_next{background:url("../gfx/zoombox/simplenav.png") no-repeat -20px center;filter:alpha(opacity=100);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);-moz-opacity:1;opacity:1;right:-20px;width:20px;}
+#zoombox.simple .zoombox_next:hover{background-position-x:left;}#zoombox.simple .zoombox_prev{background:url("../gfx/zoombox/simplenav.png") no-repeat -40px center;filter:alpha(opacity=100);-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);-moz-opacity:1;opacity:1;left:-20px;width:20px;}
+#zoombox.simple .zoombox_prev:hover{background-position-x:-60px;}.simple .zoombox_prev{background:url("../gfx/zoombox/ppprev.png") no-repeat left center;}
+.simple .zoombox_close{background:url("../gfx/zoombox/simpleclose.png") no-repeat;width:30px;height:30px;position:absolute;top:0;right:-10px;}
+#zoombox.simple .multimedia .zoombox_next,#zoombox.simple .multimedia .zoombox_prev{display:block;}
