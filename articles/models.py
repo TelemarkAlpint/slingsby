@@ -71,13 +71,13 @@ class Article(models.Model):
         return string
 
     def get_dateline(self):
-        dateline = 'Skrevet av %s%s.' % (self.author, self._format_date_as_string(utc_to_nor(self.published_date)))
+        dateline = 'Skrevet av %s%s.' % (self.author.profile.username, self._format_date_as_string(utc_to_nor(self.published_date)))
         return SafeUnicode(dateline)
 
     def get_editline(self):
         editline = ''
         if self.last_edited:
-            editline = 'Sist endret av %s%s.' % (self.last_edited_by, self._format_date_as_string(utc_to_nor(self.last_edited)))
+            editline = 'Sist endret av %s%s.' % (self.last_edited_by.profile.username, self._format_date_as_string(utc_to_nor(self.last_edited)))
         return SafeUnicode(editline)
 
     def is_visible(self):
