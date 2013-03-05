@@ -22,14 +22,17 @@ class Song(models.Model):
     def __unicode__(self):
         return '%s - %s' % (self.artist, self.title)
 
-    def __json__(self):
-        return dict(
-                    id=self.id,
-                    title=self.title,
-                    artist=self.artist,
-                    date_added=self.date_added.isoformat(),
-                    popularity=self.popularity,
-                    )
+    def __json__(self, verbose=False):
+        json = {
+                    'id': self.id,
+                    'title': self.title,
+                    'artist': self.artist,
+                    'date_added': self.date_added.isoformat(),
+                    'popularity': self.popularity,
+                }
+        if verbose:
+            json['filename'] = self.filename
+        return json
 
     def get_absolute_url(self):
         return reverse('musikk.views.song_details', args=[str(self.id)])
