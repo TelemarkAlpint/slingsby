@@ -11,11 +11,12 @@ from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template
 from general import make_title, reverse_with_params, feedback, cache, time
 from general.cache import CachedQuery
-from general.constants import MEDIA_DIR, MUSIC_DIR, LOCAL_MUSIC_DIR
+from general.constants import MEDIA_DIR, MUSIC_DIR
 from general.time import nor
 from musikk.models import Song, SongSuggestionForm, ReadySongForm, Vote
 from urllib2 import urlopen
 import datetime
+from dateutil.parser import parse
 import json
 import logging
 import upload
@@ -96,7 +97,8 @@ def get_new_songforms():
 def top(request):
     song_metadata = get_top_song_metadata()
     cache.set('top_song_filename', song_metadata['filename'])
-    values = {'last_updated': song_metadata['last_updated'],
+    last_updated = parse(song_metadata['last_updated'])
+    values = {'last_updated': last_updated.strftime("%d.%m.%y %H:%M"),
               'num_songs': _SONGS_IN_TOP_SONGS,
               }
     return direct_to_template(request, 'musikk/top.html', values)
@@ -116,10 +118,7 @@ def top_list(request):
     top_songs = list(TopSongsCache.update_cache())
     final_list = []
     for song in top_songs:
-        final_list.append({'artist': song['artist'],
-                           'title': song['title'],
-                           'path': LOCAL_MUSIC_DIR + song['filename'].replace('/', '\\'),
-                           'rating': song['popularity']})
+        final_list.append(song.__json__(verbose=True))
     return HttpResponse(json.dumps(final_list, indent=2), mimetype='application/json')
 
 @login_required
