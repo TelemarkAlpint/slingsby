@@ -347,9 +347,30 @@ form {
     padding-top: 20px;
 }
 
-.styremedlem ul {
-    float: right;
-    width: 300px;
+.styremedlem {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.styremedlem > .about {
+    position: absolute;
+    right: 0px;
+}
+
+.styremedlem .about {
+    width: 325px;
+}
+
+.styremedlem .about h3 {
+    padding-left: 15px;
+}
+
+.styremedlem .about li {
+    padding-top: 7px;
+}
+
+.styremedlem img {
+    width: 350px;
 }
 
 #feedback {
