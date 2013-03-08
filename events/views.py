@@ -10,15 +10,29 @@ from events.models import Event, UserAddError, EventError
 from general import make_title, add_params, feedback, time
 from general.cache import CachedQuery
 import json
-import logging
+from logging import getLogger
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
+
+class AllUpcomingEventsQuery(CachedQuery):
+    queryset = Event.objects.filter(startdate__gte=time.now())
+post_save.connect(AllUpcomingEventsQuery.empty_on_save, sender=Event)
 
 class NextEventsQuery(CachedQuery):
-    keyword = 'next_events'
     queryset = Event.objects.filter(startdate__gte=time.now())[:3]
     timeout_in_s = 3600
 post_save.connect(NextEventsQuery.empty_on_save, sender=Event)
+
+def list_events(request):
+    events = AllUpcomingEventsQuery.get_cached()
+    if request.prefer_json:
+        json_data = json.dumps([event.__json__() for event in events])
+        return HttpResponse(json_data, mimetype='application/json')
+    context = {
+               'events': events,
+               'title': make_title('Program'),
+               }
+    return direct_to_template(request, 'events/event_list.html', context)
 
 def detail(request, event_id):
     event_id = int(event_id)
@@ -39,7 +53,7 @@ def join_event(request, event_id):
     try:
         event.add_user(user)
     except UserAddError as error:
-        logging.info(error)
+        logger.info(error)
         logger.info('%s meldte seg på eventet %s.', user, event)
     redirect = add_params(redirect, feedback.EVENT_SIGN_ON.format_string(event))
     return HttpResponseRedirect(redirect)

@@ -5,8 +5,7 @@ from django.db import models
 from django.db.models import permalink
 from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
-from django.views.generic.list import ListView
-from general import time, validate_text, make_title
+from general import time, validate_text
 from general.widgets import WidgEditorWidget
 
 _COUNTDOWN_TIME_IN_S = 1800
@@ -196,22 +195,6 @@ class EventForm(ModelForm):
         data = self.cleaned_data['description']
         clean_data = validate_text(data)
         return clean_data
-
-class EventListView(ListView):
-    model = Event
-    context_object_name = 'event_list'
-    template_name = 'events/event_list.html'
-    paginate_by = 5
-
-    def get_queryset(self):
-        raw_events = Event.objects.filter(startdate__gte=time.now())
-        events = [event for event in raw_events if time.is_future(event.enddate)]
-        return events
-
-    def get_context_data(self, **kwargs):
-        context = super(EventListView, self).get_context_data(**kwargs)
-        context['title'] = make_title('Program')
-        return context
 
 class EventError(Exception):
     """ Base class for event-related exceptions. """

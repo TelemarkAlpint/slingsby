@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
-
 {% block content %}
     {% block calendar %}
         <div id="calendar">
@@ -11,7 +9,7 @@
 
     {% block events %}
 
-        {% for event in event_list %}
+        {% for event in events %}
 
             <div class="event">
                 {% include "events/event_header.html" %}
