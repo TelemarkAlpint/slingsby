@@ -26,8 +26,10 @@ post_save.connect(NextEventsQuery.empty_on_save, sender=Event)
 def list_events(request):
     events = AllUpcomingEventsQuery.get_cached()
     if request.prefer_json:
-        json_data = json.dumps([event.__json__() for event in events])
-        return HttpResponse(json_data, mimetype='application/json')
+        json_data = {
+                     'events': [event.__json__() for event in events],
+                     }
+        return HttpResponse(json.dumps(json_data), mimetype='application/json')
     context = {
                'events': events,
                'title': make_title('Program'),
@@ -38,7 +40,10 @@ def detail(request, event_id):
     event_id = int(event_id)
     event = get_object_or_404(Event, pk=event_id)
     if request.prefer_json:
-        return HttpResponse(json.dumps(event.__json__()), mimetype='application/json')
+        json_data = {
+                     'event': event.__json__(),
+                    }
+        return HttpResponse(json.dumps(json_data), mimetype='application/json')
     values = {
               'event': event,
               'title': make_title(event.name),
