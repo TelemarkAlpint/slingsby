@@ -9,7 +9,6 @@ from django.dispatch.dispatcher import receiver
 from django.forms import ModelForm
 from django.utils.safestring import SafeUnicode
 from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
 from general import time, validate_text, make_title
 from general.time import utc_to_nor, nor_to_utc, is_past
 from general.widgets import WidgEditorWidget, NORDateTimeWidget
@@ -117,24 +116,6 @@ class SubPageArticle(models.Model):
 
     def __unicode__(self):
         return self.subpage_name
-
-class ArticleListView(ListView):
-    model = Article
-    context_object_name = 'article_list'
-    paginate_by = 5
-
-    def get_queryset(self):
-        subpage_ids = list(SubPageArticle.objects.all().values_list('article', flat=True))
-        if subpage_ids:
-            articles = Article.objects.exclude(id__in=subpage_ids)
-        else:
-            articles = Article.objects.all()
-        return articles
-
-    def get_context_data(self, **kwargs):
-        context = super(ArticleListView, self).get_context_data(**kwargs)
-        context['title'] = make_title(self.kwargs.get('target_page'))
-        return context
 
 class ArticleDetailView(DetailView):
     model = Article

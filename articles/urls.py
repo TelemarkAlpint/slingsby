@@ -1,4 +1,4 @@
-from articles.models import ArticleDetailView, SubPageArticle
+from articles.models import SubPageArticle
 from django.conf.urls.defaults import patterns, url
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect
@@ -12,5 +12,5 @@ urlpatterns = patterns('articles.views',
 
 urls = []
 for slug, article_id in SubPageArticle.objects.all().values_list('slug', 'article'):
-    urls.append(url(r'^%s/$' % slug, ArticleDetailView.as_view(), {'pk': article_id}))
+    urls.append(url(r'^%s/$' % slug, 'articles.views.show_article', {'article_id': article_id}))
 urlpatterns += patterns('', *urls)
