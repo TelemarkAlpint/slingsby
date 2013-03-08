@@ -16,8 +16,10 @@ post_save.connect(AllGearQuery.empty_on_save, sender=Gear)
 def all_gear(request):
     all_gear = AllGearQuery.get_cached()
     if request.prefer_json:
-        json_array = [gear.__json__() for gear in all_gear]
-        return HttpResponse(json.dumps(json_array), mimetype='application/json')
+        json_data = {
+                      'gear': [gear.__json__() for gear in all_gear],
+                    }
+        return HttpResponse(json.dumps(json_data), mimetype='application/json')
     context = {
                'all_gear': all_gear,
                'title': make_title('Utleie'),
@@ -27,7 +29,8 @@ def all_gear(request):
 def gear_details(request, gear_id):
     gear = get_object_or_404(Gear, id=gear_id)
     if request.prefer_json:
-        return HttpResponse(json.dumps(gear.__json__()), mimetype='application/json')
+        json_data = {'gear': gear.__json__()}
+        return HttpResponse(json.dumps(json_data), mimetype='application/json')
     context = {
                'gear': gear,
                'title': make_title(gear.gear_id),
