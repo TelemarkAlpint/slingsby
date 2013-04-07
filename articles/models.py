@@ -74,10 +74,12 @@ class Article(models.Model):
         return SafeUnicode(dateline)
 
     def get_editline(self):
-        editline = ''
+        editline = None
         if self.last_edited:
-            editline = 'Sist endret av %s%s.' % (self.last_edited_by.profile.username, self._format_date_as_string(utc_to_nor(self.last_edited)))
-        return SafeUnicode(editline)
+            editline = SafeUnicode('Sist endret av %s%s.' % (
+                                    self.last_edited_by.profile.username,
+                                    self._format_date_as_string(utc_to_nor(self.last_edited))))
+        return editline
 
     def is_visible(self):
         has_been_published = is_past(self.published_date)

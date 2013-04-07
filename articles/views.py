@@ -16,7 +16,8 @@ post_save.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 post_delete.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 
 class LatestArticlesQuery(CachedQuery):
-    queryset = Article.objects.all()[:5]
+    subpage_ids = list(SubPageArticle.objects.all().values_list('article', flat=True))
+    queryset = Article.objects.exclude(id__in=subpage_ids) if subpage_ids else Article.objects.all()[:5]
 post_save.connect(LatestArticlesQuery.empty_on_save, sender=Article)
 
 class AllArticlesQuery(CachedQuery):
