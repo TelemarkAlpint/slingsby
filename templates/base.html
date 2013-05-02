@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="no">
 
 {% load url from future %}
 {% load shorten %}
@@ -22,7 +22,8 @@
     -->
     <title>{% block title %}{{ title|default:"NTNUI Telemark/Alpint" }}{% endblock %}</title>
     {% block css %}
-        <link rel="stylesheet" href="{{ STATIC_DIR }}stylesheets/mainv2.css" type="text/css">
+        <link rel="stylesheet" href="{{ STATIC_DIR }}stylesheets/mainv3.css" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic|Oxygen:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="/favicon.ico">
     {% endblock %}
     <meta property="og:description" content="{% block og_description %}Norges største idrettslag inviterer deg med på ski! Bli med til alpene, Vassfjellet, på trening, på skifilmkvelder og mye moro!{% endblock %}" />
@@ -79,15 +80,15 @@
 
                 <ul style="display: none;">
                         {% if user.is_staff %}
-                            <a href="/admin/"><li>Administrer</li></a>
+                            <li><a href="/admin/">Administrer</a></li>
                         {% endif %}
 
-                        <a href="{% url 'profile' %}"><li>Profil</li></a>
+                        <li><a href="{% url 'profile' %}">Profil</a></li>
 
-                        <a href="{% url 'logout' %}"><li>Logout</li></a>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
                 </ul>
                 {% else %}
-                    <span><a href=" {{ LOGIN_URL }}">Login</a></span>
+                    <span><a href="{{ LOGIN_URL }}">Login</a></span>
                 {% endif %}
             {% endblock %}
             </div>
@@ -98,20 +99,20 @@
 
         {% block sidebar %}
 
-            <div id="sidebar">
-                <a href="{% url 'frontpage' %}" class="non-select"><img class="non-select" id="logo" src="{{ GRAPHICS_DIR }}logo.png" alt="Logo" /></a>
+            <aside id="sidebar">
+                <a href="{% url 'frontpage' %}" class="non-select"><img class="non-select" id="logo" src="{{ GRAPHICS_DIR }}logo.png" alt="" /></a>
 
                 <nav>
                     <ul>
                         {% for slug, subpage_name in subpages %}
-                            <a href="/{{ slug }}"><li>{{ subpage_name }}</li></a>
+                            <li><a href="/{{ slug }}">{{ subpage_name }}</a></li>
                         {% endfor %}
 
                         {% if not user.is_authenticated %}
-                          <a href="{{ JOIN_URL }}"><li>Bli medlem!</li></a>
+                          <li><a href="{{ JOIN_URL }}">Bli medlem!</a></li>
                       {% else %}
                           {% if not user.profile.is_member %}
-                              <a href="{% url 'join' %}"><li>Bli medlem!</li></a>
+                              <li><a href="{% url 'join' %}">Bli medlem!</a></li>
                           {% endif %}
                         {% endif %}
                     </ul>
@@ -125,7 +126,7 @@
                         {% if user.is_authenticated %}
                             <div id="quote_suggestion" class="sidebar_box" style="display: none">
                                 <p>Foreslå en ny quote!</p>
-                                <form id="quoteform" action="{% url 'upload.upload_quote' %}" method="post">
+                                <form id="quoteform" action="{% url 'upload_quote' %}" method="post">
                                     {{ quote_form.as_p }}
                                     <input type="submit" value="Foreslå!">
                                 </form>
@@ -159,11 +160,10 @@
                 {% endblock quote %}
 
                 {% block next_events %}
-
                     {% if next_events %}
                         <div id="next_events" class="sidebar_box">
 
-                            <h3>Neste events</h3>
+                            <h1>Neste events</h1>
 
                             <ul>
                                 {% for event in next_events %}
@@ -179,15 +179,35 @@
                     <div id="sponsors" class="non-select">
 
                         {% for sponsor in sponsors %}
-                            <a href="{{ sponsor.webpage }}"><img src="{{ sponsor.get_img_url }}" alt="{{ sponsor }}"></a>
+                            <a href="{{ sponsor.webpage }}"><img src="{{ sponsor.get_img_url }}" alt="Logoen til {{ sponsor }}"></a>
                         {% endfor %}
 
                     </div>
                 {% endblock sponsors %}
 
+                {% block follow %}
+                    <div id="follow_us">
+                        <p>
+                            Følg oss på:
+                        </p>
+                        <ul>
+                            <li>
+                                <a href="https://github.com/organizations/TelemarkAlpint" title="GitHub">
+                                    <img src="{{ GRAPHICS_DIR }}social/Octocat.png" alt="GitHub logo">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.facebook.com/telemarkalpint" title="Facebook">
+                                    <img width="44px" src="{{ GRAPHICS_DIR }}social/Facebook.png" alt="Facebook logo">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endblock follow %}
+
                 <!-- <a href="http://ntnui.no"><img id="ntnui_logo" class="non-select" src="{{ STATIC_DIR }}gfx/ntnui.png" alt="NTNUI Logo"></a> -->
 
-            </div>
+            </aside>
         {% endblock %}
 
         <div id="content" role="main">

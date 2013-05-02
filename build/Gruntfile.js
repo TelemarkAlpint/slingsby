@@ -23,6 +23,15 @@ module.exports = function(grunt) {
       }
     },
 
+    compass: {
+        dist: {
+            options: {
+                sassDir: '../static/stylesheets/sass',
+                cssDir: '../static/stylesheets/',
+            }
+        }
+    },
+
     /*
      * Copy the static dir over to the fileserver.
      */
@@ -34,6 +43,7 @@ module.exports = function(grunt) {
               src: ['**/*.*'],
               cwd: '../static/',
               dest: '//webedit.ntnu.no/groupswww/telemark/static/',
+              processContentExclude: ['stylesheets/sass'],
           }
         ]
       }
@@ -43,8 +53,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-compass');
 
   // Default tasks
-  grunt.registerTask('default', ['handlebars', 'copy']);
+  grunt.registerTask('default', ['handlebars', 'compass', 'copy']);
 
 };
