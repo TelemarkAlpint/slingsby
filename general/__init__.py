@@ -6,9 +6,9 @@ from django.utils.safestring import mark_safe
 from django.views.generic.simple import direct_to_template
 import logging
 
-_LEGAL_TAGS = set(['p', 'br', 'ol', 'li', 'ul', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'a',
+_LEGAL_TAGS = set(['p', 'br', 'ol', 'li', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'a',
                   'b', 'strong', 'italic', 'i', 'em', 'div', 'iframe', 'table', 'tr', 'th', 'td',
-                  'tbody', 'thead', 'tfoot'])
+                  'tbody', 'thead', 'tfoot', 'span', 'q', 'blockquote', 'dd', 'dl', 'dt'])
 
 def append_slash(request, page):
     return HttpResponseRedirect('/%s/' % page)
@@ -39,7 +39,7 @@ def make_title(subpage=None):
 def add_params(url, params):
     return '%s?%s' % (url, params)
 
-def reverse_with_params(func_name='main', feedback_code=''):
+def reverse_with_params(func_name='frontpage', feedback_code=''):
     return add_params(reverse(func_name), feedback_code)
 
 
