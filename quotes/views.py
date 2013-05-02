@@ -1,14 +1,17 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template
-from general import make_title
+from general import make_title, reverse_with_params, feedback
 from general.cache import CachedQuery
-from quotes.models import Quote
+from quotes.models import Quote, QuoteForm
 import json
 import logging
+from upload import upload
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +36,12 @@ def delete_quote(request, quote_id):
     quote.delete()
     logging.info('%s rejected quote: %s', request.user.profile.username, quote)
     return HttpResponse('Quote slettet.', content_type='text/plain')
+
+@login_required
+@require_POST
+def upload_quote(request):
+    redirect = reverse_with_params(feedback_code=feedback.QUOTE_THANKS)
+    return upload(request, QuoteForm, reverse('upload_quote'), redirect)
 
 def all_quotes(request):
     quotes = AllQuotesQuery.update_cache()

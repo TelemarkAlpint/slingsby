@@ -13,10 +13,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def upload_quote(request):
-    redirect = reverse_with_params(feedback_code=feedback.QUOTE_THANKS)
-    return upload(request, QuoteForm, reverse('upload.upload_quote'), redirect)
-
 def upload(request, model_form, upload_handler_url, redirect='/', instance=None,
            post_save=None, custom_log=None, *args, **kwargs):
     if request.method == 'POST':
