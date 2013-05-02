@@ -91,7 +91,6 @@ class ArticleForm(ModelForm):
         exclude = ('author', 'last_edited', 'last_edited_by')
         widgets = {
                    'content': WidgEditorWidget(),
-                   'introduction': WidgEditorWidget(),
                    'published_date': NORDateTimeWidget(),
                    'social_summary': SocialSummaryWidget(),
                    }
@@ -107,17 +106,103 @@ class ArticleForm(ModelForm):
         clean_data = validate_text(data)
         return clean_data
 
+#This class is a copy-paste of Article, with some extra fields in the top. They should have both inherited from a parent
+#base class, but sadly multi-table inheritance is not supported on GAE.
 class SubPageArticle(models.Model):
-    subpage_name = models.CharField('side', unique=True, max_length=30, help_text='Hva skal undersiden hete?')
+    title = models.CharField('tittel', unique=True, blank=False, max_length=30, help_text='Hva skal undersiden hete?')
     slug = models.CharField('slug', unique=True, max_length=15, help_text="URLen siden får.")
     sort_key = models.IntegerField('sorteringsnøkkel', default=0, help_text='Jo høyere tall, jo høyere kommer siden')
-    article = models.OneToOneField(Article, related_name='subpage', verbose_name='artikkel')
+
+    #Similar to Article from here and down
+    visible = models.BooleanField('synlig', default=True)
+    published_date = models.DateTimeField('publiseres', blank=True, null=True,
+                                          help_text='''Kan settes inn i fremtiden hvis du vil at en artikkel skal bli
+                                          synlig ved en senere anledning''')
+    last_edited = models.DateTimeField('sist endret', null=True, blank=True)
+    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='User.article_set')
+    content = models.TextField('innhold')
+    author = models.ForeignKey(User, related_name='User.article_Set', null=True)
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
+    social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
     class Meta:
         ordering = ['-sort_key']
 
     def __unicode__(self):
-        return self.subpage_name
+        return "<SubPageArticle: %s -> %s>" % (self.slug, self.title)
+
+    def __json__(self):
+        data = {
+                'id': self.id,
+                'published_date': self.published_date.isoformat(),
+                'published_date_as_string': self.get_dateline(),
+                'title': self.title,
+                'content': self.content,
+                'author': self.author.profile.username,
+                'slug': self.slug,
+                }
+        if self.social_summary:
+            data['summary'] = self.social_summary
+        if self.last_edited:
+            data['last_edited'] =  self.last_edited.isoformat()
+            data['last_edited_by'] =  self.last_edited_by.profile.username
+            data['last_edited_as_string'] = self.get_editline()
+        return data
+
+    def get_absolute_url(self):
+        return reverse('article_detail', args=[str(self.id)])
+
+    def _format_date_as_string(self, date):
+        date = utc_to_nor(date)
+        days_passed = time.days_since(date)
+        if days_passed == 0:
+            string = ', i dag'
+        elif days_passed == 1:
+            string = ', i går'
+        elif days_passed == 2:
+            string = ' for to dager siden'
+        else:
+            string = ' den %s' % date.strftime('%d.%m.%y')
+        string += ', kl %s' % date.strftime('%H:%M')
+        return string
+
+    def get_dateline(self):
+        dateline = 'Skrevet av %s%s.' % (self.author.profile.username, self._format_date_as_string(utc_to_nor(self.published_date)))
+        return SafeUnicode(dateline)
+
+    def get_editline(self):
+        editline = None
+        if self.last_edited:
+            editline = SafeUnicode('Sist endret av %s%s.' % (
+                                    self.last_edited_by.profile.username,
+                                    self._format_date_as_string(utc_to_nor(self.last_edited))))
+        return editline
+
+    def is_visible(self):
+        has_been_published = is_past(self.published_date)
+        return has_been_published and self.visible
+
+class SubPageArticleForm(ModelForm):
+    class Meta:
+        model = SubPageArticle
+        exclude = ('author', 'last_edited', 'last_edited_by')
+        widgets = {
+                   'content': WidgEditorWidget(),
+                   'introduction': WidgEditorWidget(),
+                   'published_date': NORDateTimeWidget(),
+                   'social_summary': SocialSummaryWidget(),
+                   }
+
+    def clean_published_date(self):
+        date = self.cleaned_data['published_date']
+        if not date:
+            date = time.now()
+        return nor_to_utc(date)
+
+    def clean_content(self):
+        data = self.cleaned_data['content']
+        clean_data = validate_text(data)
+        return clean_data
 
 class ArticleDetailView(DetailView):
     model = Article
@@ -135,5 +220,5 @@ def register_new_url(sender, **kwargs):
     from django.conf.urls.defaults import patterns, url
     subpage = kwargs['instance']
     urlpatterns += patterns('',
-        url(r'^%s$' % subpage.slug, ArticleDetailView.as_view(), {'pk': subpage.article.id}),
+        url(r'^%s$' % subpage.slug, 'articles.views.show_article', {'article_id': subpage.id}),
                            )

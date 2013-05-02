@@ -12,7 +12,7 @@
             <article data-datetime="{{ article.published_date.isoformat }}">
                 {% include 'articles/article_view_heading.html' %}
                 {{ article.content|safe }}
-                <span>Del og diskuter: </span><a href="{{ article.get_absolute_url }}#disqus_thread">Del og diskuter &rarr;</a></span>
+                <span>Del og diskuter: <a href="{{ article.get_absolute_url }}#disqus_thread">Del og diskuter &rarr;</a></span>
                 {% include 'articles/article_view_ending.html' %}
             </article>
         {% endif %}

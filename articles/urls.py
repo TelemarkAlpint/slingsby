@@ -11,6 +11,6 @@ urlpatterns = patterns('articles.views',
                         )
 
 urls = []
-for slug, article_id in SubPageArticle.objects.all().values_list('slug', 'article'):
+for slug, article_id in SubPageArticle.objects.all().values_list('slug', 'id'):
     urls.append(url(r'^%s/$' % slug, 'articles.views.show_article', {'article_id': article_id}))
 urlpatterns += patterns('', *urls)
