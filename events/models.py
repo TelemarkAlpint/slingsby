@@ -15,7 +15,7 @@ _MONTHS =  [u'januar', u'februar', u'mars', u'april', u'mai', u'juni', u'juli',
 
 class Event(models.Model):
     name = models.CharField('navn', max_length=100)
-    startdate = models.DateTimeField('startdao')
+    startdate = models.DateTimeField('startdato')
     enddate = models.DateTimeField('sluttdato')
     has_registration = models.BooleanField(SafeUnicode(u'påmelding'))
     registration_opens = models.DateTimeField(SafeUnicode(u'påmeldingen åpner'), null=True, blank=True)

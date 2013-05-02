@@ -16,8 +16,6 @@
 
                 <p>{{ event.summary|safe }} <a class="read_more" href="{{ event.get_absolute_url }}">Les mer &rarr;</a></p>
 
-                {% include "events/event_registration.html" %}
-
             </div>
 
         {% empty %}
