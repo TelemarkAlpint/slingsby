@@ -4,6 +4,10 @@ register = template.Library()
 
 @register.filter
 def shorten(text, num_chars):
+    """ Split a long text in two parts and add ellipses in between.
+
+    Ex: "My long text this is" -> "My lo...is is!"
+    """
     if len(text) > num_chars and num_chars > 5:
         padding = num_chars // 2
         ellipses = unichr(8230) # Horizontal ellipses
