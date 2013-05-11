@@ -4,7 +4,7 @@ import logging
 import os
 
 # Current version prepended to every keyword, to prevent mixup of the caches between different versions
-_PREFIX = os.environ['CURRENT_VERSION_ID']
+_PREFIX = os.environ.get('CURRENT_VERSION_ID', '')
 
 """
 Due to some funky coding from Google, all of the memcache functions will show a warning in Eclipse. Partly due

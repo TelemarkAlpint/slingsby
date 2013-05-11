@@ -6,3 +6,4 @@
 secrets.py
 auth/*
 TODO.txt
+build/.sass-cache/*

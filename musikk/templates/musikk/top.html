@@ -11,7 +11,7 @@
         Dette er de {{ num_songs }} mest populære sangene stemt frem av brukerne våre:<br>
         <ul>
             <li>
-                <a href="{% url 'top_song' %}">Slått sammen til én sang (MP3, høyreklikk og "lagre som").</a>
+                <a href="{% url 'top_song' %}" download="top_song.mp3">Slått sammen til én sang (MP3, høyreklikk og "lagre som").</a>
             </li>
             <li>
                 <a href="{% url 'top_list' %}">Som en liste (JSON)</a>

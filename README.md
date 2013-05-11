@@ -19,14 +19,14 @@ Features
 About
 -----
 
-Our servers are running on Google App Engine, with static files hosted on org.ntnu.no. We're running
-Django-nonrel for the time being, but we're eventually aiming for Django 1.5 and Google Cloud SQL.
+Our servers are running on Google App Engine powered by Cloud SQL, with static files hosted on org.ntnu.no. We're running
+Django 1.4 for the time being, but we're headed for Django 1.5.
 
 ### Goals
 
 We strive towards a clean, predictable URL scheme, and try to provide every resource as both HTML and JSON. Try browsing the site with Firefox,
-with network.http.accept.default set to any string that prioritizes JSON over HTML, like text/html,application/json;q=1.1. This is not entirely
-documented yet, and might change in the future, but if you want to program towards the site, this is how you want to do it.
+with network.http.accept.default set to any string that prioritizes JSON over HTML, like text/html,application/json;q=1.1. This API is not entirely
+documented yet and is subject to large changes, but if you want to program towards the site, this is how you want to do it.
 
 A major goal for the site is to try to follow best practices as far as possible, as the site will be the first entry point to the "real world"
 for many of the developers working on it, and we try to make that as easy as possible. This goes for both compliance to protocols like HTTP,
@@ -43,7 +43,7 @@ pages soon, enhancing the mobile experience.
 Dependencies
 ------------
 
-* BeautifulSoup 3.2.0
+* BeautifulSoup 4
 * Pytz 2011k
 * jQuery 1.8.1
 * Modernizr 2.0.6
@@ -51,3 +51,5 @@ Dependencies
 * Zoombox
 * dateutil 1.5
 * Handlebars 1.0.0-rc3
+* Compass
+* Grunt

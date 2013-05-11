@@ -166,10 +166,11 @@ def vote_on_song(request, song_id):
         logging.info('%s voted on %s.', song)
         return HttpResponse('Vote registered on %s.' % song)
     else:
-        logging.info('%s tried to vote more than once on %s.' % (user.profile.username, song))
+        logging.info('%s tried to vote more than once on %s.' % (user.username, song))
         return HttpResponse("Du har allerede stemt på denne sangen i dag!", content_type='text/plain', status=403)
 
 @staff_member_required
+@require_POST
 def delete_song(request, song_id):
     song = get_object_or_404(Song, id=song_id)
     song.delete()

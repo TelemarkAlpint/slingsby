@@ -1,6 +1,6 @@
 from articles.views import SingleArticlePageQuery
 from events.views import NextEventsQuery
-from general.constants import STATIC_DIR, LOGIN_URL, MEDIA_DIR, GRAPHICS_DIR, \
+from general.constants import LOGIN_URL, MEDIA_DIR, GRAPHICS_DIR, \
     JOIN_URL, LEAVE_URL
 from general.feedback import get_feedback
 from general.models import SponsorsQuery
@@ -17,7 +17,6 @@ def default(request):
     context = {
         'sponsors': SponsorsQuery.get_cached(),
         'next_events': NextEventsQuery.get_cached(),
-        'STATIC_DIR': STATIC_DIR,
         'MEDIA_DIR': MEDIA_DIR,
         'GRAPHICS_DIR': GRAPHICS_DIR,
         'LOGIN_URL': LOGIN_URL,
