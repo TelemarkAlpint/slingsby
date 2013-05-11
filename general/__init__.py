@@ -1,4 +1,4 @@
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect

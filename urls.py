@@ -23,10 +23,4 @@ urlpatterns = patterns('',
     (r'^tasks/', include('tasks.urls')),
     (r'^program/', include('events.urls')),
     (r'^gear/', include('gear.urls')),
-    (r'^_ah/warmup$', 'djangoappengine.views.warmup'),
                        )
-
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^test/$', lambda req: direct_to_template(req, 'test.html', {})),
-    )

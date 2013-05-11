@@ -1,5 +1,5 @@
 application: telemarkalpint
-version: 59
+version: 62
 runtime: python27
 api_version: 1
 threadsafe: false
@@ -10,6 +10,19 @@ builtins:
 inbound_services:
 - warmup
 
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- static/.*
+- build/.*
+
 handlers:
 - url: /favicon\.ico
   static_files: static/favicon.ico
@@ -19,23 +32,18 @@ handlers:
   static_files: static/robots.txt
   upload: static/robots\.txt
 
-- url: /_ah/queue/deferred
-  script: djangoappengine.deferred.handler.application
-  login: admin
-
-- url: /_ah/stats/.*
-  script: djangoappengine.appstats.application
-
-- url: /media/admin
-  static_dir: django/contrib/admin/media
-  expiration: '0'
+- url: /static
+  static_dir: static
+#- url: /media/admin
+#  static_dir: django/contrib/admin/media
+#  expiration: '0'
 
 - url: /tasks/.*
-  script: djangoappengine.main.application
+  script: main.py
   login: admin
 
 - url: /.*
-  script: djangoappengine.main.application
+  script: main.py
   secure: optional
 
 error_handlers:

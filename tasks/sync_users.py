@@ -1,4 +1,4 @@
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from contextlib import closing
 from django.http import HttpResponse
 from google.appengine.api.urlfetch import fetch

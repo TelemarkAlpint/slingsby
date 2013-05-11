@@ -12,6 +12,7 @@ from django.views.generic.detail import DetailView
 from general import time, validate_text, make_title
 from general.time import utc_to_nor, nor_to_utc, is_past
 from general.widgets import WidgEditorWidget, NORDateTimeWidget
+import logging
 
 class Article(models.Model):
     """
@@ -22,10 +23,10 @@ class Article(models.Model):
                                           help_text='''Kan settes inn i fremtiden hvis du vil at en artikkel skal bli
                                           synlig ved en senere anledning''')
     last_edited = models.DateTimeField('sist endret', null=True, blank=True)
-    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='User.article_set')
+    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='User.User.article_set')
     title = models.CharField('tittel', max_length=200, blank=False)
     content = models.TextField('innhold')
-    author = models.ForeignKey(User, related_name='User.article_Set')
+    author = models.ForeignKey(User, related_name='User.User.article_Set', blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
@@ -42,13 +43,13 @@ class Article(models.Model):
                 'published_date_as_string': self.get_dateline(),
                 'title': self.title,
                 'content': self.content,
-                'author': self.author.profile.username,
+                'author': self.author.username,
                 }
         if self.social_summary:
             data['summary'] = self.social_summary
         if self.last_edited:
             data['last_edited'] =  self.last_edited.isoformat()
-            data['last_edited_by'] =  self.last_edited_by.profile.username
+            data['last_edited_by'] =  self.last_edited_by.username
             data['last_edited_as_string'] = self.get_editline()
         return data
 
@@ -56,28 +57,44 @@ class Article(models.Model):
         return reverse('article_detail', args=[str(self.id)])
 
     def _format_date_as_string(self, date):
-        date = utc_to_nor(date)
         days_passed = time.days_since(date)
         if days_passed == 0:
-            string = ', i dag'
+            string = u', i dag'
         elif days_passed == 1:
-            string = ', i går'
+            string = u', i går'
         elif days_passed == 2:
-            string = ' for to dager siden'
+            string = u' for to dager siden'
         else:
-            string = ' den %s' % date.strftime('%d.%m.%y')
-        string += ', kl %s' % date.strftime('%H:%M')
+            string = u' den %s' % date.strftime('%d.%m.%y')
+        string += u', kl %s' % date.strftime('%H:%M')
         return string
 
     def get_dateline(self):
-        dateline = 'Skrevet av %s%s.' % (self.author.profile.username, self._format_date_as_string(utc_to_nor(self.published_date)))
+        logging.debug("Fetching dateline...")
+        dateline = "oops"
+        try:
+            nor_date = utc_to_nor(self.published_date)
+            datestring = self._format_date_as_string(nor_date)
+            logging.info("Got so far: %s%s", self.author.username, datestring)
+            dateline = 'Skrevet av %s%s.' % (self.author.username, datestring)
+        except Exception as e:
+            logging.warning("Failed. %s", self.author)
+            logging.warning("Username: %s", self.author.username)
+            logging.warning("Utc_to_nor: %s", utc_to_nor(self.published_date))
+            logging.warning("formatted: %s", self._format_date_as_string(self.published_date))
+            logging.warning("NOR formatted: %s", self._format_date_as_string(utc_to_nor(self.published_date)))
+            logging.warning(e.message)
+            import traceback
+            s = traceback.format_exc()
+            logging.warning(s)
+#            logging.exception()
         return SafeUnicode(dateline)
 
     def get_editline(self):
         editline = None
         if self.last_edited:
             editline = SafeUnicode('Sist endret av %s%s.' % (
-                                    self.last_edited_by.profile.username,
+                                    self.last_edited_by.username,
                                     self._format_date_as_string(utc_to_nor(self.last_edited))))
         return editline
 
@@ -88,7 +105,7 @@ class Article(models.Model):
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
-        exclude = ('author', 'last_edited', 'last_edited_by')
+        exclude = ('last_edited', 'last_edited_by')
         widgets = {
                    'content': WidgEditorWidget(),
                    'published_date': NORDateTimeWidget(),
@@ -121,12 +138,12 @@ class SubPageArticle(models.Model):
     last_edited = models.DateTimeField('sist endret', null=True, blank=True)
     last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='User.article_set')
     content = models.TextField('innhold')
-    author = models.ForeignKey(User, related_name='User.article_Set', null=True)
+    author = models.ForeignKey(User, related_name='User.article_Set', blank=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
     class Meta:
-        ordering = ['-sort_key']
+        ordering = ['-sort_key', 'title']
 
     def __unicode__(self):
         return "<SubPageArticle: %s -> %s>" % (self.slug, self.title)
@@ -138,14 +155,14 @@ class SubPageArticle(models.Model):
                 'published_date_as_string': self.get_dateline(),
                 'title': self.title,
                 'content': self.content,
-                'author': self.author.profile.username,
+                'author': self.author.username,
                 'slug': self.slug,
                 }
         if self.social_summary:
             data['summary'] = self.social_summary
         if self.last_edited:
             data['last_edited'] =  self.last_edited.isoformat()
-            data['last_edited_by'] =  self.last_edited_by.profile.username
+            data['last_edited_by'] =  self.last_edited_by.username
             data['last_edited_as_string'] = self.get_editline()
         return data
 
@@ -167,14 +184,14 @@ class SubPageArticle(models.Model):
         return string
 
     def get_dateline(self):
-        dateline = 'Skrevet av %s%s.' % (self.author.profile.username, self._format_date_as_string(utc_to_nor(self.published_date)))
+        dateline = 'Skrevet av %s%s.' % (self.author.username, self._format_date_as_string(utc_to_nor(self.published_date)))
         return SafeUnicode(dateline)
 
     def get_editline(self):
         editline = None
         if self.last_edited:
             editline = SafeUnicode('Sist endret av %s%s.' % (
-                                    self.last_edited_by.profile.username,
+                                    self.last_edited_by.username,
                                     self._format_date_as_string(utc_to_nor(self.last_edited))))
         return editline
 

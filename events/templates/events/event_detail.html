@@ -26,7 +26,7 @@
                     <h4>Påmeldte</h4>
                     <ul>
                     {% for user in event.get_participating_users %}
-                        <li> {{ user.profile.full_name_or_username }}</li>
+                        <li> {{ user.full_name_or_username }}</li>
                     {% empty %}
                         <li><i>Ingen påmeldte enda!</i></li>
                     {% endfor %}

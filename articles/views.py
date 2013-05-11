@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class SingleArticlePageQuery(CachedQuery):
-    queryset = SubPageArticle.objects.all().values_list('slug', 'title')
+    queryset = SubPageArticle.objects.all().values_list('slug', 'title', 'visible')
 post_save.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 post_delete.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 

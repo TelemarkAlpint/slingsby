@@ -57,5 +57,6 @@ module.exports = function(grunt) {
 
   // Default tasks
   grunt.registerTask('default', ['handlebars', 'compass', 'copy']);
+  grunt.registerTask('dev', ['handlebars', 'compass']);
 
 };

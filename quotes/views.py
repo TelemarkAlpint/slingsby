@@ -26,7 +26,7 @@ def approve_quote(request, quote_id):
     quote = get_object_or_404(Quote, id=quote_id)
     quote.accepted = True
     quote.save()
-    logger.info('%s confirmed quote: %s', request.user.profile.username, quote)
+    logger.info('%s confirmed quote: %s', request.user.username, quote)
     return HttpResponseRedirect(quote.get_absolute_url())
 
 @staff_member_required
@@ -34,7 +34,7 @@ def approve_quote(request, quote_id):
 def delete_quote(request, quote_id):
     quote = get_object_or_404(Quote, id=quote_id)
     quote.delete()
-    logging.info('%s rejected quote: %s', request.user.profile.username, quote)
+    logging.info('%s rejected quote: %s', request.user.username, quote)
     return HttpResponse('Quote slettet.', content_type='text/plain')
 
 @login_required

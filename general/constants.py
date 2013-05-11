@@ -1,7 +1,4 @@
 
-# Hvis denne endres mA ogsA ADMIN_MEDIA_PREFIX i settings.py endres.
-STATIC_DIR = 'http://org.ntnu.no/telemark/static/'
-
 GRAPHICS_DIR = 'http://org.ntnu.no/telemark/static/gfx/'
 
 LOGIN_URL = 'http://ntnui.no/authapi/telemark'

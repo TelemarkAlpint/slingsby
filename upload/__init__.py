@@ -25,10 +25,10 @@ def upload(request, model_form, upload_handler_url, redirect='/', instance=None,
             class_name = instance.__class__.__name__.lower()
             form.save()
             if not custom_log:
-                logging.info('%s lastet opp %s: %s', request.user.profile.username, class_name, instance)
+                logging.info('%s lastet opp %s: %s', request.user.username, class_name, instance)
 #                logging.info(request.user, UPLOADED_OBJECT, class_name, instance)
             else:
-                logging.info(custom_log, request.user.profile.username, *args, **kwargs)
+                logging.info(custom_log, request.user.username, *args, **kwargs)
             if post_save is not None:
                 post_save()
             return HttpResponseRedirect(redirect)

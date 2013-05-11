@@ -34,7 +34,7 @@ class Quote(models.Model):
         if verbose:
             fields['approved'] = self.accepted
             if self.suggested_by is not None:
-                fields['suggested_by'] = self.suggested_by.profile.username
+                fields['suggested_by'] = self.suggested_by.username
         return fields
 
     def get_absolute_url(self):

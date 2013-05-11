@@ -47,7 +47,7 @@ class Vote(models.Model):
         ordering = ['-date_added']
 
     def __unicode__(self):
-        username = self.user.profile.username
+        username = self.user.username
         date = self.date_added.strftime('%H:%M %d.%m.%y')
         return '(%s) %s: %s' % (date, username, self.song)
 

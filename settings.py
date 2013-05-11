@@ -1,19 +1,31 @@
 # coding: utf-8
 
-# Initialize App Engine and import the default settings (DB backend, etc.).
-# If you want to use a different backend you have to remove all occurences
-# of "djangoappengine" from this file.
-from djangoappengine.settings_base import DATABASES
 from secrets import SECRET_KEY
 import os
+
+prod_server = os.environ.get('SERVER_SOFTWARE', '').startswith('Google')
 
 USE_TZ = True
 TIME_ZONE = 'Europe/Oslo'
 FIRST_DAY_OF_WEEK = 1 # Søndag = 0, Mandag = 1
 
-# Activate django-dbindexer for the default database
-DATABASES['native'] = DATABASES['default']
-DATABASES['default'] = {'ENGINE': 'dbindexer', 'TARGET': 'native'}
+if prod_server:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'google.appengine.ext.django.backends.rdbms',
+            'INSTANCE': 'ntnuitelemarkalpint:slingsby-db',
+            'NAME': 'slingsby_rel',
+        },
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'USER': 'root',
+            'HOST': 'localhost',
+            'NAME': 'dev_db',
+        },
+    }
 AUTOLOAD_SITECONF = 'indexes'
 
 INSTALLED_APPS = (
@@ -21,11 +33,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.contenttypes',
     'django.contrib.auth',
+    'django.contrib.staticfiles',
     'django.contrib.sessions',
-    'djangotoolbox',
-    'permission_backend_nonrel',
-    'autoload',
-    'dbindexer',
     'articles',
     'events',
     'quotes',
@@ -36,24 +45,13 @@ INSTALLED_APPS = (
     'archive',
     'users',
     'gear',
-    'docutils',
-    'pytz',
-    'sorl.thumbnail',
-
-    # djangoappengine should come last, so it can override a few manage.py commands
-    'djangoappengine',
-)
-
-AUTHENTICATION_BACKENDS = (
-    'permission_backend_nonrel.backends.NonrelPermissionBackend',
 )
 
 MIDDLEWARE_CLASSES = (
-    # This loads the index definitions, so it has to come first
-    'autoload.middleware.AutoloadMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'general.middleware.HttpAcceptMiddleware',
 )
 
@@ -78,15 +76,18 @@ TEST_RUNNER = 'djangotoolbox.test.CapturingTestSuiteRunner'
 
 DEBUG = False
 TEMPLATE_DEBUG = False
-if os.environ.get('SERVER_SOFTWARE', '').startswith('Dev'):
+
+if not prod_server:
     DEBUG = True
     TEMPLATE_DEBUG = True
 
-ADMIN_MEDIA_PREFIX =  'http://org.ntnu.no/telemark/static/admin/media/'
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
 
 ROOT_URLCONF = 'urls'
 
-STATIC_URL = 'http://org.ntnu.no/telemark/static/'
+if DEBUG:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = 'http://org.ntnu.no/telemark/static/'
 
 AUTH_PROFILE_MODULE = 'users.UserProfile'

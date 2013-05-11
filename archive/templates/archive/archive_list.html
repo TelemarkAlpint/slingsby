@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block extrastyles %}
-    <link rel="stylesheet" href="{{ STATIC_DIR }}stylesheets/zoombox.css">
+    <link rel="stylesheet" href="{% static "stylesheets/zoombox.css" %}">
 {% endblock %}
 
 {% block content %}
@@ -72,6 +74,6 @@
             });
         });
     </script>
-    <script src="{{ STATIC_DIR }}js/zoombox.js"></script>
+    <script src="{% static "js/zoombox.js" %}"></script>
 
 {% endblock %}
