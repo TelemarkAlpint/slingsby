@@ -292,12 +292,14 @@
 
     </script>
 
-    {# <script type="text/javascript">if (window != top) top.location = window.location;</script>#}
-
     {% if feedback %}
         <script>
             setTimeout(function() {$("#feedback").slideUp(500)},10000);
         </script>
+    {% endif %}
+
+    {% if debug %}
+        <script src="http://localhost:35729/livereload.js"></script>
     {% endif %}
 {% endblock %}
 

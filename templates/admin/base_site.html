@@ -3,6 +3,13 @@
 
 {% block title %}{{ title }} | {% trans 'NTNUI Telemark/Alpint' %}{% endblock %}
 
+{% block extrahead %}
+	{{ block.super }}
+	{% if debug %}
+		<script src="http://localhost:35729/livereload.js"></script>
+	{% endif %}
+{% endblock %}
+
 {% block branding %}
 <h1 id="site-name">{% trans 'Administatorsiden (<a href="/">Forsiden</a>)' %}</h1>
 {% endblock %}

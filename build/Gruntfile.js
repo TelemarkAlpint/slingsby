@@ -18,16 +18,20 @@ module.exports = function(grunt) {
           closure: true,
         },
         files: {
-            "../static/js/handlebars_templates/articles.js": "../articles/templates/articles/handlebars/*.handlebars",
+            "../static/js/handlebars_templates/articles.js": "../**/handlebars/*.hbs",
         }
       }
     },
 
+    /*
+    * Compile SASS stylesheets.
+    */
     compass: {
         dist: {
             options: {
                 sassDir: '../static/stylesheets/sass',
                 cssDir: '../static/stylesheets/',
+                outputStyle: "compressed",
             }
         }
     },
@@ -49,11 +53,37 @@ module.exports = function(grunt) {
       }
     },
 
+    /*
+    * Recompile css, coffeescript and reload on template changes.
+    */
+    watch: {
+      options: {
+        livereload: true,
+      },
+      css: {
+        files: ['../static/stylesheets/sass/*.scss'],
+        tasks: ['compass'],
+      },
+      js: {
+        files: ['../static/js/*.js'],
+        tasks: []
+      },
+      templates: {
+        files: ['../templates/*.html'],
+        tasks: [],
+      },
+      handlebars: {
+        files: ['../**/handlebars/*.hbs'],
+        tasks: ['handlebars'],
+      },
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default tasks
   grunt.registerTask('default', ['handlebars', 'compass', 'copy']);
