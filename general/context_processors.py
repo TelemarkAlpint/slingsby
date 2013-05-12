@@ -1,7 +1,6 @@
 from articles.views import SingleArticlePageQuery
 from events.views import NextEventsQuery
-from general.constants import LOGIN_URL, MEDIA_DIR, GRAPHICS_DIR, \
-    JOIN_URL, LEAVE_URL
+from general.constants import LOGIN_URL, MEDIA_DIR, JOIN_URL, LEAVE_URL
 from general.feedback import get_feedback
 from general.models import SponsorsQuery
 from django.conf import settings
@@ -19,7 +18,6 @@ def default(request):
         'sponsors': SponsorsQuery.get_cached(),
         'next_events': NextEventsQuery.get_cached(),
         'MEDIA_DIR': MEDIA_DIR,
-        'GRAPHICS_DIR': GRAPHICS_DIR,
         'LOGIN_URL': LOGIN_URL,
         'JOIN_URL': JOIN_URL,
         'LEAVE_URL': LEAVE_URL,

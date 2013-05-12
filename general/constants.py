@@ -1,6 +1,4 @@
 
-GRAPHICS_DIR = 'http://org.ntnu.no/telemark/static/gfx/'
-
 LOGIN_URL = 'http://ntnui.no/authapi/telemark'
 
 LOGOUT_URL = 'http://ntnui.no/Logout.xhtml'

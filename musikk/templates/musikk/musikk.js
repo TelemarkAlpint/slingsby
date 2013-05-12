@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 $(function(){
     $(".song_vote_button").click(function(){
         var song_id = $(this).attr('id');
@@ -6,7 +8,7 @@ $(function(){
 });
 
 function setIcon(song_id, img_path){
-    $('#' + song_id).attr('src', '{{ GRAPHICS_DIR }}' + img_path)
+    $('#' + song_id).attr('src', '{% static "gfx/" %}' + img_path)
         .removeClass('clickable');
 }
 

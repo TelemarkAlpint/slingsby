@@ -17,7 +17,7 @@
         {% if user.profile.image_large %}
             <img src="{{ user.profile.image_large }}" alt="Profilbildet ditt">
         {% else %}
-            <img src="{{ GRAPHICS_DIR }}missing_picture-75.png" alt="Du har ikke lagt inn bilde!">
+            <img src="{% static "gfx/missing_picture-75.png" %}" alt="Du har ikke lagt inn bilde!">
             <br>
             <a href="{{ EDIT_PROFILE_IMAGE }}">Last opp bilde</a>
         {% endif %}

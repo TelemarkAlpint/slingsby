@@ -1,4 +1,5 @@
 {% load shorten %}
+{% load staticfiles %}
 
 <li data-filter="{{ song.artist }} {{ song.title }}">
     <a href="{{ song.get_absolute_url }}" class="song_rating">
@@ -11,9 +12,9 @@
     <a href="{{ song_dir }}{{ song.filename|urlencode }}.mp3" title="{{ song.title }}">{{ song.title|truncatechars:16 }}</a>
     {% if user.is_authenticated %}
         {% if song.id not in songs_voted_on %}
-            <img id="{{ song.id }}" alt="Stem opp!" title="Stem opp {{ song.title }}!" class="clickable song_vote_button" src="{{ GRAPHICS_DIR }}up.png">
+            <img id="{{ song.id }}" alt="Stem opp!" title="Stem opp {{ song.title }}!" class="clickable song_vote_button" src="{% static "gfx/up.png" %}" >
         {% else %}
-            <img src="{{ GRAPHICS_DIR }}check.png">
+            <img src="{% static "gfx/check.png" %}" >
         {% endif %}
     {% endif %}
 </li>
