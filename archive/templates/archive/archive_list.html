@@ -5,6 +5,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block extrastyles %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static "stylesheets/zoombox.css" %}">
 {% endblock %}
 

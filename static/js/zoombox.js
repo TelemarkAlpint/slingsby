@@ -23,6 +23,7 @@ var height;
 var timer;          // Timing for img loading
 var i = 0;          // iteration variable
 var content;        // The content of the box
+
 var type = 'multimedia'; // Content type
 var position = false;
 var imageset = false;
@@ -88,10 +89,6 @@ $.fn.zoombox = function(opts){
      * Bind the behaviour on every Elements
      */
     return this.each(function(){
-        // No zoombox for IE6
-        if($.browser.msie && $.browser.version < 7 && !window.XMLHttpRequest){
-            return false;
-        }
         var obj = this;
         var galleryRegExp = /zgallery([0-9]+)/;
         var gallery = galleryRegExp.exec($(this).attr("class"));

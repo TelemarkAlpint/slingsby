@@ -102,6 +102,7 @@ def get_old_hashes():
     return set(hashes)
 
 def create_and_get_events(archive, old_hashes):
+    images = []
     for path_hash, event in archive['events'].items():
         if path_hash not in old_hashes:
             e = ArchiveEvent()
@@ -134,11 +135,12 @@ def create_and_get_events(archive, old_hashes):
                     i.large_size_url = img['fullsize']
                     i.gallery = g
                     i.description = img.get('description', None)
-                    i.save()
+                    images.append(i)
             if not g.cover_photo:
                 img_hash, cover_img = gallery['images'].popitem()
                 g.cover_photo = cover_img['websize']
                 g.save()
+    Image.objects.bulk_create(images)
 
 def create_new_events(archive, old_hashes):
     """ Save all objects to the database which is not present in the old hash set.
