@@ -105,7 +105,7 @@ class Article(models.Model):
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
-        exclude = ('last_edited', 'last_edited_by')
+        exclude = ('last_edited', 'last_edited_by', 'author')
         widgets = {
                    'content': WidgEditorWidget(),
                    'published_date': NORDateTimeWidget(),
