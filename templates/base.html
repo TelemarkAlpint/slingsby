@@ -100,7 +100,7 @@
         {% block sidebar %}
 
             <aside id="sidebar">
-                <a href="{% url 'frontpage' %}" class="non-select"><img class="non-select" id="logo" src="{{ GRAPHICS_DIR }}logo.png" alt="" /></a>
+                <a href="{% url 'frontpage' %}" id="logo" class="non-select"><img class="non-select" src="{{ GRAPHICS_DIR }}logo.png" alt="" /></a>
 
                 <nav>
                     <ul>
@@ -262,8 +262,8 @@
 </div> <!--! end of #wrapper -->
 
 {% block scripts %}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{% static "js/jquery-1.8.1.min.js" %}"><\/script>')</script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{% static "js/jquery-1.9.1.min.js" %}"><\/script>')</script>
     <script src="{% static "js/modernizr-2.0.6.min.js" %}"></script>
     <script src="{% static "js/main.min.js" %}"></script>
     <script>

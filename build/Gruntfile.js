@@ -69,7 +69,7 @@ module.exports = function(grunt) {
         tasks: []
       },
       templates: {
-        files: ['../templates/*.html'],
+        files: ['../templates/*.html', '../*/templates/*/*.html'],
         tasks: [],
       },
       handlebars: {

@@ -45,7 +45,7 @@ Dependencies
 
 * BeautifulSoup 4
 * Pytz 2011k
-* jQuery 1.8.1
+* jQuery 1.9.1
 * Modernizr 2.0.6
 * WidgEditor 2008-03-01
 * Zoombox

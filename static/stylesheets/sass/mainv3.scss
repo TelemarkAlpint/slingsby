@@ -519,9 +519,13 @@ th {
 }
 
 
-img#logo {
+#logo {
     background-color: $header_background;
-    padding: 0px 10px 10px 10px;
+    display: inline-block;
+
+    img {
+        padding: 0px 10px 10px 10px;
+    }
 }
 
 img#ntnui_logo {
