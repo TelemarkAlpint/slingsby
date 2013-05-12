@@ -70,12 +70,10 @@ class Article(models.Model):
         return string
 
     def get_dateline(self):
-        logging.debug("Fetching dateline...")
         dateline = "oops"
         try:
             nor_date = utc_to_nor(self.published_date)
             datestring = self._format_date_as_string(nor_date)
-            logging.info("Got so far: %s%s", self.author.username, datestring)
             dateline = 'Skrevet av %s%s.' % (self.author.username, datestring)
         except Exception as e:
             logging.warning("Failed. %s", self.author)
@@ -87,7 +85,6 @@ class Article(models.Model):
             import traceback
             s = traceback.format_exc()
             logging.warning(s)
-#            logging.exception()
         return SafeUnicode(dateline)
 
     def get_editline(self):
