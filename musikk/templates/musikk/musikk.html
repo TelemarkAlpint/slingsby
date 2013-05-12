@@ -19,6 +19,10 @@
                 {{ song_form.as_p }}
                 <input class="submit" type="submit" value="Foreslå!" >
             </form>
+    {% else %}
+        <p>
+            Logg deg inn med NTNUI-brukeren din, så kan du foreslå sanger til lista!
+        </p>
     {% endif %}
 
     {% if user.is_staff and new_songforms %}
