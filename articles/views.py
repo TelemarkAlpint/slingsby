@@ -37,7 +37,7 @@ def _get_filtered_articles(request):
     else:
         published_date_filter = parse(before)
         utc_date = aware_from_utc(published_date_filter)
-        articles = Article.objects.filter(published_date__lt=utc_date)
+        articles = Article.objects.filter(published_date__lt=utc_date, visible=True)
     num_limit = int(request.GET.get('limit', '0'))
     if num_limit:
         articles = articles[:num_limit]
