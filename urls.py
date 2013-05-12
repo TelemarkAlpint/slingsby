@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from django.views.generic.simple import direct_to_template
@@ -24,3 +25,8 @@ urlpatterns = patterns('',
     (r'^program/', include('events.urls')),
     (r'^gear/', include('gear.urls')),
                        )
+
+urlpatterns += patterns('',
+    (r'^favicon.ico$', lambda r: HttpResponseRedirect(settings.STATIC_URL + 'favicon.ico')),
+    (r'^robots.txt$', lambda r: HttpResponseRedirect(settings.STATIC_URL + 'robots.txt')),
+                        )

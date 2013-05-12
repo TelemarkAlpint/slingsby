@@ -40,6 +40,7 @@
 {% endblock %}
 
 {% block extrascripts %}
+    {{ block.super }}
     <script>
         /* Set up click handling for the events */
         $('.archive_event').each(function() {

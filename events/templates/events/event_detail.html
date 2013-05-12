@@ -26,7 +26,7 @@
                     <h4>Påmeldte</h4>
                     <ul>
                     {% for user in event.get_participating_users %}
-                        <li> {{ user.full_name_or_username }}</li>
+                        <li> {{ user.username }}</li>
                     {% empty %}
                         <li><i>Ingen påmeldte enda!</i></li>
                     {% endfor %}
@@ -47,6 +47,7 @@
 {% endblock %}
 
 {% block extrascripts %}
+    {{ block.super }}
     {% if event.use_countdown %}
         <script>
           $(function(){

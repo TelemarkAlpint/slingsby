@@ -13,7 +13,7 @@
     </p>
 
     {% if user.is_authenticated %}
-        <h2>Foreslå ny sang</h2>
+        <h1>Foreslå ny sang</h1>
             <form action="{% url 'musikk.views.upload_song' %}" method="post">
                 {{ song_form.as_p }}
                 <input class="submit" type="submit" value="Foreslå!" >

@@ -68,7 +68,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 # Used for the query debugger that's run in dev mode.
-INTERNAL_IPS = ("127.0.0.1",)
+INTERNAL_IPS = ("127.0.0.1", "::1")
 
 # This test runner captures stdout and associates tracebacks with their
 # corresponding output. Helps a lot with print-debugging.

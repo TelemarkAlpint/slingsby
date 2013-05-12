@@ -29,7 +29,7 @@ class ImageGallery(models.Model):
     path_hash = models.CharField(primary_key=True, max_length=40)
     photographer = models.CharField('fotograf', max_length=50, null=True)
     event = models.ForeignKey(ArchiveEvent, related_name='_galleries')
-    cover_photo = models.URLField()
+    cover_photo = models.CharField(max_length=200)
     
     @property
     def images(self):
@@ -47,8 +47,8 @@ class ImageGallery(models.Model):
 
 class Image(models.Model):
     path_hash = models.CharField(primary_key=True, max_length=40)
-    medium_size_url = models.URLField()
-    large_size_url = models.URLField()
+    medium_size_url = models.CharField(max_length=200)
+    large_size_url = models.CharField(max_length=200)
     description = models.CharField(max_length=250, null=True)
     gallery = models.ForeignKey(ImageGallery, related_name='_images')
     
@@ -56,7 +56,7 @@ class Image(models.Model):
         return ARCHIVE_BASE_PATH + self.medium_size_url
     
 class Video(models.Model):
-    video_url = models.URLField()
+    video_url = models.CharField(max_length=200)
     description = models.CharField(max_length=250, null=True)
     event = models.ForeignKey(ArchiveEvent, related_name='_videos')
     path_hash = models.CharField(max_length=40)

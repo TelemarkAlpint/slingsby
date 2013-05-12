@@ -3,8 +3,6 @@ Disallow: /admin/
 Disallow: /musikk/vote_on_song
 Disallow: /join
 Disallow: /_ah/
-Disallow: /log
 Disallow: /auth/
 Disallow: /tasks/
 Disallow: /upload/
-Disallow: /latest_song

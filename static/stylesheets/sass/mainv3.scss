@@ -90,7 +90,7 @@ body {
     margin: auto auto;
 }
 
-#content h1, #content h2 {
+#content h1 {
     background-color: $headers_color;
     color: white;
     padding: 5px;
@@ -99,29 +99,28 @@ body {
     clear: both;
 }
 
-h1 {
-    font-size: 20px;
+h1, h2, h3, h4, h5, h6 {
+    @include box-sizing(border-box);
+    clear: both;
     font-family: "Bitter", serif;
 }
 
-h2 {
-    font-size: 18px;
-}
+h1 { font-size: 20px; }
 
-h3 {
-    font-size: 16px;
-}
+h2 { font-size: 18px; }
 
-#sidebar h1 {
-    font-size: 16px;
-}
-
-#sidebar pre {
-    font-family: "Oxygen", sans-serif;
-}
+h3 { font-size: 16px; }
 
 #sidebar {
     font-size: 14px;
+
+    h1 {
+        font-size: 16px;
+    }
+
+    pre {
+        font-family: "Oxygen", sans-serif;
+    }
 }
 
 /* ==|== Header ======================================= */
@@ -330,25 +329,16 @@ form {
 }
 
 .event_extras {
-    margin-top: 4px;
     float: right;
-    color: white;
     font-weight: bold;
+    font-size: 14px;
+    margin-top: 4px;
 }
 
 .event_info {
     font-style: italic;
 }
 
-
-.eventheader {
-    background-color: rgb(215, 73, 55);
-    padding: 5px;
-
-    h2 {
-        display: inline;
-    }
-}
 
 /* ==|== end Events =================================== */
 
@@ -528,14 +518,6 @@ th {
     }
 }
 
-img#ntnui_logo {
-    display: block;
-    position: relative;
-    padding: 5px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .sidebar_box {
     width: 240px;
     min-height: 50px;
@@ -564,6 +546,7 @@ img#ntnui_logo {
 .quote_confirm {float: left;}
 
 .quote {
+    overflow: hidden;
     background: url("http://org.ntnu.no/telemark/static/gfx/quote-bg.png") $quote_bg no-repeat;
     color: white;
     width: 240px;
@@ -613,7 +596,7 @@ img#ntnui_logo {
 }
 
 #quote_suggestion {color: #000;}
-.suggested_quote {background: rgb(215, 73, 55);}
+.suggested_quote {background: $headers_color;}
 
 /* ==|== end Quotes ========================================================= */
 

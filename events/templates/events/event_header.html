@@ -1,18 +1,20 @@
-<div class="eventheader">
-    <h2>{{ event.name }} </h2>
-    {% if event.has_registration %}
-        {% if event.has_opened %}
-            {% if not event.number_of_spots %}
-                <span class="event_extras">Antall påmeldte: {{ event.num_participants }}</span>
+<h1>
+    {{ event.name }}
+    <span class="event_extras">
+        {% if event.has_registration %}
+            {% if event.has_opened %}
+                {% if not event.number_of_spots %}
+                    Antall påmeldte: {{ event.num_participants }}
+                {% else %}
+                    <meter max="{{ event.number_of_spots }}" value="{{ event.num_participants }}" title="{{ event.num_participants }} / {{ event.number_of_spots}}">
+                    </meter>
+                {% endif %}
             {% else %}
-                <meter max="{{ event.number_of_spots }}" value="{{ event.num_participants }}" title="{{ event.num_participants }} / {{ event.number_of_spots}}">
-                </meter>
+                Påmeldingen åpner {{ event.registration_opens_as_string }}<span class="countdown"></span>
             {% endif %}
         {% else %}
-            <span class="event_extras">Påmeldingen åpner {{ event.registration_opens_as_string }}<span class="countdown"></span></span>
+            Åpent for alle!
         {% endif %}
-    {% else %}
-        <span class="event_extras">Åpent for alle!</span>
-    {% endif %}
-</div>
+    </span>
+ </h1>
 <span class="event_info"> {{ event.location }} - {{ event.duration_as_string }}.</span>

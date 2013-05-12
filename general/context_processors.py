@@ -4,6 +4,7 @@ from general.constants import LOGIN_URL, MEDIA_DIR, GRAPHICS_DIR, \
     JOIN_URL, LEAVE_URL
 from general.feedback import get_feedback
 from general.models import SponsorsQuery
+from django.conf import settings
 
 def get_feedback_code(get_dict):
     urlcode = None
@@ -24,5 +25,7 @@ def default(request):
         'LEAVE_URL': LEAVE_URL,
         'subpages': SingleArticlePageQuery.get_cached(),
         'feedback': feedback,
+        #This will override what is set by django.core.context_processors.debug
+        'debug': settings.DEBUG,
     }
     return context
