@@ -149,6 +149,7 @@ header {
             margin: auto auto;
             list-style-type: none;
             text-align: center;
+            z-index: 2;
 
             li {
                 display: inline;
@@ -173,68 +174,70 @@ header {
             padding: 5px 20px;
         }
     }
-}
 
+    #status {
+        position: relative;
+        float: right;
+        margin-top: -18px;
+        margin-right: 10px;
+        color: white;
+        z-index: 1;
 
-#status {
-    position: relative;
-    float: right;
-    margin-top: -18px;
-    margin-right: 10px;
-    color: white;
-    z-index: 1;
-
-    span {
-        display: inline-block;
-        width: 100%;
-        text-align: right;
-    }
-
-    .click_symbol {
-        @include single-transition(all, 500ms, ease-in-out);
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        display: inline-block;
-        vertical-align: middle;
-
-        &.rotated_left {
-            @include rotate(-90deg);
+        span {
+            display: inline-block;
+            width: 100%;
+            text-align: right;
         }
-    }
 
-    ul {
-        padding: 0px;
-        padding-top: 5px;
-        margin: 0;
-        text-align: right;
+        .click_symbol {
+            @include single-transition(all, 500ms, ease-in-out);
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            display: inline-block;
+            vertical-align: middle;
 
-        li {
+            &.rotated_left {
+                @include rotate(-90deg);
+            }
+        }
 
-            a {
-                background-color: $header_background;
-                padding: 8px;
-                color: #fff;
-                text-decoration: none;
-                width: 100%;
-                display: inline-block;
+        ul {
+            padding: 0px;
+            padding-top: 5px;
+            margin: 0;
+            text-align: right;
+            list-style: none;
 
-                &:hover {
-                  background-color: $header_emphasis;
+            li {
+
+                a {
+                    background-color: $header_background;
+                    padding: 8px;
+                    color: #fff;
+                    text-decoration: none;
+                    width: 100%;
+                    display: inline-block;
+
+                    &:hover {
+                      background-color: $header_emphasis;
+                    }
                 }
             }
         }
-    }
 
-    span a {
-        color: #fff;
-        font-weight: bold;
-        font-size: 14px;
-        padding: 5px 20px;
-        text-decoration: none;
+        span a {
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px 20px;
+            text-decoration: none;
+        }
     }
 }
+
+
 
 /* ==|== end header =================================== */
 
