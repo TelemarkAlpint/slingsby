@@ -13,43 +13,6 @@ import datetime
 import json
 import logging
 
-_VIDEO_FILES = set(['mp4', 'webm'])
-
-class VariableDateTime(object):
-    """ A pure presentation-intended date class, with variable presition.
-
-    Does not validat that a valid time or date is given, and is not timezone aware or possible to do aritmethic on,
-    but provides a consisent way of storing dates when the degree of precision varies, as within an image archive. """
-
-    year = None
-    month = None
-    day = None
-    time = None
-
-    def __init__(self, year, month=None, day=None, time=None):
-        if not isinstance(year, int):
-            raise ValueError('year must be an integer')
-        self.year = year
-        if not (isinstance(month, int) or month is None):
-            raise ValueError('month must be an integer')
-        self.month = month
-        if not (isinstance(day, int) or day is None):
-            raise ValueError('day must be an integer ')
-        self.day = day
-        if not (isinstance(time, datetime.time) or time is None):
-            raise ValueError('time attribute must be instance of datetime.time')
-        self.time = time
-
-    def __unicode__(self):
-        out = str(self.year)
-        if self.month:
-            out += '.%2d' % self.month
-            if self.day:
-                out += '.%2d' % self.day
-                if self.time:
-                    out += ' %s' % self.time.strftime('%H:%M')
-        return out
-
 def view_archive(request):
     gallery_ids = set(ImageGallery.objects.values_list('event', flat=True))
     events = ArchiveEvent.objects.filter(pk__in=gallery_ids)
@@ -60,9 +23,7 @@ def view_archive(request):
     return direct_to_template(request, 'archive/archive_list.html', values)
 
 def event_details(request, event_id):
-    logging.info('Fetching details for event: %s', event_id)
     event = get_object_or_404(ArchiveEvent, pk=event_id)
-    logging.info('Found event: ' + str(event))
     return render_to_response('archive/event_details.html', {'event': event})
 
 def update_archive(request):
