@@ -20,4 +20,4 @@ class SocialSummaryWidget(Textarea):
         super(SocialSummaryWidget, self).__init__(self.custom_attrs)
 
     class Media:
-        js = ('js/jquery-1.8.1.min.js', 'js/socialSummary.js')
+        js = ('js/jquery-1.9.1.min.js', 'js/socialSummary.js')

@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from general.cache import CachedQuery
+from general.time import aware_from_utc
 import json
 import logging
 
@@ -35,7 +36,8 @@ def _get_filtered_articles(request):
         articles = AllArticlesQuery.get_cached()
     else:
         published_date_filter = parse(before)
-        articles = Article.objects.filter(published_date__lt=published_date_filter)
+        utc_date = aware_from_utc(published_date_filter)
+        articles = Article.objects.filter(published_date__lt=utc_date)
     num_limit = int(request.GET.get('limit', '0'))
     if num_limit:
         articles = articles[:num_limit]
