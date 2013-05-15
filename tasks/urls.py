@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
 
 urlpatterns = patterns('tasks',
         (r'^sync_users$', 'sync_users.sync_users'),

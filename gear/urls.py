@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('gear.views',
       url(r'^$', 'all_gear', name='all_gear'),

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('quotes.views',
       url('^$', 'all_quotes', name='all_quotes'),

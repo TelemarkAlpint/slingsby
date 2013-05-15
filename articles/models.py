@@ -231,7 +231,7 @@ class ArticleDetailView(DetailView):
 def register_new_url(sender, **kwargs):
     """ Register a new valid URL when a SubPageArticle is saved. """
     from urls import urlpatterns
-    from django.conf.urls.defaults import patterns, url
+    from django.conf.urls import patterns, url
     subpage = kwargs['instance']
     urlpatterns += patterns('',
         url(r'^%s$' % subpage.slug, 'articles.views.show_article', {'article_id': subpage.id}),

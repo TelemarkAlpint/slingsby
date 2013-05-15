@@ -1,5 +1,5 @@
 from articles.models import SubPageArticle
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect
 
