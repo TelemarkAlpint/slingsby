@@ -9,3 +9,4 @@ auth/*
 TODO.txt
 build/.sass-cache/*
 build/node_modules/*
+static/*

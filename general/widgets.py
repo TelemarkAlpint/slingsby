@@ -13,12 +13,12 @@ class NORDateTimeWidget(widgets.AdminSplitDateTime):
             return super(NORDateTimeWidget, self).render(name, value, attrs)
 
 class WidgEditorWidget(Textarea):
-    custom_attrs={'cols': 80, 'rows': 10, 
+    custom_attrs={'cols': 80, 'rows': 10,
                   'class': 'widgEditor nothing'}
-    
+
     def __init__(self):
         super(WidgEditorWidget, self).__init__(self.custom_attrs)
-    
+
     class Media:
-        js = ('js/widgEditor.min.js',)
+        js = ('js/libs/widgEditor.min.js',)
         css = {'all': ('stylesheets/widgEditor.min.css',)}

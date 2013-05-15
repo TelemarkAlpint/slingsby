@@ -18,7 +18,7 @@ module.exports = function(grunt) {
           closure: true,
         },
         files: {
-            "../static/js/handlebars_templates/articles.js": "../**/handlebars/*.hbs",
+            "../static/js/handlebars_templates.js": "../**/handlebars/*.hbs",
         }
       }
     },
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     compass: {
         dist: {
             options: {
-                sassDir: '../static/stylesheets/sass',
+                sassDir: '../static-src/stylesheets/sass/',
                 cssDir: '../static/stylesheets/',
                 outputStyle: "compressed",
             }
@@ -45,12 +45,28 @@ module.exports = function(grunt) {
           {
               expand: true,
               src: ['**/*.*'],
-              cwd: '../static/',
+              cwd: '../static-src/',
               dest: '//webedit.ntnu.no/groupswww/telemark/static/',
               processContentExclude: ['stylesheets/sass'],
           }
         ]
+      },
+      srcToStatic: {
+        files: [
+          {
+              expand: true,
+              src: ['**/*.*'],
+              cwd: '../static-src/',
+              dest: '../static/',
+              processContentExclude: ['stylesheets/sass'],
+          }
+        ]
       }
+
+    },
+
+    jshint: {
+      all: ['../static-src/js/*.js'],
     },
 
     /*
@@ -61,11 +77,11 @@ module.exports = function(grunt) {
         livereload: true,
       },
       css: {
-        files: ['../static/stylesheets/sass/*.scss'],
+        files: ['../static-src/stylesheets/sass/*.scss'],
         tasks: ['compass'],
       },
       js: {
-        files: ['../static/js/*.js'],
+        files: ['../static-src/js/*.js'],
         tasks: []
       },
       templates: {
@@ -84,9 +100,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default tasks
   grunt.registerTask('default', ['handlebars', 'compass', 'copy']);
-  grunt.registerTask('dev', ['handlebars', 'compass']);
+  grunt.registerTask('dev', ['handlebars', 'compass', 'copy:srcToStatic']);
 
 };
