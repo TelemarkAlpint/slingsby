@@ -1,17 +1,21 @@
-import logging, os, sys
+import logging, os, sys, warnings
+
+# Enable warnings from Django, and log them
+warnings.simplefilter('default')
+logging.captureWarnings(True)
 
 # Google App Engine imports.
 from google.appengine.ext.webapp import util
 
 
 # Must set this env var before importing any part of Django
-# 'project' is the name of the project created with django-admin.py
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "libs"))
 
 # Force Django to reload its settings.
 from django.conf import settings
 settings._target = None
+
 
 import logging
 import django.core.handlers.wsgi
