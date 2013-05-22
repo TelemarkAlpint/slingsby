@@ -10,7 +10,7 @@ from django.forms import ModelForm, Textarea
 class Quote(models.Model):
     topic = models.CharField('om...', max_length=100, null=True, blank=True)
     quote = models.TextField("sitat")
-    author = models.CharField('opphavsmann', max_length=100)
+    author = models.CharField('hvem', max_length=100)
     date_added = models.DateTimeField('lagt inn', auto_now_add=True)
     suggested_by = models.ForeignKey(User, related_name='suggested_quotes', null=True, verbose_name='foreslått av')
     accepted = models.BooleanField('godkjent', default=False)
@@ -45,5 +45,5 @@ class QuoteForm(ModelForm):
         model = Quote
         exclude = ('suggested_by', 'accepted')
         widgets = {
-            'quote': Textarea(attrs={'cols': 20, 'rows': 5})
+            'quote': Textarea(attrs={'cols': 20, 'rows': 3})
         }

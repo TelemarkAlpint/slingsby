@@ -68,11 +68,11 @@ td { vertical-align: top; }
    Author: Tarjei Husøy
    ========================================================================== */
 
-$header_background: #404040;
-$header_emphasis: lighten($header_background, 10%);
-$headers_color: rgb(215, 73, 55);
-
-$quote_bg: rgb(72, 137, 244);
+$header-background: #404040;
+$header-emphasis: lighten($header-background, 10%);
+$headers-color: rgb(215, 73, 55);
+$button-color: #357DF3;
+$quote-bg: rgb(72, 137, 244);
 
 body {
     background-color: #FFFFFF;
@@ -91,7 +91,7 @@ body {
 }
 
 #content h1 {
-    background-color: $headers_color;
+    background-color: $headers-color;
     color: white;
     padding: 5px;
     border-radius: 2px;
@@ -110,6 +110,30 @@ h1 { font-size: 20px; }
 h2 { font-size: 18px; }
 
 h3 { font-size: 16px; }
+
+.btn {
+    background-color: $button-color;
+    border-color: $button-color;
+    background-image: linear-gradient(to bottom, lighten($button-color, 4%), $button-color);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 1px 1px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 1px 10px;
+    margin: 5px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+
+    &:hover {
+        background-image: linear-gradient(to bottom, $button-color, darken($button-color, 4%));
+        text-decoration: none;
+        color: #fff;
+    }
+}
 
 #sidebar {
     font-size: 14px;
@@ -133,10 +157,10 @@ h3 { font-size: 16px; }
 
 header {
     height: 50px;
-    background-color: $header_background;
+    background-color: $header-background;
 
     a:hover {
-        background-color: $header_emphasis;
+        background-color: $header-emphasis;
     }
 
     nav {
@@ -213,7 +237,7 @@ header {
             li {
 
                 a {
-                    background-color: $header_background;
+                    background-color: $header-background;
                     padding: 8px;
                     color: #fff;
                     text-decoration: none;
@@ -221,7 +245,7 @@ header {
                     display: inline-block;
 
                     &:hover {
-                      background-color: $header_emphasis;
+                      background-color: $header-emphasis;
                     }
                 }
             }
@@ -437,21 +461,17 @@ input {
     padding: 5px;
 }
 
-table {
-    border: 1px dotted black;
-}
-
-tr {
-    border-bottom: 1px dotted black;
-}
-
 td {
-    padding: 5px 10px;
+    padding: 0 5px;
+    vertical-align: middle;
+
+    input, textarea {
+        width: 100%;
+        margin: 0;
+    }
 }
 
 th {
-    background-color: #D74937;
-    color: #fff;
     font-weight: bold;
     text-align: left;
     padding: 5px 10px;
@@ -499,7 +519,7 @@ th {
             padding: 5px 0;
 
             &:hover {
-                background-color: $header_emphasis;
+                background-color: $header-emphasis;
             }
         }
     }
@@ -513,7 +533,7 @@ th {
 
 
 #logo {
-    background-color: $header_background;
+    background-color: $header-background;
     display: inline-block;
 
     img {
@@ -550,7 +570,7 @@ th {
 
 .quote {
     overflow: hidden;
-    background: url("http://org.ntnu.no/telemark/static/gfx/quote-bg.png") $quote_bg no-repeat;
+    background: url("http://org.ntnu.no/telemark/static/gfx/quote-bg.png") $quote-bg no-repeat;
     color: white;
     width: 240px;
     margin-left: 0;
@@ -570,14 +590,11 @@ th {
     }
 
     #suggest_quote {
-        background-color: darken($quote_bg, 5%);
-        border-radius: 6px;
+        border-color: #fff;
         box-shadow: 2px 2px 1px rgba(255, 255, 255, 0.4);
-        font-weight: bold;
         font-size: 25px;
-        color: white;
-        line-height: 1em;
-        width: 30px;
+        line-height: 0.9em;
+        width: 1.1em;
     }
 }
 
@@ -599,7 +616,7 @@ th {
 }
 
 #quote_suggestion {color: #000;}
-.suggested_quote {background: $headers_color;}
+.suggested_quote {background: $headers-color;}
 
 /* ==|== end Quotes ========================================================= */
 

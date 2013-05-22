@@ -127,10 +127,12 @@
 
                         {% if user.is_authenticated %}
                             <div id="quote_suggestion" class="sidebar_box" style="display: none">
-                                <p>Foreslå en ny quote!</p>
+                                <h1>Foreslå en ny quote!</h1>
                                 <form id="quoteform" action="{% url 'upload_quote' %}" method="post">
-                                    {{ quote_form.as_p }}
-                                    <input type="submit" value="Foreslå!">
+                                    <table>
+                                        {{ quote_form.as_table }}
+                                    </table>
+                                    <input type="submit" class="btn" value="Foreslå!">
                                 </form>
                             </div>
                         {% endif %}

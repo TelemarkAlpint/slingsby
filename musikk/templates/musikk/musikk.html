@@ -16,8 +16,10 @@
     {% if user.is_authenticated %}
         <h1>Foreslå ny sang</h1>
             <form action="{% url 'musikk.views.upload_song' %}" method="post">
-                {{ song_form.as_p }}
-                <input class="submit" type="submit" value="Foreslå!" >
+                <table>
+                    {{ song_form.as_table }}
+                </table>
+                <input class="btn" type="submit" value="Foreslå!" >
             </form>
     {% else %}
         <p>
@@ -26,7 +28,7 @@
     {% endif %}
 
     {% if user.is_staff and new_songforms %}
-        <h2>Nye forslag</h2>
+        <h1>Nye forslag</h1>
 
         <p>
         Dette er sangene som er foreslått, men som vi ikke har fått tak i enda. Hvis du sitter på en av disse, finn et parti på omtrent
@@ -40,11 +42,11 @@
             <table>
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="Registrer sang">
+            <input type="submit" class="btn" value="Registrer sang">
             </form>
 
             <form class="inline" action="{% url 'delete_song' form.instance.id %}" method="post">
-                <input type="submit" value="Slett forslag">
+                <input type="submit" class="btn" value="Slett forslag">
             </form>
 
         {% endfor %}

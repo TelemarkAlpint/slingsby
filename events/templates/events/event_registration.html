@@ -17,7 +17,7 @@
                 {% if event.is_full %}
                     <span>Beklager, eventet er fullt.</span>
                 {% else %}
-                    <input type="submit" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}">
+                    <input type="submit" class="btn" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}">
                 {% endif %}
 
             {% else %}
@@ -25,7 +25,7 @@
                     <p class="event_info">Påmeldingen stengte {{ event.registration_closes_as_string }}.</p>
                 {% endif %}
 
-                <input type="submit" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}" disabled>
+                <input type="submit" class="btn" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}" disabled>
             {% endif %}
         </form>
 
@@ -42,7 +42,7 @@
                 {% if event.binding_registration %}
                     <input type="submit" value="Du er påmeldt!" disabled>
                 {% else %}
-                    <input type="submit" value="Meld meg av!">
+                    <input type="submit" class="btn" value="Meld meg av!">
                 {% endif %}
             </form>
 

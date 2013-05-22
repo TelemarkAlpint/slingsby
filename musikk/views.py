@@ -124,7 +124,7 @@ def top_list(request):
 @login_required
 @require_POST
 def upload_song(request):
-    redirect = reverse_with_params('musikk.views.main', feedback.SONG_THANKS)
+    redirect = reverse_with_params('musikk', feedback.SONG_THANKS)
     self_url = reverse('musikk.views.upload_song')
     song = SongSuggestionForm(request.POST).save(commit=False)
     song.suggested_by = request.user

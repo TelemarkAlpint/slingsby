@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load url from future %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -12,7 +14,7 @@
         ha lyst til å melde deg inn i gruppa, så kan du gjøre det ved å <a href="http://ntnui.no/telemark/Join.xhtml">klikke her.</a>
         </p>
     {% endif %}
-    
+
     <div class="profile_image">
         {% if user.profile.image_large %}
             <img src="{{ user.profile.image_large }}" alt="Profilbildet ditt">
@@ -25,24 +27,24 @@
 
     <table id="profile-info">
         <tr>
-            <td>Fullt navn:</td>
+            <th>Fullt navn:</th>
             <td>{% if user.profile.full_name %}
                     {{ user.profile.full_name }}
                 {% else %}
                     <form class="inline" action="{% url 'submit_full_name' %}" method="post">
                         {{ name_form.full_name }}
-                        <input type="submit" value="Send inn">
+                        <input type="submit" class="btn" value="Send inn">
                     </form>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>E-post:</td>
+            <th>E-post:</th>
             <td>{{ user.email }}</td>
         </tr>
         <tr>
-            <td>Medlem av gruppen:</td>
-            <td>{% if user.profile.is_member %}Ja <a href="{{ LEAVE_URL }}">Meld meg ut</a>{% else %}Nei <a href="{{ JOIN_URL }}">Meld meg inn</a>{% endif %}</td>
+            <th>Medlem av gruppen:</th>
+            <td>{% if user.profile.is_member %}Ja <a href="{{ LEAVE_URL }}" class="btn">Meld meg ut</a>{% else %}Nei <a href="{{ JOIN_URL }}" class="btn">Meld meg inn</a>{% endif %}</td>
         </tr>
     </table>
 
@@ -54,11 +56,11 @@
         <li>Du har ingen forestående events!</li>
     {% endfor %}
     </ul>
-    
+
     <h1>Sanger du har foreslått*</h1>
     <ul>
     {% for song in suggested_songs %}
-        <li>    
+        <li>
             <div class="rating" style="width: 30px;border: 1px solid black;height: 10px;display: inline-block;">
                 <div style="width: {{ song.popularity }}%;background-color: green;height: 10px;">
                 </div>
@@ -68,17 +70,17 @@
         <li>Du har ikke forestlått noen sanger!</li>
     {% endfor %}
     </ul>
-    
-    <span><i>* Etter 30. august 2012. Hvis du vil ha kred for noen sanger du har foreslått før den tid, 
+
+    <span><i>* Etter 30. august 2012. Hvis du vil ha kred for noen sanger du har foreslått før den tid,
         send en mail til telemark-webmaster@ntnui.no</i></span>
-    
+
     <h1>Sanger du har stemt mest på</h1>
     <ul class="most_voted_songs">
         {% for song in top_voted_songs %}
             <li>({{ song.votes }}) {{ song.artist }} - {{ song.title }}</li>
         {% empty %}
             <li>Du har ikke stemt på noen sanger enda!</li>
-        {% endfor %}    
+        {% endfor %}
     </ul>
-    
+
 {% endblock %}
