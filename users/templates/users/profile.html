@@ -7,6 +7,7 @@
 
     <h1>{{ user.profile.username }}</h1>
 
+    {% comment %}
     {% if not user.profile.full_name %}
         <p>
         Ettersom du ikke stå som medlem i gruppen, så har vi ikke klart å automatisk finne det fulle navnet ditt.
@@ -15,7 +16,6 @@
         </p>
     {% endif %}
 
-    {% comment %}
     <div class="profile_image">
         {% if user.profile.image_large %}
             <img src="{{ user.profile.image_large }}" alt="Profilbildet ditt">
