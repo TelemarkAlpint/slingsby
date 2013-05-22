@@ -45,9 +45,8 @@ module.exports = function(grunt) {
           {
               expand: true,
               src: ['**/*.*'],
-              cwd: '../static-src/',
+              cwd: '../static/',
               dest: '//webedit.ntnu.no/groupswww/telemark/static/',
-              processContentExclude: ['stylesheets/sass'],
           }
         ]
       },
@@ -55,10 +54,9 @@ module.exports = function(grunt) {
         files: [
           {
               expand: true,
-              src: ['**/*.*'],
+              src: ['**/*.*', '!**/*.scss'],
               cwd: '../static-src/',
               dest: '../static/',
-              processContentExclude: ['stylesheets/sass'],
           }
         ]
       }
@@ -103,7 +101,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default tasks
-  grunt.registerTask('default', ['handlebars', 'compass', 'copy']);
+  grunt.registerTask('default', ['handlebars', 'compass', 'copy:srcToStatic', 'copy:main']);
   grunt.registerTask('dev', ['handlebars', 'compass', 'copy:srcToStatic']);
 
 };
