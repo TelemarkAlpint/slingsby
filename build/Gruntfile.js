@@ -10,12 +10,14 @@ module.exports = function(grunt) {
     handlebars: {
       compile: {
         options: {
-          namespace: false,
-          wrapped: false,
-          // Closure is not an official option, it's something we've created to make sure that Handlebars.templates.<template>
-          // will be created if the script is included. Check out the src of the task for details. Found no other way of doing
-          // this, other suggestions welcome!
-          closure: true,
+          namespace: "Handlebars.templates",
+          processName: function(name){
+            var path = name.split('/');
+            var filename = path[path.length - 1];
+            var parts = filename.split('.');
+            parts.pop(); //removes extension
+            return parts.join('.');
+          },
         },
         files: {
             "../static/js/handlebars_templates.js": "../**/handlebars/*.hbs",
