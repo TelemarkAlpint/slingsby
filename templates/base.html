@@ -24,7 +24,7 @@
     <title>{% block title %}{{ title|default:"NTNUI Telemark/Alpint" }}{% endblock %}</title>
     {% block css %}
         <link rel="stylesheet" href="{% static "stylesheets/mainv3.css" %}" type="text/css">
-        <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic|Oxygen:400,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Bitter:700|Oxygen:400' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="/favicon.ico">
     {% endblock %}
     <meta property="og:description" content="{% block og_description %}Norges største idrettslag inviterer deg med på ski! Bli med til alpene, Vassfjellet, på trening, på skifilmkvelder og mye moro!{% endblock %}" />
@@ -105,9 +105,9 @@
 
                 <nav>
                     <ul>
-                        {% for slug, subpage_name, visible in subpages %}
+                        {% for subpage in subpages %}
                             {% if visible or user.is_staff %}
-                                <li><a href="/{{ slug }}">{{ subpage_name }}{% if not visible %} (usynlig){% endif %}</a></li>
+                                <li><a href="/{{ subpage.slug }}">{{ subpage.title }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
                             {% endif %}
                         {% endfor %}
 
@@ -173,7 +173,7 @@
 
                             <ul>
                                 {% for event in next_events %}
-                                    <li><a href="{{ event.get_absolute_url }}">{{ event.startdate|date:"d.n.y" }}: {{ event }}</a></li>
+                                    <li><a href="{% url 'event_detail' event.id %}">{{ event.startdate|date:"d.n.y" }}: {{ event.name }}</a></li>
                                 {% endfor %}
                             </ul>
 
@@ -287,7 +287,7 @@
     {% endif %}
 
     {% if debug %}
-        <script src="http://localhost:35729/livereload.js"></script>
+        <script async src="http://localhost:35729/livereload.js"></script>
     {% endif %}
 {% endblock %}
 
