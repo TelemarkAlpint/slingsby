@@ -1,4 +1,4 @@
-from articles.models import SubPageArticle
+from articles.views import SingleArticlePageQuery
 from django.conf.urls import patterns, url
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect
@@ -11,6 +11,6 @@ urlpatterns = patterns('articles.views',
                         )
 
 urls = []
-for slug, article_id in SubPageArticle.objects.all().values_list('slug', 'id'):
-    urls.append(url(r'^%s/$' % slug, 'articles.views.show_article', {'article_id': article_id}))
+for subpage in SingleArticlePageQuery.get_cached():
+    urls.append(url(r'^%s/$' % subpage['slug'], 'articles.views.show_article', {'article_id': subpage['id']}))
 urlpatterns += patterns('', *urls)

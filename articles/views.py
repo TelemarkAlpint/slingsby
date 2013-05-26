@@ -12,12 +12,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 class SingleArticlePageQuery(CachedQuery):
-    queryset = SubPageArticle.objects.all().values_list('slug', 'title', 'visible')
+    queryset = SubPageArticle.objects.all().values('slug', 'title', 'visible', 'id')
 post_save.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 post_delete.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 
 class LatestArticlesQuery(CachedQuery):
-    queryset = Article.objects.all()[:5]
+    queryset = Article.objects.all().select_related().values('visible', 'content', 'title', 'id', 'published_date', 'last_edited', 'last_edited_by__username', 'author__username')[:5]
 post_save.connect(LatestArticlesQuery.empty_on_save, sender=Article)
 
 class AllArticlesQuery(CachedQuery):
