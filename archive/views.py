@@ -8,14 +8,17 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic.simple import direct_to_template
 from general import make_title, cache
 from general.constants import JSON_ARCHIVE_PATH
+from general.cache import CachedQuery
 from urllib2 import urlopen
 import datetime
 import json
 import logging
 
+class ArchiveEventQuery(CachedQuery):
+    queryset = ArchiveEvent.objects.all()
+
 def view_archive(request):
-    gallery_ids = set(ImageGallery.objects.values_list('event', flat=True))
-    events = ArchiveEvent.objects.filter(pk__in=gallery_ids)
+    events = ArchiveEventQuery.get_cached()
     values = {
               'events': events,
               'title': make_title('Arkiv')
@@ -28,7 +31,7 @@ def event_details(request, event_id):
 
 def update_archive(request):
     logging.info('Starting to update archive event database')
-    if 'clear_all' in request.GET and request.user.is_admin:
+    if 'clear_all' in request.GET and request.user.is_staff:
         logging.info('Deleting all old entries')
         clear_archive_and_cache()
     archive = get_archive()
