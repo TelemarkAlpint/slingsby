@@ -1,26 +1,29 @@
-module.exports = function(grunt) {
+/* jshint indent:2 */
+/* global module */
+module.exports = function (grunt) {
+  "use strict";
 
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     /*
-     * Compile all .handlebars templates in an app to a shared file for that app, eq. articles.js, or event.js.
+     * Compile all .hbs (handlebars) templates to a shared file
      */
     handlebars: {
       compile: {
         options: {
           namespace: "Handlebars.templates",
-          processName: function(name){
+          processName: function (name) {
             var path = name.split('/');
             var filename = path[path.length - 1];
             var parts = filename.split('.');
             parts.pop(); //removes extension
             return parts.join('.');
-          },
+          }
         },
         files: {
-            "../static/js/handlebars_templates.js": "../**/handlebars/*.hbs",
+          "../static/js/handlebars_templates.js": "../**/handlebars/*.hbs"
         }
       }
     },
@@ -29,13 +32,13 @@ module.exports = function(grunt) {
     * Compile SASS stylesheets.
     */
     compass: {
-        dist: {
-            options: {
-                sassDir: '../static-src/stylesheets/sass/',
-                cssDir: '../static/stylesheets/',
-                outputStyle: "compressed",
-            }
+      dist: {
+        options: {
+          sassDir: '../static-src/stylesheets/sass/',
+          cssDir: '../static/stylesheets/',
+          outputStyle: "compressed"
         }
+      }
     },
 
     /*
@@ -45,20 +48,20 @@ module.exports = function(grunt) {
       main: {
         files: [
           {
-              expand: true,
-              src: ['**/*.*'],
-              cwd: '../static/',
-              dest: '//webedit.ntnu.no/groupswww/telemark/static/',
+            expand: true,
+            src: ['**/*.*'],
+            cwd: '../static/',
+            dest: '//webedit.ntnu.no/groupswww/telemark/static/'
           }
         ]
       },
       srcToStatic: {
         files: [
           {
-              expand: true,
-              src: ['**/*.*', '!**/*.scss'],
-              cwd: '../static-src/',
-              dest: '../static/',
+            expand: true,
+            src: ['**/*.*', '!**/*.scss'],
+            cwd: '../static-src/',
+            dest: '../static/'
           }
         ]
       }
@@ -66,33 +69,60 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      all: ['../static-src/js/*.js'],
+      options: {
+        "browser": true,
+        "bitwise": true,
+        "camelcase": true,
+        "curly": true,
+        "eqeqeq": true,
+        "immed": true,
+        "indent": 4,
+        "latedef": true,
+        "newcap": true,
+        "noarg": true,
+        "noempty": true,
+        "regexp": true,
+        "undef": true,
+        "unused": true,
+        "strict": true,
+        "trailing": true,
+        "maxparams": 3,
+        "maxdepth": 3,
+        "maxstatements": 10,
+        "maxlen": 110,
+        "smarttabs": true,
+        "white": true,
+        globals: {
+          jQuery: true
+        }
+      },
+      all: ['Gruntfile.js', '../static-src/js/*.js']
     },
 
     /*
-    * Recompile css, coffeescript and reload on template changes.
+    * Recompile css, update static dir and reload on template changes.
     */
     watch: {
       options: {
-        livereload: true,
+        livereload: true
       },
       css: {
         files: ['../static-src/stylesheets/sass/*.scss'],
-        tasks: ['compass'],
+        tasks: ['compass']
       },
       js: {
-        files: ['../static-src/js/*.js'],
-        tasks: []
+        files: ['<%= jshint.all %>'],
+        tasks: ['jshint']
       },
       templates: {
         files: ['../templates/*.html', '../*/templates/*/*.html'],
-        tasks: [],
+        tasks: []
       },
       handlebars: {
         files: ['../**/handlebars/*.hbs'],
-        tasks: ['handlebars'],
-      },
-    },
+        tasks: ['handlebars']
+      }
+    }
 
   });
 
@@ -103,7 +133,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default tasks
-  grunt.registerTask('default', ['handlebars', 'compass', 'copy:srcToStatic', 'copy:main']);
-  grunt.registerTask('dev', ['handlebars', 'compass', 'copy:srcToStatic']);
+  grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'copy:main']);
+  grunt.registerTask('default', ['watch']);
 
 };
