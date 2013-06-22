@@ -19,7 +19,7 @@ class AllUpcomingEventsQuery(CachedQuery):
 post_save.connect(AllUpcomingEventsQuery.empty_on_save, sender=Event)
 
 class NextEventsQuery(CachedQuery):
-    queryset = Event.objects.filter(startdate__gte=time.now())[:3]
+    queryset = Event.objects.filter(startdate__gte=time.now()).values('id', 'name', 'startdate')[:3]
     timeout_in_s = 3600
 post_save.connect(NextEventsQuery.empty_on_save, sender=Event)
 
