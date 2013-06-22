@@ -34,7 +34,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.staticfiles',
-    'django.contrib.sessions',
     'articles',
     'events',
     'quotes',
@@ -50,10 +49,12 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'general.middleware.HttpAcceptMiddleware',
+    'general.middleware.CachedAuthMiddleware',
 )
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 LOGIN_URL = 'http://ntnui.no/authapi/telemark'
 LOGIN_REDIRECT_URL = '/'
