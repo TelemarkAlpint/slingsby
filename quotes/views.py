@@ -16,7 +16,7 @@ from upload import upload
 logger = logging.getLogger(__name__)
 
 class AllQuotesQuery(CachedQuery):
-    queryset = Quote.objects.filter(accepted=True)
+    queryset = Quote.objects.filter(accepted=True).values('topic', 'quote', 'author')
 
 post_save.connect(AllQuotesQuery.empty_on_save, sender=Quote)
 
