@@ -134,6 +134,11 @@ h3 { font-size: 16px; }
     }
 }
 
+.isotimestamp {
+    opacity: 0;
+    transition: 1s;
+}
+
 #sidebar {
     font-size: 14px;
 
