@@ -1,17 +1,19 @@
-(function(window, document, undefined){
+(function ($) {
+    "use strict";
+
     $("#suggest_quote").click(function () {
         $("#quote_suggestion").slideToggle(300);
-        $(this).html(($(this).text() == "+") ? "-" : "+");
+        $(this).html(($(this).text() === "+") ? "-" : "+");
     });
 
-    $('.quote_reject').submit(function(){
+    $('.quote_reject').submit(function () {
         var target = $(this).attr('action');
         $.ajax(target, {
             type: "POST",
             context: $(this),
-            success: function(){
+            success: function () {
                 var wrapper = $(this).parents('.suggested_quote_wrapper');
-                wrapper.slideUp(function(){
+                wrapper.slideUp(function () {
                     wrapper.remove();
                 });
             }
@@ -19,13 +21,13 @@
         return false;
     });
 
-    $('.quote_confirm').submit(function(){
+    $('.quote_confirm').submit(function () {
         var target = $(this).attr('action');
         $.ajax(target, {
             type: "POST",
             context: $(this),
-            success: function(){
-                $('.suggested_quote_wrapper').slideUp(function(){
+            success: function () {
+                $('.suggested_quote_wrapper').slideUp(function () {
                     $(this).remove();
                 });
             }
@@ -34,9 +36,9 @@
     });
 
     // Add click handling for the statusbar in the header
-    $('#status .clickable').click(function(){
+    $('#status .clickable').click(function () {
         var clickSymbol = '&#9660;'; // BLACK DOWN POINTING TRIANGLE
-        if ($(this).hasClass('selected')){
+        if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
             clickSymbol =  '&#9664;'; // BLACK LEFT POINTING TRIANGLE
             $(this).parent().find('ul').slideUp();
@@ -48,4 +50,4 @@
         }
         //$(this).find('.click_symbol').html(clickSymbol);
     });
-})(this, document);
+})(jQuery);
