@@ -1,3 +1,12 @@
+"""
+This module is a wrapper around Googles memcached API.
+
+Here you also find a class you should extend when creating queries than
+should be cached.
+
+If necessary, you may also inject debugging code here.
+"""
+
 from abc import ABCMeta, abstractproperty
 from google.appengine.api import memcache
 import logging
@@ -6,34 +15,29 @@ import os
 # Current version prepended to every keyword, to prevent mixup of the caches between different versions
 _PREFIX = os.environ.get('CURRENT_VERSION_ID', '')
 
-"""
-Due to some funky coding from Google, all of the memcache functions will show a warning in Eclipse. Partly due
-to that, and partly to provide a common gateway to the memcache, this module exists. From here it's also
-possible to log what's put into the cache, if that should prove necessary for debugging reasons.
-"""
 
 logger = logging.getLogger(__name__)
 
-def set(keyword, obj, timeout=None): #@ReservedAssignment
+def set(keyword, obj, timeout=None):
     key = _PREFIX + keyword
     if timeout is None:
-        memcache.set(key, obj) #@UndefinedVariable
+        memcache.set(key, obj)
     else:
-        memcache.set(key, obj, timeout) #@UndefinedVariable
+        memcache.set(key, obj, timeout)
         logger.debug('Element added to cache: %s -> %s.' % (key, str(obj)[:150]))
 
 def get(keyword):
     key = _PREFIX + keyword
-    fetched_obj = memcache.get(key) #@UndefinedVariable
+    fetched_obj = memcache.get(key)
     logger.debug('Element fetched from cache: %s -> %s.' % (key, str(fetched_obj)[:150]))
     return fetched_obj
 
 def flush_all():
-    memcache.flush_all() #@UndefinedVariable
+    memcache.flush_all()
 
 def delete(keyword):
     key = _PREFIX + keyword
-    memcache.delete(key) #@UndefinedVariable
+    memcache.delete(key)
     logger.debug('Deleted from cache: %s' % key)
 
 class CachedQuery(object):
@@ -67,6 +71,7 @@ class CachedQuery(object):
     timeout_in_s = None
     parent_model = None
 
+
     @classmethod
     def update_cache(cls, objects=None):
         """ Fetch the latest queryset from the db, and put it into the cache.
@@ -74,7 +79,10 @@ class CachedQuery(object):
         If objects is given, those will be put into the cache. """
 
         if objects is None:
+            # Force get fresh from db
             objects = cls.queryset.all()
+            # This line is necessary to allow serializing ValuesQuerySets
+            objects = [item for item in objects]
         if cls.timeout_in_s:
             set(cls.__name__, objects, cls.timeout_in_s)
         else:
@@ -101,4 +109,3 @@ class CachedQuery(object):
     def empty_on_save(cls, sender, instance=None, **kwargs):
         logger.debug('Clearing cached query: %s.' % cls.__name__)
         cls.empty_cache()
-
