@@ -1,7 +1,7 @@
 <p>
-    <span class="byline">{{ article.get_dateline }}</span>
+    <span class="byline">Skrevet av {{ article.author__username }}, <span class="isotimestamp" data-timestamp="{{ article.published_date.isoformat }}"></span>.</span>
 
     {% if article.last_edited %}
-        <span class="byline">{{ article.get_editline }}</span>
+        <span class="byline">Sist endret av {{ article.last_edited_by__username }}, <span class="isotimestamp" data-timestamp="{{ article.last_edited.isoformat }}"></span>.</span>
     {% endif %}
 </p>

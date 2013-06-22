@@ -1,15 +1,17 @@
 {{#each articles}}
 
     <article data-datetime="{{ this.published_date }}">
-        <h1>{{ this.title }}</h1>
+        <h1>{{ this.title }} {{#if this.visible}}(ikke synlig){{/if}}</h1>
 
         {{{ this.content }}}
 
+        <span>Del og diskuter: <a href="/articles/{{this.id}}#disqus_thread">Del og diskuter &rarr;</a></span>
+
         <p>
-            <span class="byline">{{ this.published_date_as_string }}</span>
+            <span class="byline">Skrevet av {{ this.author }}, <span class="isotimestamp" data-timestamp="{{ this.published_date }}"></span>.</span>
 
             {{#if this.last_edited}}
-                <span class="byline">Sist endret av {{ this.last_edited_by }}{{ this.last_edited_datestring }}.</span>
+                <span class="byline">Sist endret av {{ this.last_edited_by }}, <span class="isotimestamp" data-timestamp="{{ this.last_edited }}"></span>.</span>
             {{/if}}
         </p>
     </article>

@@ -40,8 +40,8 @@ class Article(models.Model):
         data = {
                 'id': self.id,
                 'published_date': self.published_date.isoformat(),
-                'published_date_as_string': self.get_dateline(),
                 'title': self.title,
+                'visible': self.visible,
                 'content': self.content,
                 'author': self.author.username,
                 }
@@ -50,50 +50,10 @@ class Article(models.Model):
         if self.last_edited:
             data['last_edited'] =  self.last_edited.isoformat()
             data['last_edited_by'] =  self.last_edited_by.username
-            data['last_edited_as_string'] = self.get_editline()
         return data
 
     def get_absolute_url(self):
         return reverse('article_detail', args=[str(self.id)])
-
-    def _format_date_as_string(self, date):
-        days_passed = time.days_since(date)
-        if days_passed == 0:
-            string = u', i dag'
-        elif days_passed == 1:
-            string = u', i går'
-        elif days_passed == 2:
-            string = u' for to dager siden'
-        else:
-            string = u' den %s' % date.strftime('%d.%m.%y')
-        string += u', kl %s' % date.strftime('%H:%M')
-        return string
-
-    def get_dateline(self):
-        dateline = "oops"
-        try:
-            nor_date = utc_to_nor(self.published_date)
-            datestring = self._format_date_as_string(nor_date)
-            dateline = 'Skrevet av %s%s.' % (self.author.username, datestring)
-        except Exception as e:
-            logging.warning("Failed. %s", self.author)
-            logging.warning("Username: %s", self.author.username)
-            logging.warning("Utc_to_nor: %s", utc_to_nor(self.published_date))
-            logging.warning("formatted: %s", self._format_date_as_string(self.published_date))
-            logging.warning("NOR formatted: %s", self._format_date_as_string(utc_to_nor(self.published_date)))
-            logging.warning(e.message)
-            import traceback
-            s = traceback.format_exc()
-            logging.warning(s)
-        return SafeUnicode(dateline)
-
-    def get_editline(self):
-        editline = None
-        if self.last_edited:
-            editline = SafeUnicode('Sist endret av %s%s.' % (
-                                    self.last_edited_by.username,
-                                    self._format_date_as_string(utc_to_nor(self.last_edited))))
-        return editline
 
     def is_visible(self):
         has_been_published = is_past(self.published_date)
@@ -149,7 +109,6 @@ class SubPageArticle(models.Model):
         data = {
                 'id': self.id,
                 'published_date': self.published_date.isoformat(),
-                'published_date_as_string': self.get_dateline(),
                 'title': self.title,
                 'content': self.content,
                 'author': self.author.username,
@@ -160,37 +119,10 @@ class SubPageArticle(models.Model):
         if self.last_edited:
             data['last_edited'] =  self.last_edited.isoformat()
             data['last_edited_by'] =  self.last_edited_by.username
-            data['last_edited_as_string'] = self.get_editline()
         return data
 
     def get_absolute_url(self):
         return reverse('article_detail', args=[str(self.id)])
-
-    def _format_date_as_string(self, date):
-        date = utc_to_nor(date)
-        days_passed = time.days_since(date)
-        if days_passed == 0:
-            string = ', i dag'
-        elif days_passed == 1:
-            string = ', i går'
-        elif days_passed == 2:
-            string = ' for to dager siden'
-        else:
-            string = ' den %s' % date.strftime('%d.%m.%y')
-        string += ', kl %s' % date.strftime('%H:%M')
-        return string
-
-    def get_dateline(self):
-        dateline = 'Skrevet av %s%s.' % (self.author.username, self._format_date_as_string(utc_to_nor(self.published_date)))
-        return SafeUnicode(dateline)
-
-    def get_editline(self):
-        editline = None
-        if self.last_edited:
-            editline = SafeUnicode('Sist endret av %s%s.' % (
-                                    self.last_edited_by.username,
-                                    self._format_date_as_string(utc_to_nor(self.last_edited))))
-        return editline
 
     def is_visible(self):
         has_been_published = is_past(self.published_date)

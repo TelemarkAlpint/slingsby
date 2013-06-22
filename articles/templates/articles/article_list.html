@@ -7,11 +7,11 @@
 {% block content %}
 
     {% for article in articles %}
-        {% if user.is_superuser or article.is_visible %}
+        {% if user.is_superuser or article.visible %}
             <article data-datetime="{{ article.published_date.isoformat }}">
                 {% include 'articles/article_view_heading.html' %}
                 {{ article.content|safe }}
-                <span>Del og diskuter: <a href="{{ article.get_absolute_url }}#disqus_thread">Del og diskuter &rarr;</a></span>
+                <span>Del og diskuter: <a href="{% url 'article_detail' article.id %}#disqus_thread">Del og diskuter &rarr;</a></span>
                 {% include 'articles/article_view_ending.html' %}
             </article>
         {% endif %}
@@ -23,9 +23,10 @@
 {% endblock %}
 
 {% block extrascripts %}
-    <script src="{% static "js/libs/handlebars.runtime-1.0.0.js" %}"></script>
-    <script src="{% static "js/handlebars_templates.js" %}"></script>
-
+    <script async src="{% static "js/libs/handlebars.runtime-1.0.0.js" %}"></script>
+    <script async src="{% static "js/handlebars_templates.js" %}"></script>
+    <script src="{% static "js/libs/moment.min.js" %}"></script>
+    <script src="{% static "js/libs/lang/nb.js" %}"></script>
     <script>
         var disqus_shortname = 'telemarkalpint';
         (function () {
@@ -49,6 +50,19 @@
             });
         });
 
+        moment.lang("nb");
+        function improveTimestamps(){
+            $('.isotimestamp').each(function(){
+                var timestamp = $(this).attr('data-timestamp');
+                var m = moment(timestamp);
+                $(this).html(m.calendar());
+                $(this).css("opacity", 1);
+                $(this).attr("title", m.format("LLL"));
+            });
+        };
+
+        improveTimestamps();
+
         function loadAjaxData(){
             var loading_image = $("#loading_image");
             if (loading_image.is(":hidden")){
@@ -60,6 +74,7 @@
                     success: function(data, status, xhr){
                         var html = Handlebars.templates.articles(data);
                         $("#content").append(html);
+                        improveTimestamps();
                     },
                     complete: function(xhr, status){
                         loading_image.hide();
