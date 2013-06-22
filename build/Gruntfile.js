@@ -14,6 +14,7 @@ module.exports = function (grunt) {
       compile: {
         options: {
           namespace: "Handlebars.templates",
+          // Transform paths to sensible template names -> Extract filename, remove ext
           processName: function (name) {
             var path = name.split('/');
             var filename = path[path.length - 1];
@@ -93,7 +94,7 @@ module.exports = function (grunt) {
         "smarttabs": true,
         "white": true,
         globals: {
-          jQuery: true
+          jQuery: false
         }
       },
       all: ['Gruntfile.js', '../static-src/js/*.js']
