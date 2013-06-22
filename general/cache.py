@@ -9,6 +9,7 @@ If necessary, you may also inject debugging code here.
 
 from abc import ABCMeta, abstractproperty
 from google.appengine.api import memcache
+from django.db.models.query import ValuesQuerySet
 import logging
 import os
 
@@ -81,8 +82,9 @@ class CachedQuery(object):
         if objects is None:
             # Force get fresh from db
             objects = cls.queryset.all()
-            # This line is necessary to allow serializing ValuesQuerySets
-            objects = [item for item in objects]
+            if isinstance(objects, ValuesQuerySet):
+                # This line is necessary to allow serializing ValuesQuerySets
+                objects = [item for item in objects]
         if cls.timeout_in_s:
             set(cls.__name__, objects, cls.timeout_in_s)
         else:
