@@ -1,1 +1,18 @@
-* text eol=lf
+# Auto-detect text files
+* text auto eol=lf
+
+# ... but we override that detection for some known text files.
+*.py text
+*.html text
+*.css text
+*.scss text
+*.js text
+*.yaml text
+*.md text
+*.hbs text
+
+# ... and for some known binary files
+*.jpg binary
+*.png binary
+*.gif binary
+*.mo binary
