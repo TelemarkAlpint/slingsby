@@ -106,7 +106,7 @@
                 <nav>
                     <ul>
                         {% for subpage in subpages %}
-                            {% if visible or user.is_staff %}
+                            {% if subpage.visible or user.is_staff %}
                                 <li><a href="/{{ subpage.slug }}">{{ subpage.title }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
                             {% endif %}
                         {% endfor %}
