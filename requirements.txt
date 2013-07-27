@@ -1,0 +1,12 @@
+# This is all the dependencies slingsby has
+# Install them using pip install -r requirements.txt
+
+# In addition mysql-python must be installed outside of the virtualenv,
+# since the database connector utilizes c libraries, which are forbidden in the
+# app engine sandbox
+
+django==1.4.5
+django-debug-toolbar
+python-dateutil
+pytz
+beautifulsoup4
