@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'archive',
     'users',
     'gear',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'general.middleware.HttpAcceptMiddleware',
     'general.middleware.CachedAuthMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
@@ -92,3 +94,19 @@ else:
     STATIC_URL = 'http://org.ntnu.no/telemark/static/'
 
 AUTH_PROFILE_MODULE = 'users.UserProfile'
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda req: DEBUG,
+}
+
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
