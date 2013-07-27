@@ -6,8 +6,7 @@ from dateutil.parser import parse
 from django.db.models.signals import post_save, post_delete
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
-from django.views.generic.simple import direct_to_template
-from django.views.generic.base import View
+from django.views.generic.base import TemplateView
 import json
 import logging
 
@@ -29,7 +28,9 @@ class AllArticlesQuery(CachedQuery):
 post_save.connect(AllArticlesQuery.empty_on_save, sender=Article)
 
 
-class AllArticlesList(View):
+class AllArticlesList(TemplateView):
+
+    template_name = 'articles/article_list.html'
 
     def _get_filtered_articles(self, request):
         """ Get all articles, but filter them by the `before` param and limit
@@ -54,22 +55,26 @@ class AllArticlesList(View):
                 'articles': [a.__json__() for a in articles],
             }
             return HttpResponse(json.dumps(json_data), mimetype='application/json')
-        values = {
+        context = {
             'articles': articles,
         }
-        return direct_to_template(request, 'articles/article_list.html', values)
+        return self.render_to_response(context)
 
 
-class LatestArticlesList(View):
+class LatestArticlesList(TemplateView):
 
-    def get(self, request):
-        values = {
+    template_name = 'articles/article_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = {
             'articles': LatestArticlesQuery.get_cached(),
         }
-        return direct_to_template(request, 'articles/article_list.html', values)
+        return context
 
 
-class ArticleDetail(View):
+class ArticleDetail(TemplateView):
+
+    template_name = 'articles/article_detail.html'
 
     def get(self, request, article_id):
         try:
@@ -82,4 +87,4 @@ class ArticleDetail(View):
             'article': article,
             'title': make_title(article.title),
         }
-        return direct_to_template(request, 'articles/article_detail.html', context)
+        return self.render_to_response(context)
