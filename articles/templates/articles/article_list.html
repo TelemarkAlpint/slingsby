@@ -27,7 +27,11 @@
     <script async src="{% static "js/handlebars_templates.js" %}"></script>
     <script src="{% static "js/libs/moment.min.js" %}"></script>
     <script src="{% static "js/libs/lang/nb.js" %}"></script>
+    <script src="{% static "js/articles.js" %}"></script>
     <script>
+
+        improveTimestamps();
+
         var disqus_shortname = 'telemarkalpint';
         (function () {
             var s = document.createElement('script'); s.async = true;
@@ -37,31 +41,16 @@
         }());
 
         // Load more articles if approaching the end
-        $(function(){
-            $(document).scroll(function (e) {
+        $(document).scroll(function (e) {
 
-                var intBottomMargin = 500; //Pixels from bottom when script should trigger
+            var intBottomMargin = 500; //Pixels from bottom when script should trigger
 
-                //if less than intBottomMargin px from bottom
-                if ($(window).scrollTop() >= $(document).height() - $(window).height() - intBottomMargin) {
-                    loadAjaxData();
-                }
+            //if less than intBottomMargin px from bottom
+            if ($(window).scrollTop() >= $(document).height() - $(window).height() - intBottomMargin) {
+                loadAjaxData();
+            }
 
-            });
         });
-
-        moment.lang("nb");
-        function improveTimestamps(){
-            $('.isotimestamp').each(function(){
-                var timestamp = $(this).attr('data-timestamp');
-                var m = moment(timestamp);
-                $(this).html(m.calendar());
-                $(this).css("opacity", 1);
-                $(this).attr("title", m.format("LLL"));
-            });
-        };
-
-        improveTimestamps();
 
         function loadAjaxData(){
             var loading_image = $("#loading_image");

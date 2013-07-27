@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block og_description %}{% firstof article.social_summary article.content|striptags|truncatewords:40 %}{% endblock %}
 {% block og_title %}{{ article.title }}{% endblock %}
 
@@ -12,5 +14,16 @@
         {% include 'articles/article_view_ending.html' %}
 
         {% include 'social_plugins.html' with thing=article %}
+
+{% endblock %}
+
+{% block extrascripts %}
+
+    <script src="{% static "js/libs/moment.min.js" %}"></script>
+    <script src="{% static "js/libs/lang/nb.js" %}"></script>
+    <script src="{% static "js/articles.js" %}"></script>
+    <script>
+        improveTimestamps();
+    </script>
 
 {% endblock %}
