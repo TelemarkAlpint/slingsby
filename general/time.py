@@ -18,7 +18,7 @@ def aware_from_utc(time):
         return time.replace(tzinfo=utc)
     else:
         return time
-    
+
 def aware_from_nor(time):
     if not time.tzinfo:
         return time.replace(tzinfo=nor)
@@ -36,12 +36,12 @@ def nor_to_utc(nordate):
 def is_past(date):
     dst_aware_datetime = aware_time(date)
     time_now = now()
-    seconds_since_date = (time_now - dst_aware_datetime).total_seconds() 
+    seconds_since_date = (time_now - dst_aware_datetime).total_seconds()
     return seconds_since_date > 0
 
 def is_future(date):
     return not is_past(date)
-    
+
 def days_since(date):
     return days_between(now(), date)
 

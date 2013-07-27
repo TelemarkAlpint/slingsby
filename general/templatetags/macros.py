@@ -1,9 +1,9 @@
-# 
+#
 # templatetags/macros.py - Support for macros in Django templates
-# 
+#
 # Author: Michal Ludvig <michal@logix.cz>
 #         http://www.logix.cz/michal
-# 
+#
 
 """
 Tag library that provides support for "macros" in
@@ -26,7 +26,7 @@ Usage example:
 3) Use the macro with a String parameter:
         {% usemacro my_macro "String parameter" %}
 
-   or with a variable parameter (provided the 
+   or with a variable parameter (provided the
    context defines 'somearg' variable, e.g. with
    value "Variable parameter"):
         {% usemacro my_macro somearg %}
@@ -36,18 +36,18 @@ Usage example:
         Parameter: Variable parameter <br/>
 
 4) Alternatively save your macros in a separate
-   file, e.g. "mymacros.html" and load it to the 
+   file, e.g. "mymacros.html" and load it to the
    current template with:
         {% loadmacros "mymacros.html" %}
-   Then use these loaded macros in {% usemacro %} 
+   Then use these loaded macros in {% usemacro %}
    as described above.
 
 Macros can take zero or more arguments and both
 context variables and macro arguments are resolved
 in macro body when used in {% usemacro ... %} tag.
 
-Bear in mind that defined and loaded Macros are local 
-to each template file and are not inherited 
+Bear in mind that defined and loaded Macros are local
+to each template file and are not inherited
 through {% extends ... %} tags.
 """
 
@@ -60,7 +60,7 @@ import re
 register = template.Library()
 
 def _setup_macros_dict(parser):
-    ## Metadata of each macro are stored in a new attribute 
+    ## Metadata of each macro are stored in a new attribute
     ## of 'parser' class. That way we can access it later
     ## in the template when processing 'usemacro' tags.
     try:
@@ -94,7 +94,7 @@ def do_macro(parser, token):
     nodelist = parser.parse(('endmacro', ))
     parser.delete_first_token()
 
-    ## Metadata of each macro are stored in a new attribute 
+    ## Metadata of each macro are stored in a new attribute
     ## of 'parser' class. That way we can access it later
     ## in the template when processing 'usemacro' tags.
     _setup_macros_dict(parser)
@@ -117,14 +117,14 @@ def do_loadmacros(parser, token):
         filename = filename[1:-1]
     t = get_template(filename)
     macros = t.nodelist.get_nodes_by_type(DefineMacroNode)
-    ## Metadata of each macro are stored in a new attribute 
+    ## Metadata of each macro are stored in a new attribute
     ## of 'parser' class. That way we can access it later
     ## in the template when processing 'usemacro' tags.
     _setup_macros_dict(parser)
     for macro in macros:
         parser._macros[macro.name] = macro
     return LoadMacrosNode()
-    
+
 class UseMacroNode(template.Node):
     def __init__(self, macro, filter_expressions):
         self.nodelist = macro.nodelist

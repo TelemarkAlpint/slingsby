@@ -4,18 +4,18 @@ register = template.Library()
 
 @register.filter
 def change_base(value, bases):
-    """ Converts a string in a given base to a target base. 
-    
+    """ Converts a string in a given base to a target base.
+
     Bases argument should be a a string in the format 'from,to'.
-    
+
     If base > 16, the conversion is not well defined, as it's not clear which symbols to use. """
-    
+
     src_base, target_base = [int(s) for s in bases.split(',')]
     if isinstance(value, int):
         num = value
     else:
         num = int(value, base=src_base)
-    
+
     if target_base == 2:
         return '{0:b}'.format(num)
     elif target_base == 8:
