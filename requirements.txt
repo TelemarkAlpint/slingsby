@@ -5,7 +5,7 @@
 # since the database connector utilizes c libraries, which are forbidden in the
 # app engine sandbox
 
-django==1.4.5
+django==1.5.1
 django-debug-toolbar
 python-dateutil
 pytz
