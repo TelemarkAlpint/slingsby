@@ -2,10 +2,9 @@
 
 from .users.views import UserProfileView
 from django.conf import settings
-from django.http import HttpResponseRedirect
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 
 from .archive  import urls as archive_urls
 from .articles import urls as article_urls
@@ -36,6 +35,6 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('',
-    (r'^favicon.ico$', lambda r: HttpResponseRedirect(settings.STATIC_URL + 'favicon.ico')),
-    (r'^robots.txt$', lambda r: HttpResponseRedirect(settings.STATIC_URL + 'robots.txt')),
+    (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
+    (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
 )
