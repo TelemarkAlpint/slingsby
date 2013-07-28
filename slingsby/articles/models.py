@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from ..general import time, validate_text, make_title
-from ..general.time import utc_to_nor, nor_to_utc, is_past
+from ..general import time, validate_text
+from ..general.time import nor_to_utc, is_past
 from ..general.widgets import WidgEditorWidget, NORDateTimeWidget
 from .widgets import SocialSummaryWidget
 from django.contrib.auth.models import User
@@ -10,9 +10,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.forms import ModelForm
-from django.utils.safestring import SafeUnicode
-from django.views.generic.detail import DetailView
-import logging
 
 class Article(models.Model):
     """
@@ -30,11 +27,14 @@ class Article(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
+
     class Meta:
         ordering = ['-published_date']
 
+
     def __unicode__(self):
         return self.title
+
 
     def __json__(self):
         data = {
@@ -52,22 +52,25 @@ class Article(models.Model):
             data['last_edited_by'] =  self.last_edited_by.username
         return data
 
+
     def get_absolute_url(self):
         return reverse('article_detail', args=[str(self.id)])
+
 
     def is_visible(self):
         has_been_published = is_past(self.published_date)
         return has_been_published and self.visible
+
 
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
         exclude = ('last_edited', 'last_edited_by', 'author')
         widgets = {
-                   'content': WidgEditorWidget(),
-                   'published_date': NORDateTimeWidget(),
-                   'social_summary': SocialSummaryWidget(),
-                   }
+           'content': WidgEditorWidget(),
+           'published_date': NORDateTimeWidget(),
+           'social_summary': SocialSummaryWidget(),
+        }
 
     def clean_published_date(self):
         date = self.cleaned_data['published_date']
@@ -99,11 +102,14 @@ class SubPageArticle(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
+
     class Meta:
         ordering = ['-sort_key', 'title']
 
+
     def __unicode__(self):
         return "<SubPageArticle: %s -> %s>" % (self.slug, self.title)
+
 
     def __json__(self):
         data = {
@@ -121,23 +127,28 @@ class SubPageArticle(models.Model):
             data['last_edited_by'] =  self.last_edited_by.username
         return data
 
+
     def get_absolute_url(self):
         return reverse('article_detail', args=[str(self.id)])
+
 
     def is_visible(self):
         has_been_published = is_past(self.published_date)
         return has_been_published and self.visible
 
+
 class SubPageArticleForm(ModelForm):
+
     class Meta:
         model = SubPageArticle
         exclude = ('author', 'last_edited', 'last_edited_by')
         widgets = {
-                   'content': WidgEditorWidget(),
-                   'introduction': WidgEditorWidget(),
-                   'published_date': NORDateTimeWidget(),
-                   'social_summary': SocialSummaryWidget(),
-                   }
+           'content': WidgEditorWidget(),
+           'introduction': WidgEditorWidget(),
+           'published_date': NORDateTimeWidget(),
+           'social_summary': SocialSummaryWidget(),
+        }
+
 
     def clean_published_date(self):
         date = self.cleaned_data['published_date']
@@ -145,26 +156,20 @@ class SubPageArticleForm(ModelForm):
             date = time.now()
         return nor_to_utc(date)
 
+
     def clean_content(self):
         data = self.cleaned_data['content']
         clean_data = validate_text(data)
         return clean_data
 
-class ArticleDetailView(DetailView):
-    model = Article
-
-    def get_context_data(self, **kwargs):
-        context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        article = super(ArticleDetailView, self).get_object()
-        context['title'] = make_title(article.title)
-        return context
 
 @receiver(post_save, sender=SubPageArticle)
 def register_new_url(sender, **kwargs):
     """ Register a new valid URL when a SubPageArticle is saved. """
-    from urls import urlpatterns
+    from .urls import urlpatterns
+    from .views import ArticleDetail
     from django.conf.urls import patterns, url
     subpage = kwargs['instance']
     urlpatterns += patterns('',
-        url(r'^%s$' % subpage.slug, 'articles.views.show_article', {'article_id': subpage.id}),
-                           )
+        url(r'^%s$' % subpage.slug, ArticleDetail.as_view(), {'article_id': subpage.id}),
+    )
