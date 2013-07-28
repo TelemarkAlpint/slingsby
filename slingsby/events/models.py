@@ -3,8 +3,8 @@
 from ..general import time, validate_text
 from ..general.widgets import WidgEditorWidget
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import permalink
 from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
 
@@ -33,26 +33,25 @@ class Event(models.Model):
     def __unicode__(self):
         return self.name
 
-    def __json__(self):
-        fields = {
-                'name': self.name,
-                'start_date': self.startdate.isoformat(),
-                'end_date': self.enddate.isoformat(),
-                'id': self.id,
-                'has_registration': self.has_registration,
-                'number_of_spots': self.number_of_spots,
-                'summary': self.summary,
-                'description': self.description,
+    def to_json(self):
+        json = {
+            'name': self.name,
+            'start_date': self.startdate.isoformat(),
+            'end_date': self.enddate.isoformat(),
+            'id': self.id,
+            'has_registration': self.has_registration,
+            'number_of_spots': self.number_of_spots,
+            'summary': self.summary,
+            'description': self.description,
         }
         if self.has_registration:
-            fields['registration_opens'] = self.registration_opens.isoformat() if self.registration_opens else None
-            fields['registration_closes'] = self.registration_closes.isoformat() if self.registration_closes else None
-            fields['binding_registration'] = self.binding_registration
-        return fields
+            json['registration_opens'] = self.registration_opens.isoformat() if self.registration_opens else None
+            json['registration_closes'] = self.registration_closes.isoformat() if self.registration_closes else None
+            json['binding_registration'] = self.binding_registration
+        return json
 
-    @permalink
     def get_absolute_url(self):
-        return ('slingsby.events.views.detail', [str(self.id)])
+        return reverse('event_detail', kwargs={'event_id': str(self.id)})
 
     def duration_as_string(self):
         if time.days_between(self.startdate, self.enddate) != 0:
@@ -158,7 +157,7 @@ class Event(models.Model):
     def get_participants_id(self):
         user_ids = []
         if self.participants_by_id:
-            user_ids = map(int, self.participants_by_id.split(','))
+            user_ids = [int(user_id) for user_id in self.participants_by_id.split(',')]
         return user_ids
 
     def get_participating_users(self):
@@ -169,7 +168,7 @@ class Event(models.Model):
         return users
 
     def update_participating_users(self, list_of_new_ids):
-        list_of_new_ids = map(str, list_of_new_ids)
+        list_of_new_ids = [str(user_id) for user_id in list_of_new_ids]
         self.participants_by_id = ','.join(list_of_new_ids)
         self.save()
     update_participating_users.alters_data = True
@@ -207,6 +206,7 @@ class UserAddError(EventError):
     for registration yet, or the user already being signed up for the event. """
 
     def __init__(self, reason):
+        super(UserAddError, self).__init__()
         self.reason = reason
 
     def __str__(self):
@@ -216,6 +216,7 @@ class NotRegisteredError(EventError):
     """ Raised if the user tried to do something one has to be signed up to the event to do."""
 
     def __init__(self, event, message):
+        super(NotRegisteredError, self).__init__()
         self.event = event
         self.message = message
 
