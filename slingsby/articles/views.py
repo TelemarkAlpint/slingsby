@@ -1,32 +1,29 @@
 from ..general import make_title
-from ..general.cache import CachedQuery
+from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.time import aware_from_utc
 from ..general.mixins import JSONMixin
 from .models import SubPageArticle, Article
 from dateutil.parser import parse
-from django.db.models.signals import post_save, post_delete
-from django.http import HttpResponse, Http404
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
-import json
-import logging
+from logging import getLogger
 
-logger = logging.getLogger(__name__)
+_logger = getLogger(__name__)
 
+@empty_on_changes_to(SubPageArticle)
 class SingleArticlePageQuery(CachedQuery):
     queryset = SubPageArticle.objects.all()
-post_save.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
-post_delete.connect(SingleArticlePageQuery.empty_on_save, sender=SubPageArticle)
 
 
+@empty_on_changes_to(Article)
 class LatestArticlesQuery(CachedQuery):
     queryset = Article.objects.all().select_related()[:5]
-post_save.connect(LatestArticlesQuery.empty_on_save, sender=Article)
 
 
+@empty_on_changes_to(Article)
 class AllArticlesQuery(CachedQuery):
     queryset = Article.objects.all().select_related()
-post_save.connect(AllArticlesQuery.empty_on_save, sender=Article)
 
 
 class AllArticlesList(JSONMixin, TemplateView):
