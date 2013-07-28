@@ -1,10 +1,12 @@
-from ..general.cache import CachedQuery
+from ..general.cache import CachedQuery, empty_on_changes_to
 from .models import Quote, QuoteForm
 from .views import AllQuotesQuery
 from random import choice as random_choice
 
+@empty_on_changes_to(Quote)
 class SuggestedQuotesQuery(CachedQuery):
     queryset = Quote.objects.filter(accepted=False).values('topic', 'quote', 'author', 'id')
+
 
 def get_random_quote_or_default():
     all_quotes = AllQuotesQuery.get_cached()
@@ -16,11 +18,12 @@ def get_random_quote_or_default():
         quote.author = 'Trist teknisk ansvarlig'
     return quote
 
+
 def default(request):
     context = {
         'random_quote': get_random_quote_or_default(),
         'quote_form': QuoteForm(),
-               }
+    }
     if request.user.is_staff:
         context['suggested_quotes'] = SuggestedQuotesQuery.get_cached()
     return context
