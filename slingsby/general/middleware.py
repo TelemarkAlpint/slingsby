@@ -36,6 +36,18 @@ class HttpAcceptMiddleware(object):
         request.prefer_html = html_priority > json_priority
         request.prefer_json = json_priority > html_priority
 
+class HttpMethodOverride(object):
+    """ HTML has no way of sending HTTP DELETE or PUT requests. To patch up this,
+    we allow the specification of desired HTTP verb in the _http_verb request data
+    field. If the request is a POST request and has this field, the value from that
+    field will override the original HTTP request verb.
+    """
+
+    def process_request(self, request):
+        if request.method == 'POST':
+            if request.POST.get('_http_verb'):
+                request.method = request.POST.get('_http_verb')
+
 
 class CachedAuthMiddleware(object):
     """ Store session user in cache, to avoid hitting the database on every pageview. """

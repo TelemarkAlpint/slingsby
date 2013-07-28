@@ -59,6 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'slingsby.general.middleware.HttpAcceptMiddleware',
     'slingsby.general.middleware.CachedAuthMiddleware',
+    'slingsby.general.middleware.HttpMethodOverride',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
