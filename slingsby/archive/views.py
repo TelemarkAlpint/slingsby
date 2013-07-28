@@ -3,16 +3,13 @@
 from ..general import make_title, cache
 from ..general.constants import JSON_ARCHIVE_PATH
 from ..general.cache import CachedQuery
-from .models import ArchiveEvent, ImageGallery, Image, Video
-from contextlib import closing
+from .models import ArchiveEvent, ImageGallery, Image
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic.simple import direct_to_template
-from urllib2 import urlopen
-import datetime
-import json
 import logging
+import requests
 
 class ArchiveEventQuery(CachedQuery):
     queryset = ArchiveEvent.objects.all()
@@ -58,8 +55,8 @@ def clear_archive_and_cache():
     cache.flush_all()
 
 def get_archive():
-    with closing(urlopen(JSON_ARCHIVE_PATH)) as fp:
-        return json.load(fp)
+    archive = requests.get(JSON_ARCHIVE_PATH)
+    return archive.json()
 
 def get_old_hashes():
     hashes = ArchiveEvent.objects.values_list('path_hash', flat=True)
@@ -116,5 +113,5 @@ def create_new_events(archive, old_hashes):
 def delete_old_events(events, hashes):
     for event in events:
         if event.data_hash in hashes:
-            logging.info('Deleted outdated event: %s' % event)
+            logging.info('Deleted outdated event: %s', event)
             event.delete()

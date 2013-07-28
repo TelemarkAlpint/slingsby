@@ -10,3 +10,4 @@ django-debug-toolbar
 python-dateutil
 pytz
 beautifulsoup4
+requests
