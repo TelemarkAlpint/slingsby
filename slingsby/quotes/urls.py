@@ -1,9 +1,9 @@
+from .views import AllQuotesView, QuoteDetailView
 from django.conf.urls import patterns, url
+from django.contrib.admin.views.decorators import staff_member_required
 
-urlpatterns = patterns('slingsby.quotes.views',
-      url('^$', 'all_quotes', name='all_quotes'),
-      url('^upload$', 'upload_quote', name='upload_quote'),
-      url(r'^(\d+)/$', 'show_quote', name='show_quote'),
-      url(r'^(\d+)/approve/$', 'approve_quote', name='approve_quote'),
-      url(r'^(\d+)/delete/$', 'delete_quote', name='delete_quote'),
-      )
+urlpatterns = patterns('',
+    url('^$', AllQuotesView.as_view(), name='all_quotes'),
+    url(r'^(?P<quote_id>\d+)/$', QuoteDetailView.as_view(), name='show_quote'),
+    url(r'^(?P<quote_id>\d+)/approve/$', staff_member_required(QuoteDetailView.as_view(action='approve')), name='approve_quote'),
+)

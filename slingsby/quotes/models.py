@@ -1,11 +1,11 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import ModelForm, Textarea
 
-#TODO: suggested_by, verified_by null=True bare i en overgangsfase mens gamle quotes får lagt inn feltet
+#TODO: suggested_by bare i en overgangsfase mens gamle quotes får lagt inn feltet
 #TODO: Spell correction changes suggested_by
 class Quote(models.Model):
     topic = models.CharField('om...', max_length=100, null=True, blank=True)
@@ -22,25 +22,28 @@ class Quote(models.Model):
             ellipses = '...' if len(self.quote) > 30 else ''
             return '%s: %s' % (self.author, self.quote[:30] + ellipses)
 
-    def __json__(self, verbose=False):
-        fields = {
-                  'id': self.id,
-                  'quote': self.quote,
-                  'author': self.author,
-                  'date_added': self.date_added.isoformat(),
-                  }
+
+    def to_json(self):
+        json = {
+            'id': self.id,
+            'quote': self.quote,
+            'author': self.author,
+            'date_added': self.date_added.isoformat(),
+            'approved': self.accepted,
+        }
         if self.topic:
-            fields['topic'] = 'Om %s' % self.topic
-        if verbose:
-            fields['approved'] = self.accepted
-            if self.suggested_by is not None:
-                fields['suggested_by'] = self.suggested_by.username
-        return fields
+            json['topic'] = 'Om %s' % self.topic
+        if self.suggested_by is not None:
+            json['suggested_by'] = self.suggested_by.username
+        return json
+
 
     def get_absolute_url(self):
-        return reverse('quotes.views.show_quote', args=[str(self.id)])
+        return reverse('show_quote', kwargs={'quote_id': str(self.id)})
+
 
 class QuoteForm(ModelForm):
+
     class Meta:
         model = Quote
         exclude = ('suggested_by', 'accepted')

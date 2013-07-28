@@ -1,83 +1,104 @@
-from ..general import make_title, reverse_with_params, feedback
-from ..general.cache import CachedQuery
-from ..upload import upload
+# -*- coding: utf-8 -*-
+
+from ..general import make_title
+from ..general.cache import CachedQuery, empty_on_changes_to
+from ..general.views import ActionView
 from .models import Quote, QuoteForm
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.db.models.signals import post_save
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_POST
-from django.views.generic.simple import direct_to_template
-import json
+from django.views.generic.base import TemplateView
 import logging
 
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
+@empty_on_changes_to(Quote)
 class AllQuotesQuery(CachedQuery):
-    queryset = Quote.objects.filter(accepted=True).values('topic', 'quote', 'author')
+    queryset = Quote.objects.filter(accepted=True)
 
-post_save.connect(AllQuotesQuery.empty_on_save, sender=Quote)
 
-@staff_member_required
-@require_POST
-def approve_quote(request, quote_id):
-    quote = get_object_or_404(Quote, id=quote_id)
-    quote.accepted = True
-    quote.save()
-    logger.info('%s confirmed quote: %s', request.user.username, quote)
-    return HttpResponseRedirect(quote.get_absolute_url())
+class QuoteDetailView(ActionView, TemplateView):
 
-@staff_member_required
-@require_POST
-def delete_quote(request, quote_id):
-    quote = get_object_or_404(Quote, id=quote_id)
-    quote.delete()
-    logging.info('%s rejected quote: %s', request.user.username, quote)
-    return HttpResponse('Quote slettet.', content_type='text/plain')
+    template_name = 'quotes/show_quote.html'
+    actions = ('approve',)
 
-@login_required
-@require_POST
-def upload_quote(request):
-    redirect = reverse_with_params(feedback_code=feedback.QUOTE_THANKS)
-    return upload(request, QuoteForm, reverse('upload_quote'), redirect)
+    def get_context_data(self, **kwargs):
+        context = super(QuoteDetailView, self).get_context_data(**kwargs)
+        quote_id = kwargs['quote_id']
+        quote = self._find_quote(int(quote_id))
+        context['quote'] = quote
+        return context
 
-def all_quotes(request):
-    quotes = AllQuotesQuery.update_cache()
-    if request.prefer_json:
-        if 'pending' in request.GET:
-            logger.info('Verbose JSON of all quotes returned')
-            quotes = Quote.objects.all()
-            json_array = [quote.__json__(verbose=True) for quote in quotes]
+
+    def get(self, request, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+
+    def approve(self, request, **kwargs):
+        quote_id = kwargs['quote_id']
+        quote = get_object_or_404(Quote, id=quote_id)
+        quote.accepted = True
+        quote.save()
+        _logger.info('%s confirmed quote: %s', request.user, quote)
+        msg = 'Sitatet ble godkjent!'
+        return HttpResponseRedirect(quote.get_absolute_url() + '?msg=' + msg)
+
+
+    def delete(self, request, **kwargs):
+        _logger.info("%s is trying to delete a quote", request.user)
+        if not request.user.is_staff:
+            return HttpResponseForbidden('Kun administratorer kan slette quotes!')
+        quote_id = kwargs['quote_id']
+        quote = get_object_or_404(Quote, id=quote_id)
+        quote.delete()
+        logging.info('%s deleted quote: %s', request.user.username, quote)
+        return HttpResponse('Quote slettet.', content_type='text/plain')
+
+
+    def _find_quote(self, quote_id):
+        """ Since all quotes most likely are cached, use that
+        to find fetch the quote instead of hitting the db.
+        """
+        found_quote = None
+        cached_quotes = AllQuotesQuery.get_cached()
+        for quote in cached_quotes:
+            if quote.id == quote_id:
+                found_quote = quote
+                break
         else:
-            logger.info('JSON of all quotes returned.')
-            json_array = [quote.__json__() for quote in quotes]
-        return HttpResponse(json.dumps(json_array), mimetype='application/json')
-    context = {
-               'all_quotes': quotes,
-               'title': make_title('Sitater'),
-               }
-    return direct_to_template(request, 'quotes/all_quotes.html', context)
+            found_quote = get_object_or_404(Quote, pk=quote_id)
+        return found_quote
 
-def find_quote(quote_id):
-    found_quote = None
-    cached_quotes = AllQuotesQuery.get_cached()
-    for quote in cached_quotes:
-        if quote.id == quote_id:
-            found_quote = quote
-            break
-    else:
-        found_quote = get_object_or_404(Quote, pk=quote_id)
-    return found_quote
 
-def show_quote(request, quote_id):
-    quote = find_quote(int(quote_id))
-    if request.prefer_json:
-        json_dict = None
-        if 'pending' in request.GET:
-            json_dict = quote.__json__(verbose=True)
+class AllQuotesView(TemplateView):
+
+    template_name = 'quotes/all_quotes.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AllQuotesView, self).get_context_data(**kwargs)
+        quotes = AllQuotesQuery.get_cached()
+        context = {
+            'all_quotes': quotes,
+            'title': make_title('Sitater'),
+        }
+        return context
+
+
+    def get(self, request, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+
+    def post(self, request, **kwargs):
+        context = self.get_context_data(**kwargs)
+        form = QuoteForm(request.POST)
+        if form.is_valid():
+            quote = form.save(commit=False)
+            quote.suggested_by = request.user
+            quote.save()
+            msg = 'Takk for forslaget, noen fra styret vil se på det ASAP!'
+            return HttpResponseRedirect('/?msg=' + msg)
         else:
-            json_dict = quote.__json__()
-        return HttpResponse(json.dumps(json_dict), mimetype='application/json')
-    return direct_to_template(request, 'quotes/show_quote.html', {'quote': quote})
+            context['quote_form'] = form
+            msg = 'Beklager, du har visst noen feil i skjemaet, prøv på nytt er du snill!'
+            return HttpResponseRedirect('/?msg=' + msg)

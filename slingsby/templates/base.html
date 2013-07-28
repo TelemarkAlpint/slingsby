@@ -129,7 +129,7 @@
                         {% if user.is_authenticated %}
                             <div id="quote_suggestion" class="sidebar_box" style="display: none">
                                 <h1>Foreslå en ny quote!</h1>
-                                <form id="quoteform" action="{% url 'upload_quote' %}" method="post">
+                                <form id="quoteform" action="{% url 'all_quotes' %}" method="post">
                                     <table>
                                         {{ quote_form.as_table }}
                                     </table>
@@ -154,7 +154,8 @@
                                         <input type="image" src="{% static "gfx/confirm.png" %}" alt="Godkjenn">
                                     </form>
                                     <span class="quote_descr">Akseptér sitatet over?</span>
-                                    <form class="quote_reject" action="{% url 'delete_quote' suggested_q.id %}" method="post">
+                                    <form class="quote_reject" action="{% url 'show_quote' quote_id=suggested_q.id %}" method="post">
+                                        <input type="hidden" name="_http_verb" value="delete">
                                         <input type="image" src="{% static "gfx/reject.png" %}" alt="Slett">
                                     </form>
                                 </div>
