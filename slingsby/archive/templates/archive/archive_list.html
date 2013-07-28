@@ -50,7 +50,7 @@
                 var event_details = $('.event_details#details-' + id);
                 $.ajax({
                     url: {% url archive %} + id,
-                    method: 'POST',
+                    method: 'GET',
                     success: function(data, status, jqxhr){
                         event_details.html(data);
                         $('a.zoombox').zoombox({

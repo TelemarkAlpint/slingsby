@@ -1,7 +1,7 @@
+from .views import ArchiveView, ArchiveEventDetailView
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('slingsby.archive.views',
-    url(r'^$', 'view_archive', name='archive'),
-    (r'^update$', 'update_archive'),
-    url(r'^([0-9a-f]+)', 'event_details', name='event_details'),
+urlpatterns = patterns('',
+    url(r'^$', ArchiveView.as_view(), name='archive'),
+    url(r'^(?P<event_id>[0-9a-f]+)', ArchiveEventDetailView.as_view(), name='event_details'),
 )
