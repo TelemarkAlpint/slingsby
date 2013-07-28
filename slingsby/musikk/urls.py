@@ -1,13 +1,16 @@
+from .views import SongDetailView, AllSongsView, TopSongsView, TopSong, TopSongsList
 from django.conf.urls import patterns, url
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
-urlpatterns = patterns('slingsby.musikk.views',
-    url(r'^$', 'all_songs', name='musikk'),
-    url(r'^(\d+)/$', 'song_details', name='song_details'),
-    url(r'^(\d+)/vote/$', 'vote_on_song', name='vote_on_song'),
-    url(r'^(\d+)/approve/$', 'approve_song', name='approve_song'),
-    url(r'^(\d+)/delete/$', 'delete_song', name='delete_song'),
-    url(r'^top/list/$', 'top_list', name='top_list'),
-    url(r'^top/song/$', 'top_song', name='top_song'),
-    (r'^top/$', 'top'),
-    (r'^upload_song$', 'upload_song'),
+urlpatterns = patterns('',
+    url(r'^$', AllSongsView.as_view(), name='musikk'),
+
+    url(r'^(?P<song_id>\d+)/$', SongDetailView.as_view(), name='song_details'),
+    url(r'^(?P<song_id>\d+)/vote/$', login_required(SongDetailView.as_view(action='vote')), name='vote_on_song'),
+    url(r'^(?P<song_id>\d+)/approve/$', staff_member_required(SongDetailView.as_view(action='approve')), name='approve_song'),
+
+    url(r'^top/$', TopSongsView.as_view()),
+    url(r'^top/list/$', TopSongsList.as_view(), name='top_list'),
+    url(r'^top/song/$', TopSong.as_view(), name='top_song'),
 )

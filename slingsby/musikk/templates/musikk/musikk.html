@@ -15,7 +15,7 @@
 
     {% if user.is_authenticated %}
         <h1>Foreslå ny sang</h1>
-            <form action="{% url 'musikk.views.upload_song' %}" method="post">
+            <form action="{% url 'musikk' %}" method="post">
                 <table>
                     {{ song_form.as_table }}
                 </table>
@@ -38,14 +38,15 @@
         </p>
 
         {% for form in new_songforms %}
-            <form class="inline" action="{% url 'approve_song' form.instance.id %}" method="post">
+            <form class="inline" action="{% url 'approve_song' song_id=form.instance.id %}" method="post">
             <table>
                 {{ form.as_table }}
             </table>
             <input type="submit" class="btn" value="Registrer sang">
             </form>
 
-            <form class="inline" action="{% url 'delete_song' form.instance.id %}" method="post">
+            <form class="inline" action="{% url 'song_details' song_id=form.instance.id %}" method="post">
+                <input type="hidden" name="_http_verb" value="delete">
                 <input type="submit" class="btn" value="Slett forslag">
             </form>
 

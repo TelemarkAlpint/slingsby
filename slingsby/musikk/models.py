@@ -8,7 +8,7 @@ from django.forms.models import ModelForm
 class Song(models.Model):
     title = models.CharField('tittel', max_length=200)
     artist = models.CharField('artist', max_length=200)
-    startpoint_in_s = models.IntegerField('startpunkt i sekunder',default=0)
+    startpoint_in_s = models.IntegerField('startpunkt i sekunder', default=0)
     filename = models.CharField('filnavn', max_length=500)
     ready = models.BooleanField('godkjent', default=False)
     date_added = models.DateTimeField('lagt inn', auto_now_add=True)
@@ -22,20 +22,19 @@ class Song(models.Model):
     def __unicode__(self):
         return '%s - %s' % (self.artist, self.title)
 
-    def __json__(self, verbose=False):
+    def to_json(self):
         json = {
             'id': self.id,
             'title': self.title,
             'artist': self.artist,
             'date_added': self.date_added.isoformat(),
             'popularity': self.popularity,
+            'filename': self.filename,
         }
-        if verbose:
-            json['filename'] = self.filename
         return json
 
     def get_absolute_url(self):
-        return reverse('slingsby.musikk.views.song_details', args=[str(self.id)])
+        return reverse('song_details', kwargs={'song_id': str(self.id)})
 
 class Vote(models.Model):
     date_added = models.DateTimeField('dato lagt inn', auto_now_add=True)
