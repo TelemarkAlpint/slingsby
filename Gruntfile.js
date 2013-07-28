@@ -99,6 +99,9 @@ module.exports = function (grunt) {
       handlebars: {
         files: ['slingsby/**/handlebars/*.hbs'],
         tasks: ['handlebars']
+      },
+      python: {
+        files: ['slingsby/**/*.py']
       }
     }
 
