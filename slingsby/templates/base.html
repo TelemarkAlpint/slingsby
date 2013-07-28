@@ -70,8 +70,8 @@
 
                     <span class="clickable">
                       {% comment %}
-                          {% if user.profile.small_img %}
-                              <img width=25 height=25 class="small_profile" src="{{ user.profile.small_img }}" alt="Profilbildet ditt">
+                          {% if user.small_img %}
+                              <img width=25 height=25 class="small_profile" src="{{ user.small_img }}" alt="Profilbildet ditt">
                           {% else %}
                               <img width=25 height=25 class="small_profile" src="{% static "gfx/missing_picture-25.png" %}" alt="Profilbilde mangler!">
                           {% endif %}
@@ -111,13 +111,15 @@
                             {% endif %}
                         {% endfor %}
 
-                        {% if not user.is_authenticated %}
-                          <li><a href="{{ JOIN_URL }}">Bli medlem!</a></li>
-                      {% else %}
-                          {% if not user.profile.is_member %}
-                              <li><a href="{% url 'join' %}">Bli medlem!</a></li>
-                          {% endif %}
-                        {% endif %}
+                        {% comment %}
+                            {% if not user.is_authenticated %}
+                                <li><a href="{{ JOIN_URL }}">Bli medlem!</a></li>
+                            {% else %}
+                                {% if not user.is_member %}
+                                    <li><a href="{% url 'join' %}">Bli medlem!</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endcomment %}
                     </ul>
                 </nav>
 

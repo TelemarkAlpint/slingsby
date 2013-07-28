@@ -5,10 +5,10 @@
 
 {% block content %}
 
-    <h1>{{ user.profile.username }}</h1>
+    <h1>{{ user }}</h1>
 
     {% comment %}
-    {% if not user.profile.full_name %}
+    {% if not user.full_name %}
         <p>
         Ettersom du ikke stå som medlem i gruppen, så har vi ikke klart å automatisk finne det fulle navnet ditt.
         Hvis du hjelpe oss med å fylle det ut under, så hadde det vært supert! Hvis du mot all formodning skulle
@@ -17,8 +17,8 @@
     {% endif %}
 
     <div class="profile_image">
-        {% if user.profile.image_large %}
-            <img src="{{ user.profile.image_large }}" alt="Profilbildet ditt">
+        {% if user.image_large %}
+            <img src="{{ user.image_large }}" alt="Profilbildet ditt">
         {% else %}
             <img src="{% static "gfx/missing_picture-75.png" %}" alt="Du har ikke lagt inn bilde!">
             <br>
@@ -31,8 +31,8 @@
         <tr>
             {% comment %}
             <th>Fullt navn:</th>
-            <td>{% if user.profile.full_name %}
-                    {{ user.profile.full_name }}
+            <td>{% if user.full_name %}
+                    {{ user.full_name }}
                 {% else %}
                     <form class="inline" action="{% url 'submit_full_name' %}" method="post">
                         {{ name_form.full_name }}
@@ -46,10 +46,12 @@
             <th>E-post:</th>
             <td>{{ user.email }}</td>
         </tr>
-        <tr>
-            <th>Medlem av gruppen:</th>
-            <td>{% if user.profile.is_member %}Ja <a href="{{ LEAVE_URL }}" class="btn">Meld meg ut</a>{% else %}Nei <a href="{{ JOIN_URL }}" class="btn">Meld meg inn</a>{% endif %}</td>
-        </tr>
+        {% comment %}
+            <tr>
+                <th>Medlem av gruppen:</th>
+                <td>{% if user.is_member %}Ja <a href="{{ LEAVE_URL }}" class="btn">Meld meg ut</a>{% else %}Nei <a href="{{ JOIN_URL }}" class="btn">Meld meg inn</a>{% endif %}</td>
+            </tr>
+        {% endcomment %}
     </table>
 
     <h1>Mine events</h1>

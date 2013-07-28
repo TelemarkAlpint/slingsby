@@ -1,8 +1,8 @@
 # coding: utf-8
 
+from .views import UserProfileView
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('slingsby.users.views',
-    url(r'^$', 'edit_profile', name='profile'),
-                       )
-
+urlpatterns = patterns('',
+    url(r'^$', UserProfileView.as_view(), name='profile'),
+)

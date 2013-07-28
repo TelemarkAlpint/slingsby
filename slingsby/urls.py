@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from .users.views import UserProfileView
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.conf.urls import patterns, include, url
@@ -14,21 +15,19 @@ from .gear     import urls as gear_urls
 from .musikk   import urls as musikk_urls
 from .quotes   import urls as quote_urls
 from .tasks    import urls as task_urls
-from .upload   import urls as upload_urls
 from .users    import urls as user_urls
 
 admin.autodiscover()
 handler500 = TemplateView.as_view(template_name='500.html')
 
 urlpatterns = patterns('',
-    url(r'^join$',   'slingsby.users.views.join_group', name='join'),
+    url(r'^join$',   UserProfileView.as_view(action='join'), name='join'),
     url(r'^',        include(article_urls)),
     url(r'^musikk/', include(musikk_urls)),
     url(r'^arkiv/',  include(archive_urls)),
     url(r'^profil/', include(user_urls)),
     url(r'^quotes/', include(quote_urls)),
     (r'^auth/',      include(auth_urls)),
-    (r'^upload/',    include(upload_urls)),
     (r'^tasks/',     include(task_urls)),
     (r'^program/',   include(event_urls)),
     (r'^gear/',      include(gear_urls)),

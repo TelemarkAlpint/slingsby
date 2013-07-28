@@ -1,6 +1,5 @@
 # coding: utf-8
 
-from ..users.models import UserProfile
 from . import validate_text
 from .cache import CachedQuery
 from .constants import MEDIA_DIR
@@ -31,20 +30,3 @@ class SponsorsQuery(CachedQuery):
     keyword = 'sponsors'
     queryset = Sponsor.objects.all()
 post_save.connect(SponsorsQuery.empty_on_save, sender=Sponsor)
-
-class Notification(models.Model):
-    text = models.CharField('tekst', max_length=300)
-    viewed = models.BooleanField('lest', default=False)
-    date_added = models.DateTimeField('opprettet', auto_now_add=True)
-    users = models.ManyToManyField(UserProfile)
-
-    def __unicode__(self):
-        return self.text
-
-    def set_text(self, text):
-        clean_text = validate_text(text)
-        self.text = clean_text
-
-    class Meta:
-        ordering = ['-date_added']
-

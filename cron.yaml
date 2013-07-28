@@ -9,15 +9,15 @@ cron:
   schedule: every day 00:01
   timezone: Europe/Oslo
 
-- description: Daily sync of email/name-combinations from NTNUI.no
-  url: /tasks/sync_users
-  schedule: every day 00:30
-  timezone: Europe/Oslo
+# - description: Daily sync of email/name-combinations from NTNUI.no
+#   url: /tasks/sync_users
+#   schedule: every day 00:30
+#   timezone: Europe/Oslo
 
-- description: Daily find names for profiles without names.
-  url: /tasks/find_names
-  schedule: every day 01:00
-  timezone: Europe/Oslo
+# - description: Daily find names for profiles without names.
+#   url: /tasks/find_names
+#   schedule: every day 01:00
+#   timezone: Europe/Oslo
 
 - description: Update the archive with the latest entries from the file server.
   url: /tasks/update_archive

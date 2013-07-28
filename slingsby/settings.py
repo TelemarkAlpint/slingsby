@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'slingsby.quotes',
     'slingsby.musikk',
     'slingsby.tasks',
-    'slingsby.upload',
     'slingsby.general',
     'slingsby.archive',
     'slingsby.users',
@@ -99,8 +98,6 @@ if DEBUG:
     STATIC_URL = '/static/'
 else:
     STATIC_URL = 'http://org.ntnu.no/telemark/static/'
-
-AUTH_PROFILE_MODULE = 'slingsby.users.UserProfile'
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda req: DEBUG,
