@@ -17,6 +17,9 @@ ALLOWED_HOSTS = [
     '.telemarkalpint.appspot.com',
 ]
 
+if not prod_server:
+    ALLOWED_HOSTS.append('localhost')
+
 USE_TZ = True
 TIME_ZONE = 'Europe/Oslo'
 FIRST_DAY_OF_WEEK = 1 # Søndag = 0, Mandag = 1
