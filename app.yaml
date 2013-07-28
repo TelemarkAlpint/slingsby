@@ -1,5 +1,5 @@
 application: telemarkalpint
-version: 68
+version: 69
 runtime: python27
 api_version: 1
 threadsafe: false
