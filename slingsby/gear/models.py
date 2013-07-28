@@ -13,18 +13,22 @@ class Gear(models.Model):
     class Meta:
         verbose_name_plural = 'gear'
 
-    def __json__(self):
-        return dict(
-                    id=self.id,
-                    gear_id=self.gear_id,
-                    description=self.description,
-                    name=self.name,
-                    image=self.img,
-                    date_added=self.date_added,
-                    )
+
+    def to_json(self):
+        json = {
+            'id': self.id,
+            'gear_id': self.gear_id,
+            'description': self.description,
+            'name': self.name,
+            'image': self.img,
+            'date_added': self.date_added,
+        }
+        return json
+
 
     def __unicode__(self):
-        return '<Gear: %s (%s)>' % (self.name, self.gear_id)
+        return '%s (%s)' % (self.name, self.gear_id)
+
 
 class Reservation(models.Model):
     gear = models.ForeignKey(Gear)

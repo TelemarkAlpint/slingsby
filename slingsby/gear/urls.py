@@ -1,7 +1,8 @@
+from .views import GearListView, GearDetailView
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('slingsby.gear.views',
-      url(r'^$', 'all_gear', name='all_gear'),
-      url(r'^(\d+L?)/$', 'gear_details', name='gear_details'),
-      url(r'^(\d+L?)/book$', 'gear_reservation', name='gear_reservation'),
+urlpatterns = patterns('',
+      url(r'^$', GearListView.as_view(), name='all_gear'),
+      url(r'^(?P<gear_id>\d+L?)/$', GearDetailView.as_view(), name='gear_details'),
+      #url(r'^(?P<gear_id>\d+L?)/book$', 'gear_reservation', name='gear_reservation'),
       )
