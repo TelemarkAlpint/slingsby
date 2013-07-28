@@ -9,6 +9,14 @@ if prod_server:
 else:
     SECRET_KEY = 'pleasedontusethisinprod'
 
+DEBUG = not prod_server
+TEMPLATE_DEBUG = DEBUG
+
+ALLOWED_HOSTS = [
+    '.ntnuita.no',
+    '.telemarkalpint.appspot.com',
+]
+
 USE_TZ = True
 TIME_ZONE = 'Europe/Oslo'
 FIRST_DAY_OF_WEEK = 1 # Søndag = 0, Mandag = 1
@@ -83,14 +91,9 @@ INTERNAL_IPS = ("127.0.0.1", "::1")
 # corresponding output. Helps a lot with print-debugging.
 TEST_RUNNER = 'djangotoolbox.test.CapturingTestSuiteRunner'
 
-DEBUG = False
-TEMPLATE_DEBUG = False
-
-if not prod_server:
-    DEBUG = True
-    TEMPLATE_DEBUG = True
-
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'))
+TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'templates'),
+)
 
 ROOT_URLCONF = 'slingsby.urls'
 
