@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load staticfiles %}
+{% load url from future %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -49,7 +50,7 @@
                 var id = $(this).attr('id');
                 var event_details = $('.event_details#details-' + id);
                 $.ajax({
-                    url: {% url archive %} + id,
+                    url: {% url 'archive' %} + id,
                     method: 'GET',
                     success: function(data, status, jqxhr){
                         event_details.html(data);
