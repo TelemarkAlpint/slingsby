@@ -24,18 +24,18 @@ class Song(models.Model):
 
     def __json__(self, verbose=False):
         json = {
-                    'id': self.id,
-                    'title': self.title,
-                    'artist': self.artist,
-                    'date_added': self.date_added.isoformat(),
-                    'popularity': self.popularity,
-                }
+            'id': self.id,
+            'title': self.title,
+            'artist': self.artist,
+            'date_added': self.date_added.isoformat(),
+            'popularity': self.popularity,
+        }
         if verbose:
             json['filename'] = self.filename
         return json
 
     def get_absolute_url(self):
-        return reverse('musikk.views.song_details', args=[str(self.id)])
+        return reverse('slingsby.musikk.views.song_details', args=[str(self.id)])
 
 class Vote(models.Model):
     date_added = models.DateTimeField('dato lagt inn', auto_now_add=True)
