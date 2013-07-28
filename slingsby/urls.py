@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
+from django.views.generic.base import TemplateView
 
 from .archive  import urls as archive_urls
 from .articles import urls as article_urls
@@ -18,7 +18,7 @@ from .upload   import urls as upload_urls
 from .users    import urls as user_urls
 
 admin.autodiscover()
-handler500 = lambda request: direct_to_template(request, '500.html', {})
+handler500 = TemplateView.as_view(template_name='500.html')
 
 urlpatterns = patterns('',
     url(r'^join$',   'slingsby.users.views.join_group', name='join'),
@@ -34,9 +34,9 @@ urlpatterns = patterns('',
     (r'^gear/',      include(gear_urls)),
     (r'^admin/',     include(admin.site.urls)),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-                       )
+)
 
 urlpatterns += patterns('',
     (r'^favicon.ico$', lambda r: HttpResponseRedirect(settings.STATIC_URL + 'favicon.ico')),
     (r'^robots.txt$', lambda r: HttpResponseRedirect(settings.STATIC_URL + 'robots.txt')),
-                        )
+)
