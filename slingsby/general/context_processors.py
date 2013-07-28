@@ -4,10 +4,8 @@ from .constants import LOGIN_URL, MEDIA_DIR, JOIN_URL, LEAVE_URL
 from .models import SponsorsQuery
 from django.conf import settings
 
-import logging
 
 def default(request):
-    logging.info("Request from context processor: %s", request)
     context = {
         'sponsors': SponsorsQuery.get_cached(),
         'next_events': NextEventsQuery.get_cached(),
@@ -16,7 +14,6 @@ def default(request):
         'JOIN_URL': JOIN_URL,
         'LEAVE_URL': LEAVE_URL,
         'subpages': SingleArticlePageQuery.get_cached(),
-
 
         #This will override what is set by django.core.context_processors.debug
         'debug': settings.DEBUG,
