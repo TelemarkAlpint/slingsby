@@ -7,13 +7,12 @@ from ..general.time import nor
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
 from django.core.urlresolvers import reverse
-from django.db.models.signals import post_save, post_delete
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView, View
 from dateutil.parser import parse
 import datetime
-import time
+from time import time as get_timestamp
 import json
 import logging
 import requests
@@ -124,7 +123,7 @@ class AllSongsView(TemplateView):
 
     def post(self, request, **kwargs):
         if not request.user.is_authenticated:
-            return Http
+            return HttpResponseForbidden()
         form = SongSuggestionForm(request.POST)
         context = self.get_context_data(**kwargs)
         if form.is_valid():
@@ -213,6 +212,6 @@ class TopSongsList(View):
 
 def get_top_song_metadata():
     """ Fetch the JSON metadata about the latest top song from the fileserver. """
-    cache_buster = '?v=%s' % time.time()
+    cache_buster = '?v=%s' % get_timestamp()
     response = requests.get(MUSIC_DIR + 'top_meta.json' + cache_buster)
     return response.json()
