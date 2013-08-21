@@ -73,10 +73,21 @@ You also need some database slingsby can use. In production we're using MySQL (t
 for local development too. If on a sensible system, setting up a local MySQL database is very easy:
 
     $ sudo apt-get install mysql # (or your favorite osx package manager, like brew or port)
-    # TODO: Describe how to start mysql, create database dev_db, enable root access, create tables
+
+In addition to MySQL, you'll need libmysqlclient-dev:
+
+    $ sudo apt-get install libmysqlclient-dev
+    
+Now, install the mysql-python database connector for python inside of your virtual environment:
+
+    $ . virtualenv_slingsby/bin/activate
+    $ pip install mysql-python
+    $ deactivate
+    
+Also, make sure that the password for the 'root' user in your mysql-server is set to '' (an empty string, i.e. nothing!)
 
 Fetch the auth module from the Dropbox folder, and unzip it in the slingsby package. Once that's in place, you should be all set to start
-the devserver!
+the devserver, which can be found at the [Google App Engine site](https://developers.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python).
 
     $ dev_appserver.py .
 
