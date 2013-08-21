@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView, View
 from dateutil.parser import parse
 import datetime
+import time
 import json
 import logging
 import requests
@@ -212,5 +213,6 @@ class TopSongsList(View):
 
 def get_top_song_metadata():
     """ Fetch the JSON metadata about the latest top song from the fileserver. """
-    response = requests.get(MUSIC_DIR + 'top_meta.json')
+    cache_buster = '?v=%s' % time.time()
+    response = requests.get(MUSIC_DIR + 'top_meta.json' + cache_buster)
     return response.json()
