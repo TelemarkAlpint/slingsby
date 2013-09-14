@@ -13,8 +13,6 @@ inbound_services:
 skip_files:
 - ^(.*/)?app\.yaml
 - ^(.*/)?app\.yml
-- ^(.*/)?index\.yaml
-- ^(.*/)?index\.yml
 - ^(.*/)?#.*#
 - ^(.*/)?.*~
 - ^(.*/)?.*\.py[co]
@@ -30,9 +28,6 @@ skip_files:
 handlers:
 - url: /static
   static_dir: slingsby/static
-#- url: /media/admin
-#  static_dir: django/contrib/admin/media
-#  expiration: '0'
 
 - url: /tasks/.*
   script: main.py
@@ -43,11 +38,11 @@ handlers:
   secure: optional
 
 error_handlers:
-    - error_code: timeout
-      file: slingsby/templates/timeout.html
+- error_code: timeout
+  file: slingsby/templates/timeout.html
 
-    - error_code: over_quota
-      file: slingsby/templates/over_quota.html
+- error_code: over_quota
+  file: slingsby/templates/over_quota.html
 
 libraries:
 - name: pycrypto

@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
+{% load i18n admin_static %}
 
-{% block extrastyle %}{% load adminmedia %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/login.css" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />{% endblock %}
 
 {% block bodyclass %}login{% endblock %}
 
@@ -13,6 +13,6 @@
 
 {% block content %}
     {% if not user.is_staff %}
-        <head><meta http-equiv="refresh" content="0;http://ntnui.no/authapi/telemark"></head>
+        <head><meta http-equiv="refresh" content="0;http://old.ntnui.no/authapi/telemark"></head>
     {% endif %}
 {% endblock %}

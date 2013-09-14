@@ -5,9 +5,10 @@
 # since the database connector utilizes c libraries, which are forbidden in the
 # app engine sandbox
 
-django==1.5.1
-django-debug-toolbar
+django==1.5.3
+# install django-debug-toolbar from github for updated version:
+git+https://github.com/django-debug-toolbar/django-debug-toolbar.git@7e4ecfd04cfe61b51e1fd6fdf0ce1c800a3ebb3b
 python-dateutil
-pytz
+pytz>=2013b
 beautifulsoup4
 requests

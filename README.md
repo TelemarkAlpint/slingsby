@@ -33,8 +33,8 @@ Download the App Engine SDK and install it, instructions at [AppEngineSDK](https
 
 Set up a virtualenv and install the python requirements:
 
-    $ virtualenv virtualenv_slingsby
-    $ . virtualenv_slingsby/bin/activate
+    $ virtualenv venv_slingsby
+    $ . venv_slingsby/bin/activate
     $ pip install -r requirements.txt
     $ deactivate
 
