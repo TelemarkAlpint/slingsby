@@ -1,7 +1,6 @@
 # This module is the main entry point to slingsby, as indicated in app.yaml.
 # Request flow on app engine is app.yaml -> main.py -> slingsby.urls (approximately)
 
-import slingsby
 
 from google.appengine.ext.webapp.util import run_wsgi_app
 import logging
@@ -34,6 +33,9 @@ else:
 
 
 def main():
+
+    # Slingsby can't be imported until the venv has been added to the path
+    import slingsby
 
     # Run the WSGI handler
     run_wsgi_app(slingsby.application)
