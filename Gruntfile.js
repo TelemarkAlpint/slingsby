@@ -103,6 +103,16 @@ module.exports = function (grunt) {
       python: {
         files: ['slingsby/**/*.py']
       }
+    },
+
+    pylint: {
+      slingsby: {
+        options: {
+          rcfile: '.pylintrc',
+          virtualenv: 'venv_slingsby',
+        },
+        src: 'slingsby',
+      }
     }
 
   });
@@ -112,6 +122,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-pylint');
 
   // Default tasks
   grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic']);
