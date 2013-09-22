@@ -25,7 +25,8 @@ class Article(models.Model):
     content = models.TextField('innhold')
     author = models.ForeignKey(User, related_name='User.User.article_Set', blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
-    social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
+    social_summary = models.TextField('sosialt sammendrag', blank=True, null=True,
+        help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
 
     class Meta:
@@ -100,7 +101,8 @@ class SubPageArticle(models.Model):
     content = models.TextField('innhold')
     author = models.ForeignKey(User, related_name='User.article_Set', blank=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
-    social_summary = models.TextField('sosialt sammendrag', blank=True, null=True, help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
+    social_summary = models.TextField('sosialt sammendrag', blank=True, null=True,
+        help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
 
 
     class Meta:
@@ -166,6 +168,8 @@ class SubPageArticleForm(ModelForm):
 @receiver(post_save, sender=SubPageArticle)
 def register_new_url(sender, **kwargs):
     """ Register a new valid URL when a SubPageArticle is saved. """
+    # A pylint bug makes it think that urlpatterns is unused because of the +=
+    # pylint: disable=unused-variable
     from .urls import urlpatterns
     from .views import ArticleDetail
     from django.conf.urls import patterns, url

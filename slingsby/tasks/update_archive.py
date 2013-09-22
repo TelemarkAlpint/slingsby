@@ -13,8 +13,13 @@ Anyway, the key to working with large datasets like these -> bulk_create!
 
 """
 
+from ..general.constants import JSON_ARCHIVE_PATH
+from ..archive.models import ArchiveEvent, ImageGallery, Image
+
 from django.http import HttpResponse
 from logging import getLogger
+import requests
+
 
 _logger = getLogger(__name__)
 
@@ -29,22 +34,21 @@ def update_archive(request):
     #     clear_archive_and_cache()
     archive = requests.get(JSON_ARCHIVE_PATH).json()
     _logger.info('JSON archive fetched.')
-    new_hashes = create_and_get_events(archive)
+    create_and_get_events(archive)
     _logger.info('All new items created.')
-#    delete_old_events(all_db_events, old_hashes - new_hashes)
     return HttpResponse()
 
 
 # def clear_archive_and_cache():
 #     """ Delete all ArchiveEvents, ImageGalleries and Images, and flush the cache."""
 
-#     logging.info('Deleting all old events')
+#     _logger.info('Deleting all old events')
 #     for event in ArchiveEvent.objects.all():
 #         event.delete()
-#     logging.info('Deleting all old galleries')
+#     _logger.info('Deleting all old galleries')
 #     for gallery in ImageGallery.objects.all():
 #         gallery.delete()
-#     logging.info('Deleting all old images')
+#     _logger.info('Deleting all old images')
 #     for image in Image.objects.all():
 #         image.delete()
 #     cache.flush_all()
@@ -60,27 +64,27 @@ def create_and_get_events(archive):
     images = []
     for path_hash, event in archive['events'].items():
         if path_hash not in old_event_hashes:
-            e = ArchiveEvent()
-            e.date = event['date']
-            e.name = event['name']
-            e.path_hash = path_hash
-            e.save()
-            logging.info('New event found: %s', e.name)
+            event = ArchiveEvent()
+            event.date = event['date']
+            event.name = event['name']
+            event.path_hash = path_hash
+            event.save()
+            _logger.info('New event found: %s', event.name)
         else:
-            e = ArchiveEvent.objects.get(pk=path_hash)
+            event = ArchiveEvent.objects.get(pk=path_hash)
         old_galleries = set(ImageGallery.objects.values_list('path_hash', flat=True))
         for gallery_hash, gallery in event['galleries'].items():
             if not gallery['images']:
                 continue
             if gallery_hash not in old_galleries:
-                g = ImageGallery()
-                g.path_hash = gallery_hash
-                g.photographer = gallery['photographer']
-                g.event = e
-                g.save()
-                logging.info('New gallery for event "%s" found: %s', e.name, g.photographer)
+                new_gallery = ImageGallery()
+                new_gallery.path_hash = gallery_hash
+                new_gallery.photographer = gallery['photographer']
+                new_gallery.event = event
+                new_gallery.save()
+                _logger.info('New gallery for event "%s" found: %s', event.name, new_gallery.photographer)
             else:
-                g = ImageGallery.objects.get(pk=gallery_hash)
+                gallery = ImageGallery.objects.get(pk=gallery_hash)
             old_images = set(Image.objects.values_list('path_hash', flat=True))
             for img_hash, img in gallery['images'].items():
                 if img_hash not in old_images:
@@ -88,13 +92,13 @@ def create_and_get_events(archive):
                     i.path_hash = img_hash
                     i.medium_size_url = img['websize']
                     i.large_size_url = img['fullsize']
-                    i.gallery = g
+                    i.gallery = new_gallery
                     i.description = img.get('description', None)
                     images.append(i)
-            if not g.cover_photo:
+            if not new_gallery.cover_photo:
                 img_hash, cover_img = gallery['images'].popitem()
-                g.cover_photo = cover_img['websize']
-                g.save()
+                new_gallery.cover_photo = cover_img['websize']
+                new_gallery.save()
     Image.objects.bulk_create(images)
 
 

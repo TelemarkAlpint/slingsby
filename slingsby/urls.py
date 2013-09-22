@@ -1,4 +1,5 @@
 # coding: utf-8
+# pylint: disable=invalid-name
 
 from .users.views import UserProfileView
 from django.conf import settings
@@ -17,6 +18,7 @@ from .tasks    import urls as task_urls
 from .users    import urls as user_urls
 
 admin.autodiscover()
+
 handler500 = TemplateView.as_view(template_name='500.html')
 
 urlpatterns = patterns('',

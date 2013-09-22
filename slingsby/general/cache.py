@@ -6,6 +6,7 @@ should be cached.
 
 If necessary, you may also inject debugging code here.
 """
+# pylint: disable=redefined-builtin
 
 from abc import ABCMeta, abstractproperty
 from google.appengine.api import memcache

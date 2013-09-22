@@ -1,8 +1,8 @@
 # coding: utf-8
 
-from . import validate_text
 from .cache import CachedQuery
 from .constants import MEDIA_DIR
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.http import urlquote

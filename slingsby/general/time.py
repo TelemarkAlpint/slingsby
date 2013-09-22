@@ -1,15 +1,14 @@
 from pytz import timezone, utc
 from datetime import datetime
 
-nor = timezone('Europe/Oslo')
-eng = timezone('America/New_York')
+_nor = timezone('Europe/Oslo')
 
 def now():
-    return datetime.now(tz=nor)
+    return datetime.now(tz=_nor)
 
 def aware_time(time):
     if not time.tzinfo:
-        return nor.normalize(nor.localize(time))
+        return _nor.normalize(_nor.localize(time))
     else:
         return time
 
@@ -21,13 +20,13 @@ def aware_from_utc(time):
 
 def aware_from_nor(time):
     if not time.tzinfo:
-        return time.replace(tzinfo=nor)
+        return time.replace(tzinfo=_nor)
     else:
         return time
 
-def utc_to_nor(utc):
-    utcdate = aware_from_utc(utc)
-    return utcdate.astimezone(nor)
+def utc_to_nor(naive_utc_date):
+    aware_utc_date = aware_from_utc(naive_utc_date)
+    return aware_utc_date.astimezone(_nor)
 
 def nor_to_utc(nordate):
     nordate = aware_from_nor(nordate)

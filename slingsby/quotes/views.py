@@ -4,7 +4,7 @@ from ..general import make_title
 from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.views import ActionView
 from .models import Quote, QuoteForm
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
 import logging

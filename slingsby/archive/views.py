@@ -1,15 +1,10 @@
 # coding: utf-8
 
-from ..general import make_title, cache
-from ..general.constants import JSON_ARCHIVE_PATH
+from ..general import make_title
 from ..general.cache import CachedQuery, empty_on_changes_to
-from .models import ArchiveEvent, ImageGallery, Image
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from .models import ArchiveEvent
+from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
-import logging
-import requests
 
 @empty_on_changes_to(ArchiveEvent)
 class ArchiveEventQuery(CachedQuery):

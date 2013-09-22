@@ -5,6 +5,9 @@
 #         http://www.logix.cz/michal
 #
 
+# pylint: disable=all
+# TODO: delete this module
+
 """
 Tag library that provides support for "macros" in
 Django templates.

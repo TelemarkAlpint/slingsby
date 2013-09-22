@@ -3,7 +3,7 @@
 from ..general import make_title, cache, time
 from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.constants import MEDIA_DIR, MUSIC_DIR
-from ..general.time import nor
+from ..general.time import _nor as nor_timezone
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
 from django.core.urlresolvers import reverse
@@ -105,7 +105,7 @@ def get_vote_dict(user):
     dictionary = cache.get('vote_dict')
     if dictionary is None or user.id not in dictionary.keys():
         date = time.now().date()
-        start = nor.localize(datetime.datetime(date.year, date.month, date.day))
+        start = nor_timezone.localize(datetime.datetime(date.year, date.month, date.day))
         values = Vote.objects.filter(date_added__gte=start).filter(user=user).values('song')
         ids = [d.values()[0] for d in values]
         dictionary = {user.id: ids}
@@ -123,7 +123,7 @@ class AllSongsView(TemplateView):
 
     def post(self, request, **kwargs):
         if not request.user.is_authenticated:
-            return HttpResponseForbidden()
+            return HttpResponse('Authenticate first', status=401)
         form = SongSuggestionForm(request.POST)
         context = self.get_context_data(**kwargs)
         if form.is_valid():

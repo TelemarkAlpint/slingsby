@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 import json
 
+# pylint: disable=attribute-defined-outside-init
+
 class JSONMixin(object):
 
     def dispatch(self, request, *args, **kwargs):

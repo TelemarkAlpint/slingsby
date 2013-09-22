@@ -1,5 +1,8 @@
 # coding: utf-8
 
+# pylint: disable=invalid-name
+# TODO: Delete this module, replace with django.contrib.messages
+
 from django.utils.safestring import SafeUnicode
 
 _all_feedbacks = {}

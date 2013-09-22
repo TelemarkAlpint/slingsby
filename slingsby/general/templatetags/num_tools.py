@@ -9,6 +9,7 @@ def change_base(value, bases):
     Bases argument should be a a string in the format 'from,to'.
 
     If base > 16, the conversion is not well defined, as it's not clear which symbols to use. """
+    # pylint: disable=too-many-return-statements
 
     src_base, target_base = [int(s) for s in bases.split(',')]
     if isinstance(value, int):

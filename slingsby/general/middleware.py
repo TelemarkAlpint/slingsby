@@ -18,19 +18,19 @@ class HttpAcceptMiddleware(object):
         for item in content_types:
             params = item.split(';')
             media_type = params.pop(0)
-            q = 1.0
+            priority = 1.0
             param_dict = {}
             for param in params:
                 key, val = param.split('=')
                 if key == 'q':
-                    q = float(val)
+                    priority = float(val)
                 else:
                     param_dict[key] = val
             if media_type == 'application/json':
-                json_priority = q
+                json_priority = priority
             elif media_type == 'text/html':
-                html_priority = q
-            accepts.append( (media_type, param_dict, q))
+                html_priority = priority
+            accepts.append( (media_type, param_dict, priority))
         accepts.sort(lambda x, y: -cmp(x[2], y[2]))
         request.http_accept = accepts
         request.prefer_html = html_priority > json_priority
@@ -65,5 +65,6 @@ class CachedAuthMiddleware(object):
         return user
 
     def process_request(self, request):
-        assert hasattr(request, 'session'), "The CachedAuthMiddleware requires the django.contrib.sessions.middleware.SessionMiddleware to be installed!"
+        assert hasattr(request, 'session'), "The CachedAuthMiddleware requires the " \
+            "django.contrib.sessions.middleware.SessionMiddleware to be installed!"
         request.user = SimpleLazyObject(lambda: CachedAuthMiddleware.get_user(request))

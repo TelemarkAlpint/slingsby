@@ -1,17 +1,4 @@
-from ..general.time import utc_to_nor
-from django.contrib.admin import widgets
 from django.forms.widgets import Textarea
-from datetime import datetime
-
-class NORDateTimeWidget(widgets.AdminSplitDateTime):
-
-    def render(self, name, value, attrs=None):
-        if isinstance(value, datetime):
-            utcdate = value
-            nordate = utc_to_nor(utcdate)
-            return super(NORDateTimeWidget, self).render(name, nordate, attrs)
-        else:
-            return super(NORDateTimeWidget, self).render(name, value, attrs)
 
 class SocialSummaryWidget(Textarea):
 

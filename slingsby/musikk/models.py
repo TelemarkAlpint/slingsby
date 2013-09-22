@@ -12,8 +12,10 @@ class Song(models.Model):
     filename = models.CharField('filnavn', max_length=500)
     ready = models.BooleanField('godkjent', default=False)
     date_added = models.DateTimeField('lagt inn', auto_now_add=True)
-    suggested_by = models.ForeignKey(User, related_name="suggested_songs", null=True, verbose_name='foreslått av')
-    popularity = models.FloatField('popularitet', default=0.0, help_text='Prosentvis hvor mange poeng sammenlignet med mest populære sang')
+    suggested_by = models.ForeignKey(User, related_name="suggested_songs", null=True,
+        verbose_name='foreslått av')
+    popularity = models.FloatField('popularitet', default=0.0,
+        help_text='Prosentvis hvor mange poeng sammenlignet med mest populære sang')
     votes = models.FloatField('rating', default=0.0)
 
     class Meta:

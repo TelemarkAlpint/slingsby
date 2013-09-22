@@ -2,6 +2,7 @@ from django.views.generic.base import View
 from django.utils.decorators import classonlymethod
 from functools import update_wrapper
 
+# pylint: disable=attribute-defined-outside-init
 
 class ActionView(View):
     """ A view that in addition to dispatching to methods get, post, delete, etc.,
@@ -17,8 +18,10 @@ class ActionView(View):
             ...
 
     In your URLConf, you'd then do this to dispatch requests to this view:
-    url(r'^(?P<song_id>\d+)/vote/$', SongDetailView.as_view(action='vote')
+    url(r'^(?P<song_id>\\d+)/vote/$', SongDetailView.as_view(action='vote')
     """
+    # Pylint doesn't catch on to the classonlymethod decorator:
+    # pylint: disable=no-self-argument,not-callable
 
 
     @classonlymethod
