@@ -125,8 +125,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-pylint');
 
   // Default tasks
+  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('lint', ['jshint', 'pylint']);
   grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic']);
   grunt.registerTask('deploy', ['copy:main']);
-  grunt.registerTask('default', ['watch']);
 
 };
