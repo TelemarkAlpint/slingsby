@@ -109,7 +109,6 @@ module.exports = function (grunt) {
       slingsby: {
         options: {
           rcfile: '.pylintrc',
-          virtualenv: 'venv_slingsby',
         },
         src: ['slingsby', 'local_settings.py', 'tools/*.py'],
       }
