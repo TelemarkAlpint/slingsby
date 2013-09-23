@@ -5,9 +5,10 @@ import os
 prod_server = os.environ.get('SERVER_SOFTWARE', '').startswith('Google')
 
 if prod_server:
-    from .secrets import SECRET_KEY
+    from .secrets import SECRET_KEY, FACEBOOK_API_SECRET
 else:
     SECRET_KEY = 'pleasedontusethisinprod'
+    FACEBOOK_API_SECRET = 'pleasedontusethisinprod'
 
 DEBUG = not prod_server
 TEMPLATE_DEBUG = DEBUG
@@ -62,12 +63,15 @@ INSTALLED_APPS = (
     'slingsby.users',
 
     'debug_toolbar',
+
+    'social_auth',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'slingsby.general.middleware.HttpAcceptMiddleware',
     'slingsby.general.middleware.HttpMethodOverride',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -75,8 +79,11 @@ MIDDLEWARE_CLASSES = (
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-LOGIN_URL = 'http://ntnui.no/authapi/telemark'
-LOGIN_REDIRECT_URL = '/'
+AUTHENTICATION_BACKENDS = (
+  'social_auth.backends.google.GoogleOAuth2Backend',
+  'social_auth.backends.facebook.FacebookBackend',
+  'django.contrib.auth.backends.ModelBackend',
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -85,6 +92,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'slingsby.general.context_processors.default',
     'slingsby.quotes.context_processors.default',
+    'social_auth.context_processors.social_auth_by_name_backends',
+    'social_auth.context_processors.social_auth_backends',
+    'social_auth.context_processors.social_auth_by_type_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
 )
 
 # Used for the query debugger that's run in dev mode.
@@ -116,3 +127,14 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
 )
+
+# social_auth specific settings
+SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+SOCIAL_AUTH_UID_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook')
+FACEBOOK_APP_ID = '1416174671936188'
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']

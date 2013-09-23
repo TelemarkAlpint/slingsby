@@ -89,7 +89,14 @@
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                 </ul>
                 {% else %}
-                    <span><a href="{{ LOGIN_URL }}">Login</a></span>
+                    <span class="clickable">
+                        Login <span class="click_symbol">&#9664;</span>
+                    </span>
+
+                <ul style="display: none">
+                    <li><a href="{{ LOGIN_URL }}">Login via ntnui</a></li>
+
+                    <li><a href="{{ LOGIN_URL_FB }}">Login via facebook</a></li>
                 {% endif %}
             {% endblock %}
             </div>
