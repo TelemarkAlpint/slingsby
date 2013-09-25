@@ -46,19 +46,20 @@ AUTOLOAD_SITECONF = 'indexes'
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'django.contrib.contenttypes',
     'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    'slingsby.archive',
     'slingsby.articles',
     'slingsby.events',
-    'slingsby.quotes',
-    'slingsby.musikk',
-    'slingsby.tasks',
-    'slingsby.general',
-    'slingsby.archive',
-    'slingsby.users',
     'slingsby.gear',
+    'slingsby.general',
+    'slingsby.musikk',
+    'slingsby.quotes',
+    'slingsby.tasks',
+    'slingsby.users',
 
     'debug_toolbar',
 )
@@ -68,12 +69,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'slingsby.general.middleware.HttpAcceptMiddleware',
-    'slingsby.general.middleware.CachedAuthMiddleware',
     'slingsby.general.middleware.HttpMethodOverride',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 LOGIN_URL = 'http://ntnui.no/authapi/telemark'
 LOGIN_REDIRECT_URL = '/'
@@ -89,10 +89,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 # Used for the query debugger that's run in dev mode.
 INTERNAL_IPS = ("127.0.0.1", "::1")
-
-# This test runner captures stdout and associates tracebacks with their
-# corresponding output. Helps a lot with print-debugging.
-TEST_RUNNER = 'djangotoolbox.test.CapturingTestSuiteRunner'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),

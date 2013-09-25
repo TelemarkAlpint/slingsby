@@ -47,24 +47,3 @@ class HttpMethodOverride(object):
         if request.method == 'POST':
             if request.POST.get('_http_verb'):
                 request.method = request.POST.get('_http_verb')
-
-
-class CachedAuthMiddleware(object):
-    """ Store session user in cache, to avoid hitting the database on every pageview. """
-
-    @staticmethod
-    def get_user(request):
-        user_id = request.session.get('_auth_user_id')
-        if user_id is None:
-            user = auth.get_user(request)
-        else:
-            user = cache.get('auth_user-%d' % user_id)
-            if user is None:
-                user = auth.get_user(request)
-                cache.set('auth_user-%d' % user_id, user)
-        return user
-
-    def process_request(self, request):
-        assert hasattr(request, 'session'), "The CachedAuthMiddleware requires the " \
-            "django.contrib.sessions.middleware.SessionMiddleware to be installed!"
-        request.user = SimpleLazyObject(lambda: CachedAuthMiddleware.get_user(request))
