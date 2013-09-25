@@ -132,6 +132,11 @@ h3 { font-size: 16px; }
         text-decoration: none;
         color: #fff;
     }
+
+    &[disabled] {
+        background: #aaa;
+        border-color: #aaa;
+    }
 }
 
 .isotimestamp {
