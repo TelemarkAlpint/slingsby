@@ -36,6 +36,11 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
+    # social auth urls
+urlpatterns += patterns('',
+    url(r'', include('social_auth.urls')),
+)
+
 urlpatterns += patterns('',
     (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
     (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
