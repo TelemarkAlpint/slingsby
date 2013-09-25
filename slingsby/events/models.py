@@ -55,18 +55,18 @@ class Event(models.Model):
 
     def duration_as_string(self):
         if time.days_between(self.startdate, self.enddate) != 0:
-            return 'Fra %s til %s' % (self._format_date(self.startdate), self._format_date(self.enddate))
+            return 'Fra %s til %s' % (self._format_date(time.utc_to_nor(self.startdate)), self._format_date(time.utc_to_nor(self.enddate)))
         else:
-            return 'Fra %s til %s' % (self._format_date(self.startdate), self.enddate.strftime('%H:%M'))
+            return 'Fra %s til %s' % (self._format_date(time.utc_to_nor(self.startdate)), time.utc_to_nor(self.enddate).strftime('%H:%M'))
 
     def _format_date(self, date):
         return '%s %d. %s %s' % (_WEEKDAYS[date.weekday()], date.day, _MONTHS[date.month - 1], date.strftime('%H:%M'))
 
     def registration_closes_as_string(self):
-        return self._format_date(self.registration_closes)
+        return self._format_date(time.utc_to_nor(self.registration_closes))
 
     def registration_opens_as_string(self):
-        return self._format_date(self.registration_opens)
+        return self._format_date(time.utc_to_nor(self.registration_opens))
 
     def is_over(self):
         return time.is_past(self.enddate)
