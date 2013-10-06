@@ -17,7 +17,7 @@ import json
 import logging
 import requests
 
-_SONGS_IN_TOP_SONGS = 33
+_SONGS_IN_TOP_SONGS = 36
 _EXPONENTIAL_BASE = 0.9917
 
 _logger = logging.getLogger(__name__)
