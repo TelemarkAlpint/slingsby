@@ -21,6 +21,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix:/tmp/memcached.socket',
+    }
+}
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',

@@ -15,6 +15,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
+
 # Used for the query debugger that's run in dev mode.
 INTERNAL_IPS = ("127.0.0.1", "::1")
 
