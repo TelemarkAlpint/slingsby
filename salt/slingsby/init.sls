@@ -12,7 +12,6 @@ venv:
 
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
-
     - require:
       - pip: virtualenv
       - file: /srv/ntnuita.no/venv
@@ -33,6 +32,7 @@ slingsby_settings:
     - name: /srv/ntnuita.no/prod_settings.py
     - source: salt://slingsby/prod_settings.py
     - template: jinja
+    - show_diff: False
 
 postgres:
   postgres_user.present:

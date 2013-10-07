@@ -8,3 +8,4 @@ newrelic_conf:
     - name: /etc/newrelic.ini
     - source: salt://newrelic/newrelic.ini
     - template: jinja
+    - show_diff: False

@@ -47,4 +47,9 @@ Done. Save the result as an AMI, and use that AMI the next time (done from the w
 syncdb is only called on provision runs where slingsby is already installed (that is, everyone after the first one).
 So the first time you're setting up a server you'll have to run `grunt build provision deploy provision`.
 
+It's of uttermost importance that files with sensitive data (such as API_KEYS or similar) are managed with the
+show_diff-flag set to False. Failing to do so might expose the keys in the travis build log. Silencing all
+output from the provisioning at Travis might be another way to enforce this, but that would kill the entire log,
+which might be nice to have.
+
 [1]: http://www.theregister.co.uk/2013/03/18/servers_pets_or_cattle_cern/
