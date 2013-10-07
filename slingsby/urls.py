@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic.base import TemplateView, RedirectView
+from django.shortcuts import render_to_response
 
 from .archive  import urls as archive_urls
 from .articles import urls as article_urls
@@ -18,7 +19,7 @@ from .users    import urls as user_urls
 
 admin.autodiscover()
 
-handler500 = TemplateView.as_view(template_name='500.html')
+handler500 = lambda req: render_to_response('500.html')
 
 urlpatterns = patterns('',
     url(r'^join$',   UserProfileView.as_view(action='join'), name='join'),
