@@ -1,4 +1,3 @@
-# coding: utf-8
 # pylint: disable=invalid-name
 
 from .users.views import UserProfileView
@@ -36,7 +35,7 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
-    # social auth urls
+# social auth urls
 urlpatterns += patterns('',
     url(r'', include('social_auth.urls')),
 )
@@ -45,3 +44,8 @@ urlpatterns += patterns('',
     (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
     (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve', {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+    )
