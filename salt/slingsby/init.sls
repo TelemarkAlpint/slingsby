@@ -12,6 +12,7 @@ venv:
 
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
+    - requirements: salt://slingsby/prod-requirements.txt
     - require:
       - pip: virtualenv
       - file: /srv/ntnuita.no/venv
