@@ -1,7 +1,10 @@
+from . import settings
+
 from django.core.handlers.wsgi import WSGIHandler
-import os
+from django.core.management import execute_manager
 # pylint: disable=invalid-name
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'slingsby.settings'
-
 application = WSGIHandler()
+
+def manage():
+    execute_manager(settings)
