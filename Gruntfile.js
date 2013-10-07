@@ -111,7 +111,7 @@ module.exports = function (grunt) {
           rcfile: '.pylintrc',
           virtualenv: 'venv_slingsby',
         },
-        src: ['slingsby', 'local_settings.py'],
+        src: ['slingsby', 'local_settings.py', 'tools/*.py'],
       }
     },
 
@@ -127,6 +127,7 @@ module.exports = function (grunt) {
             stdout: true,
         },
         command: [
+            'python ./tools/dump_secure_env_vars_to_pillar.py',
             'tar czf build/salt_and_pillar.tar.gz salt pillar',
             'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
             'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
