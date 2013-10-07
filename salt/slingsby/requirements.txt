@@ -4,6 +4,7 @@
 # with whatever tools support for cache and database.
 
 django==1.5.4
+PyYAML
 python-dateutil
 pytz>=2013b
 beautifulsoup4
