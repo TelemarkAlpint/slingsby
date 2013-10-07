@@ -20,3 +20,6 @@ indent_size = 2
 # Markdown uses trailing whitespace for features
 [*.md]
 trim_trailing_whitespace = false
+
+[*.sls]
+indent_size = 2

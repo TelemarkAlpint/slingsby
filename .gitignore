@@ -8,3 +8,7 @@ TODO.txt
 .sass-cache
 node_modules
 venv_slingsby
+build
+*.egg-info
+slingsby_rel.sqlite
+pillar/secure
