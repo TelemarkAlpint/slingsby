@@ -17,7 +17,6 @@ The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed t
 
     $ sudo apt-get update
     $ sudo apt-get upgrade
-    $ sudo apt-get dist-upgrade
 
 - Install salt-minion (v0.17.0 is latest release as of 7.10.13)
 
@@ -27,16 +26,15 @@ The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed t
     
     $ wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | sudo python
 
-- tar the slingsby/salt directory and scp it to the server:
+- tar the salt and the pillar directories and scp it to the server:
     
-    $ tar czf salt.tar.gz salt # assuming cd=slingsby
-    $ scp salt.tar.gz <your_username>@<public_dns_of_new_instance>:~
-    $ ssh <your_username>@<public_dns_of_new_instance>
-    $ tar xf salt.tar.gz -C /srv
+    $ tar czf salt_and_pillar.tar.gz salt pillar
+    $ scp salt_and_pillar.tar.gz slingsby:~
+    $ ssh slingsby "tar xf salt_and_pillar.tar.gz -C /srv"
 
-- Set up users and sudoers:
+- Set up users, sudoers and ssh:
 
-    $ sudo salt-call --local state.sls users,sudo
+    $ sudo salt-call --local state.sls users,sudo,ssh
 
 - Log out, log in using your own user, run `sudo salt-call --local state.sls users' again to remove the ubuntu user.
 
