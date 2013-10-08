@@ -9,8 +9,10 @@ nginx:
     - running
     - require:
       - pkg: nginx
+      - file: nginx_log_dir
     - watch:
       - file: nginx_conf
+      - file: /etc/nginx/sites-enabled/slingsby
 
 nginx_conf:
   file.managed:
@@ -36,9 +38,8 @@ sites_available:
 
 
 # Enabled sites:
-slingsby:
+/etc/nginx/sites-enabled/slingsby:
   file.symlink:
-    - name: /etc/nginx/sites-enabled/slingsby
     - target: /etc/nginx/sites-available/slingsby
 
 # Disable default
