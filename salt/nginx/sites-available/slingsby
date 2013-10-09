@@ -4,6 +4,12 @@ upstream slingsby {
 }
 
 server {
+  listen 80;
+  server_name www.ntnuita.no;
+  return 301 $scheme://ntnuita.no$request_uri;
+}
+
+server {
 
   listen 80 default_server;
   server_name ntnuita.no;
