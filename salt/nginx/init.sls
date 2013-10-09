@@ -10,6 +10,7 @@ nginx:
     - require:
       - pkg: nginx
       - file: nginx_log_dir
+      - service: uwsgi
     - watch:
       - file: nginx_conf
       - file: sites_available
