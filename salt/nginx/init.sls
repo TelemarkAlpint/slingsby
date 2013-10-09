@@ -12,7 +12,7 @@ nginx:
       - file: nginx_log_dir
     - watch:
       - file: nginx_conf
-      - file: /etc/nginx/sites-enabled/slingsby
+      - file: sites_available
 
 nginx_conf:
   file.managed:

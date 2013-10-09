@@ -1,3 +1,6 @@
+include:
+  - .cron
+
 venv:
   pip.installed:
     - name: virtualenv
