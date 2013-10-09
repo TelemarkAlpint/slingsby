@@ -9,3 +9,5 @@ newrelic_conf:
     - source: salt://newrelic/newrelic.ini
     - template: jinja
     - show_diff: False
+    - require:
+      - pip: newrelic

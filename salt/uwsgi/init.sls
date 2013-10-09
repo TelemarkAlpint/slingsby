@@ -13,6 +13,7 @@ uwsgi:
     - require:
       - pip: uwsgi
     - watch:
+      - file: newrelic_conf
       - file: uwsgi_conf
       - file: slingsby_settings
       - file: slingsby_uwsgi_conf
