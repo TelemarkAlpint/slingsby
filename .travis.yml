@@ -62,6 +62,9 @@ env:
     # NEWRELIC_LICENSE_KEY
     - secure: "CN0K9yf5gvS+KnGJhBEIKgDxeh9TFhfb+k/LJZGvskQxllaoApXa0ZwPNGFyvM1aduJPZBByCLccpHbI7avo7XlJJO3K04xUIwn6aWoqntUHSq1r6KWMBBzIre/av7euEwnmRynssRpPk9XC/Cn44hDYwiM/vAc0eybPWEbsWdk="
 
+    # MYSQL_PASSWORD
+    - secure: "e6o4FcseLGeH8FF5kGS51BfhqNwbs/MIDi6cjVO/00X+437LAORNuh15KZCZEZzEhX4maiZWbvky4W/oi1BZyPseIMDOrueOxkWsVzc2qWtDzc6HIv4UmOqRxC5XqNr2QZb+FoJCJgc3ipRI4bhAiDy2Q9PQn7NiQGOYkS9wsEY="
+
     # Private part of Travis' SSH key, keyed $id_rsa_00-$id_rsa_43
     - secure: "Wbt4g0eJlM7UW+2ORKAxSViWd7ZDybQ3BSB2smkNzHeRblFeE2UaGxhZIP9G8fJDKbjFfClXEHNTWzRpcCdt1roh2eBoa630Of20q1vZuAutNtzarO3v95JxBxftSnPDJo2/PwcBxmj/HB/6bB52t83HpkIyLkZ5eWQV3k7MLu4="
     - secure: "NmWJuYOVQItS7mkjiwSU5NE402qmlUkopwBjdnDK9lGZtJl8htIZ5sT0POngsoZOnpg8M3Y8VQXvyICs/WnorW/TtSDPiwhrqswYV1zUEoux7UoDWptDWQh2ybz9DqqMTO7QODTqHJRsGbegG1ABIlMSSLD8wCX8HLPsbAqxcMA="

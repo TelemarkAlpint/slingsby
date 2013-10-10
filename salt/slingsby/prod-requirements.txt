@@ -2,5 +2,5 @@
 -r requirements.txt
 
 # Add stuff needed in prod:
-psycopg2
+MySQL-python
 python-memcached

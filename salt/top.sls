@@ -1,11 +1,11 @@
 base:
   '*':
     - memcached
+    - mysql
     - newrelic
     - nginx
     - pip
     - pkg
-    - postgres
     - slingsby
     - ssh
     - users

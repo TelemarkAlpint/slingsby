@@ -16,9 +16,8 @@ FIRST_DAY_OF_WEEK = 1 # Søndag = 0, Mandag = 1
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'slingsby',
-        'NAME': 'slingsby_rel',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'slingsby_rel.sqlite',
     }
 }
 

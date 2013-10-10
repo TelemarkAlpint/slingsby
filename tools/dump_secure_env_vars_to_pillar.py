@@ -17,6 +17,7 @@ TARGET_ENV_VARS = [
     'FACEBOOK_API_KEY',
     'SECRET_KEY',
     'NEWRELIC_LICENSE_KEY',
+    'MYSQL_PASSWORD',
 ]
 
 _TARGET_FILE = os.path.join(os.path.dirname(__file__), '..', 'pillar', 'secure', 'init.sls')

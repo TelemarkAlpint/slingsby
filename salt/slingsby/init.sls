@@ -9,7 +9,6 @@ venv:
 
   file.directory:
     - name: /srv/ntnuita.no/venv
-    - makedirs: True
     - user: www
     - group: www
 
@@ -19,7 +18,8 @@ venv:
     - require:
       - pip: virtualenv
       - file: /srv/ntnuita.no/venv
-      - pkg: python-dev # required for psycopg2 to compile
+      - pkg: python-dev # required for db bindings to compile
+      - pkg: mysql # Needed for the db bindings to install correctly
 
 
 slingsby_uwsgi_conf:
@@ -37,13 +37,6 @@ slingsby_settings:
     - source: salt://slingsby/prod_settings.py
     - template: jinja
     - show_diff: False
-
-postgres:
-  postgres_user.present:
-    - name: slingsby
-
-  postgres_database.present:
-    - name: slingsby_rel
 
   # Sync db
   cmd.run:
