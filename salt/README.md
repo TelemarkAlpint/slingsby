@@ -11,7 +11,7 @@ don't always have to require the user account 'www' for example everywhere.
 
 The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed these steps:
 
-- ssh in to the box with some keypair and the 'ubuntu' user
+- ssh in to the box with the master key (located in dropbox accounts db) and the 'ubuntu' user
 
 - do the most elementary upgrades, so that salt doesnt have to work that hard
 
@@ -30,13 +30,7 @@ The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed t
     
     $ tar czf salt_and_pillar.tar.gz salt pillar
     $ scp salt_and_pillar.tar.gz slingsby:~
-    $ ssh slingsby "tar xf salt_and_pillar.tar.gz -C /srv"
-
-- Set up users, sudoers and ssh:
-
-    $ sudo salt-call --local state.sls users,sudo,ssh
-
-- Log out, log in using your own user, run `sudo salt-call --local state.sls users' again to remove the ubuntu user.
+    $ ssh slingsby "sudo tar xf salt_and_pillar.tar.gz -C /srv && sudo salt-call --local state.sls users,sudo,ssh exclude=\"[{'id': 'ubuntu'}]\" && sudo rm -rf /srv/salt /srv/pillar"
 
 Done. Save the result as an AMI, and use that AMI the next time (done from the web console).
 
@@ -49,5 +43,24 @@ It's of uttermost importance that files with sensitive data (such as API_KEYS or
 show_diff-flag set to False. Failing to do so might expose the keys in the travis build log. Silencing all
 output from the provisioning at Travis might be another way to enforce this, but that would kill the entire log,
 which might be nice to have.
+
+## Debugging 101
+
+Can't connect to an instance? First points to check:
+
+- Have you assigned it a elastic IP? If you're using some hostname to connect to the instance (like ntnuita.no), you have to make sure that the IP associated with this DNS lookup points to the correct instance. This can be changed in the AWS console, under Elastic IPs.
+
+- Have you assigned the instance to the correct security groups? Failing to do so will mean lead to you being stopped in the Amazon firewall.
+
+- Are you connecting to the instance on the right port? We're running SSH on non-standard ports for increased security, make sure you try to connect to the right one.
+
+# Extra
+
+Just to keep it down somewhere, for creating a new DB instance, you fire it up, add a master account (see password in dropbox account db), and execute the following:
+
+    $ mysql -u master -p -u <db-instance-endpoint>
+    # Gives access to the slingsby user on the private VPC only
+    CREATE USER 'slingsby'@'172.31.0.0/255.255.0.0' IDENTIFIED BY '<slingsby_pw as encrypted in .travis.yml>';
+    GRANT ALL ON slingsby_rel.* TO 'slingsby'@'172.31.0.0/255.255.0.0';
 
 [1]: http://www.theregister.co.uk/2013/03/18/servers_pets_or_cattle_cern/
