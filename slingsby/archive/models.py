@@ -55,12 +55,3 @@ class Image(models.Model):
     def get_absolute_url(self):
         return ARCHIVE_BASE_PATH + self.medium_size_url
 
-class Video(models.Model):
-    video_url = models.CharField(max_length=200)
-    description = models.CharField(max_length=250, null=True)
-    event = models.ForeignKey(ArchiveEvent, related_name='_videos')
-    path_hash = models.CharField(max_length=40)
-
-    def get_absolute_url(self):
-        return self.video_url
-
