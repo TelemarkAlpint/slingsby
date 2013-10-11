@@ -52,7 +52,8 @@ slingsby_settings:
 
 
 slingsby_log_dir:
-  file.directory:
-    - name: /var/log/slingsby
+  file.managed:
+    - name: /var/log/slingsby/log.log
+    - makedirs: True
     - user: www
     - group: www
