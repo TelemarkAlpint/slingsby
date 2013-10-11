@@ -16,6 +16,6 @@ developers:
   travis:
     fullname: Travis CI [automated]
     groups:
-      - www
+      - admin
     ssh_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAq5brYOhXXo5R8hQtTV8m5H1gxz238F+B6I7GNnn/dCvg0LSaerBFV6ZwCWi//ticWd3iS8RjZOC/0m9iL5OBP3mcNWutc2E9W1vR0b9KbyKIzH6+KlGYKFFU7hILdaBNjusfuN+DFoomQ7p5jsapi/aXgNYRXA9IDHjnce3g/eYMX1XSlSI9t9gWd30jxDDCAwxior86/YDlRDb5VFR4nX3RFF8z2WHG34yRUbSupJso/dMW11N/S9bRDPVbUh9GfVdOE5qzbWTr7BMMlfmzwkZie0lVQf4vLh0JYq/X5IpBCId+oIbclmSuH8bX/Pr0oWOCvmzbuVn5Vg2kUBct+pv3wd+vHR1XHrWPVcUjvfO2HQrFnexlABVBd3eavC5uw4YoI+c+8m1vL1sHQ3T6qlRGDa8gU/2gmvZsOIio3BL+s7losBLJ6coH4AOfrIr4ZEc9I4j5lGBgy6OgT9ajlJ66xEcuxBjrX+EoZ4A5dTc8Ymr9JQ0dKFqzQ5wd+NGq7uUdjmO81WgS6wqvnBtuhRrDlDJXqhB6HqhKUwmhX8yzx3/hKISTpzpqmXzOuMssk0M8zsgXPP+xjn7QOstIo3Mvs7BY7oFlv37YJq8vvpTD8D6S+mUOpZpWFCgREzQkpKUwvSidzq6gV/72kCP/qAwJjkxOeZnttj3OC0xO/w==
