@@ -94,9 +94,8 @@
                     </span>
 
                 <ul style="display: none">
-                    <li><a href="{{ LOGIN_URL }}">Login via ntnui</a></li>
-
                     <li><a href="{% url 'socialauth_begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">Login via facebook</a></li>
+                </ul>
                 {% endif %}
             {% endblock %}
             </div>

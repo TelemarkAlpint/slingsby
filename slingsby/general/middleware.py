@@ -1,7 +1,3 @@
-from . import cache
-from django.contrib import auth
-from django.utils.functional import SimpleLazyObject
-
 class HttpAcceptMiddleware(object):
     """ Parse the HTTP_ACCEPT header and add it to the request object.
 

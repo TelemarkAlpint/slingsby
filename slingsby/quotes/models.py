@@ -6,7 +6,6 @@ from django.db import models
 from django.forms import ModelForm, Textarea
 
 #TODO: suggested_by bare i en overgangsfase mens gamle quotes får lagt inn feltet
-#TODO: Spell correction changes suggested_by
 class Quote(models.Model):
     topic = models.CharField('om...', max_length=100, null=True, blank=True)
     quote = models.TextField("sitat")

@@ -1,0 +1,12 @@
+# This is the core dependencies of slingsby
+# Something more is usually required though, like a database connector
+# and a cache binding. Make sure to install these in your environment,
+# with whatever tools support for cache and database.
+
+django==1.5.4
+PyYAML
+python-dateutil
+pytz>=2013b
+beautifulsoup4
+requests
+django-social-auth

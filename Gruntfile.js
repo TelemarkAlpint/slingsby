@@ -1,4 +1,4 @@
-/* jshint indent:2 */
+/* jshint indent:2,maxstatements:false */
 /* global module */
 module.exports = function (grunt) {
   "use strict";
@@ -109,24 +109,69 @@ module.exports = function (grunt) {
       slingsby: {
         options: {
           rcfile: '.pylintrc',
-          virtualenv: 'venv_slingsby',
         },
-        src: 'slingsby',
+        src: ['slingsby', 'local_settings.py', 'tools/*.py'],
       }
-    }
+    },
 
+    shell: {
+      options: {
+        stderr: true,
+      },
+      buildPython: {
+        command: 'python setup.py sdist --dist-dir build --formats gztar',
+      },
+      provision: {
+        options: {
+          stdout: true,
+        },
+        command: [
+          'python ./tools/dump_secure_env_vars_to_pillar.py',
+          'tar czf build/salt_and_pillar.tar.gz salt pillar',
+          'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
+          'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
+          'sudo salt-call --local state.highstate --force-color"'
+        ].join('&&'),
+      },
+      deploy: {
+        options: {
+          stdout: true
+        },
+        command: [
+          'scp build/slingsby-1.0.0.tar.gz slingsby:/tmp/slingsby.tar.gz',
+          'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip uninstall slingsby -y || echo',
+          'sudo /srv/ntnuita.no/venv/bin/pip install /tmp/slingsby.tar.gz',
+          'sudo restart uwsgi"'
+        ].join(' && '),
+      }
+    },
+
+    clean: {
+      python: [
+        'slingsby/**/*.pyc',
+      ],
+      builds: [
+        'build',
+        'slingsby.egg-info',
+      ]
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-handlebars');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-pylint');
+  grunt.loadNpmTasks('grunt-shell');
 
   // Default tasks
-  grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic']);
-  grunt.registerTask('deploy', ['copy:main']);
   grunt.registerTask('default', ['watch']);
+  grunt.registerTask('lint', ['jshint', 'pylint']);
+  grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'pybuild']);
+  grunt.registerTask('deploy', ['shell:deploy']);//, 'copy:main']);
+  grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);
+  grunt.registerTask('provision', ['shell:provision']);
 
 };
