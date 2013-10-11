@@ -9,7 +9,7 @@ If necessary, you may also inject debugging code here.
 # pylint: disable=redefined-builtin
 
 from abc import ABCMeta, abstractproperty
-from google.appengine.api import memcache
+from django.core.cache import cache as memcache
 from django.db.models.query import ValuesQuerySet
 from django.db.models.signals import post_save, post_delete
 from logging import getLogger

@@ -1,0 +1,2 @@
+absent_pkgs:
+  - whoopsie

@@ -1,11 +1,11 @@
-# coding: utf-8
 # pylint: disable=invalid-name
 
 from .users.views import UserProfileView
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic.base import TemplateView, RedirectView
+from django.views.generic.base import RedirectView
+from django.shortcuts import render_to_response
 
 from .archive  import urls as archive_urls
 from .articles import urls as article_urls
@@ -19,7 +19,7 @@ from .users    import urls as user_urls
 
 admin.autodiscover()
 
-handler500 = TemplateView.as_view(template_name='500.html')
+handler500 = lambda req: render_to_response('500.html')
 
 urlpatterns = patterns('',
     url(r'^join$',   UserProfileView.as_view(action='join'), name='join'),
@@ -36,7 +36,7 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
-    # social auth urls
+# social auth urls
 urlpatterns += patterns('',
     url(r'', include('social_auth.urls')),
 )
@@ -45,3 +45,9 @@ urlpatterns += patterns('',
     (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
     (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve',
+            {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+    )
