@@ -1,11 +1,9 @@
 Thumbs.db
 .DS_Store
+.sass-cache
 *.pyc
-slingsby/secrets.py
-slingsby/auth
 slingsby/static
 TODO.txt
-.sass-cache
 node_modules
 venv_slingsby
 build
