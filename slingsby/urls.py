@@ -4,7 +4,7 @@ from .users.views import UserProfileView
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic.base import TemplateView, RedirectView
+from django.views.generic.base import RedirectView
 from django.shortcuts import render_to_response
 
 from .archive  import urls as archive_urls
@@ -48,5 +48,6 @@ urlpatterns += patterns('',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        (r'%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve', {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+        (r'%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve',
+            {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
     )

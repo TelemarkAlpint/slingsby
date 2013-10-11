@@ -1,4 +1,4 @@
-/* jshint indent:2 */
+/* jshint indent:2,maxstatements:false */
 /* global module */
 module.exports = function (grunt) {
   "use strict";
@@ -118,30 +118,30 @@ module.exports = function (grunt) {
       options: {
         stderr: true,
       },
-      build_python: {
+      buildPython: {
         command: 'python setup.py sdist --dist-dir build --formats gztar',
       },
       provision: {
         options: {
-            stdout: true,
+          stdout: true,
         },
         command: [
-            'python ./tools/dump_secure_env_vars_to_pillar.py',
-            'tar czf build/salt_and_pillar.tar.gz salt pillar',
-            'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
-            'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
-                'sudo salt-call --local state.highstate --force-color"'
+          'python ./tools/dump_secure_env_vars_to_pillar.py',
+          'tar czf build/salt_and_pillar.tar.gz salt pillar',
+          'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
+          'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
+          'sudo salt-call --local state.highstate --force-color"'
         ].join('&&'),
       },
       deploy: {
         options: {
-            stdout: true
+          stdout: true
         },
         command: [
-            'scp build/slingsby-1.0.0.tar.gz slingsby:/tmp/slingsby.tar.gz',
-            'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip uninstall slingsby -y || echo',
-                'sudo /srv/ntnuita.no/venv/bin/pip install /tmp/slingsby.tar.gz',
-                'sudo restart uwsgi"'
+          'scp build/slingsby-1.0.0.tar.gz slingsby:/tmp/slingsby.tar.gz',
+          'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip uninstall slingsby -y || echo',
+          'sudo /srv/ntnuita.no/venv/bin/pip install /tmp/slingsby.tar.gz',
+          'sudo restart uwsgi"'
         ].join(' && '),
       }
     },
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
   grunt.registerTask('lint', ['jshint', 'pylint']);
   grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'pybuild']);
   grunt.registerTask('deploy', ['shell:deploy']);//, 'copy:main']);
-  grunt.registerTask('pybuild', ['clean:builds', 'shell:build_python']);
+  grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);
   grunt.registerTask('provision', ['shell:provision']);
 
 };

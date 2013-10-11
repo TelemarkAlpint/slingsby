@@ -105,6 +105,6 @@ SOCIAL_AUTH_ENABLED_BACKENDS = (
 FACEBOOK_APP_ID = '1416174671936188'
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
-log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
-with open(log_config_path) as log_conf_file:
+_log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
+with open(_log_config_path) as log_conf_file:
     LOGGING = yaml.load(log_conf_file)
