@@ -14,7 +14,7 @@ import sys
 import yaml
 
 TARGET_ENV_VARS = [
-    'FACEBOOK_API_KEY',
+    'SOCIAL_AUTH_FACEBOOK_SECRET',
     'SECRET_KEY',
     'NEWRELIC_LICENSE_KEY',
     'MYSQL_PASSWORD',

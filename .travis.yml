@@ -38,8 +38,7 @@ script:
   # We should have had some tests here
   # - grunt test
 
-
-after_success:
+  # Include the provisioning and deployment in the script so that it can determine whether a build was successful or not
   # Everything A-OK, provision the server to make it's up to date, and deploy
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then grunt provision && grunt deploy; fi
 
@@ -53,8 +52,8 @@ env:
     # If you're adding a new var that you want to use in salt templates, add it to
     # TARGET_ENV_VARS in tools/dump_secure_env_vars_to_pillar.py as well.
 
-    # FACEBOOK_API_KEY
-    - secure: "OcpYRCoCNwmAUFAuk8ENgJtkIo28U7lXOQ6PKbm6JaGRFiPK5GtO51uEIBMotz6doRd4z2TlL/1GaDQxWT3B/nyscDoL9+rZy4HBcAUaWmfHYhB6poLiXJ4qDBZ6HqUYk35XmTU29vXIvSFn/EvV+LXn3FODjBvWnf4LfGPiE1k="
+    # SOCIAL_AUTH_FACEBOOK_SECRET
+    - secure: "duBeDAIV3hMFXH6RYvaobOOELwXICnBR3EWRamvem5wW55XWGKE9+eqhoIVanZUHiQwXQk22ONuiGWKKL5bAQh9Gif0/zOV25C/JcS/1K5fR0VvUsdqurTlbHSpAdpRsZJRWc9mnLgjuY0fwA/jh4TLp5e410fP1YHdQbqzai2c="
 
     # SECRET_KEY
     - secure: "BfBDtoIbNtVCW8vlA2EIg9MrvWKLdfLmVP19wzVfUT+kdPBK11mPX9Am+PeKxNpo2CtSNWL/0HKPC+LnRvmFGhDmON99Eehss7B4/+DsmQqlF8ahUAZs+ILarcUPA5gdsSL/06pcBj5Mas23mqNDFpkKMColJcKqEbj+OnLVNpo="

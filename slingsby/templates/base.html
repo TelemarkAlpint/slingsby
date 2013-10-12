@@ -94,7 +94,7 @@
                     </span>
 
                 <ul style="display: none">
-                    <li><a href="{% url 'socialauth_begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">Login via facebook</a></li>
+                    <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">Login via facebook</a></li>
                 </ul>
                 {% endif %}
             {% endblock %}
@@ -116,16 +116,6 @@
                                 <li><a href="/{{ subpage.slug }}">{{ subpage.title }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
                             {% endif %}
                         {% endfor %}
-
-                        {% comment %}
-                            {% if not user.is_authenticated %}
-                                <li><a href="{{ JOIN_URL }}">Bli medlem!</a></li>
-                            {% else %}
-                                {% if not user.is_member %}
-                                    <li><a href="{% url 'join' %}">Bli medlem!</a></li>
-                                {% endif %}
-                            {% endif %}
-                        {% endcomment %}
                     </ul>
                 </nav>
 

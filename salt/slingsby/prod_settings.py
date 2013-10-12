@@ -2,7 +2,7 @@ from slingsby.settings import *
 
 SECRET_KEY = '{{ pillar["SECRET_KEY"] }}'
 
-FACEBOOK_API_KEY = '{{ pillar["FACEBOOK_API_KEY"] }}'
+SOCIAL_AUTH_FACEBOOK_SECRET = '{{ pillar["SOCIAL_AUTH_FACEBOOK_SECRET"] }}'
 
 ALLOWED_HOSTS = (
     '.ntnuita.no',

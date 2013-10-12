@@ -47,7 +47,7 @@ INSTALLED_APPS = (
     'slingsby.tasks',
     'slingsby.users',
 
-    'social_auth',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,8 +63,7 @@ MIDDLEWARE_CLASSES = (
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 AUTHENTICATION_BACKENDS = (
-  'social_auth.backends.google.GoogleOAuth2Backend',
-  'social_auth.backends.facebook.FacebookBackend',
+  'social.backends.facebook.FacebookOAuth2',
 
   'django.contrib.auth.backends.ModelBackend',
 )
@@ -78,10 +77,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'slingsby.general.context_processors.default',
     'slingsby.quotes.context_processors.default',
 
-    'social_auth.context_processors.social_auth_by_name_backends',
-    'social_auth.context_processors.social_auth_backends',
-    'social_auth.context_processors.social_auth_by_type_backends',
-    'social_auth.context_processors.social_auth_login_redirect',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 TEMPLATE_DIRS = (
@@ -102,7 +99,7 @@ SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
 SOCIAL_AUTH_ENABLED_BACKENDS = (
     'facebook',
 )
-FACEBOOK_APP_ID = '1416174671936188'
+SOCIAL_AUTH_FACEBOOK_KEY = '1416174671936188'
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
 _log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
