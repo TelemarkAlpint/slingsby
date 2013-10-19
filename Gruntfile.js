@@ -1,5 +1,5 @@
 /* jshint indent:2,maxstatements:false */
-/* global module */
+/* global module,require */
 module.exports = function (grunt) {
   "use strict";
 
@@ -159,14 +159,8 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-handlebars');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-compass');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-pylint');
-  grunt.loadNpmTasks('grunt-shell');
+  // Load all grunt tasks defined in package.json
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   // Default tasks
   grunt.registerTask('default', ['watch']);
