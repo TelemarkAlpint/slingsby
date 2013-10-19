@@ -16,6 +16,7 @@ setup(
         '': [
             path.join('templates', '*.html'),
             path.join('templates', '*', '*.html'),
+            path.join('templates', '*', '*.js'),
             'log_conf.yaml',
         ],
     },
