@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from ..general.constants import ARCHIVE_BASE_PATH
 from django.db import models
+from django.conf import settings
 
 class ArchiveEvent(models.Model):
     path_hash = models.CharField(primary_key=True, max_length=40)
@@ -53,5 +53,5 @@ class Image(models.Model):
     gallery = models.ForeignKey(ImageGallery, related_name='_images')
 
     def get_absolute_url(self):
-        return ARCHIVE_BASE_PATH + self.medium_size_url
+        return settings.ARCHIVE_BASE_PATH + self.medium_size_url
 

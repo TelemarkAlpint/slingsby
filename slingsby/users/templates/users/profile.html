@@ -22,7 +22,7 @@
         {% else %}
             <img src="{% static "gfx/missing_picture-75.png" %}" alt="Du har ikke lagt inn bilde!">
             <br>
-            <a href="{{ EDIT_PROFILE_IMAGE }}">Last opp bilde</a>
+            <a href="">Last opp bilde</a>
         {% endif %}
     </div>
     {% endcomment %}
@@ -49,7 +49,7 @@
         {% comment %}
             <tr>
                 <th>Medlem av gruppen:</th>
-                <td>{% if user.is_member %}Ja <a href="{{ LEAVE_URL }}" class="btn">Meld meg ut</a>{% else %}Nei <a href="{{ JOIN_URL }}" class="btn">Meld meg inn</a>{% endif %}</td>
+                <td>{% if user.is_member %}Ja <a href="" class="btn">Meld meg ut</a>{% else %}Nei <a href="" class="btn">Meld meg inn</a>{% endif %}</td>
             </tr>
         {% endcomment %}
     </table>

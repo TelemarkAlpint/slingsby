@@ -1,8 +1,8 @@
 # coding: utf-8
 
 from .cache import CachedQuery
-from .constants import MEDIA_DIR
 
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.http import urlquote
@@ -24,7 +24,7 @@ class Sponsor(models.Model):
         return self.name
 
     def get_img_url(self):
-        return MEDIA_DIR + 'img/sponsors/' + urlquote(self.filename)
+        return settings.MEDIA_DIR + 'img/sponsors/' + urlquote(self.filename)
 
 class SponsorsQuery(CachedQuery):
     keyword = 'sponsors'

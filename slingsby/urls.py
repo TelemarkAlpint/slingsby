@@ -22,7 +22,6 @@ admin.autodiscover()
 handler500 = lambda req: render_to_response('500.html')
 
 urlpatterns = patterns('',
-    url(r'^join$',   UserProfileView.as_view(action='join'), name='join'),
     url(r'^',        include(article_urls)),
     url(r'^musikk/', include(musikk_urls)),
     url(r'^arkiv/',  include(archive_urls)),

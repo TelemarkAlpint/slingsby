@@ -2,17 +2,18 @@
 
 from ..general import make_title, cache, time
 from ..general.cache import CachedQuery, empty_on_changes_to
-from ..general.constants import MEDIA_DIR, MUSIC_DIR
 from ..general.time import _nor as nor_timezone
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
+
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView, View
 from dateutil.parser import parse
-import datetime
 from time import time as get_timestamp
+import datetime
 import json
 import logging
 import requests
@@ -156,7 +157,7 @@ class AllSongsView(TemplateView):
         context['all_songs_second_half'] = second_half
         context['song_form'] = SongSuggestionForm()
         context['title'] = make_title('Musikk')
-        context['song_dir'] = MEDIA_DIR + 'songs/'
+        context['song_dir'] = settings.MEDIA_DIR + 'songs/'
 
         if user.is_staff:
             context['new_songforms'] = self._get_new_songforms()
@@ -199,7 +200,7 @@ class TopSong(RedirectView):
         """ Get the location of the latest song merged from the top songs. """
         metadata = get_top_song_metadata()
         filename = metadata['filename']
-        return MUSIC_DIR + filename
+        return settings.MUSIC_DIR + filename
 
 
 class TopSongsList(View):
@@ -213,5 +214,5 @@ class TopSongsList(View):
 def get_top_song_metadata():
     """ Fetch the JSON metadata about the latest top song from the fileserver. """
     cache_buster = '?v=%s' % get_timestamp()
-    response = requests.get(MUSIC_DIR + 'top_meta.json' + cache_buster)
+    response = requests.get(settings.MUSIC_DIR + 'top_meta.json' + cache_buster)
     return response.json()

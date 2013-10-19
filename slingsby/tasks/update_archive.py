@@ -13,9 +13,9 @@ Anyway, the key to working with large datasets like these -> bulk_create!
 
 """
 
-from ..general.constants import JSON_ARCHIVE_PATH
 from ..archive.models import ArchiveEvent, ImageGallery, Image
 
+from django.conf import settings
 from django.http import HttpResponse
 from logging import getLogger
 import requests
@@ -32,7 +32,7 @@ def update_archive(request):
     # if 'clear_all' in request.GET and request.user.is_staff:
     #     _logger.info('Deleting all old entries')
     #     clear_archive_and_cache()
-    archive = requests.get(JSON_ARCHIVE_PATH).json()
+    archive = requests.get(settings.JSON_ARCHIVE_PATH).json()
     _logger.info('JSON archive fetched.')
     create_and_get_events(archive)
     _logger.info('All new items created.')

@@ -89,7 +89,15 @@ ROOT_URLCONF = 'slingsby.urls'
 
 STATIC_URL = 'http://org.ntnu.no/telemark/static/'
 
-# social_auth specific settings
+_log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
+with open(_log_config_path) as log_conf_file:
+    LOGGING = yaml.load(log_conf_file)
+
+
+########################################
+### python-social-auth specific settings
+########################################
+
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 SOCIAL_AUTH_UID_LENGTH = 16
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
@@ -102,6 +110,17 @@ SOCIAL_AUTH_ENABLED_BACKENDS = (
 SOCIAL_AUTH_FACEBOOK_KEY = '1416174671936188'
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
-_log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
-with open(_log_config_path) as log_conf_file:
-    LOGGING = yaml.load(log_conf_file)
+
+#######################################
+#### Settings defined only for slingsby
+#######################################
+
+MEDIA_DIR = 'http://org.ntnu.no/telemark/media/'
+
+MUSIC_DIR = MEDIA_DIR + 'songs/'
+
+JSON_ARCHIVE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/archive.json'
+
+DEFAULT_TITLE = 'NTNUI Telemark/Alpint'
+
+ARCHIVE_BASE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/'

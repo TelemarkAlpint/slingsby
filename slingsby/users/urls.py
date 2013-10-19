@@ -2,7 +2,8 @@
 
 from .views import UserProfileView
 from django.conf.urls import patterns, url
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns('',
-    url(r'^$', UserProfileView.as_view(), name='profile'),
+    url(r'^$', login_required(UserProfileView.as_view()), name='profile'),
 )

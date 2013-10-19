@@ -55,5 +55,5 @@
     {% endif %}
 
 {% else %}
-    <p class="event_info">Du er ikke innlogget. <a href="{{ LOGIN_URL }}">Logg inn</a> med NTNUI-brukeren din for å melde deg på events.</p>
+    <p class="event_info">Du er ikke innlogget. <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}>Logg inn</a> med NTNUI-brukeren din for å melde deg på events.</p>
 {% endif %}
