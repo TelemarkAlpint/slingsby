@@ -10,3 +10,4 @@ build
 *.egg-info
 slingsby_rel.sqlite
 pillar/secure
+secret_settings.py

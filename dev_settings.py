@@ -3,10 +3,12 @@ from slingsby.settings import *
 from os import path
 
 DEBUG = True
+
 TEMPLATE_DEBUG = DEBUG
 
 SECRET_KEY = 'pleasedontusethisinprod'
-FACEBOOK_API_SECRET = 'pleasedontusethisinprod'
+
+SOCIAL_AUTH_FACEBOOK_SECRET = 'pleasedontusethisinprod'
 
 DATABASES = {
     'default': {
@@ -25,7 +27,8 @@ CACHES = {
 # Used for the query debugger that's run in dev mode.
 INTERNAL_IPS = ("127.0.0.1", "::1")
 
-STATIC_URL = 'staticstuff/'
+STATIC_URL = 'static/'
+
 STATIC_ROOT = path.join(path.dirname(__file__), 'slingsby', 'static')
 
 DEBUG_TOOLBAR_CONFIG = {
