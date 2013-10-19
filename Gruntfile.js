@@ -130,7 +130,8 @@ module.exports = function (grunt) {
           'tar czf build/salt_and_pillar.tar.gz salt pillar',
           'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
           'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
-          'sudo salt-call --local state.highstate --force-color"'
+          'sudo salt-call --local state.highstate --force-color',
+          'rm /tmp/salt_and_pillar.tar.gz"'
         ].join('&&'),
       },
       deploy: {
@@ -141,7 +142,8 @@ module.exports = function (grunt) {
           'scp build/slingsby-1.0.0.tar.gz slingsby:/tmp/slingsby.tar.gz',
           'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip uninstall slingsby -y || echo',
           'sudo /srv/ntnuita.no/venv/bin/pip install /tmp/slingsby.tar.gz',
-          'sudo restart uwsgi"'
+          'sudo restart uwsgi',
+          'rm /tmp/slingsby.tar.gz"'
         ].join(' && '),
       }
     },
