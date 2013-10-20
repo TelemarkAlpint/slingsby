@@ -110,7 +110,7 @@ module.exports = function (grunt) {
         options: {
           rcfile: '.pylintrc',
         },
-        src: ['slingsby', 'local_settings.py', 'tools/*.py'],
+        src: ['slingsby', '*.py', 'tools/*.py'],
       }
     },
 

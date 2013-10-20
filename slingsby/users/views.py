@@ -3,8 +3,6 @@ from ..general.views import ActionView
 from ..events.models import Event
 from ..musikk.models import Vote, Song
 
-from django.conf import settings
-from django.http import HttpResponseRedirect
 from django.views.generic.base import TemplateView
 
 class UserProfileView(ActionView, TemplateView):

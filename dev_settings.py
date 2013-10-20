@@ -1,3 +1,5 @@
+# pylint: disable=unused-wildcard-import,wildcard-import
+
 # Override settings locally
 from slingsby.settings import *
 from os import path
