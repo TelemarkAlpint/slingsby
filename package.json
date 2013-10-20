@@ -11,6 +11,7 @@
     "grunt-contrib-watch": "~0.4.2",
     "grunt-pylint": "~0.1.0",
     "grunt-shell": "~0.4.0",
-    "grunt-contrib-clean": "~0.5.0"
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-concurrent": "~0.4.1"
   }
 }

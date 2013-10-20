@@ -55,7 +55,9 @@ And now, you can start the devserver:
 
     $ python manage.py runserver --settings dev_settings
 
-This should start the devserver at port 8000, browse to http://localhost:8000 to see it!
+This should start the devserver at port 8000, browse to http://localhost:8000 to see it! Eventually you can use the grunt
+task `grunt server`, which will run both `grunt watch` and start the devserver on port **80**. This also uses the `secret_settings.py`
+module, so make sure to create that one first (see a couple of paragraphs further down for how and why to do that).
 
 If you want to log in to the devserver, you need to start the devserver on port 80 and add a line to your hosts file to redirect 
 requests to ntnuita.no to the devserver, since facebook will only authenticate towards that domain. Add this line to 

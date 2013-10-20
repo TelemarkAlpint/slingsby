@@ -145,7 +145,13 @@ module.exports = function (grunt) {
           'sudo restart uwsgi',
           'rm /tmp/slingsby.tar.gz"'
         ].join(' && '),
-      }
+      },
+      devserver: {
+        options: {
+          stdout: true,
+        },
+        command: 'python manage.py runserver --settings secret_settings 80'
+      },
     },
 
     clean: {
@@ -156,6 +162,15 @@ module.exports = function (grunt) {
         'build',
         'slingsby.egg-info',
       ]
+    },
+
+    concurrent: {
+      server: {
+        tasks: ['watch', 'shell:devserver'],
+        options: {
+          logConcurrentOutput: true,
+        }
+      }
     }
   });
 
@@ -163,11 +178,12 @@ module.exports = function (grunt) {
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   // Default tasks
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['server']);
   grunt.registerTask('lint', ['jshint', 'pylint']);
   grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'pybuild']);
   grunt.registerTask('deploy', ['shell:deploy']);//, 'copy:main']);
   grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);
   grunt.registerTask('provision', ['shell:provision']);
+  grunt.registerTask('server', ['concurrent:server']);
 
 };
