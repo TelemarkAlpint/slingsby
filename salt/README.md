@@ -16,11 +16,11 @@ The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed t
 - do the most elementary upgrades, so that salt doesnt have to work that hard
 
     $ sudo apt-get update
-    $ sudo apt-get upgrade
+    $ sudo apt-get upgrade -y
 
 - Install salt-minion (v0.17.0 is latest release as of 7.10.13)
 
-    $ curl -L http://bootstrap.saltstack.org | sudo sh -s -- git v0.17.0
+    $ curl -L http://bootstrap.saltstack.org | sudo sh -s -- git develop
 
 - Install up-to-date setuptools
     
