@@ -14,8 +14,4 @@ def default(request):
         # This will override what is set by django.core.context_processors.debug
         'debug': settings.DEBUG,
     }
-
-    # only provide it present to avoid overriding template contexts
-    if request.GET.get('msg'):
-        context['feedback'] = request.GET.get('msg')
     return context

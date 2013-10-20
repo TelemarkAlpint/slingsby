@@ -7,6 +7,7 @@ from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
 
 from django.conf import settings
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
@@ -57,9 +58,9 @@ class SongDetailView(ActionView, TemplateView):
         context = self.get_context_data(**kwargs)
         song = context['song']
         song.delete()
-        msg = 'Poof, %s er nå slettet!' % song
+        messages.success(request, 'Poof, %s er nå slettet!' % song)
         _logger.info("%s successfully deleted by %s", song, request.user)
-        return HttpResponseRedirect(reverse('musikk') + '?msg=' + msg)
+        return HttpResponseRedirect(reverse('musikk'))
 
 
     def approve(self, request, **kwargs):
@@ -70,13 +71,13 @@ class SongDetailView(ActionView, TemplateView):
         if form.is_valid():
             song.ready = True
             song.save()
-            msg = '%s ble registrert, takker og bukker!' % song
+            messages.success(request, '%s ble registrert, takker og bukker!' % song)
             _logger.info("%s approved by %s", song, request.user)
-            return HttpResponseRedirect(reverse('musikk') + '?msg=' + msg)
+            return HttpResponseRedirect(reverse('musikk') )
         else:
-            message = 'Sorry, did not validate, try again?'
+            messages.error(request, 'Du har noen feil i skjemaet, prøv på nytt pretty please?')
             _logger.info("%s was rejected for approval, invalid form data entered by %s", song, request.user)
-            return HttpResponseRedirect(reverse('musikk') + '?msg=' + message)
+            return HttpResponseRedirect(reverse('musikk'))
 
 
     def vote(self, request, **kwargs):
@@ -132,12 +133,12 @@ class AllSongsView(TemplateView):
             song.suggested_by = request.user
             song.save()
             context['new_songforms'].append(ReadySongForm(instance=song))
-            context['feedback'] = 'Takker og bukker, webmaster vil se på forslaget og ' \
-                'prøve å få lastet det opp ASAP, hang tight!'
+            messages.success(request, 'Takker og bukker, webmaster vil se på forslaget og ' \
+                'prøve å få lastet det opp ASAP, hang tight!')
             return self.render_to_response(context, status=201)
         else:
-            context['feedback'] = 'Oops, ser ut til at du har noen feil i skjemaet, ' \
-                'se om du får fikset det og prøv på nytt!'
+            messages.warning(request, 'Oops, ser ut til at du har noen feil i skjemaet, ' \
+                'se om du får fikset det og prøv på nytt!')
             context['song_form'] = form
             return self.render_to_response(context)
 

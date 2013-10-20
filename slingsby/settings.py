@@ -4,6 +4,7 @@ import os
 import yaml
 
 DEBUG = False
+
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = [
@@ -11,7 +12,9 @@ ALLOWED_HOSTS = [
 ]
 
 USE_TZ = True
+
 TIME_ZONE = 'Europe/Oslo'
+
 FIRST_DAY_OF_WEEK = 1 # Søndag = 0, Mandag = 1
 
 DATABASES = {
@@ -33,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
@@ -70,6 +74,7 @@ AUTHENTICATION_BACKENDS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.debug',
@@ -99,15 +104,23 @@ with open(_log_config_path) as log_conf_file:
 ########################################
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+
 SOCIAL_AUTH_UID_LENGTH = 16
+
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+
 SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 16
+
 SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 16
+
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+
 SOCIAL_AUTH_ENABLED_BACKENDS = (
     'facebook',
 )
+
 SOCIAL_AUTH_FACEBOOK_KEY = '1416174671936188'
+
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
 

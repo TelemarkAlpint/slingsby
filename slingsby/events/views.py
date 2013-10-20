@@ -4,6 +4,8 @@ from .models import Event, UserAddError, EventError
 from ..general import make_title, time
 from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.views import ActionView
+
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
@@ -64,10 +66,9 @@ class EventDetailView(ActionView, TemplateView):
             event.add_user(request.user)
         except UserAddError as error:
             _logger.info(error)
-        redirect = event.get_absolute_url()
-        msg = 'Du er nå påmeldt %s!' % event
+        messages.success(request, 'Du er nå påmeldt %s!' % event)
         _logger.info("%s meldte seg på eventet %s", request.user, event)
-        return HttpResponseRedirect(redirect + '?msg=' + msg)
+        return HttpResponseRedirect(event.get_absolute_url())
 
 
     def leave(self, request, **kwargs):
@@ -77,13 +78,11 @@ class EventDetailView(ActionView, TemplateView):
         try:
             event.remove_user(request.user)
             _logger.info('%s meldte seg av eventet %s.', request.user, event)
-            redirect = event.get_absolute_url()
-            msg = 'Du har nå meldt deg av %s.' % event
-            return HttpResponseRedirect(redirect + '?msg=' + msg)
+            messages.info(request, 'Du har nå meldt deg av %s.' % event)
+            return HttpResponseRedirect(event.get_absolute_url())
         except EventError as error:
             _logger.warning(error)
-            redirect = event.get_absolute_url()
-            msg = 'Beklager, men dette eventet har bindende påmelding. Ta ' \
+            messages.warning(request, 'Beklager, men dette eventet har bindende påmelding. Ta ' \
                 'kontakt med arrkom hvis du absolutt ikke har mulighet til å stille, ' \
-                'så vil vi se om vi kan gjøre noe med det.'
-            return HttpResponseRedirect(redirect + '?msg=' + msg)
+                'så vil vi se om vi kan gjøre noe med det.')
+            return HttpResponseRedirect(event.get_absolute_url())

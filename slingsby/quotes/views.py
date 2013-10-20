@@ -4,6 +4,8 @@ from ..general import make_title
 from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.views import ActionView
 from .models import Quote, QuoteForm
+
+from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
@@ -40,8 +42,8 @@ class QuoteDetailView(ActionView, TemplateView):
         quote.accepted = True
         quote.save()
         _logger.info('%s confirmed quote: %s', request.user, quote)
-        msg = 'Sitatet ble godkjent!'
-        return HttpResponseRedirect(quote.get_absolute_url() + '?msg=' + msg)
+        messages.success(request, 'Sitatet ble godkjent!')
+        return HttpResponseRedirect(quote.get_absolute_url())
 
 
     def delete(self, request, **kwargs):
@@ -52,6 +54,7 @@ class QuoteDetailView(ActionView, TemplateView):
         quote = get_object_or_404(Quote, id=quote_id)
         quote.delete()
         logging.info('%s deleted quote: %s', request.user.username, quote)
+        messages.success(request, 'Quote slettet!')
         return HttpResponse('Quote slettet.', content_type='text/plain')
 
 
@@ -96,9 +99,9 @@ class AllQuotesView(TemplateView):
             quote = form.save(commit=False)
             quote.suggested_by = request.user
             quote.save()
-            msg = 'Takk for forslaget, noen fra styret vil se på det ASAP!'
-            return HttpResponseRedirect('/?msg=' + msg)
+            messages.success(request, 'Takk for forslaget, noen fra styret vil se på det ASAP!')
+            return HttpResponseRedirect('/')
         else:
             context['quote_form'] = form
-            msg = 'Beklager, du har visst noen feil i skjemaet, prøv på nytt er du snill!'
-            return HttpResponseRedirect('/?msg=' + msg)
+            messages.error(request, 'Beklager, du har visst noen feil i skjemaet, prøv på nytt er du snill!')
+            return HttpResponseRedirect('/')

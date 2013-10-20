@@ -422,13 +422,26 @@ form {
     width: 350px;
 }
 
-#feedback {
+.messages {
     margin: 5px 20px;
+    padding: 5px 20px;
+    /* Default to success background color, green */
     background-color: rgb(123, 209, 72);
     border-style: groove;
     border-width: 2px;
     text-align: center;
 
+    &.error {
+        background-color: #f2dede;
+    }
+
+    &.warning {
+        background-color: #fbeed5;
+    }
+
+    &.info {
+        background-color: #d9edf7;
+    }
 }
 
 #user_class_input {

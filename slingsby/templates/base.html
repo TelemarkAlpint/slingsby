@@ -215,11 +215,12 @@
 
         <div id="content" role="main">
 
-            {% if feedback %}
-
-                <div id="feedback">
-                    <p>{{ feedback }}</p>
-                </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="messages {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
 
             {% endif %}
 
@@ -241,16 +242,7 @@
         Modernizr.load({
           load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
         });
-
-
-
     </script>
-
-    {% if feedback %}
-        <script>
-            setTimeout(function() {$("#feedback").slideUp(500)},10000);
-        </script>
-    {% endif %}
 
     {% if debug %}
         <script async src="http://localhost:35729/livereload.js"></script>

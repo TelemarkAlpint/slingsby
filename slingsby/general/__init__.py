@@ -39,11 +39,3 @@ def make_title(subpage=None):
         return '%s :: NTNUI Telemark/Alpint' % subpage
     else:
         return 'NTNUI Telemark/Alpint'
-
-def add_params(url, params):
-    return '%s?%s' % (url, params)
-
-def reverse_with_params(func_name='frontpage', feedback_code=''):
-    return add_params(reverse(func_name), feedback_code)
-
-
