@@ -20,3 +20,9 @@ DATABASES = {
         'PASSWORD': '{{ pillar["MYSQL_PASSWORD"] }}',
     },
 }
+
+_static_url_base = 'http://org.ntnu.no/telemark/static/%s/'
+
+_slingsby_version = '{{ pillar["slingsby_version"] }}'
+
+STATIC_URL = _static_url_base % _slingsby_version

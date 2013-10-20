@@ -43,25 +43,19 @@ module.exports = function (grunt) {
     },
 
     /*
-     * Copy the static dir over to the fileserver.
+     * Copy static-src -> static.
      */
     copy: {
-      main: {
-        files: [
-          {
-            expand: true,
-            src: ['**/*.*'],
-            cwd: 'slingsby/static/',
-            dest: '/Volumes/groupswww-1/telemark/static/',
-            //dest: '//webedit.ntnu.no/groupswww/telemark/static/'
-          }
-        ]
-      },
       srcToStatic: {
         files: [
           {
             expand: true,
-            src: ['**/*.*', '!**/*.scss'],
+            src: [
+              '**/*.*',
+
+              // Exclude dynamically built files.
+              '!**/*.scss',
+            ],
             cwd: 'slingsby/static-src/',
             dest: 'slingsby/static/'
           }
@@ -134,7 +128,7 @@ module.exports = function (grunt) {
           'rm /tmp/salt_and_pillar.tar.gz"'
         ].join('&&'),
       },
-      deploy: {
+      deployCode: {
         options: {
           stdout: true
         },
@@ -144,6 +138,20 @@ module.exports = function (grunt) {
           'sudo /srv/ntnuita.no/venv/bin/pip install /tmp/slingsby.tar.gz',
           'sudo restart uwsgi',
           'rm /tmp/slingsby.tar.gz"'
+        ].join(' && '),
+      },
+      deployStatic: {
+        options: {
+          stdout: true,
+        },
+        command: [
+          'cd slingsby/static',
+          'tar czf ../../build/static_files.tar.gz *',
+          'scp ../../build/static_files.tar.gz slingsby_fileserver:/home/groupswww/telemark/static/',
+          'ssh slingsby_fileserver "cd /home/groupswww/telemark/static/',
+          'test -d <%= grunt.option("slingsby-version") %> || mkdir <%= grunt.option("slingsby-version") %>',
+          'tar xf static_files.tar.gz -C <%= grunt.option("slingsby-version") %>',
+          'rm static_files.tar.gz"'
         ].join(' && '),
       },
       devserver: {
@@ -181,7 +189,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['server']);
   grunt.registerTask('lint', ['jshint', 'pylint']);
   grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'pybuild']);
-  grunt.registerTask('deploy', ['shell:deploy']);//, 'copy:main']);
+  grunt.registerTask('deploy', ['shell:deployCode', 'shell:deployStatic']);
   grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);
   grunt.registerTask('provision', ['shell:provision']);
   grunt.registerTask('server', ['concurrent:server']);

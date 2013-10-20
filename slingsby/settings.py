@@ -92,8 +92,6 @@ TEMPLATE_DIRS = (
 
 ROOT_URLCONF = 'slingsby.urls'
 
-STATIC_URL = 'http://org.ntnu.no/telemark/static/'
-
 _log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
 with open(_log_config_path) as log_conf_file:
     LOGGING = yaml.load(log_conf_file)
