@@ -29,4 +29,4 @@ loggers:
         handlers: [mail_admins, console, file]
     slingsby:
         handlers: [console, file]
-        level: DEBUG
+        level: INFO
