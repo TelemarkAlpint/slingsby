@@ -7,7 +7,7 @@
 
 {% block extrastyles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "stylesheets/zoombox.css" %}">
+    <link rel="stylesheet" href="{% static "libs/Zoombox/zoombox.css" %}">
 {% endblock %}
 
 {% block content %}
@@ -77,6 +77,6 @@
             });
         });
     </script>
-    <script src="{% static "js/libs/zoombox.js" %}"></script>
+    <script src="{% static "libs/Zoombox/zoombox.js" %}"></script>
 
 {% endblock %}

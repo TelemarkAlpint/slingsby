@@ -13,7 +13,7 @@ module.exports = function (grunt) {
     handlebars: {
       compile: {
         options: {
-          namespace: "Handlebars.templates",
+          namespace: "slingsby.templates",
           // Transform paths to sensible template names -> Extract filename, remove ext
           processName: function (name) {
             var path = name.split('/');

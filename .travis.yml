@@ -33,8 +33,9 @@ install:
   - gem install compass
 
   # Install grunt-cli and grunt
-  - npm install -g grunt-cli
+  - npm install -g grunt-cli bower
   - npm install
+  - bower install
 
 script:
   # Lint the code, but don't fail the build if there's errors

@@ -42,10 +42,11 @@ To use grunt, you need NodeJS installed. Follow the instructions over at [NodeJS
 The node package manager *npm* is bundled with recent versions of node, we're using npm to install grunt plugins we use. These are
 defined in the package.json file.
 
-Once you have node and npm installed, you should install the grunt-cli and all the grunt plugins:
+Once you have node and npm installed, you should install the grunt-cli, bower and all the grunt plugins and frontend dependencies:
 
-    $ npm install -g grunt-cli
+    $ npm install -g grunt-cli bower
     $ npm install
+    $ bower install
 
 Great! Now you can compile all the static files:
 
@@ -108,4 +109,4 @@ pages soon, enhancing the mobile experience.
 Dependencies
 ------------
 
-See salt\slingsby\requirements.txt.
+See salt\slingsby\requirements.txt, bower.json and package.json.

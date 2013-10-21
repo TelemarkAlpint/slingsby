@@ -14,6 +14,6 @@ class SocialSummaryWidget(Textarea):
 
     class Media:
         js = (
-            'js/libs/jquery-1.9.1.min.js',
+            'libs/jquery/jquery.min.js',
             'js/socialSummary.js'
         )
