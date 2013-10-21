@@ -18,7 +18,7 @@
     "maxparams": 3,
     "maxdepth": 3,
     "maxstatements": 10,
-    "maxlen": 110,
+    "maxlen": 120,
     "smarttabs": true,
     "white": true,
     "globals": {

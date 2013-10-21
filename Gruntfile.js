@@ -128,6 +128,9 @@ module.exports = function (grunt) {
           'rm /tmp/salt_and_pillar.tar.gz"'
         ].join('&&'),
       },
+      collectstatic: {
+        command: 'python manage.py collectstatic --settings dev_settings --noinput',
+      },
       deployCode: {
         options: {
           stdout: true
@@ -188,7 +191,7 @@ module.exports = function (grunt) {
   // Default tasks
   grunt.registerTask('default', ['server']);
   grunt.registerTask('lint', ['jshint', 'pylint']);
-  grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'pybuild']);
+  grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'shell:collectstatic', 'pybuild']);
   grunt.registerTask('deploy', ['shell:deployCode', 'shell:deployStatic']);
   grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);
   grunt.registerTask('provision', ['shell:provision']);
