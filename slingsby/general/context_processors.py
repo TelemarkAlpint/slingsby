@@ -15,3 +15,12 @@ def default(request):
         'debug': settings.DEBUG,
     }
     return context
+
+def urls(request):
+    urls = {
+        'STATIC_URL': settings.STATIC_URL,
+        'GRAPHICS_URL': settings.STATIC_URL + 'gfx/',
+    }
+    return {
+        'slingsby_urls': urls,
+    }

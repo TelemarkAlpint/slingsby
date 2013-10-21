@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load url from future %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -120,7 +121,5 @@
 {% endblock %}
 
 {% block extrascripts %}
-    <script>
-        {% include 'musikk/musikk.js' %}
-    </script>
+    <script async src="{% static 'js/musikk.js' %}"></script>
 {% endblock %}

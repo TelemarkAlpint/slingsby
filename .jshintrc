@@ -23,6 +23,7 @@
     "white": true,
     "globals": {
        "jQuery": false,
-       "moment": false
+       "moment": false,
+       "slingsby": false
     }
 }
