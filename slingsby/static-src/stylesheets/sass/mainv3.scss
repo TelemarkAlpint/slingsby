@@ -592,7 +592,7 @@ th {
 
 .quote {
     overflow: hidden;
-    background: url("http://org.ntnu.no/telemark/static/gfx/quote-bg.png") $quote-bg no-repeat;
+    background: url("../gfx/quote-bg.png") $quote-bg no-repeat;
     color: white;
     width: 240px;
     margin-left: 0;
@@ -644,7 +644,7 @@ th {
 /* ==|== end Quotes ========================================================= */
 
 #next_events {
-  background: url("http://org.ntnu.no/telemark/static/gfx/events-bg.png") rgb(1, 165, 21) no-repeat;
+  background: url("../gfx/events-bg.png") rgb(1, 165, 21) no-repeat;
 
   a {
     font-weight: bold;
