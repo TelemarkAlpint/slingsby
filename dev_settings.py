@@ -55,4 +55,7 @@ MIDDLEWARE_CLASSES = tuple(list(MIDDLEWARE_CLASSES) + [
 
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + [
     'debug_toolbar',
+    'django_nose',
 ])
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

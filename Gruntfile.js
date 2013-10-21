@@ -68,7 +68,12 @@ module.exports = function (grunt) {
       options: {
         'jshintrc': '.jshintrc',
       },
-      all: ['Gruntfile.js', 'slingsby/static-src/js/*.js']
+      all: [
+        'Gruntfile.js',
+        'slingsby/static-src/js/*.js',
+        'slingsby/**/static/js/*.js',
+        '!slingsby/static/**',
+      ]
     },
 
     /*
@@ -163,6 +168,9 @@ module.exports = function (grunt) {
         },
         command: 'python manage.py runserver --settings secret_settings 80'
       },
+      test: {
+        command: 'python manage.py test --settings dev_settings slingsby.general.tests',
+      }
     },
 
     clean: {
@@ -182,7 +190,8 @@ module.exports = function (grunt) {
           logConcurrentOutput: true,
         }
       }
-    }
+    },
+
   });
 
   // Load all grunt tasks defined in package.json
@@ -191,6 +200,7 @@ module.exports = function (grunt) {
   // Default tasks
   grunt.registerTask('default', ['server']);
   grunt.registerTask('lint', ['jshint', 'pylint']);
+  grunt.registerTask('test', ['shell:test']);
   grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'shell:collectstatic', 'pybuild']);
   grunt.registerTask('deploy', ['shell:deployCode', 'shell:deployStatic']);
   grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);

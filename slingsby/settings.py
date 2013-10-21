@@ -80,6 +80,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
 
     'slingsby.general.context_processors.default',
+    'slingsby.general.context_processors.urls',
     'slingsby.quotes.context_processors.default',
 
     'social.apps.django_app.context_processors.backends',
@@ -92,9 +93,20 @@ TEMPLATE_DIRS = (
 
 ROOT_URLCONF = 'slingsby.urls'
 
+def fix_nonexistent_file_handlers(log_conf):
+    # If the target log directory doesn't exists, log to current
+    # directory. This ensures you don't need /var/log/slingsby to
+    # run the devserver, but will still give you the log
+    for handler, handler_config in log_conf['handlers'].items():
+        if 'filename' in handler_config:
+            if not os.path.exists(os.path.dirname(handler_config['filename'])):
+                handler_config['filename'] = 'log.log'
+
 _log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
 with open(_log_config_path) as log_conf_file:
-    LOGGING = yaml.load(log_conf_file)
+    log_conf = yaml.load(log_conf_file)
+    fix_nonexistent_file_handlers(log_conf)
+    LOGGING = log_conf
 
 
 ########################################
