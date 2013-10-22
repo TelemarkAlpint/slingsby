@@ -239,7 +239,7 @@
             {% for url_name, url in slingsby_urls.items %}
                 {{ url_name }}: '{{ url }}',
             {% endfor %}
-        }
+        },
     };
     </script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -248,7 +248,7 @@
     <script>
         window._gaq = [['_setAccount','UA-26717996-1'],['_trackPageview'],['_trackPageLoadTime']];
         var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-        document.write(unescape('%3Cscript src="' + gaJsHost + 'google-analytics.com/ga.js"'));
+        document.write(unescape('%3Cscript src="' + gaJsHost + 'google-analytics.com/ga.js"%3E%3C\/script%3E'));
     </script>
 
     {% if debug %}
