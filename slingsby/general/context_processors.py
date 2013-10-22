@@ -3,6 +3,7 @@ from ..events.views import NextEventsQuery
 from .models import SponsorsQuery
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 
 def default(request):
@@ -20,6 +21,7 @@ def urls(request):
     urls = {
         'STATIC_URL': settings.STATIC_URL,
         'GRAPHICS_URL': settings.STATIC_URL + 'gfx/',
+        'allArticles': reverse('all_articles'),
     }
     return {
         'slingsby_urls': urls,

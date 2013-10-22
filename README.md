@@ -57,8 +57,9 @@ And now, you can start the devserver:
     $ python manage.py runserver --settings dev_settings
 
 This should start the devserver at port 8000, browse to http://localhost:8000 to see it! Eventually you can use the grunt
-task `grunt server`, which will run both `grunt watch` and start the devserver on port **80**. This also uses the `secret_settings.py`
-module, so make sure to create that one first (see a couple of paragraphs further down for how and why to do that).
+task `grunt server`, which will run both `grunt watch` and start the devserver on port **80** (port can be override with
+the `--port` flag). This also uses the `secret_settings.py` module, so make sure to create that one first (see a couple of
+paragraphs further down for how and why to do that).
 
 If you want to log in to the devserver, you need to start the devserver on port 80 and add a line to your hosts file to redirect 
 requests to ntnuita.no to the devserver, since facebook will only authenticate towards that domain. Add this line to 
@@ -82,6 +83,9 @@ that you can import into mysql, and then you should have an environment that qui
 
 You should now be all set to start making your changes. If you're not the dev lead, submit your changes as pull requests on GitHub, and dev
 lead will take a look at them, and hopefully admit your change into the repo.
+
+If you want to test files after the build step (like the output from uglify), you need the start the devserver with `DEBUG=False` in
+dev_settings.py and the `--insecure` flag to tell staticfiles to serve the files even though we're not in debug mode.
 
 About
 -----

@@ -3,8 +3,13 @@
 module.exports = function (grunt) {
   "use strict";
 
+  // Load all grunt tasks defined in package.json
+  require('load-grunt-tasks')(grunt);
+
   // Project configuration.
   grunt.initConfig({
+
+
     pkg: grunt.file.readJSON('package.json'),
 
     /*
@@ -24,7 +29,7 @@ module.exports = function (grunt) {
           }
         },
         files: {
-          "slingsby/static/js/handlebars_templates.js": "**/handlebars/*.hbs"
+          "slingsby/static/.tmp/handlebars_templates.js": "slingsby/*/templates/handlebars/*.hbs"
         }
       }
     },
@@ -53,15 +58,17 @@ module.exports = function (grunt) {
             src: [
               '**/*.*',
 
-              // Exclude dynamically built files.
-              '!**/*.scss',
+              // Exclude stuff built elsewhere
+              '!stylesheets/sass/*',
             ],
             cwd: 'slingsby/static-src/',
             dest: 'slingsby/static/'
           }
         ]
+      },
+      collectedToStatic: {
+        files: [{expand: true, src: ['**'], cwd: 'build/.tmp/', dest: 'slingsby/static/'}]
       }
-
     },
 
     jshint: {
@@ -72,6 +79,8 @@ module.exports = function (grunt) {
         'Gruntfile.js',
         'slingsby/static-src/js/*.js',
         'slingsby/**/static/js/*.js',
+
+        // Ignore the built stuff
         '!slingsby/static/**',
       ]
     },
@@ -113,6 +122,7 @@ module.exports = function (grunt) {
       }
     },
 
+    // Shortcuts for some often used commands
     shell: {
       options: {
         stderr: true,
@@ -166,7 +176,7 @@ module.exports = function (grunt) {
         options: {
           stdout: true,
         },
-        command: 'python manage.py runserver --settings secret_settings 80'
+        command: 'python manage.py runserver --settings secret_settings <%= grunt.option("port") || 80 %>'
       },
       test: {
         command: 'python manage.py test --settings dev_settings slingsby.general.tests',
@@ -176,6 +186,10 @@ module.exports = function (grunt) {
     clean: {
       python: [
         'slingsby/**/*.pyc',
+        'slingsby/static/*',
+
+        // save the bower libs from being cleaned on every build
+        '!slingsby/static/libs',
       ],
       builds: [
         'build',
@@ -192,19 +206,58 @@ module.exports = function (grunt) {
       }
     },
 
+    // This task configures the uglify task with the files specified in build blocks
+    // in our html files.
+    useminPrepare: {
+      options: {
+        dest: 'slingsby/static',
+        root: 'slingsby',
+        flow: {
+          html: {
+            steps: {'js': ['uglifyjs']},
+            post: {}
+          }
+        }
+      },
+      html: 'slingsby/**/templates/**/*.html',
+    },
+
   });
 
-  // Load all grunt tasks defined in package.json
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  // Default tasks
-  grunt.registerTask('default', ['server']);
-  grunt.registerTask('lint', ['jshint', 'pylint']);
-  grunt.registerTask('test', ['shell:test']);
-  grunt.registerTask('build', ['handlebars', 'compass', 'copy:srcToStatic', 'shell:collectstatic', 'pybuild']);
-  grunt.registerTask('deploy', ['shell:deployCode', 'shell:deployStatic']);
-  grunt.registerTask('pybuild', ['clean:builds', 'shell:buildPython']);
-  grunt.registerTask('provision', ['shell:provision']);
-  grunt.registerTask('server', ['concurrent:server']);
-
+  // Default task
+  grunt.registerTask('default', [
+    'server',
+  ]);
+  grunt.registerTask('lint', [
+    'jshint',
+    'pylint',
+  ]);
+  grunt.registerTask('test', [
+    'shell:test',
+  ]);
+  grunt.registerTask('deploy', [
+    'shell:deployStatic',
+    'shell:deployCode',
+  ]);
+  grunt.registerTask('pybuild', [
+    'shell:buildPython',
+  ]);
+  grunt.registerTask('provision', [
+    'shell:provision',
+  ]);
+  grunt.registerTask('server', [
+    'concurrent:server',
+  ]);
+  grunt.registerTask('build', [
+    'clean',
+    'useminPrepare',
+    'handlebars',
+    'compass',
+    'copy:srcToStatic',
+    'shell:collectstatic',
+    'copy:collectedToStatic',
+    'uglify',
+    'pybuild',
+  ]);
 };

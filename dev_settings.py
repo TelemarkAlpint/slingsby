@@ -29,9 +29,13 @@ CACHES = {
 # Used for the query debugger that's run in dev mode.
 INTERNAL_IPS = ("127.0.0.1", "::1")
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-STATIC_ROOT = path.join(path.dirname(__file__), 'slingsby', 'static')
+STATIC_ROOT = path.join(path.dirname(__file__), 'build', '.tmp')
+
+STATICFILES_DIRS = (
+   path.join(path.dirname(__file__), 'slingsby', 'static'),
+)
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda req: DEBUG,
@@ -59,3 +63,8 @@ INSTALLED_APPS = tuple(list(INSTALLED_APPS) + [
 ])
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+ALLOWED_HOSTS = (
+    'localhost',
+    'ntnuita.no',
+)
