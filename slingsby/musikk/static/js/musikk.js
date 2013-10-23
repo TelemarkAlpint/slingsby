@@ -73,13 +73,14 @@
         }
     }
 
-    /* Stuff to be done onload, assign listeners etc */
-    $(document).ready(function () {
+    // Stuff to be done asap
+    (function () {
         $('input#song_filter').bind('keyup', filterSongList);
 
         $(".song_vote_button").click(function () {
             var songId = $(this).attr('id');
             vote(songId);
         });
-    });
+    })();
+
 })(jQuery);
