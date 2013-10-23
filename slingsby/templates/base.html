@@ -234,10 +234,16 @@
 
 {% block scripts %}
     <script>
+    {# This objects holds configuration that can be used client-side, to avoid hardcoding stuff #}
     var slingsby = {
         urls: {
             {% for url_name, url in slingsby_urls.items %}
                 {{ url_name }}: '{{ url }}',
+            {% endfor %}
+        },
+        config: {
+            {% for config_name, value in slingsby_config.items %}
+                {{ config_name }}: '{{ value }}',
             {% endfor %}
         },
     };

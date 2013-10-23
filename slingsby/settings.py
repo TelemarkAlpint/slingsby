@@ -80,7 +80,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
 
     'slingsby.general.context_processors.default',
-    'slingsby.general.context_processors.urls',
+    'slingsby.general.context_processors.slingsby_urls',
+    'slingsby.general.context_processors.slingsby_config',
     'slingsby.quotes.context_processors.default',
 
     'social.apps.django_app.context_processors.backends',
@@ -147,3 +148,5 @@ JSON_ARCHIVE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/archive.json'
 DEFAULT_TITLE = 'NTNUI Telemark/Alpint'
 
 ARCHIVE_BASE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/'
+
+DISQUS_IDENTIFIER = 'telemarkalpint'

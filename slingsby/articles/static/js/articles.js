@@ -2,7 +2,6 @@
     "use strict";
 
     moment.lang("nb");
-    var disqus_shortname = 'telemarkalpint';
 
     function improveTimestamps() {
         $('.isotimestamp').each(function () {
@@ -20,7 +19,7 @@
         var s = document.createElement('script');
         s.async = true;
         s.type = 'text/javascript';
-        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        s.src = 'http://' + slingsby.config.DISQUS_IDENTIFIER + '.disqus.com/count.js';
         (document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 
