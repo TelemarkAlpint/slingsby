@@ -1,36 +1,33 @@
-class HttpAcceptMiddleware(object):
-    """ Parse the HTTP_ACCEPT header and add it to the request object.
+from django.http import HttpResponse
 
-    Also adds two convenience attributes to the request, prefer_html and prefer_json, which what
-    format the browser would like to recieve the response as.
-    The format of the http_accept is [("Mime-type", {"key": value}, priority)], orderer by priority.
+class HttpAcceptMiddleware(object):
+    """ Parse the HTTP_ACCEPT header and add two attributes to the request object,
+     `prefer_html` and `prefer_json`.
+
+    An empty accept header means by the spec that the client can recieve any kind of response,
+    so we default to html in that case.
     """
 
     def process_request(self, request):
-        content_types = request.META.get('HTTP_ACCEPT', '').split(',')
-        accepts = []
-        json_priority = 0.0
-        html_priority = 0.0
+        content_types = request.META.get('HTTP_ACCEPT')
+        content_types = content_types.split(',') if content_types else []
+        accepts = {}
+        if not content_types:
+            accepts['text/html'] = 1.0
         for item in content_types:
             params = item.split(';')
             media_type = params.pop(0)
             priority = 1.0
-            param_dict = {}
             for param in params:
                 key, val = param.split('=')
                 if key == 'q':
                     priority = float(val)
-                else:
-                    param_dict[key] = val
-            if media_type == 'application/json':
-                json_priority = priority
-            elif media_type == 'text/html':
-                html_priority = priority
-            accepts.append( (media_type, param_dict, priority))
-        accepts.sort(lambda x, y: -cmp(x[2], y[2]))
-        request.http_accept = accepts
-        request.prefer_html = html_priority > json_priority
-        request.prefer_json = json_priority > html_priority
+                    continue
+            accepts[media_type] = priority
+        if not ('text/html' in accepts or 'application/json' in accepts):
+            return HttpResponse(status=406)
+        request.prefer_html = bool(accepts.get('text/html', 1.0) >= accepts.get('application/json', 0))
+        request.prefer_json = bool(accepts.get('application/json', 0) > accepts.get('text/html', 0))
 
 class HttpMethodOverride(object):
     """ HTML has no way of sending HTTP DELETE or PUT requests. To patch up this,
