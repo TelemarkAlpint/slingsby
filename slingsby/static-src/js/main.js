@@ -9,7 +9,7 @@
     $('.quote_reject').submit(function () {
         var target = $(this).attr('action');
         $.ajax(target, {
-            type: "POST",
+            type: "DELETE",
             context: $(this),
             success: function () {
                 var wrapper = $(this).parents('.suggested_quote_wrapper');
