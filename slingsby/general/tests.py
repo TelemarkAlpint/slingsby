@@ -1,4 +1,4 @@
-from slingsby.general.middleware import HttpAcceptMiddleware
+from slingsby.general.middleware import HttpAcceptMiddleware, HttpMethodOverride
 from slingsby.settings import fix_nonexistent_file_handlers
 
 from django.http import HttpResponse
@@ -101,3 +101,22 @@ class HttpAcceptMiddlewareTest(TestCase):
         response = self.middleware.process_request(self.request)
         self.assertTrue(type(response) == HttpResponse)
         self.assertEqual(response.status_code, 406)
+
+
+class HttpMethodOverrideTest(TestCase):
+
+    def setUp(self):
+        self.request = Mock()
+        self.middleware = HttpMethodOverride()
+
+    def test_override(self):
+        self.request.method = 'POST'
+        self.request.POST = {'_http_verb': 'delete'}
+        self.middleware.process_request(self.request)
+        self.assertEqual(self.request.method, 'delete')
+
+    def test_override_non_post(self):
+        self.request.method = 'GET'
+        self.request.POST = {'_http_verb': 'delete'}
+        self.middleware.process_request(self.request)
+        self.assertEqual(self.request.method, 'GET')
