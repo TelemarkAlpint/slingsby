@@ -1,5 +1,4 @@
-.quote_reject {float: right;}
-.quote_confirm {float: left;}
+$quote-bg: rgb(72, 137, 244);
 
 .quote {
     overflow: hidden;
@@ -49,5 +48,18 @@
     }
 }
 
-#quote_suggestion {color: #000;}
-.suggested_quote {background: $headers-color;}
+.quote_reject {
+    float: right;
+}
+
+.quote_confirm {
+    float: left;
+}
+
+#quote_suggestion {
+    color: #000;
+}
+
+.suggested_quote {
+    background: $headers-color;
+}

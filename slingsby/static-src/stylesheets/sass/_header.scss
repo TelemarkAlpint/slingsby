@@ -1,5 +1,8 @@
 @import "compass/css3";
 
+$header-background: #404040;
+$header-emphasis: lighten($header-background, 10%);
+
 #header_wrapper {
     max-width: 1500px;
     min-width: 960px;

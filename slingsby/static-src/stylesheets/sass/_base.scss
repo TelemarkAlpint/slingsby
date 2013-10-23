@@ -1,14 +1,12 @@
 @import "compass/css3";
 
-/* Define some constants that will be used later */
-$header-background: #404040;
-$header-emphasis: lighten($header-background, 10%);
+/* Define some constants that will be used later.
+These can also be used in stylesheets import after this one. */
 $headers-color: rgb(215, 73, 55);
 $button-color: #357DF3;
-$quote-bg: rgb(72, 137, 244);
 
 body {
-    background-color: #FFFFFF;
+    background-color: #fff;
 }
 
 #wrapper {
@@ -23,25 +21,35 @@ body {
     margin: auto auto;
 }
 
-#content h1 {
-    background-color: $headers-color;
-    color: white;
+#content {
+    float: right;
+    margin-top: 15px;
+    width: 690px;
     padding: 5px;
-    border-radius: 2px;
-    width: 100%;
-    clear: both;
+
+    h1 {
+        background-color: $headers-color;
+        color: white;
+        padding: 5px;
+        border-radius: 2px;
+        width: 100%;
+        clear: both;
+    }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     @include box-sizing(border-box);
     clear: both;
     font-family: "Bitter", serif;
 }
 
 h1 { font-size: 20px; }
-
 h2 { font-size: 18px; }
-
 h3 { font-size: 16px; }
 
 .btn {
@@ -72,11 +80,6 @@ h3 { font-size: 16px; }
     }
 }
 
-.isotimestamp {
-    opacity: 0;
-    transition: 1s;
-}
-
 textarea {
     margin: 5px 0px;
 }
@@ -85,42 +88,8 @@ form {
     margin: 5px 0px;
 }
 
-.uploadfield {
-    width: 250px;
-    float: left;
-    clear: right;
-    margin: 5px 0px;
-}
-
-.uploadform {
-    width: 680px;
-}
-
 .inline {
     display: inline;
-}
-
-.clear_sides {
-    float: left;
-    clear: both;
-}
-
-.older {
-    float: left;
-}
-
-.newer {
-    float: right;
-}
-
-.page-current {
-    width: 200px;
-    margin: auto auto;
-    text-align: center;
-}
-
-.page-navigation {
-    padding-top: 20px;
 }
 
 .messages {
@@ -145,17 +114,6 @@ form {
     }
 }
 
-#user_class_input {
-    float: right;
-    width: 180px;
-    margin-right: -10px;
-}
-
-#general_input {
-    float: left;
-    width: 400px;
-}
-
 input[type="time"] {
     width: 60px;
 }
@@ -177,18 +135,13 @@ input {
     margin: 5px;
 }
 
-#content {
-    float: right;
-    margin-top: 15px;
-    width: 690px;
-    padding: 5px;
-}
 
 td {
     padding: 0 5px;
     vertical-align: middle;
 
-    input, textarea {
+    input,
+    textarea {
         width: 100%;
         margin: 0;
     }
@@ -199,18 +152,6 @@ th {
     text-align: left;
     padding: 5px 10px;
 }
-
-/*
-@media all and (max-width:999px) {
-    #sidebar {
-        display: none;
-    }
-
-    .wrapper {
-        min-width: 600px;
-    }
-}
-*/
 
 
 /* ==|== non-semantic helper classes ======================================== */

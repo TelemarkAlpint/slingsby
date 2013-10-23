@@ -1,20 +1,23 @@
 #sidebar {
     font-size: 14px;
+    z-index: 1;
+    width: 250px;
+    margin-top: -62px;
+    float: left;
 
     h1 {
         font-size: 16px;
     }
 
+    h4 {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
     pre {
         font-family: "Oxygen", sans-serif;
     }
-}
-
-#sidebar {
-    z-index: 1;
-    width: 250px;
-    margin-top: -62px;
-    float: left;
 
     nav {
         background-color: #404040;
@@ -39,12 +42,6 @@
                 background-color: $header-emphasis;
             }
         }
-    }
-
-    h4 {
-        margin-top: 10px;
-        font-size: 16px;
-        font-weight: bold;
     }
 }
 
@@ -106,17 +103,17 @@
       list-style: none;
       padding: 0;
 
-      li {
-          display: inline-block;
+        li {
+            display: inline-block;
 
-          a {
-              display: inline-block;
+            a {
+                display: inline-block;
 
-              img {
-                  width: 50px;
-              }
+                img {
+                    width: 50px;
+                }
 
-          }
-      }
+            }
+        }
     }
 }

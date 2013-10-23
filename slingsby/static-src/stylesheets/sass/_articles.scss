@@ -1,12 +1,20 @@
-.byline {
-    width: 690px;
-    color: rgb(150, 150, 150);
-    font-style: italic;
+article {
+    .byline {
+        width: 690px;
+        color: rgb(150, 150, 150);
+        font-style: italic;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    .isotimestamp {
+        opacity: 0;
+        transition: 1s;
+    }
 }
 
-article img {
-  width: 100%;
-}
 
 
 
@@ -23,25 +31,22 @@ article img {
 .styremedlem {
     position: relative;
     padding-bottom: 20px;
-}
 
-.styremedlem > .about {
-    position: absolute;
-    right: 0px;
-}
+    img {
+        width: 350px;
+    }
 
-.styremedlem .about {
-    width: 325px;
-}
+    .about {
+        position: absolute;
+        right: 0px;
+        width: 325px;
 
-.styremedlem .about h3 {
-    padding-left: 15px;
-}
+        h3 {
+            padding-left: 15px;
+        }
 
-.styremedlem .about li {
-    padding-top: 7px;
-}
-
-.styremedlem img {
-    width: 350px;
+        li {
+            padding-top: 7px;
+        }
+    }
 }

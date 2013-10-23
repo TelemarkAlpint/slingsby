@@ -1,58 +1,26 @@
-.eventheader meter {
-  /*background-color: rgb(72, 137, 244);*/
-  float: right;
-  margin-top: 5px;
-  color: #fff;
-}
-
-.no-meter .progressbar {
-  display: block;
-}
-
-.progressbar {
-    background-color: #fff;
-    position: relative;
-    float: right;
-}
-
-.progress {
-    background-color: rgb(72, 137, 244);
-    float: left;
-}
-
-.progressbar, .progress, .progresstext {
-    width: 100px;
-    height: 20px;
-    border-radius: 15px;
-}
-
-.progresstext {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    color: black;
-    padding-top: 3px;
-    text-align: center;
-    font-weight: bold;
-    width: 100%;
-}
-
 .event {
     clear: both;
     margin-bottom: 10px;
-}
 
-.event_extras {
-    float: right;
-    font-weight: bold;
-    font-size: 14px;
-    margin-top: 4px;
-}
+    img {
+      width: 100%;
+    }
 
-.event_info {
-    font-style: italic;
-}
+    .event_extras {
+        float: right;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: 4px;
+    }
 
-.event img {
-  width: 100%;
+    .event_info {
+        font-style: italic;
+    }
+
+    meter {
+      /*background-color: rgb(72, 137, 244);*/
+      float: right;
+      margin-top: 5px;
+      color: #fff;
+    }
 }
