@@ -60,6 +60,7 @@ module.exports = function (grunt) {
 
               // Exclude stuff built elsewhere
               '!stylesheets/sass/*',
+              '!gfx/*',
             ],
             cwd: 'slingsby/static-src/',
             dest: 'slingsby/static/'
@@ -222,6 +223,22 @@ module.exports = function (grunt) {
       html: 'slingsby/**/templates/**/*.html',
     },
 
+    imagemin: {
+      static: {
+        files: [{
+          expand: true,
+          cwd: 'slingsby/static-src/gfx',
+          src: [
+            '**/*.{png,jpg,gif}',
+
+            // Ignore originals
+            '!originals/*',
+          ],
+          dest: 'slingsby/static/gfx',
+        }]
+      }
+    },
+
   });
 
 
@@ -254,6 +271,7 @@ module.exports = function (grunt) {
     'useminPrepare',
     'handlebars',
     'compass',
+    'imagemin',
     'copy:srcToStatic',
     'shell:collectstatic',
     'copy:collectedToStatic',
