@@ -7,10 +7,6 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = [
-    '.ntnuita.no',
-]
-
 USE_TZ = True
 
 TIME_ZONE = 'Europe/Oslo'
@@ -94,20 +90,20 @@ TEMPLATE_DIRS = (
 
 ROOT_URLCONF = 'slingsby.urls'
 
-def fix_nonexistent_file_handlers(log_conf):
+def fix_nonexistent_file_handlers(log_config):
     # If the target log directory doesn't exists, log to current
     # directory. This ensures you don't need /var/log/slingsby to
     # run the devserver, but will still give you the log
-    for handler, handler_config in log_conf['handlers'].items():
+    for handler_config in log_config['handlers'].values():
         if 'filename' in handler_config:
             if not os.path.exists(os.path.dirname(handler_config['filename'])):
                 handler_config['filename'] = 'log.log'
 
 _log_config_path = os.path.join(os.path.dirname(__file__), 'log_conf.yaml')
 with open(_log_config_path) as log_conf_file:
-    log_conf = yaml.load(log_conf_file)
-    fix_nonexistent_file_handlers(log_conf)
-    LOGGING = log_conf
+    _log_conf = yaml.load(log_conf_file)
+    fix_nonexistent_file_handlers(_log_conf)
+    LOGGING = _log_conf
 
 
 ########################################
