@@ -1,0 +1,53 @@
+#toplist {
+    border: none;
+
+    tr {
+        border: none;
+    }
+
+    td{
+        border: none;
+        background-color: #fff;
+        padding: 2px;
+    }
+}
+
+.multicolumn ul {
+    float:left;
+    list-style: none;
+    padding-left: 0px;
+
+    li {
+        display: inline;
+        width: 340px;
+
+        ul li {
+            display: block;
+        }
+    }
+}
+
+#toplist .left {width:400px; vertical-align: middle;}
+#song_help_text {clear: both; font-style: italic;}
+
+a.song_rating {
+    text-decoration: none;
+}
+
+.small {margin-top: -20px; padding: 0px;}
+.odd {background-color: #66FFFF;}
+.even {background-color: #CCFFFF;}
+
+.entry {
+    height: 30px;
+    vertical-align: bottom;
+    font-size: 17px;
+    border: 1px solid black;
+}
+
+.center {
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+}
+
+.wide {width: 100%;}

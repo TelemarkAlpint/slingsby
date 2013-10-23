@@ -1,0 +1,53 @@
+.quote_reject {float: right;}
+.quote_confirm {float: left;}
+
+.quote {
+    overflow: hidden;
+    background: url("../gfx/quote-bg.png") $quote-bg no-repeat;
+    color: white;
+    width: 240px;
+    margin-left: 0;
+    margin-right: 0;
+
+    cite {
+        font-style: normal;
+    }
+
+    .quote_author {
+        margin-top: -10px;
+        padding: 10px;
+        float: right;
+        font-weight: bold;
+        width: 70%;
+        text-align: right;
+    }
+
+    #suggest_quote {
+        border-color: #fff;
+        box-shadow: 2px 2px 1px rgba(255, 255, 255, 0.4);
+        font-size: 25px;
+        line-height: 0.9em;
+        width: 1.1em;
+        padding: 0;
+    }
+}
+
+.quote_descr {
+    float: left;
+    width: 84px;
+    padding: 14px;
+    text-align: center;
+}
+
+.quote_list {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+#quote_suggestion {color: #000;}
+.suggested_quote {background: $headers-color;}

@@ -1,0 +1,114 @@
+@import "compass/css3";
+
+#header_wrapper {
+    max-width: 1500px;
+    min-width: 960px;
+    margin: auto auto;
+}
+
+header {
+    height: 50px;
+    background-color: $header-background;
+
+    a:hover {
+        background-color: $header-emphasis;
+    }
+
+    nav {
+        margin: 0;
+        padding: 0;
+
+        ul {
+            padding-top: 15px;
+            padding-left: 240px;
+            margin: auto auto;
+            list-style-type: none;
+            text-align: center;
+            z-index: 2;
+
+            li {
+                display: inline;
+                text-transform: uppercase;
+                font-weight: bold;
+                border-right: 1px solid gray;
+                position: relative;
+
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+
+        a:active,
+        a:visited,
+        a:active,
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 20px;
+        }
+    }
+
+    #status {
+        position: relative;
+        float: right;
+        margin-top: -18px;
+        margin-right: 10px;
+        color: white;
+        z-index: 1;
+
+        span {
+            display: inline-block;
+            width: 100%;
+            text-align: right;
+        }
+
+        .click_symbol {
+            @include single-transition(all, 500ms, ease-in-out);
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            display: inline-block;
+            vertical-align: middle;
+
+            &.rotated_left {
+                @include rotate(-90deg);
+            }
+        }
+
+        ul {
+            padding: 0px;
+            padding-top: 5px;
+            margin: 0;
+            text-align: right;
+            list-style: none;
+
+            li {
+
+                a {
+                    background-color: $header-background;
+                    padding: 8px;
+                    color: #fff;
+                    text-decoration: none;
+                    width: 100%;
+                    display: inline-block;
+
+                    &:hover {
+                      background-color: $header-emphasis;
+                    }
+                }
+            }
+        }
+
+        span a {
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px 20px;
+            text-decoration: none;
+        }
+    }
+}
+

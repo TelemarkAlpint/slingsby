@@ -1,0 +1,249 @@
+@import "compass/css3";
+
+/* Define some constants that will be used later */
+$header-background: #404040;
+$header-emphasis: lighten($header-background, 10%);
+$headers-color: rgb(215, 73, 55);
+$button-color: #357DF3;
+$quote-bg: rgb(72, 137, 244);
+
+body {
+    background-color: #FFFFFF;
+}
+
+#wrapper {
+    position: relative;
+    margin: auto auto;
+    min-width: 1000px;
+}
+
+#main {
+    z-index: 0;
+    width: 1000px;
+    margin: auto auto;
+}
+
+#content h1 {
+    background-color: $headers-color;
+    color: white;
+    padding: 5px;
+    border-radius: 2px;
+    width: 100%;
+    clear: both;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @include box-sizing(border-box);
+    clear: both;
+    font-family: "Bitter", serif;
+}
+
+h1 { font-size: 20px; }
+
+h2 { font-size: 18px; }
+
+h3 { font-size: 16px; }
+
+.btn {
+    background-color: $button-color;
+    border-color: $button-color;
+    background-image: linear-gradient(to bottom, lighten($button-color, 4%), $button-color);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 1px 1px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    padding: 1px 10px;
+    margin: 5px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+
+    &:hover {
+        background-image: linear-gradient(to bottom, $button-color, darken($button-color, 4%));
+        text-decoration: none;
+        color: #fff;
+    }
+
+    &[disabled] {
+        background: #aaa;
+        border-color: #aaa;
+    }
+}
+
+.isotimestamp {
+    opacity: 0;
+    transition: 1s;
+}
+
+textarea {
+    margin: 5px 0px;
+}
+
+form {
+    margin: 5px 0px;
+}
+
+.uploadfield {
+    width: 250px;
+    float: left;
+    clear: right;
+    margin: 5px 0px;
+}
+
+.uploadform {
+    width: 680px;
+}
+
+.inline {
+    display: inline;
+}
+
+.clear_sides {
+    float: left;
+    clear: both;
+}
+
+.older {
+    float: left;
+}
+
+.newer {
+    float: right;
+}
+
+.page-current {
+    width: 200px;
+    margin: auto auto;
+    text-align: center;
+}
+
+.page-navigation {
+    padding-top: 20px;
+}
+
+.messages {
+    margin: 5px 20px;
+    padding: 5px 20px;
+    /* Default to success background color, green */
+    background-color: rgb(123, 209, 72);
+    border-style: groove;
+    border-width: 2px;
+    text-align: center;
+
+    &.error {
+        background-color: #f2dede;
+    }
+
+    &.warning {
+        background-color: #fbeed5;
+    }
+
+    &.info {
+        background-color: #d9edf7;
+    }
+}
+
+#user_class_input {
+    float: right;
+    width: 180px;
+    margin-right: -10px;
+}
+
+#general_input {
+    float: left;
+    width: 400px;
+}
+
+input[type="time"] {
+    width: 60px;
+}
+
+input[type="date"] {
+    width: 100px;
+}
+
+input[type="number"] {
+    width: 50px;
+}
+
+input[type="image"] {
+    margin-bottom: -4px;
+    margin-right: -5px;
+}
+
+input {
+    margin: 5px;
+}
+
+#content {
+    float: right;
+    margin-top: 15px;
+    width: 690px;
+    padding: 5px;
+}
+
+td {
+    padding: 0 5px;
+    vertical-align: middle;
+
+    input, textarea {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+th {
+    font-weight: bold;
+    text-align: left;
+    padding: 5px 10px;
+}
+
+/*
+@media all and (max-width:999px) {
+    #sidebar {
+        display: none;
+    }
+
+    .wrapper {
+        min-width: 600px;
+    }
+}
+*/
+
+
+/* ==|== non-semantic helper classes ======================================== */
+
+.ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; }
+.ir br { display: none; }
+.hidden { display: none !important; visibility: hidden; }
+.visuallyhidden { border: 0; clip: rect(0, 0, 0, 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+.non-select {-webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none;}
+.clickable { cursor: pointer; }
+
+/* ==|== media queries ====================================================== */
+
+@media only screen and (min-width: 480px) {}
+@media only screen and (min-width: 768px) {}
+
+/* ==|== print styles ======================================================= */
+
+@media print {
+  * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; }
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}

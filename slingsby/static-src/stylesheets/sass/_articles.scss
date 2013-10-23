@@ -1,0 +1,47 @@
+.byline {
+    width: 690px;
+    color: rgb(150, 150, 150);
+    font-style: italic;
+}
+
+article img {
+  width: 100%;
+}
+
+
+
+/* ========================================================
+    Extra tags that can be used to mark up text in articles:
+===========================================================*/
+
+.img_text {
+    padding: 0px 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.styremedlem {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.styremedlem > .about {
+    position: absolute;
+    right: 0px;
+}
+
+.styremedlem .about {
+    width: 325px;
+}
+
+.styremedlem .about h3 {
+    padding-left: 15px;
+}
+
+.styremedlem .about li {
+    padding-top: 7px;
+}
+
+.styremedlem img {
+    width: 350px;
+}

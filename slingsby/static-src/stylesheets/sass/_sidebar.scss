@@ -1,0 +1,122 @@
+#sidebar {
+    font-size: 14px;
+
+    h1 {
+        font-size: 16px;
+    }
+
+    pre {
+        font-family: "Oxygen", sans-serif;
+    }
+}
+
+#sidebar {
+    z-index: 1;
+    width: 250px;
+    margin-top: -62px;
+    float: left;
+
+    nav {
+        background-color: #404040;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+
+        ul {
+            list-style-type: none;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            padding: 5px 0;
+
+            &:hover {
+                background-color: $header-emphasis;
+            }
+        }
+    }
+
+    h4 {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+
+#logo {
+    background-color: $header-background;
+    display: inline-block;
+
+    img {
+        padding: 0px 10px 10px 10px;
+    }
+}
+
+.sidebar_box {
+    width: 240px;
+    min-height: 50px;
+    margin-top: 20px;
+    clear: both;
+    color: white;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+#sponsors {
+    margin-top: 20px;
+    clear: both;
+    width: 100%;
+
+    img {
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+}
+
+#next_events {
+  background: url("../gfx/events-bg.png") rgb(1, 165, 21) no-repeat;
+
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  ul {
+    padding-left: 15px;
+  }
+
+}
+
+#follow_us {
+    text-align: center;
+    margin-top: 10px;
+
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+          display: inline-block;
+
+          a {
+              display: inline-block;
+
+              img {
+                  width: 50px;
+              }
+
+          }
+      }
+    }
+}
