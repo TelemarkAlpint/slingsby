@@ -7,13 +7,14 @@
 
 {% block content %}
 
+    <article>
+
         {% include 'articles/article_view_heading.html' %}
-
         {{ article.content|safe }}
-
         {% include 'articles/article_view_ending.html' %}
-
         {% include 'social_plugins.html' with thing=article %}
+
+    </article>
 
 {% endblock %}
 
