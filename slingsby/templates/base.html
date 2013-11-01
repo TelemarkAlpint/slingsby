@@ -251,12 +251,18 @@
     </script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{% static "libs/jquery/jquery.min.js" %}"><\/script>')</script>
-    <script src="{% static "js/main.js" %}"></script>
     <script>
         window._gaq = [['_setAccount','UA-26717996-1'],['_trackPageview'],['_trackPageLoadTime']];
         var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
         document.write(unescape('%3Cscript src="' + gaJsHost + 'google-analytics.com/ga.js"%3E%3C\/script%3E'));
     </script>
+    {% if not debug %}
+        <script async src="{% static "js/main.min.js" %}"></script>
+    {% else %}
+        <!-- build:js js/main.min.js -->
+        <script src="static/js/main.js"></script>
+        <!-- endbuild -->
+    {% endif %}
 
     {% if debug %}
         <script async src="http://localhost:35729/livereload.js"></script>
