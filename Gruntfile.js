@@ -232,7 +232,7 @@ module.exports = function (grunt) {
             '**/*.{png,jpg,gif}',
 
             // Ignore originals
-            '!originals/*',
+            '!originals/**',
           ],
           dest: 'slingsby/static/gfx',
         }]
