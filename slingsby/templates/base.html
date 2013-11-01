@@ -32,7 +32,7 @@
     <meta property="og:title" content="{% block og_title %}NTNUI Telemark/Alpint{% endblock %}" />
     <meta property="og:type" content="{% block og_type %}sports_team{% endblock %}" />
     <meta property="og:url" content="{{ request.get_full_path }}" />
-    <meta property="og:image" content="{% block og_image %}http://org.ntnu.no/telemark/static/gfx/logo_svart_tekst.png{% endblock %}" />
+    <meta property="og:image" content="{% block og_image %}{% static "gfx/logo_svart_tekst.png" %}{% endblock %}" />
     <meta property="og:site_name" content="NTNUI Telemark/Alpint" />
     <meta property="fb:admins" content="902380388" />
     {% block extrastyles %}{% endblock %}
