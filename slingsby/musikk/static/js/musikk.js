@@ -81,6 +81,19 @@
             var songId = $(this).attr('id');
             vote(songId);
         });
+        // Display a loading symbol while loading audio
+        $('audio').click(function () {
+            if (this.readyState !== 4) {
+                // Not loaded and ready to play, show waiting gif
+                var $this = $(this);
+                var $loadingImg = $this.siblings('.loading').find('img');
+                $loadingImg.show();
+                $this.on('playing', function () {
+                    $loadingImg.hide();
+                });
+            }
+        });
+
     })();
 
 })(jQuery);

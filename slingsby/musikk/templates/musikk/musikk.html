@@ -68,7 +68,10 @@
             {{ song.artist }} - {{ song.title }}
         </td>
         <td class="right">
-            <audio controls preload="auto">
+            <div class="loading">
+                <img src="{% static 'gfx/wait.gif' %}" style="display: none;">
+            </div>
+            <audio controls preload="none">
                 <source src="{{ song_dir }}{{ song.filename|urlencode }}.ogg" type="audio/ogg">
                 <source src="{{ song_dir }}{{ song.filename|urlencode }}.mp3" type="audio/mp3">
                 Nettleseren din støtter dessverre ikke HTML5-lyd. Vi beklager dette, men kan varmt anbefale både
