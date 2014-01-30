@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-
 class HttpAcceptMiddleware(object):
     """ Parse the HTTP_ACCEPT header and add two attributes to the request object,
      `prefer_html` and `prefer_json`.
@@ -11,9 +9,9 @@ class HttpAcceptMiddleware(object):
     def process_request(self, request):
         content_types = request.META.get('HTTP_ACCEPT')
         content_types = content_types.split(',') if content_types else []
-        accepts = {}
-        if not content_types:
-            accepts['text/html'] = 1.0
+        accepts = {
+            'text/html': 1.0,
+        }
         for item in content_types:
             params = item.split(';')
             media_type = params.pop(0)
@@ -24,8 +22,6 @@ class HttpAcceptMiddleware(object):
                     priority = float(val)
                     continue
             accepts[media_type] = priority
-        if not ('text/html' in accepts or 'application/json' in accepts):
-            return HttpResponse(status=406)
         request.prefer_html = bool(accepts.get('text/html', 1.0) >= accepts.get('application/json', 0))
         request.prefer_json = bool(accepts.get('application/json', 0) > accepts.get('text/html', 0))
 

@@ -98,9 +98,15 @@ class HttpAcceptMiddlewareTest(TestCase):
 
     def test_invalid_accept(self):
         self.request.META['HTTP_ACCEPT'] = 'invalid'
-        response = self.middleware.process_request(self.request)
-        self.assertTrue(type(response) == HttpResponse)
-        self.assertEqual(response.status_code, 406)
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_html)
+        self.assertFalse(self.request.prefer_json)
+
+    def test_wildcard_accept(self):
+        self.request.META['HTTP_ACCEPT'] = '*/*'
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_html)
+        self.assertFalse(self.request.prefer_json)
 
 
 class HttpMethodOverrideTest(TestCase):
