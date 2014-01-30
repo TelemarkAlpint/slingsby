@@ -1,9 +1,10 @@
-# pylint: disable=invalid-name
+from . import settings
 
 from django.core.handlers.wsgi import WSGIHandler
-from django.core.management import execute_from_command_line
+from django.core.management import execute_manager
+# pylint: disable=invalid-name
 
 application = WSGIHandler()
 
 def manage():
-    execute_from_command_line()
+    execute_manager(settings)
