@@ -3,7 +3,7 @@
 # and a cache binding. Make sure to install these in your environment,
 # with whatever tools support for cache and database.
 
-django==1.5.4
+django==1.6.1
 PyYAML
 python-dateutil
 pytz>=2013b

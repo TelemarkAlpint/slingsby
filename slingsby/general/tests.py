@@ -1,7 +1,6 @@
 from slingsby.general.middleware import HttpAcceptMiddleware, HttpMethodOverride
 from slingsby.settings import fix_nonexistent_file_handlers
 
-from django.http import HttpResponse
 from django.test import TestCase
 from mock import Mock
 
