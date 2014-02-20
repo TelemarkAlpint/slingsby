@@ -73,14 +73,16 @@
         }
     }
 
-    // Stuff to be done asap
-    (function () {
+    function init() {
+        // Bind to the filter songs field
         $('input#song_filter').bind('keyup', filterSongList);
 
+        // Bind to the vote button
         $(".song_vote_button").click(function () {
             var songId = $(this).attr('id');
             vote(songId);
         });
+
         // Display a loading symbol while loading audio
         $('audio').click(function () {
             if (this.readyState !== 4) {
@@ -94,6 +96,8 @@
             }
         });
 
-    })();
+    }
+
+    init();
 
 })(jQuery);
