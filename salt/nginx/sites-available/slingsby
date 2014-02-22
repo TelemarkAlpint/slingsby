@@ -27,6 +27,13 @@ server {
 
   }
 
+  location /static {
+    alias /srv/ntnuita.no/static/;
+    expires 1y;
+    access_log off;
+    add_header Cache-Control "public";
+  }
+
   # Restrict access to the tasks, so that they can only be accessed locally
   location ~ ^/tasks {
     allow 127.0.0.1;
@@ -35,4 +42,5 @@ server {
     include uwsgi_params;
     uwsgi_pass slingsby;
   }
+
 }

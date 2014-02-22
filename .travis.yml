@@ -14,7 +14,6 @@ before_install:
 
   # Make sure we can connect by the alias 'slingsby' and without prompts
   - echo -e "Host slingsby\n\tHostName ntnuita.no\n\tStrictHostKeyChecking no\n\tPort 3271\n" >> ~/.ssh/config
-  - echo -e "Host slingsby_fileserver\n\tHostName login.stud.ntnu.no\n\tStrictHostKeyChecking no\n\tUser tarjeikl\n" >> ~/.ssh/config
 
   # Find current version
   - SLINGSBY_VERSION=`git log -1 --format=%h`
@@ -26,14 +25,14 @@ before_install:
 install:
 
   # Python stuff
-  - pip install -r dev-requirements.txt --use-mirrors
+  - pip install -r dev-requirements.txt
 
   # Install compass
   - gem update --system
   - gem install sass -v 3.2.13
   - gem install compass
 
-  # Install grunt-cli and grunt
+  # Install grunt-cli, grunt plugins and bower dependencies
   - npm install -g grunt-cli bower
   - npm install
   - bower install

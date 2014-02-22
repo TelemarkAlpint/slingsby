@@ -99,7 +99,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= jshint.all %>'],
-        tasks: ['jshint']
+        tasks: ['jshint', 'shell:collectstatic', 'copy:collectedToStatic']
       },
       templates: {
         files: ['slingsby/**/templates/*.html'],
@@ -147,6 +147,12 @@ module.exports = function (grunt) {
       collectstatic: {
         command: 'python manage.py collectstatic --settings dev_settings --noinput',
       },
+      buildStatic: {
+        command: [
+          'cd slingsby/static',
+          'tar czf ../../build/static_files.tar.gz *',
+        ].join(' && '),
+      },
       deployCode: {
         options: {
           stdout: true
@@ -164,13 +170,14 @@ module.exports = function (grunt) {
           stdout: true,
         },
         command: [
-          'cd slingsby/static',
-          'tar czf ../../build/static_files.tar.gz *',
-          'scp ../../build/static_files.tar.gz slingsby_fileserver:/home/groupswww/telemark/static/',
-          'ssh slingsby_fileserver "cd /home/groupswww/telemark/static/',
-          'test -d <%= grunt.option("slingsby-version") %> || mkdir <%= grunt.option("slingsby-version") %>',
-          'tar xf static_files.tar.gz -C <%= grunt.option("slingsby-version") %>',
-          'rm static_files.tar.gz"'
+          'scp build/static_files.tar.gz slingsby:/tmp/static_files.tar.gz',
+          'ssh slingsby "cd /srv/ntnuita.no/static/',
+          'test -d <%= grunt.option("slingsby-version") %> || sudo mkdir <%= grunt.option("slingsby-version") %>',
+          'sudo tar xf /tmp/static_files.tar.gz -C <%= grunt.option("slingsby-version") %>',
+          'sudo chown -R root:www <%= grunt.option("slingsby-version") %>',
+          'find /srv/ntnuita.no/static -type f -print0 | xargs -0 sudo chmod 444',
+          'find /srv/ntnuita.no/static -type d -print0 | xargs -0 sudo chmod 555',
+          'rm /tmp/static_files.tar.gz"'
         ].join(' && '),
       },
       devserver: {
@@ -276,6 +283,7 @@ module.exports = function (grunt) {
     'shell:collectstatic',
     'copy:collectedToStatic',
     'uglify',
+    'shell:buildStatic',
     'pybuild',
   ]);
 };

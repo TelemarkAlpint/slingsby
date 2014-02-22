@@ -21,7 +21,7 @@ DATABASES = {
     },
 }
 
-_static_url_base = 'http://org.ntnu.no/telemark/static/%s/'
+_static_url_base = 'http://ntnuita.no/static/%s/'
 
 _slingsby_version = '{{ pillar["slingsby_version"] }}'
 
