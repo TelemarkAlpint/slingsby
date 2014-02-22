@@ -11,7 +11,7 @@ server {
 
 server {
 
-  listen 80 default_server;
+  listen 80;
   server_name ntnuita.no;
   charset utf-8;
 
