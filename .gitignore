@@ -2,10 +2,12 @@ Thumbs.db
 .DS_Store
 .sass-cache
 *.pyc
-slingsby/static
 TODO.txt
+bower_components
 node_modules
 venv_slingsby
+venv
+.tmp
 build
 *.egg-info
 slingsby_rel.sqlite

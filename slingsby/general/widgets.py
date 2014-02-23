@@ -27,7 +27,7 @@ class WidgEditorWidget(Textarea):
 
 
     class Media:
-        js = ('js/libs/widgEditor.min.js',)
+        js = ('js/widgEditor.min.js',)
         css = {
-            'all': ('stylesheets/widgEditor.min.css',)
+            'all': ('stylesheets/widgEditor.css',)
         }

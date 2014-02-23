@@ -31,10 +31,12 @@ INTERNAL_IPS = ("127.0.0.1", "::1")
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = path.join(path.dirname(__file__), 'build', '.tmp')
+# This is where collectstatic gathers the static files from the installed apps
+STATIC_ROOT = path.join(path.dirname(__file__), '.tmp', 'static')
 
+# This is where static files are served from
 STATICFILES_DIRS = (
-   path.join(path.dirname(__file__), 'slingsby', 'static'),
+   path.join(path.dirname(__file__), 'build', 'static'),
 )
 
 DEBUG_TOOLBAR_CONFIG = {
