@@ -266,6 +266,17 @@ module.exports = function (grunt) {
       }
     },
 
+    cssUrlEmbed: {
+      css: {
+        options: {
+          baseDir: 'slingsby/static-src/',
+        },
+        files: {
+          '.tmp/sass/_fonts.scss': 'slingsby/static-src/sass/_fonts.scss',
+        }
+      }
+    },
+
     uglify: {
       dist: {
         files: {
