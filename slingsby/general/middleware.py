@@ -9,9 +9,7 @@ class HttpAcceptMiddleware(object):
     def process_request(self, request):
         content_types = request.META.get('HTTP_ACCEPT')
         content_types = content_types.split(',') if content_types else []
-        accepts = {
-            'text/html': 1.0,
-        }
+        accepts = {}
         for item in content_types:
             params = item.split(';')
             media_type = params.pop(0)
@@ -22,8 +20,14 @@ class HttpAcceptMiddleware(object):
                     priority = float(val)
                     continue
             accepts[media_type] = priority
-        request.prefer_html = bool(accepts.get('text/html', 1.0) >= accepts.get('application/json', 0))
+
+        # If not json or html requested explicitly, default to html
+        if not ('application/json' in accepts or 'text/html' in accepts):
+            accepts['text/html'] = 1.0
+
+        request.prefer_html = bool(accepts.get('text/html', 0) >= accepts.get('application/json', 0))
         request.prefer_json = bool(accepts.get('application/json', 0) > accepts.get('text/html', 0))
+
 
 class HttpMethodOverride(object):
     """ HTML has no way of sending HTTP DELETE or PUT requests. To patch up this,

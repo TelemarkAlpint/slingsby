@@ -108,6 +108,12 @@ class HttpAcceptMiddlewareTest(TestCase):
         self.assertTrue(self.request.prefer_html)
         self.assertFalse(self.request.prefer_json)
 
+    def test_jquery_json_accept(self):
+        self.request.META['HTTP_ACCEPT'] = 'application/json, text/javascript, */*; q=0.01'
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_json)
+        self.assertFalse(self.request.prefer_html)
+
 
 class HttpMethodOverrideTest(TestCase):
 
