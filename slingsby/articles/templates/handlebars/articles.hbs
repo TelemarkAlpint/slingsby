@@ -1,7 +1,7 @@
 {{#each articles}}
 
     <article data-datetime="{{ this.published_date }}">
-        <h1>{{ this.title }} {{#if this.visible}}(ikke synlig){{/if}}</h1>
+        <h1>{{ this.title }} {{#unless this.visible}}(ikke synlig){{/unless}}</h1>
 
         {{{ this.content }}}
 
