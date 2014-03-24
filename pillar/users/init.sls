@@ -13,6 +13,13 @@ developers:
     ssh_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAucbjnOHylg+LCKEM8CBEBigYIUc/BM9bDDp2Fh+WMJRm8Ahz3fVQWFsTUY8QjNaPtgJeHLRMerG6WU4TwWRNWYjhSL9VIlNHu3qwhbI9v+IbuEqyhaS9MjNTB7ygkBnKw++XoJcor4NWq3FTKOY/FRMx/VsUcj4NRxagA4TyhFuYWVIfgMsnxHVDs3t8QYHvsXZ4c2wuXusnmS2SQIMoFgpz4btgB2UcRjPB1pGd8NFi4tq/ksqTnf2dcpB1EdymmlNVOpqGYaU2eMygbjT4elhY1CcgoEhCZxnUivaSJ/JGE8pojUvRgPIkwjsksr44QfgBlYycq/iIYiSOdi3Q2Q==
 
+  henrik:
+    fullname: Henrik Heggelund Svendsen
+    groups:
+      - admin
+    ssh_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVrxWtx5acuTAZLea/dj0QxgxHmmj/fFk2ILnxol9CAsv5YRc2ixWo53cl0UzwS0s5Tb4n3eoGUfT/FxKo/02JyFkuJh4+WplTUj32qDAnM86my+LrrXsB8B28R7lorvEiNGD6GcBWErThdHAp/qWmRGrnxrTs8vpnuXVOodyCvYmbdfK049DsD4ZbX1CvTubreAWJaoQz4k4DKCAg8iyOYJ1oipkghqMNK3nYQD+/voDn7Uf67jbnM2Hqw+02eylFNSbowsGmELdU5gWZZ5ZsBiuutTFtuccIP3380yAvj+4s2DvjI+yteEoWdn90b6prE50kPDZlEzu7KqHrwwp5
+
   travis:
     fullname: Travis CI [automated]
     groups:
