@@ -1,0 +1,7 @@
+<p>
+    <span class="byline">Skrevet av {{ blog.author }}, <span class="isotimestamp" data-timestamp="{{ blog.published_date.isoformat }}"></span>.</span>
+
+    {% if blog.last_edited %}
+        <span class="byline">Sist endret av {{ blog.last_edited_by }}, <span class="isotimestamp" data-timestamp="{{ blog.last_edited.isoformat }}"></span>.</span>
+    {% endif %}
+</p>

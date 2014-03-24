@@ -1,0 +1,5 @@
+{% if blog.visible %}
+    <h1>{{ blog.title }}</h1>
+{% else %}
+    <h1><i>IKKE SYNLIG: {{ blog.title }} </i></h1>
+{% endif %}

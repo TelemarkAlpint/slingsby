@@ -15,6 +15,7 @@ from .musikk   import urls as musikk_urls
 from .quotes   import urls as quote_urls
 from .tasks    import urls as task_urls
 from .users    import urls as user_urls
+from .blogs    import urls as blog_urls
 
 admin.autodiscover()
 
@@ -30,6 +31,7 @@ urlpatterns = patterns('',
     (r'^tasks/',     include(task_urls)),
     (r'^program/',   include(event_urls)),
     (r'^gear/',      include(gear_urls)),
+    (r'^blog/',      include(blog_urls)),
     (r'^admin/',     include(admin.site.urls)),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )

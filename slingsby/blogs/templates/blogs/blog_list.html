@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load disqus_identifier %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <form action="blog_editor">
+            <input class="btn" type="submit" value="Skriv nytt blogginnlegg">
+        </form>
+    {% else %}
+        <p>
+            Logg deg inn, så kan du skrive egne blogginnlegg!
+        </p>
+    {% endif %}
+
+    {% for blog in blogs %}
+        {% if user.is_superuser or blog.visible %}
+            <blog data-datetime="{{ blog.published_date.isoformat }}">
+                {% include 'blogs/blog_view_heading.html' %}
+                {{ blog.content|safe }}
+                <span>Del og diskuter: <a href="{% url 'blog_detail' blog.id %}#disqus_thread">Del og diskuter &rarr;</a></span>
+                {% include 'blogs/blog_view_ending.html' %}
+            </blog>
+        {% endif %}
+
+    {% endfor %}
+
+    <img id="loadingImage" src="{% static "gfx/wait.gif" %}" alt="Loading more blogs..." style="display: none">
+
+{% endblock %}
+
+{% block extrascripts %}
+    {% if not debug %}
+        <script async src="{% static "js/blogs.min.js" %}"></script>
+    {% else %}
+        <!-- build:js js/blogs.min.js -->
+        <script src="static/libs/handlebars/handlebars.runtime.js"></script>
+        <script src="static/js/handlebars_templates.js"></script>
+        <script src="static/libs/moment/moment.js"></script>
+        <script src="static/libs/moment/lang/nb.js"></script>
+        <script src="static/js/blogs.js"></script>
+        <!-- endbuild -->
+    {% endif %}
+{% endblock %}
