@@ -2,7 +2,6 @@
 
 from .models import Event, UserAddError, EventError
 from ..general import make_title, time
-from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.views import ActionView
 
 from django.contrib import messages
@@ -13,23 +12,13 @@ from logging import getLogger
 
 _logger = getLogger(__name__)
 
-@empty_on_changes_to(Event)
-class AllUpcomingEventsQuery(CachedQuery):
-    queryset = Event.objects.filter(startdate__gte=time.now())
-
-@empty_on_changes_to(Event)
-class NextEventsQuery(CachedQuery):
-    queryset = Event.objects.filter(startdate__gte=time.now()).values('id', 'name', 'startdate')[:3]
-    timeout_in_s = 3600
-
-
 class EventListView(TemplateView):
 
     template_name = 'events/event_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(EventListView, self).get_context_data(**kwargs)
-        events = AllUpcomingEventsQuery.get_cached()
+        events = Event.objects.filter(enddate__gte=time.now())
         context['events'] = events
         context['title'] = make_title('Program')
         return context
