@@ -1,6 +1,5 @@
 base:
  '*':
-  - pkg
   - secure
   - users
 

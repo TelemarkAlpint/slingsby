@@ -1,6 +1,13 @@
-absent_packages:
+core-packages:
+  pkg.installed:
+    - order: 1
+    - pkgs:
+      - curl
+      - vim
+      - wget
+
+
+absent-packages:
   pkg.purged:
     - pkgs:
-{% for pkg in pillar.get('absent_pkgs', []) %}
-      - {{ pkg }}
-{% endfor %}
+      - whoopsie
