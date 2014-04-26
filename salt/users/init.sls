@@ -8,9 +8,8 @@
         - {{ group }}
       {% endfor %}
 
-  ssh_auth:
+  ssh_auth.present:
     - user: {{ username }}
-    - present
     - require:
       - user: {{ username }}
     - names:
