@@ -1,9 +1,9 @@
-python-pip:
-  pkg.installed
-
-# Make sure pip is updated
+# Install latest pip, first from repo, and then update from PyPI
 pip:
+  pkg.installed:
+    - name: python-pip
+
   pip.installed:
     - require:
-      - pkg: python-pip
+      - pkg: pip
     - upgrade: True
