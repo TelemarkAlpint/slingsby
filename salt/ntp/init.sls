@@ -2,14 +2,14 @@ ntp:
   pkg:
     - installed
 
+  file.managed:
+    - name: /etc/ntp.conf
+    - source: salt://ntp/ntp_config
+
   service.running:
     - require:
       - pkg: ntp
     - watch:
-      - file: ntp_config
+      - file: ntp
 
 
-ntp_config:
-  file.managed:
-    - name: /etc/ntp.conf
-    - source: salt://ntp/ntp_config
