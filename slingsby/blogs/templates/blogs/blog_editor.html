@@ -7,15 +7,15 @@
 {% block extrascripts %}
 
 
-        <script src="{% static js/Markdown.Converter.js %}"></script>
-        <script src="{% static js/Markdown.Sanitizer.js %}"></script>
-        <script src="{% static js/Markdown.Editor.js %}"></script>
+        <script src="{% static 'js/Markdown.Converter.js' %}"></script>
+        <script src="{% static 'js/Markdown.Sanitizer.js' %}"></script>
+        <script src="{% static 'js/Markdown.Editor.js' %}"></script>
 
 {% endblock %}
 
 {% block content %}
-        <link rel="stylesheet" type="text/css" href="{% static stylesheets/blogeditor.css %}" />
-        
+        <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/blogeditor.css' %}" />
+
         <div class="wmd-panel">
             <div id="wmd-button-bar"></div>
             <textarea class="wmd-input" id="wmd-input">
