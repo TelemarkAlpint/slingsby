@@ -40,7 +40,7 @@ module.exports = function (grunt) {
           }
         },
         files: {
-          ".tmp/static/js/handlebars_templates.js": "slingsby/*/templates/handlebars/*.hbs"
+          ".tmp/handlebars_templates.js": "slingsby/*/templates/handlebars/*.hbs"
         }
       }
     },
@@ -52,40 +52,23 @@ module.exports = function (grunt) {
       dist: {
         options: {
           sassDir: '.tmp/sass/',
-          cssDir: 'build/static/stylesheets',
+          cssDir: '.tmp/static/stylesheets',
           outputStyle: "compressed"
         }
       }
     },
 
     copy: {
-      other: {
-        files: [
-          {
-            expand: true,
-            src: [
-              'favicon.ico',
-              'robots.txt',
-            ],
-            cwd: 'slingsby/static-src/',
-            dest: 'build/static',
-          }
-        ]
-      },
       tmpToBuild: {
-        files: [{expand: true, src: ['**'], cwd: '.tmp/static', dest: 'build/static/'}]
+        files: [{
+          expand: true,
+          src: ['**'],
+          cwd: '.tmp/static',
+          dest: 'build/static/'
+        }]
       },
       sass: {
         files: [{expand: true, src: ['**'], cwd: 'slingsby/static-src/sass', dest: '.tmp/sass'}]
-      },
-      js: {
-        files: [{expand: true, src: ['**'], cwd: 'slingsby/static-src/js', dest: '.tmp/static/js'}]
-      },
-      libsToTmp: {
-        files: [{expand: true, src: ['**'], cwd: 'bower_components', dest: '.tmp/static/libs'}]
-      },
-      libsToBuild: {
-        files: [{expand: true, src: ['**'], cwd: '.tmp/static/libs', dest: 'build/static/libs'}]
       },
     },
 
@@ -112,11 +95,11 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['slingsby/static-src/stylesheets/sass/*.scss'],
-        tasks: ['compass']
+        tasks: ['copy:sass', 'compass', 'clean:build', 'copy:tmpToBuild', 'rev-files']
       },
       js: {
         files: ['<%= jshint.all %>'],
-        tasks: ['jshint', 'shell:collectstatic', 'copy:tmpToBuild']
+        tasks: ['uglify', 'clean:build', 'copy:tmpToBuild', 'rev-files']
       },
       templates: {
         files: ['slingsby/**/templates/*.html'],
@@ -124,7 +107,7 @@ module.exports = function (grunt) {
       },
       handlebars: {
         files: ['slingsby/**/handlebars/*.hbs'],
-        tasks: ['handlebars']
+        tasks: ['handlebars', 'uglify', 'clean:build', 'copy:tmpToBuild', 'rev-files']
       },
       python: {
         files: ['slingsby/**/*.py']
@@ -218,12 +201,17 @@ module.exports = function (grunt) {
       },
       python: [
         'slingsby/**/*.pyc',
-      ],
-      builds: [
-        'build',
         'slingsby.egg-info',
+      ],
+      build: [
+        'build',
+      ],
+      tmp: [
         '.tmp',
-      ]
+      ],
+      serverAssets: [
+        'sligsby/server-assets',
+      ],
     },
 
     concurrent: {
@@ -262,7 +250,7 @@ module.exports = function (grunt) {
             // Ignore originals
             '!originals/**',
           ],
-          dest: 'build/static/gfx',
+          dest: '.tmp/static/gfx',
         }]
       }
     },
@@ -272,8 +260,8 @@ module.exports = function (grunt) {
         algorithm: 'md5',
         length: 8,
       },
-      images: {
-        src: 'build/static/gfx/**/*.jpg',
+      gfx: {
+        src: 'build/static/gfx/**/*.{png,jpg,gif}',
       },
       styles: {
         src: 'build/static/stylesheets/*.css',
@@ -284,7 +272,8 @@ module.exports = function (grunt) {
       misc: {
         src: [
           'build/static/favicon.ico',
-        ]
+          'build/static/robots.txt',
+        ],
       },
     },
 
@@ -313,8 +302,8 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         files: {
-          'build/static/js/socialSummary.min.js': '.tmp/static/js/socialSummary.js',
-          'build/static/js/widgEditor.min.js': '.tmp/static/js/widgEditor.js',
+          'build/static/js/socialSummary.min.js': 'slingsby/general/static/js/socialSummary.js',
+          'build/static/js/widgEditor.min.js': 'slingsby/general/static/js/widgEditor.js',
         }
       }
     },
@@ -349,18 +338,19 @@ module.exports = function (grunt) {
     'filerev',
     'filerev_assets',
   ]);
-  grunt.registerTask('build', [
-    'clean',
-    'copy:libsToTmp',
+  grunt.registerTask('prep', [
+    'clean:build',
     'shell:collectstatic',
     'buildStyles',
     'buildScripts',
     'imagemin',
     'copy:tmpToBuild',
-    'copy:other',
-    'copy:libsToBuild',
-    'shell:buildStatic',
     'rev-files',
+  ]);
+  grunt.registerTask('build', [
+    'clean',
+    'prep',
+    'shell:buildStatic',
     'pybuild',
   ]);
   grunt.registerTask('buildStyles', [
@@ -369,8 +359,6 @@ module.exports = function (grunt) {
     'compass',
   ]);
   grunt.registerTask('buildScripts', [
-    'useminPrepare',
-    'copy:js',
     'handlebars',
     'uglify',
   ]);

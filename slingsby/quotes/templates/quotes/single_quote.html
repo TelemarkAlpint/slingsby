@@ -1,6 +1,8 @@
 {# Make sure the context has a "quote" object #}
 
-<blockquote class="quote sidebar_box" data-quote-id="{{ quote.id }}">
+{% load revved_static %}
+
+<blockquote class="quote sidebar_box" data-quote-id="{{ quote.id }}" style="background: rgb(72, 137, 244) url('{% static 'gfx/quote-bg.png' %}') no-repeat">
     {% if quote.topic %}
         <h1>Om {{ quote.topic }}</h1>
     {% endif %}

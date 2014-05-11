@@ -3,7 +3,7 @@
 
 {% load url from future %}
 {% load shorten %}
-{% load staticfiles %}
+{% load revved_static %}
 
 <head prefix="og: http://ogp.me/ns#">
 {% block header %}
@@ -25,7 +25,7 @@
     <title>{% block title %}{{ title|default:"NTNUI Telemark/Alpint" }}{% endblock %}</title>
     {% block css %}
         <link rel="stylesheet" href="{% static "stylesheets/styles.css" %}" type="text/css">
-        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     {% endblock %}
     <meta property="og:description" content="{% block og_description %}Norges største idrettslag inviterer deg med på ski! Bli med til alpene, Vassfjellet, på trening, på skifilmkvelder og mye moro!{% endblock %}" />
     <meta property="og:title" content="{% block og_title %}NTNUI Telemark/Alpint{% endblock %}" />
@@ -166,7 +166,7 @@
 
                 {% block next_events %}
                     {% if next_events %}
-                        <div id="next_events" class="sidebar_box">
+                        <div id="next_events" class="sidebar_box" style="background: rgb(1, 165, 21) url('{% static 'gfx/events-bg.png' %}') no-repeat">
 
                             <h1>Neste events</h1>
 
