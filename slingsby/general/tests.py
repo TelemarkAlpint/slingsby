@@ -3,7 +3,12 @@ from slingsby.settings import fix_nonexistent_file_handlers
 
 from django.http import HttpResponse
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.template import Template, Context
 from mock import Mock
+from tempfile import NamedTemporaryFile
+import json
+import os
 
 class SettingsTest(TestCase):
 
@@ -132,3 +137,21 @@ class HttpMethodOverrideTest(TestCase):
         self.request.POST = {'_http_verb': 'delete'}
         self.middleware.process_request(self.request)
         self.assertEqual(self.request.method, 'GET')
+
+
+class RevvedFileTagTest(TestCase):
+
+    def setUp(self):
+        filerevs = {'css/styles.css': 'css/styles.cafed00d.css'}
+        self.filerevs_file = NamedTemporaryFile(delete=False)
+        json.dump(filerevs, self.filerevs_file)
+        self.filerevs_file.close()
+
+    def tearDown(self):
+        os.remove(self.filerevs_file.name)
+
+    def test_revved_static_tag(self):
+        with self.settings(FILEREVS=self.filerevs_file.name):
+            t = Template("{% load revved_static %}{% static 'css/styles.css' %}")
+            rendered = t.render(Context())
+            self.assertEqual(rendered, '/static/css/styles.cafed00d.css')

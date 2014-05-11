@@ -146,3 +146,5 @@ DEFAULT_TITLE = 'NTNUI Telemark/Alpint'
 ARCHIVE_BASE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/'
 
 DISQUS_IDENTIFIER = 'telemarkalpint'
+
+FILEREVS = os.path.join(os.path.dirname(__file__), 'server-assets', 'filerevs.json')

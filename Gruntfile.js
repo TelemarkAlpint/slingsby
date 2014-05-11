@@ -12,6 +12,7 @@ graphics directly from slingsby/static-src to build/static.
 */
 module.exports = function (grunt) {
   "use strict";
+  /* jshint camelcase: false */
 
   // Load all grunt tasks defined in package.json
   require('load-grunt-tasks')(grunt);
@@ -266,6 +267,38 @@ module.exports = function (grunt) {
       }
     },
 
+    filerev: {
+      options: {
+        algorithm: 'md5',
+        length: 8,
+      },
+      images: {
+        src: 'build/static/gfx/**/*.jpg',
+      },
+      styles: {
+        src: 'build/static/stylesheets/*.css',
+      },
+      js: {
+        src: 'build/static/js/*.js',
+      },
+      misc: {
+        src: [
+          'build/static/favicon.ico',
+        ]
+      },
+    },
+
+    // Dumps filerev results to disk
+    filerev_assets: {
+      dist: {
+        options: {
+          dest: 'slingsby/server-assets/filerevs.json',
+          cwd: 'build/static/',
+          prettyPrint: true,
+        }
+      }
+    },
+
     cssUrlEmbed: {
       css: {
         options: {
@@ -287,7 +320,6 @@ module.exports = function (grunt) {
     },
 
   });
-
 
   // Default task
   grunt.registerTask('default', [
@@ -313,6 +345,10 @@ module.exports = function (grunt) {
   grunt.registerTask('server', [
     'concurrent:server',
   ]);
+  grunt.registerTask('rev-files', [
+    'filerev',
+    'filerev_assets',
+  ]);
   grunt.registerTask('build', [
     'clean',
     'copy:libsToTmp',
@@ -324,6 +360,7 @@ module.exports = function (grunt) {
     'copy:other',
     'copy:libsToBuild',
     'shell:buildStatic',
+    'rev-files',
     'pybuild',
   ]);
   grunt.registerTask('buildStyles', [
