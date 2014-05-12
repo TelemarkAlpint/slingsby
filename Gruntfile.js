@@ -151,7 +151,7 @@ module.exports = function (grunt) {
           return 'python manage.py collectstatic --settings dev_settings --noinput';
         },
       },
-      buildStatic: {
+      packageStatic: {
         command: [
           'cd build/static',
           'tar czf ../static_files.tar.gz *',
@@ -350,7 +350,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'prep',
-    'shell:buildStatic',
+    'shell:packageStatic',
     'pybuild',
   ]);
   grunt.registerTask('buildStyles', [
