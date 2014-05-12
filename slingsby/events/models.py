@@ -8,7 +8,6 @@ from django.db import models
 from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
 
-_COUNTDOWN_TIME_IN_S = 1800
 _WEEKDAYS = [u'mandag', u'tirsdag', u'onsdag', u'torsdag', u'fredag', u'lørdag', u'søndag']
 _MONTHS =  [u'januar', u'februar', u'mars', u'april', u'mai', u'juni', u'juli',
             u'august', u'september', u'oktober', u'november', u'desember']
@@ -111,16 +110,6 @@ class Event(models.Model):
             return False
         else:
             return self.num_participants() >= self.number_of_spots
-
-    def use_countdown(self):
-        if self.registration_opens:
-            return 0 < time.seconds_to(self.registration_opens) < _COUNTDOWN_TIME_IN_S
-        else:
-            return False
-
-    def seconds_to_registration_opening(self):
-        seconds = max(time.seconds_to(self.registration_opens), 0)
-        return seconds
 
     def _add_user(self, user):
         participants = self.get_participants_id()

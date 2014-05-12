@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
+{% load revved_static %}
+
 {% block title %}{{ title }}{% endblock %}
 {% block og_description %}{{ event.summary }}{% endblock %}
 {% block og_title %}{{ event.name }}{% endblock %}
 
 {% block content %}
-    <div class="event">
+    <div class="event" data-signup-opens="{{ event.registration_opens|date:"U" }}">
         {% include "events/event_header.html" %}
 
         {% autoescape off %}
@@ -48,25 +50,5 @@
 
 {% block extrascripts %}
     {{ block.super }}
-    {% if event.use_countdown %}
-        <script>
-          $(function(){
-            var count = {{ event.seconds_to_registration_opening }};
-            countdown = setInterval(function(){
-              if (count == 0) {
-                history.go(0);
-                clearInterval(countdown);
-              }
-              if (count > 59){
-                  var sec = count % 60;
-                  var min = Math.floor(count / 60);
-                  $("span.countdown").html(' (' + min + 'min og ' + sec + ' sekunder til!)');
-              }else {
-                  $("span.countdown").html(' (' + count + ' sekunder til!)');
-              }
-              count--;
-            }, 1000);
-          });
-        </script>
-    {% endif %}
+        <script async defer src="{% static 'js/event_detail.min.js' %}"></script>
 {% endblock %}
