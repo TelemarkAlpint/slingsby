@@ -234,41 +234,34 @@
 
 {% block scripts %}
     <script>
-    {# This objects holds configuration that can be used client-side, to avoid hardcoding stuff #}
-    var slingsby = {
-        urls: {
-            {% for url_name, url in slingsby_urls.items %}
-                {{ url_name }}: '{{ url }}',
-            {% endfor %}
-        },
-        config: {
-            {% for config_name, value in slingsby_config.items %}
-                {{ config_name }}: '{{ value }}',
-            {% endfor %}
-        },
-    };
+        {# This objects holds configuration that can be used client-side, to avoid hardcoding stuff #}
+        var slingsby = {
+            urls: {
+                {% for url_name, url in slingsby_urls.items %}
+                    {{ url_name }}: '{{ url }}',
+                {% endfor %}
+            },
+            config: {
+                {% for config_name, value in slingsby_config.items %}
+                    {{ config_name }}: '{{ value }}',
+                {% endfor %}
+            },
+        };
     </script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{% static "libs/jquery/jquery.min.js" %}"><\/script>')</script>
-    <script>
-        window._gaq = [['_setAccount','UA-26717996-1'],['_trackPageview'],['_trackPageLoadTime']];
-        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-        document.write(unescape('%3Cscript src="' + gaJsHost + 'google-analytics.com/ga.js"%3E%3C\/script%3E'));
-    </script>
-    {% if not debug %}
-        <script async src="{% static "js/main.min.js" %}"></script>
-    {% else %}
-        <!-- build:js js/main.min.js -->
-        <script src="static/js/main.js"></script>
-        <!-- endbuild -->
-    {% endif %}
+    <script async defer src="{% static "js/main.min.js" %}"></script>
 
     {% if debug %}
-        <script async src="http://localhost:35729/livereload.js"></script>
+        <script async defer src="http://localhost:35729/livereload.js"></script>
     {% endif %}
 {% endblock %}
 
 {% block extrascripts %}{% endblock %}
+
+<script>
+    window._gaq = [['_setAccount','UA-26717996-1'],['_trackPageview'],['_trackPageLoadTime']];
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape('%3Cscript async defer src="' + gaJsHost + 'google-analytics.com/ga.js"%3E%3C\/script%3E'));
+</script>
 
 <!--[if lt IE 7 ]>
 <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>

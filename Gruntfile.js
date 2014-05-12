@@ -223,22 +223,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // This task configures the uglify task with the files specified in build blocks
-    // in our html files.
-    useminPrepare: {
-      options: {
-        dest: 'build/static',
-        root: '.tmp',
-        flow: {
-          html: {
-            steps: {'js': ['uglifyjs']},
-            post: {}
-          }
-        }
-      },
-      html: 'slingsby/**/templates/**/*.html',
-    },
-
     imagemin: {
       static: {
         files: [{
@@ -302,6 +286,24 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         files: {
+          '.tmp/static/js/main.min.js': [
+            'bower_components/jquery/jquery.js',
+            'slingsby/general/static/js/main.js',
+          ],
+          '.tmp/static/js/articles.min.js': [
+            'bower_components/handlebars/handlebars.runtime.js',
+            '.tmp/handlebars_templates.js',
+            'bower_components/moment/moment.js',
+            'bower_components/moment/lang/nb.js',
+            'slingsby/articles/static/js/articles.js',
+          ],
+          '.tmp/static/js/musikk.min.js': [
+            'slingsby/musikk/static/js/musikk.js',
+          ],
+          '.tmp/static/js/event_detail.min.js': [
+            'bower_components/moment/moment.js',
+            'slingsby/events/static/js/event_detail.js',
+          ],
           'build/static/js/socialSummary.min.js': 'slingsby/general/static/js/socialSummary.js',
           'build/static/js/widgEditor.min.js': 'slingsby/general/static/js/widgEditor.js',
         }

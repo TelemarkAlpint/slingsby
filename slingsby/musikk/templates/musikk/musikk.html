@@ -124,11 +124,5 @@
 {% endblock %}
 
 {% block extrascripts %}
-    {% if not debug %}
-        <script async src="{% static "js/musikk.min.js" %}"></script>
-    {% else %}
-        <!-- build:js js/musikk.min.js -->
-        <script src="static/js/musikk.js"></script>
-        <!-- endbuild -->
-    {% endif %}
+    <script async defer src="{% static "js/musikk.min.js" %}"></script>
 {% endblock %}

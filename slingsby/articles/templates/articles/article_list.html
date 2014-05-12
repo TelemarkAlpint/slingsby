@@ -23,15 +23,5 @@
 {% endblock %}
 
 {% block extrascripts %}
-    {% if not debug %}
-        <script async src="{% static "js/articles.min.js" %}"></script>
-    {% else %}
-        <!-- build:js js/articles.min.js -->
-        <script src="static/libs/handlebars/handlebars.runtime.js"></script>
-        <script src="static/js/handlebars_templates.js"></script>
-        <script src="static/libs/moment/moment.js"></script>
-        <script src="static/libs/moment/lang/nb.js"></script>
-        <script src="static/js/articles.js"></script>
-        <!-- endbuild -->
-    {% endif %}
+    <script async defer src="{% static 'js/articles.min.js' %}"></script>
 {% endblock %}
