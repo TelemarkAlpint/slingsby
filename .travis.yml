@@ -15,13 +15,6 @@ before_install:
   # Make sure we can connect by the alias 'slingsby' and without prompts
   - echo -e "Host slingsby\n\tHostName ntnuita.no\n\tStrictHostKeyChecking no\n\tPort 3271\n" >> ~/.ssh/config
 
-  # Find current version
-  - SLINGSBY_VERSION=`git log -1 --format=%h`
-
-  # Save it to pillar
-  # Note that the wrapping quotes are necessary to avoid yaml thinking the colon space is a key-value pair
-  - 'echo "slingsby_version: $SLINGSBY_VERSION" >> pillar/slingsby.sls'
-
 install:
 
   # Python stuff
@@ -47,10 +40,9 @@ script:
   # Build
   - grunt build
 
-
   # Include the provisioning and deployment in the script so that it can determine whether a build was successful or not
   # Everything A-OK, provision the server to make it's up to date, and deploy
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then grunt provision && grunt deploy --slingsby-version=$SLINGSBY_VERSION; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then grunt provision && grunt deploy; fi
 
 
 env:

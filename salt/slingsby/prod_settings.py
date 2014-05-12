@@ -21,8 +21,4 @@ DATABASES = {
     },
 }
 
-_static_url_base = 'http://ntnuita.no/static/%s/'
-
-_slingsby_version = '{{ pillar["slingsby_version"] }}'
-
-STATIC_URL = _static_url_base % _slingsby_version
+STATIC_URL = '/static/'

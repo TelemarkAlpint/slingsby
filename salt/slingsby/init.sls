@@ -59,6 +59,10 @@ slingsby_log_dir:
     - group: www
 
 
-slingsby_static_files:
+slingsby-static-dir:
   file.directory:
     - name: /srv/ntnuita.no/static
+    - makedirs: True
+    - user: root
+    - group: www
+    - mode: 755

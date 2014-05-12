@@ -163,8 +163,7 @@ module.exports = function (grunt) {
         },
         command: [
           'scp build/slingsby-1.0.0.tar.gz slingsby:/tmp/slingsby.tar.gz',
-          'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip uninstall slingsby -y || echo',
-          'sudo /srv/ntnuita.no/venv/bin/pip install /tmp/slingsby.tar.gz',
+          'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip install --upgrade /tmp/slingsby.tar.gz',
           'sudo restart uwsgi',
           'rm /tmp/slingsby.tar.gz"'
         ].join(' && '),
@@ -175,12 +174,11 @@ module.exports = function (grunt) {
         },
         command: [
           'scp build/static_files.tar.gz slingsby:/tmp/static_files.tar.gz',
-          'ssh slingsby "cd /srv/ntnuita.no/static/',
-          'test -d <%= grunt.option("slingsby-version") %> || sudo mkdir <%= grunt.option("slingsby-version") %>',
-          'sudo tar xf /tmp/static_files.tar.gz -C <%= grunt.option("slingsby-version") %>',
-          'sudo chown -R root:www <%= grunt.option("slingsby-version") %>',
-          'find /srv/ntnuita.no/static -type f -print0 | xargs -0 sudo chmod 444',
-          'find /srv/ntnuita.no/static -type d -print0 | xargs -0 sudo chmod 555',
+          'ssh slingsby "cd /srv/ntnuita.no',
+          'sudo tar xf /tmp/static_files.tar.gz -C static',
+          'sudo chown -R root:www static',
+          'find static -type f -print0 | xargs -0 sudo chmod 444',
+          'find static -type d -print0 | xargs -0 sudo chmod 555',
           'rm /tmp/static_files.tar.gz"'
         ].join(' && '),
       },
