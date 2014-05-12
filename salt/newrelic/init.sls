@@ -9,7 +9,7 @@ newrelic:
     - template: jinja
     - show_diff: False
     - user: root
-    - group: root
+    - group: www
     - mode: 640
     - require:
       - pip: newrelic

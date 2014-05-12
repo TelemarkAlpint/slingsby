@@ -21,7 +21,7 @@ nginx:
       - service: uwsgi
     - watch:
       - file: nginx
-      - file: sites_available
+      - file: nginx-sites-enabled
 
 
 # For the pre-config loaded directory

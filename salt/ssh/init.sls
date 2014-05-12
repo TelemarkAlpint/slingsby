@@ -6,4 +6,4 @@ ssh:
 
   service.running:
     - watch:
-       - file: sshd
+       - file: ssh
