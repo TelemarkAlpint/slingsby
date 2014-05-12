@@ -2,7 +2,5 @@ User-agent: *
 Disallow: /admin/
 Disallow: /musikk/vote_on_song
 Disallow: /join
-Disallow: /_ah/
 Disallow: /auth/
 Disallow: /tasks/
-Disallow: /upload/
