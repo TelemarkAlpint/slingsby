@@ -124,5 +124,11 @@
 {% endblock %}
 
 {% block extrascripts %}
+    <script>
+        var musikkUrlConf = {
+            'rejectIcon': '{% static "gfx/reject-16.png" %}',
+            'successIcon': '{% static "gfx/check.png" %}',
+        }
+    </script>
     <script async defer src="{% static "js/musikk.min.js" %}"></script>
 {% endblock %}

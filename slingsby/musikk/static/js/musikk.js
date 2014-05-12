@@ -2,7 +2,7 @@
     "use strict";
 
     function setIcon(songId, imgPath) {
-        $('#' + songId).attr('src', slingsby.urls.GRAPHICS_URL + imgPath)
+        $('#' + songId).attr('src', imgPath)
             .removeClass('clickable');
     }
 
@@ -12,10 +12,10 @@
             url: '/musikk/' + songId + '/vote/',
             type: 'POST',
             success: function () {
-                setIcon(songId, 'check.png');
+                setIcon(songId, musikkUrlConf.successIcon);
             },
             error: function (jqXHR) {
-                setIcon(songId, 'reject-16.png');
+                setIcon(songId, musikkUrlConf.rejectIcon);
                 alert(jqXHR.responseText);
             }
         });
