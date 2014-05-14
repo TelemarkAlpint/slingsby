@@ -148,7 +148,7 @@ module.exports = function (grunt) {
         command: function () {
           // The build/static directory needs to exist for the collectstatic command to succeed
           grunt.file.mkdir('build/static');
-          return 'python manage.py collectstatic --settings dev_settings --noinput';
+          return 'python manage.py collectstatic --noinput';
         },
       },
       packageStatic: {
@@ -189,7 +189,7 @@ module.exports = function (grunt) {
         command: 'python manage.py runserver --settings secret_settings <%= grunt.option("port") || 80 %>'
       },
       test: {
-        command: 'python manage.py test --settings dev_settings slingsby.general.tests',
+        command: 'python manage.py test slingsby.general.tests',
       }
     },
 

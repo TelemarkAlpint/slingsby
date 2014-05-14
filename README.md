@@ -54,7 +54,7 @@ Great! Now you can compile all the static files:
 
 And now, you can start the devserver:
 
-    $ python manage.py runserver --settings dev_settings
+    $ python manage.py runserver
 
 This should start the devserver at port 8000, browse to http://localhost:8000 to see it! Eventually you can use the grunt
 task `grunt server`, which will run both `grunt watch` and start the devserver on port **80** (port can be override with
