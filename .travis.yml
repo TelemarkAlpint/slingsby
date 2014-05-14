@@ -22,7 +22,6 @@ install:
 
   # Install compass
   - gem update --system
-  - gem install sass -v 3.2.13
   - gem install compass
 
   # Install grunt-cli, grunt plugins and bower dependencies
