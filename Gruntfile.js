@@ -188,9 +188,6 @@ module.exports = function (grunt) {
         },
         command: 'python manage.py runserver --settings secret_settings <%= grunt.option("port") || 80 %>'
       },
-      test: {
-        command: 'python manage.py test slingsby.general.tests',
-      }
     },
 
     clean: {
@@ -317,9 +314,6 @@ module.exports = function (grunt) {
   grunt.registerTask('lint', [
     'jshint',
     'pylint',
-  ]);
-  grunt.registerTask('test', [
-    'shell:test',
   ]);
   grunt.registerTask('deploy', [
     'shell:deployStatic',

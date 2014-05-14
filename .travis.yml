@@ -35,7 +35,7 @@ script:
   - grunt lint --force
 
   # Unit tests
-  - grunt test
+  - python manage.py test
 
   # Build
   - grunt build
