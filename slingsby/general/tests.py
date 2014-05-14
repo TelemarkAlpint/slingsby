@@ -142,16 +142,10 @@ class HttpMethodOverrideTest(TestCase):
 class RevvedFileTagTest(TestCase):
 
     def setUp(self):
-        filerevs = {'css/styles.css': 'css/styles.cafed00d.css'}
-        self.filerevs_file = NamedTemporaryFile(delete=False)
-        json.dump(filerevs, self.filerevs_file)
-        self.filerevs_file.close()
-
-    def tearDown(self):
-        os.remove(self.filerevs_file.name)
+        self.filerevs = {'css/styles.css': 'css/styles.cafed00d.css'}
 
     def test_revved_static_tag(self):
-        with self.settings(FILEREVS=self.filerevs_file.name):
+        with self.settings(FILEREVS=self.filerevs):
             t = Template("{% load revved_static %}{% static 'css/styles.css' %}")
             rendered = t.render(Context())
             self.assertEqual(rendered, '/static/css/styles.cafed00d.css')

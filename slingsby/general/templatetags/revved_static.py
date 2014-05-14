@@ -2,8 +2,7 @@
     Override static file handling so that we can serve revved files, but access them using their
     non-revved filenames.
 
-    Set settings.FILEREVS to point to output from grunt-filerev-assets or similar, where the output
-    is a JSON file of the form:
+    Set settings.FILEREVS to be a dict loaded from the output of grunt-filerev-assets or similar, of the form:
 
         {
             'css/styles.css': 'css/styles.cafed00d.css'
@@ -26,18 +25,13 @@ from django import template
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.templatetags.staticfiles import StaticFilesNode
-import json
-from os import path
 
 register = template.Library()
 
 class FileRevNode(StaticFilesNode):
 
-    def load_filerevs(self, filerevs_path):
-        if not path.exists(filerevs_path):
-            raise template.TemplateSyntaxError("The filerevs specified by settings.FILEREVS ('%s') does not exist." % filerevs_path)
-        with open(filerevs_path) as fh:
-            self.filerevs = json.load(fh)
+    def set_filerevs(self, filerevs):
+        self.filerevs = filerevs
 
 
     def url(self, context):
@@ -52,5 +46,5 @@ class FileRevNode(StaticFilesNode):
 @register.tag
 def static(parser, token):
     static_node = FileRevNode.handle_token(parser, token)
-    static_node.load_filerevs(settings.FILEREVS)
+    static_node.set_filerevs(settings.FILEREVS)
     return static_node
