@@ -29,14 +29,14 @@ from django.contrib.staticfiles.templatetags.staticfiles import StaticFilesNode
 register = template.Library()
 
 class FileRevNode(StaticFilesNode):
-
-    def set_filerevs(self, filerevs):
-        self.filerevs = filerevs
-
+    """ Overrides normal static file handling by first checking for file revisions in
+    settings.FILEREVS, before falling back to the actual requested filename. Otherwise
+    indentical to normal static tag.
+    """
 
     def url(self, context):
         path = self.path.resolve(context)
-        revved_path = self.filerevs.get(path)
+        revved_path = settings.FILEREVS.get(path)
         if revved_path is not None:
             return staticfiles_storage.url(revved_path)
         else:
@@ -45,6 +45,4 @@ class FileRevNode(StaticFilesNode):
 
 @register.tag
 def static(parser, token):
-    static_node = FileRevNode.handle_token(parser, token)
-    static_node.set_filerevs(settings.FILEREVS)
-    return static_node
+    return FileRevNode.handle_token(parser, token)
