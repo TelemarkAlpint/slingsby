@@ -21,21 +21,29 @@ Features
 Local development
 -----------------
 
-We're using virtualenvs when working on slingsby. First off, get pip and virtualenv if you haven't already:
+We're advise using [virtualenvs](http://virtualenv.readthedocs.org/en/latest/virtualenv.html) when
+working on slingsby. First off, get pip and virtualenv if you haven't already:
 
     $ easy_install pip
     $ pip install virtualenv
 
 Fetch the source code:
 
-    $ git clone git@github.com:TelemarkAlpint/slingsby.git
+    $ git clone https://github.com/TelemarkAlpint/slingsby
     $ cd slingsby
 
 Set up a virtualenv and install the python requirements:
 
     $ virtualenv venv_slingsby
     $ . venv_slingsby/bin/activate
-    $ pip install -r requirements.txt
+    $ pip install -r dev-requirements.txt
+
+You now have everything needed to run the tests:
+
+    $ python manage.py test
+
+To run the server to test it in your browser, you need a little bit more work, because you need to
+build the project first.
 
 Slingsby uses [Grunt](http://gruntjs.com/) to run boring tasks that should be automated, like compiling SASS stylesheet and such.
 To use grunt, you need NodeJS installed. Follow the instructions over at [NodeJS](http://nodejs.org/) to install it for your system.
@@ -47,6 +55,10 @@ Once you have node and npm installed, you should install the grunt-cli, bower an
     $ npm install -g grunt-cli bower
     $ npm install
     $ bower install
+
+You also need Compass for the stylesheets, which can be installed with [RubyGems](https://rubygems.org/):
+
+    $ gem install compass
 
 Great! Now you can compile all the static files:
 
