@@ -62,7 +62,7 @@ You also need Compass for the stylesheets, which can be installed with [RubyGems
 
 Great! Now you can compile all the static files:
 
-    $ grunt build
+    $ grunt prep
 
 And now, you can start the devserver:
 

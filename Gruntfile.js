@@ -94,11 +94,11 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['slingsby/static-src/stylesheets/sass/*.scss'],
-        tasks: ['compass', 'clean:build', 'copy:tmpToBuild', 'rev-files']
+        tasks: ['compass', 'clean:build', 'copy:tmpToBuild']
       },
       js: {
         files: ['<%= jshint.all %>'],
-        tasks: ['uglify', 'clean:build', 'copy:tmpToBuild', 'rev-files']
+        tasks: ['uglify', 'clean:build', 'copy:tmpToBuild']
       },
       templates: {
         files: ['slingsby/**/templates/*.html'],
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
       },
       handlebars: {
         files: ['slingsby/**/handlebars/*.hbs'],
-        tasks: ['handlebars', 'uglify', 'clean:build', 'copy:tmpToBuild', 'rev-files']
+        tasks: ['handlebars', 'uglify', 'clean:build', 'copy:tmpToBuild']
       },
       python: {
         files: ['slingsby/**/*.py']
@@ -338,11 +338,11 @@ module.exports = function (grunt) {
     'buildScripts',
     'imagemin',
     'copy:tmpToBuild',
-    'rev-files',
   ]);
   grunt.registerTask('build', [
     'clean',
     'prep',
+    'rev-files',
     'shell:packageStatic',
     'pybuild',
   ]);
