@@ -51,13 +51,15 @@ module.exports = function (grunt) {
     compass: {
       dist: {
         options: {
-          sassDir: '.tmp/sass/',
+          sassDir: 'slingsby/static-src/sass/',
           cssDir: '.tmp/static/stylesheets',
-          outputStyle: "compressed"
+          outputStyle: 'compressed',
+          importPath: ['.tmp/sass'],
         }
       }
     },
 
+    /* Needed because django can't serve out of the same directory it collects static files to */
     copy: {
       tmpToBuild: {
         files: [{
@@ -66,9 +68,6 @@ module.exports = function (grunt) {
           cwd: '.tmp/static',
           dest: 'build/static/'
         }]
-      },
-      sass: {
-        files: [{expand: true, src: ['**'], cwd: 'slingsby/static-src/sass', dest: '.tmp/sass'}]
       },
     },
 
@@ -95,7 +94,7 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['slingsby/static-src/stylesheets/sass/*.scss'],
-        tasks: ['copy:sass', 'compass', 'clean:build', 'copy:tmpToBuild', 'rev-files']
+        tasks: ['compass', 'clean:build', 'copy:tmpToBuild', 'rev-files']
       },
       js: {
         files: ['<%= jshint.all %>'],
@@ -348,7 +347,6 @@ module.exports = function (grunt) {
     'pybuild',
   ]);
   grunt.registerTask('buildStyles', [
-    'copy:sass',
     'cssUrlEmbed',
     'compass',
   ]);
