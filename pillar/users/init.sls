@@ -1,6 +1,5 @@
 absent_users:
   - ubuntu
-  - www-data
 
 daemon_users:
   www: Nginx/uWSGI worker
