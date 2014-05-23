@@ -44,13 +44,8 @@ urlpatterns += patterns('',
     (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
 )
 
-# Needed since we can't use the url tag for the pre-uglified scripts
-# Note that this matches any url with static/ in it, so be aware of naming conflicts!
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += patterns('',
         url(r'^__debug__/', include(debug_toolbar.urls)),
-    )
-    urlpatterns += patterns('django.contrib.staticfiles.views',
-        url(r'static/(?P<path>.*)$', 'serve'),
     )
