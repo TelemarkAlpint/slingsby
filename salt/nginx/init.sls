@@ -21,7 +21,7 @@ nginx:
       - service: uwsgi
     - watch:
       - file: nginx
-      - file: nginx-sites-enabled
+      - file: slingsby-site
 
 
 # For the pre-config loaded directory
@@ -33,13 +33,18 @@ nginx_log_dir:
     - mode: 770
 
 
-nginx-sites-enabled:
-  file.recurse:
-    - name: /etc/nginx/sites-enabled
-    - source: salt://nginx/sites-enabled
+slingsby-site:
+  file.managed:
+    - name: /etc/nginx/sites-enabled/slingsby
+    - source: salt://nginx/sites-enabled/slingsby
+    - template: jinja
+    - require:
+      - file: nginx-default-site
 
 
 # Disable default
 nginx-default-site:
   file.absent:
     - name: /etc/nginx/sites-enabled/default
+    - require:
+      - pkg: nginx
