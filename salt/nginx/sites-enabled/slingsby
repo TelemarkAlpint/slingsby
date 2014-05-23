@@ -1,3 +1,5 @@
+{% set bind_url = salt['pillar.get']('env:slingsby:bind_url') %}
+
 upstream slingsby {
   least_conn;
   server unix:///tmp/slingsby.socket;
@@ -5,14 +7,14 @@ upstream slingsby {
 
 server {
   listen 80;
-  server_name www.ntnuita.no;
-  return 301 $scheme://ntnuita.no$request_uri;
+  server_name www.{{ bind_url }};
+  return 301 $scheme://{{ bind_url }}$request_uri;
 }
 
 server {
 
   listen 80;
-  server_name ntnuita.no;
+  server_name {{ bind_url }};
   charset utf-8;
 
   location / {
