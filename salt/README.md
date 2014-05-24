@@ -18,19 +18,15 @@ The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed t
     $ sudo apt-get update
     $ sudo apt-get upgrade -y
 
-- Install salt-minion (v0.17.0 is latest release as of 7.10.13)
+- Install latest salt-minion:
 
     $ curl -L http://bootstrap.saltstack.org | sudo sh -s -- git develop
 
-- Install up-to-date setuptools
-    
-    $ wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | sudo python
-
-- tar the salt and the pillar directories and scp it to the server:
+- On your local machine, tar the salt and the pillar directories and scp it to the server:
     
     $ tar czf salt_and_pillar.tar.gz salt pillar
-    $ scp salt_and_pillar.tar.gz slingsby:~
-    $ ssh slingsby "sudo tar xf salt_and_pillar.tar.gz -C /srv && sudo salt-call --local state.sls users,sudo,ssh exclude=\"[{'id': 'ubuntu'}]\" && sudo rm -rf /srv/salt /srv/pillar"
+    $ scp salt_and_pillar.tar.gz ubuntu@<new-instance-ip>:~
+    $ ssh ubuntu@<new-instance-ip> "sudo tar xf salt_and_pillar.tar.gz -C /srv && sudo salt-call --local state.sls users,sudo,ssh exclude=\"[{'id': 'ubuntu'}]\" && sudo rm -rf /srv/salt /srv/pillar"
 
 Done. Save the result as an AMI, and use that AMI the next time (done from the web console).
 
