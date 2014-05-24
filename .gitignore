@@ -14,3 +14,4 @@ slingsby_rel.sqlite
 pillar/secure
 log.log
 slingsby/server-assets
+.vagrant
