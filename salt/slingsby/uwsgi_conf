@@ -8,7 +8,11 @@ env = DJANGO_SETTINGS_MODULE=prod_settings
 module = django.core.handlers.wsgi:WSGIHandler()
 logto = /var/log/uwsgi/uwsgi.log
 chmod-socket = 664
+reload-on-exception = true
 
 # Needed for the newrelic agent:
 enable-threads = true
 single-interpreter = true
+{% if grains['id'] == 'vagrant' %}
+python-autoreload = true
+{% endif %}

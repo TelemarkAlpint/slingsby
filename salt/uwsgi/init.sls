@@ -18,7 +18,6 @@ uwsgi:
       - pip: uwsgi
     - watch:
       - file: uwsgi
-      - file: slingsby_settings
       - file: slingsby_uwsgi_conf
 
 
