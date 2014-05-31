@@ -44,10 +44,18 @@
             $.ajax(url, {
                 dataType: "json",
                 success: function (data) {
-                    var html = slingsby.templates.articles(data);
-                    $("#content").append(html);
-                    improveTimestamps();
+                    loadingImage.hide();
+                    if (data.articles.length > 0) {
+                        // Found more articles
+                        var html = slingsby.templates.articles(data);
+                        $("#content").append(html);
+                        improveTimestamps();
+                    } else {
+                        // No more articles to load, remove scroll handler
+                        $(document).off('scroll');
+                    }
                 },
+                // Hide loading symbol even if the call failed
                 complete: function () {
                     loadingImage.hide();
                 }
