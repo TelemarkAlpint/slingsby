@@ -278,6 +278,10 @@ module.exports = function (grunt) {
     },
 
     uglify: {
+      options: {
+        sourceMap: true,
+        sourceMapIncludeSources: true,
+      },
       dist: {
         files: {
           '.tmp/static/js/main.min.js': [
