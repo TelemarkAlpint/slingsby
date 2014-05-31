@@ -2,5 +2,5 @@
 -r requirements.txt
 
 # Add stuff needed in prod:
-MySQL-python
-python-memcached
+MySQL-python==1.2.5
+python-memcached==1.53

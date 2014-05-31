@@ -3,10 +3,19 @@
 # and a cache binding. Make sure to install these in your environment,
 # with whatever tools support for cache and database.
 
+# Direct dependencies:
 django==1.5.4
-PyYAML
-python-dateutil
-pytz>=2013b
-beautifulsoup4
-requests
-python-social-auth
+pyyaml==3.11
+python-dateutil==2.2
+pytz==2014.3
+beautifulsoup4==4.3.2
+requests==2.3.0
+python-social-auth==0.1.24
+
+# Python-social-auth dependencies:
+oauthlib==0.6.1
+python-openid==2.2.5
+requests-oauthlib==0.4.0
+
+# python-dateutil dependencies:
+six==1.6.1
