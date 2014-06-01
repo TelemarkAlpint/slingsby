@@ -12,7 +12,6 @@ build
 *.egg-info
 slingsby_rel.sqlite
 pillar/secure
-pillar/slingsby.sls
 secret_settings.py
 log.log
 slingsby/server-assets
