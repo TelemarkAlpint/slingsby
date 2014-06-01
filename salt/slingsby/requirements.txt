@@ -4,7 +4,7 @@
 # with whatever tools support for cache and database.
 
 # Direct dependencies:
-django==1.5.4
+django==1.6.5
 pyyaml==3.11
 python-dateutil==2.2
 pytz==2014.3
