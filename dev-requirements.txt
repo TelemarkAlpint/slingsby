@@ -3,6 +3,7 @@
 -r salt/slingsby/requirements.txt
 
 django-debug-toolbar==1.2.1
+pycrypto==2.6.1
 
 # Add test tools
 django-nose==1.2

@@ -133,14 +133,19 @@ module.exports = function (grunt) {
         options: {
           stdout: true,
         },
-        command: [
-          'python ./tools/dump_secure_env_vars_to_pillar.py',
-          'tar czf build/salt_and_pillar.tar.gz salt pillar',
-          'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
-          'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
-          'sudo salt-call --local state.highstate --force-color',
-          'rm /tmp/salt_and_pillar.tar.gz"'
-        ].join('&&'),
+        command: (function () {
+          if (!grunt.file.exists('pillar/secure/init.sls')) {
+            grunt.fail.warn("Can't provisoin until you've decrypted the secrets!\n\nRun " +
+                "`python tools/secure_data.py decrypt` to do so.");
+          }
+          return [
+              'tar czf build/salt_and_pillar.tar.gz salt pillar',
+              'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
+              'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
+              'sudo salt-call --local state.highstate --force-color',
+              'rm /tmp/salt_and_pillar.tar.gz"'
+            ].join('&&');
+        })(),
       },
       collectstatic: {
         command: function () {

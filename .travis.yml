@@ -29,6 +29,9 @@ install:
   - npm install
   - bower install
 
+  # Decrypt secrets needed to deploy
+  - python ./tools/secure_data.py decrypt --key $SALT_SECRET
+
 script:
   # Lint the code, but don't fail the build if there's errors
   - grunt lint --force
@@ -47,23 +50,10 @@ script:
 env:
   global:
 
-    # To replace any of these vars, install the travis gem (gem install travis), do
-    # 'travis encrypt FACEBOOK_API_KEY=<key>', and copy-paste the results in here.
+    # To replace travis' encrypted version of the salt secret, install the travis gem (gem install travis), do
+    # 'travis encrypt SALT_SECRET=<key> -r TelemarkAlpint/slingsby', and copy-paste the results in here.
 
-    # If you're adding a new var that you want to use in salt templates, add it to
-    # TARGET_ENV_VARS in tools/dump_secure_env_vars_to_pillar.py as well.
-
-    # SOCIAL_AUTH_FACEBOOK_SECRET
-    - secure: "duBeDAIV3hMFXH6RYvaobOOELwXICnBR3EWRamvem5wW55XWGKE9+eqhoIVanZUHiQwXQk22ONuiGWKKL5bAQh9Gif0/zOV25C/JcS/1K5fR0VvUsdqurTlbHSpAdpRsZJRWc9mnLgjuY0fwA/jh4TLp5e410fP1YHdQbqzai2c="
-
-    # SECRET_KEY
-    - secure: "BfBDtoIbNtVCW8vlA2EIg9MrvWKLdfLmVP19wzVfUT+kdPBK11mPX9Am+PeKxNpo2CtSNWL/0HKPC+LnRvmFGhDmON99Eehss7B4/+DsmQqlF8ahUAZs+ILarcUPA5gdsSL/06pcBj5Mas23mqNDFpkKMColJcKqEbj+OnLVNpo="
-
-    # NEWRELIC_LICENSE_KEY
-    - secure: "CN0K9yf5gvS+KnGJhBEIKgDxeh9TFhfb+k/LJZGvskQxllaoApXa0ZwPNGFyvM1aduJPZBByCLccpHbI7avo7XlJJO3K04xUIwn6aWoqntUHSq1r6KWMBBzIre/av7euEwnmRynssRpPk9XC/Cn44hDYwiM/vAc0eybPWEbsWdk="
-
-    # MYSQL_PASSWORD
-    - secure: "e6o4FcseLGeH8FF5kGS51BfhqNwbs/MIDi6cjVO/00X+437LAORNuh15KZCZEZzEhX4maiZWbvky4W/oi1BZyPseIMDOrueOxkWsVzc2qWtDzc6HIv4UmOqRxC5XqNr2QZb+FoJCJgc3ipRI4bhAiDy2Q9PQn7NiQGOYkS9wsEY="
+    - secure: "TUsQ4SEc9X0HThBMnjiNvT0Sd4Vp85mhrZ477VP/wSWJx+SwLGApilAm+2+AvbTAGyYyv3V2ia0mdYt6zErV/FkIAfeZ7Wu9pYOuMXkxcvNmd0w3Y7Kt/HZKNpvSNWUIZPJEI3BQKe45QZ/nQgFRIwit6lp6DJOEWeGV8Y5VU="
 
     # Private part of Travis' SSH key, keyed $id_rsa_00-$id_rsa_43
     - secure: "Wbt4g0eJlM7UW+2ORKAxSViWd7ZDybQ3BSB2smkNzHeRblFeE2UaGxhZIP9G8fJDKbjFfClXEHNTWzRpcCdt1roh2eBoa630Of20q1vZuAutNtzarO3v95JxBxftSnPDJo2/PwcBxmj/HB/6bB52t83HpkIyLkZ5eWQV3k7MLu4="
