@@ -12,6 +12,7 @@ uwsgi:
   file.managed:
     - name: /etc/init/uwsgi.conf
     - source: salt://uwsgi/uwsgi.conf
+    - template: jinja
 
   service.running:
     - require:
