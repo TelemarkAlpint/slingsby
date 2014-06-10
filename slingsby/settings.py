@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from __future__ import print_function
+
 import os
 import yaml
 import json
@@ -148,9 +150,9 @@ ARCHIVE_BASE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/'
 
 DISQUS_IDENTIFIER = 'telemarkalpint'
 
-filerevs_path = os.path.join(os.path.dirname(__file__), 'server-assets', 'filerevs.json')
+_filerevs_path = os.path.join(os.path.dirname(__file__), 'server-assets', 'filerevs.json')
 try:
-    with open(filerevs_path) as filerevs_fh:
+    with open(_filerevs_path) as filerevs_fh:
         FILEREVS = json.load(filerevs_fh)
 except IOError:
     print('No file revisions found, continuing without')

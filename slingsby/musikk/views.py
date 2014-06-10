@@ -73,7 +73,7 @@ class SongDetailView(ActionView, TemplateView):
             song.save()
             messages.success(request, '%s ble registrert, takker og bukker!' % song)
             _logger.info("%s approved by %s", song, request.user)
-            return HttpResponseRedirect(reverse('musikk') )
+            return HttpResponseRedirect(reverse('musikk'))
         else:
             messages.error(request, 'Du har noen feil i skjemaet, prøv på nytt pretty please?')
             _logger.info("%s was rejected for approval, invalid form data entered by %s", song, request.user)

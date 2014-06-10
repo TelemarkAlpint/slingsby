@@ -1,14 +1,9 @@
 from slingsby.general.middleware import HttpAcceptMiddleware, HttpMethodOverride
 from slingsby.settings import fix_nonexistent_file_handlers
 
-from django.http import HttpResponse
 from django.test import TestCase
-from django.test.utils import override_settings
 from django.template import Template, Context
 from mock import Mock
-from tempfile import NamedTemporaryFile
-import json
-import os
 
 class SettingsTest(TestCase):
 
@@ -146,6 +141,6 @@ class RevvedFileTagTest(TestCase):
 
     def test_revved_static_tag(self):
         with self.settings(FILEREVS=self.filerevs):
-            t = Template("{% load revved_static %}{% static 'css/styles.css' %}")
-            rendered = t.render(Context())
+            template = Template("{% load revved_static %}{% static 'css/styles.css' %}")
+            rendered = template.render(Context())
             self.assertEqual(rendered, '/static/css/styles.cafed00d.css')

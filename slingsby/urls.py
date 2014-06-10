@@ -6,31 +6,21 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 from django.shortcuts import render_to_response
 
-from .archive  import urls as archive_urls
-from .articles import urls as article_urls
-from .auth     import urls as auth_urls
-from .events   import urls as event_urls
-from .gear     import urls as gear_urls
-from .musikk   import urls as musikk_urls
-from .quotes   import urls as quote_urls
-from .tasks    import urls as task_urls
-from .users    import urls as user_urls
-
 admin.autodiscover()
 
 handler500 = lambda req: render_to_response('500.html')
 
 urlpatterns = patterns('',
-    url(r'^',        include(article_urls)),
-    url(r'^musikk/', include(musikk_urls)),
-    url(r'^arkiv/',  include(archive_urls)),
-    url(r'^profil/', include(user_urls)),
-    url(r'^quotes/', include(quote_urls)),
-    (r'^auth/',      include(auth_urls)),
-    (r'^tasks/',     include(task_urls)),
-    (r'^program/',   include(event_urls)),
-    (r'^gear/',      include(gear_urls)),
-    (r'^admin/',     include(admin.site.urls)),
+    url(r'^', include('slingsby.articles.urls')),
+    url(r'^musikk/', include('slingsby.musikk.urls')),
+    url(r'^arkiv/', include('slingsby.archive.urls')),
+    url(r'^profil/', include('slingsby.users.urls')),
+    url(r'^quotes/', include('slingsby.quotes.urls')),
+    (r'^auth/', include('slingsby.auth.urls')),
+    (r'^tasks/', include('slingsby.tasks.urls')),
+    (r'^program/', include('slingsby.events.urls')),
+    (r'^gear/', include('slingsby.gear.urls')),
+    (r'^admin/', include(admin.site.urls)),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 

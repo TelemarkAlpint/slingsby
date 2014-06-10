@@ -25,6 +25,7 @@ load-plugins=
 # Disable the message, report, category or checker with the given id(s).
 
 # no-member: Because of django dynamic assignments to classes
+# maybe-no-member: same as above. These errors would be catched by tests anyway.
 # unused-argument: Triggers for almost all views because of the requests argument
 # old-style-class: Reacts to model Meta classes
 # no-value-for-parameter: Triggers on most urls.py modules for some reasjon
@@ -33,6 +34,7 @@ load-plugins=
 disable=unused-argument,
     missing-docstring,
     no-member,
+    maybe-no-member,
     no-init,
     old-style-class,
     no-value-for-parameter,

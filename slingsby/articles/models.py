@@ -49,8 +49,8 @@ class Article(models.Model):
         if self.social_summary:
             data['summary'] = self.social_summary
         if self.last_edited:
-            data['last_edited'] =  self.last_edited.isoformat()
-            data['last_edited_by'] =  self.last_edited_by.username
+            data['last_edited'] = self.last_edited.isoformat()
+            data['last_edited_by'] = self.last_edited_by.username
         return data
 
 
@@ -125,8 +125,8 @@ class SubPageArticle(models.Model):
         if self.social_summary:
             data['summary'] = self.social_summary
         if self.last_edited:
-            data['last_edited'] =  self.last_edited.isoformat()
-            data['last_edited_by'] =  self.last_edited_by.username
+            data['last_edited'] = self.last_edited.isoformat()
+            data['last_edited_by'] = self.last_edited_by.username
         return data
 
 

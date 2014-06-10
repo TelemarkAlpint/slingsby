@@ -9,8 +9,8 @@ from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
 
 _WEEKDAYS = [u'mandag', u'tirsdag', u'onsdag', u'torsdag', u'fredag', u'lørdag', u'søndag']
-_MONTHS =  [u'januar', u'februar', u'mars', u'april', u'mai', u'juni', u'juli',
-            u'august', u'september', u'oktober', u'november', u'desember']
+_MONTHS = [u'januar', u'februar', u'mars', u'april', u'mai', u'juni', u'juli',
+           u'august', u'september', u'oktober', u'november', u'desember']
 
 class Event(models.Model):
     name = models.CharField('navn', max_length=100)

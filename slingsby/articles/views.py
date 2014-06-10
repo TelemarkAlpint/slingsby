@@ -75,5 +75,5 @@ class ArticleDetail(TemplateView):
         except Http404:
             article = get_object_or_404(SubPageArticle, pk=article_id)
         context['article'] = article
-        context['title'] =  make_title(article.title)
+        context['title'] = make_title(article.title)
         return context

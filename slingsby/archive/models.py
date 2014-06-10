@@ -37,7 +37,7 @@ class ImageGallery(models.Model):
         return images
 
     def __unicode__(self):
-        name =  'Gallery <%s> ' % self.event.name
+        name = 'Gallery <%s> ' % self.event.name
         if self.photographer:
             name += ' (%s)' % self.photographer
         return name

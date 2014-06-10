@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, slingsby) {
     "use strict";
 
     function setIcon(songId, imgPath) {
@@ -12,10 +12,10 @@
             url: '/musikk/' + songId + '/vote/',
             type: 'POST',
             success: function () {
-                setIcon(songId, musikkUrlConf.successIcon);
+                setIcon(songId, slingsby.urls.musikk.successIcon);
             },
             error: function (jqXHR) {
-                setIcon(songId, musikkUrlConf.rejectIcon);
+                setIcon(songId, slingsby.urls.musikk.rejectIcon);
                 alert(jqXHR.responseText);
             }
         });
@@ -52,6 +52,7 @@
     }
 
     function filterSongList() {
+        /* jshint validthis:true */
         var children = jQuery(this).attr('data-children');
         var searchText = jQuery(this).val().toLowerCase();
         var isEmpty = true;
@@ -100,4 +101,4 @@
 
     init();
 
-})(jQuery);
+})(jQuery, slingsby);

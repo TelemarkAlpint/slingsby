@@ -77,11 +77,10 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        'slingsby/static-src/js/*.js',
         'slingsby/**/static/js/*.js',
 
-        // Ignore the built stuff
-        '!slingsby/static/**',
+        // Ignore the widgEditor lib that's not in the bower registry
+        '!slingsby/general/static/js/widgEditor.js',
       ]
     },
 
