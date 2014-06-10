@@ -6,6 +6,8 @@ from os import path
 
 DEBUG = True
 
+DEBUG_TOOLBAR = os.environ.get('DJANGO_DEBUG_TOOLBAR', False)
+
 TEMPLATE_DEBUG = DEBUG
 
 SECRET_KEY = 'pleasedontusethisinprod'
@@ -39,21 +41,9 @@ STATICFILES_DIRS = (
    path.join(path.dirname(__file__), 'build', 'static'),
 )
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': '%s.true' % __name__,
-}
-
-def true(_):
-    return True
-
-MIDDLEWARE_CLASSES = tuple([
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-] + list(MIDDLEWARE_CLASSES))
-
-INSTALLED_APPS = tuple(list(INSTALLED_APPS) + [
-    'debug_toolbar',
+INSTALLED_APPS = list(INSTALLED_APPS) + [
     'django_nose',
-])
+]
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
@@ -62,3 +52,18 @@ ALLOWED_HOSTS = (
     'ntnuita.no',
     'ntnuita.local',
 )
+
+if DEBUG_TOOLBAR:
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': '%s.true' % __name__,
+        'SHOW_COLLAPSED': True,
+    }
+
+    def true(_):
+        return True
+
+    MIDDLEWARE_CLASSES = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ] + list(MIDDLEWARE_CLASSES)
+
+    INSTALLED_APPS.append('debug_toolbar')
