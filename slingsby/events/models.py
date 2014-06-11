@@ -19,7 +19,7 @@ class Event(models.Model):
     has_registration = models.BooleanField(SafeUnicode(u'påmelding'))
     registration_opens = models.DateTimeField(SafeUnicode(u'påmeldingen åpner'), null=True, blank=True)
     registration_closes = models.DateTimeField(SafeUnicode(u'påmeldingen stenger'), null=True, blank=True)
-    binding_registration = models.BooleanField(SafeUnicode(u'bindende påmelding'))
+    binding_registration = models.BooleanField(SafeUnicode(u'bindende påmelding'), default=False)
     number_of_spots = models.IntegerField('antall plasser', null=True, blank=True, help_text='0 = ubegrenset')
     participants_by_id = models.CommaSeparatedIntegerField('deltager-IDer', max_length=4000, null=True, blank=True)
     summary = models.TextField('sammendrag')
