@@ -22,7 +22,7 @@ def main():
         base64_secret_key = getpass.getpass('Enter key: ')
     secret_key = base64.b64decode(base64_secret_key)
     if args.mode == 'encrypt':
-        encrypt(secret_key)
+        encrypt(secret_key, args.values_to_encrypt)
     else:
         decrypt(secret_key)
 
@@ -43,8 +43,8 @@ def get_args():
     return parser.parse_args()
 
 
-def encrypt(secret_key):
-    key, val = args.values_to_encrypt.split('=', 1)
+def encrypt(secret_key, value):
+    key, val = value.split('=', 1)
     print 'Encryping %s...' % key
     if val[0] == '@':
         with open(val[1:]) as plaintext_fh:
