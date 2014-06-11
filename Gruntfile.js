@@ -212,15 +212,6 @@ module.exports = function (grunt) {
       ],
     },
 
-    concurrent: {
-      server: {
-        tasks: ['watch', 'shell:devserver'],
-        options: {
-          logConcurrentOutput: true,
-        }
-      }
-    },
-
     imagemin: {
       static: {
         files: [{
@@ -331,9 +322,6 @@ module.exports = function (grunt) {
   ]);
   grunt.registerTask('provision', [
     'shell:provision',
-  ]);
-  grunt.registerTask('server', [
-    'concurrent:server',
   ]);
   grunt.registerTask('rev-files', [
     'filerev',
