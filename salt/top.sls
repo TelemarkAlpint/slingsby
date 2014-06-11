@@ -2,12 +2,17 @@ base:
   '*':
     - memcached
     - mysql
-    - newrelic
     - ntp
     - nginx
     - pip
     - pkg
     - slingsby
-    - ssh
     - users
     - uwsgi
+
+  'ntnuita.no':
+    - newrelic
+    - ssh
+
+  'vagrant':
+    - mysql.server

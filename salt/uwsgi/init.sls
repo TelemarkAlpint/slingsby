@@ -12,13 +12,13 @@ uwsgi:
   file.managed:
     - name: /etc/init/uwsgi.conf
     - source: salt://uwsgi/uwsgi.conf
+    - template: jinja
 
   service.running:
     - require:
       - pip: uwsgi
     - watch:
       - file: uwsgi
-      - file: slingsby_settings
       - file: slingsby_uwsgi_conf
 
 
