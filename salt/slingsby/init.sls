@@ -1,3 +1,5 @@
+# Actual code deployed by Travis and fabric, just set up the virtualenv and the directories needed
+
 include:
   - .cron
 
@@ -25,29 +27,6 @@ slingsby:
       - virtualenv: slingsby
     - watch_in:
       - service: uwsgi
-
-  pip.installed:
-    {% if grains['id'] == 'vagrant' %}
-    - editable: /vagrant
-    {% else %}
-    - name: https://github.com/TelemarkAlpint/slingsby
-    {% endif %}
-    - bin_env: /srv/ntnuita.no/venv
-    - upgrade: True
-    - require:
-      - virtualenv: slingsby
-    - watch_in:
-      - service: uwsgi
-
-  cmd.run:
-    - name: /srv/ntnuita.no/venv/bin/manage.py syncdb --noinput --settings prod_settings
-    - user: www
-    - env:
-      - PYTHONPATH: /srv/ntnuita.no
-    - require:
-      - file: slingsby
-      - pip: slingsby
-
 
 slingsby_uwsgi_conf:
   file.managed:

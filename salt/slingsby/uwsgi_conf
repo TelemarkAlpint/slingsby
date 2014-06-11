@@ -13,6 +13,3 @@ reload-on-exception = true
 # Needed for the newrelic agent:
 enable-threads = true
 single-interpreter = true
-{% if grains['id'] == 'vagrant' %}
-python-autoreload = true
-{% endif %}

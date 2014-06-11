@@ -1,3 +1,5 @@
+{% set slingsby = pillar.get('slingsby', {}) -%}
+
 mysql-deps:
   pkg.installed:
     - name: python-mysqldb
@@ -29,7 +31,7 @@ slingsby-db:
 
   mysql_user.present:
     - name: slingsby
-    - password: "{{ pillar['MYSQL_PASSWORD'] }}"
+    - password: "{{ slingsby.db_password }}"
     - require:
       - service: mysql-server
 

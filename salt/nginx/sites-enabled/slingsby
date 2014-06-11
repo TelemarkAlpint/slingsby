@@ -1,10 +1,12 @@
-{% set bind_url = salt['pillar.get']('env:slingsby:bind_url') %}
+{% set slingsby = pillar.get('slingsby', {}) -%}
+{% set bind_url = slingsby.get('bind_url', 'ntnuita.no') -%}
 
 upstream slingsby {
   least_conn;
   server unix:///tmp/slingsby.socket;
 }
 
+# Redirect www.nnuita.no -> ntnuita.no
 server {
   listen 80;
   server_name www.{{ bind_url }};

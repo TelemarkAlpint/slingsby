@@ -1,5 +1,8 @@
 base:
- '*':
-  - env
-  - secure
-  - users
+  '*':
+    - env
+    - secure
+    - users
+
+  'vagrant':
+    - vagrant
