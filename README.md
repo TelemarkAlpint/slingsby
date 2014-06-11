@@ -132,3 +132,26 @@ dependencies like jQuery and Handlebars, defined in `bower.json`. `npm` handles 
 like grunt and the grunt plugins for SASS transiling and js minification, defined in
 `package.json`. And lastly, you also need RubyGems (`gem`) be able to install compass, which is
 needed by grunt-compass.
+
+
+How do I...
+-----------
+
+**Q**: Add a new frontend library?
+**A**: Install the library with bower: `bower install <new-libary> --save`. This will save it into
+`bower_components`, now add it to an existing script or create a new one in the uglify task in
+Gruntfile.js, to have it minified and concatenated.
+
+**Q**: Add a new grunt plugin?
+**A**: `npm install --save-dev <name-of-grunt-plugin>`. `--save-dev` makes sure the new library is
+saved in `package.json` and thus will be installed by everyone else as well.
+
+**Q**: Add a secret value to the repo?
+**A**: `python tools/secure_data.py encrypt <your-new-value>=<your-secret>`. The name you choose
+will be the name it will be added to pillar as.
+
+**Q**: Generate good secrets?
+**A**: Use `openssl rand -base64 <number-of-bytes>`. For most keys, 30 random bytes is plenty.
+
+**Q**: The server is fubar, how do I create a new one?
+**A**: See the steps under `salt/README.md`.
