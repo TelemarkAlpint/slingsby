@@ -52,8 +52,7 @@ env:
 
     # To replace travis' encrypted version of the salt secret, install the travis gem (gem install travis), do
     # 'travis encrypt SALT_SECRET=<key> -r TelemarkAlpint/slingsby', and copy-paste the results in here.
-
-    - secure: "TUsQ4SEc9X0HThBMnjiNvT0Sd4Vp85mhrZ477VP/wSWJx+SwLGApilAm+2+AvbTAGyYyv3V2ia0mdYt6zErV/FkIAfeZ7Wu9pYOuMXkxcvNmd0w3Y7Kt/HZKNpvSNWUIZPJEI3BQKe45QZ/nQgFRIwit6lp6DJOEWeGV8Y5VU="
+    - secure: "WotSK+0oCrqTbl10TQAVGfye5u1ToCihec/rAuslUoWJsj+iu0LVXX2yKseGWO6OTwTc4mAXSPFx53aHF/YBybT8fy/Q/mphWUBgEyMsBADAJRhZfDjSgpp0LScEUiYFdgJGd+CbhmleBD5jvd8N0oL4pXNDjTGZzIx8/uD6by8="
 
     # Private part of Travis' SSH key, keyed $id_rsa_00-$id_rsa_43
     - secure: "Wbt4g0eJlM7UW+2ORKAxSViWd7ZDybQ3BSB2smkNzHeRblFeE2UaGxhZIP9G8fJDKbjFfClXEHNTWzRpcCdt1roh2eBoa630Of20q1vZuAutNtzarO3v95JxBxftSnPDJo2/PwcBxmj/HB/6bB52t83HpkIyLkZ5eWQV3k7MLu4="
