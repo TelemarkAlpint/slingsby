@@ -1,25 +1,35 @@
-Slingsby
+Slingsby [![Build Status](https://travis-ci.org/TelemarkAlpint/slingsby.png?branch=master)](https://travis-ci.org/TelemarkAlpint/slingsby)
 ========
 
-[![Build Status](https://travis-ci.org/TelemarkAlpint/slingsby.png?branch=master)](https://travis-ci.org/TelemarkAlpint/slingsby)
+The homepage for [NTNUI Telemark/Alpint](http://ntnuita.no).
 
-A Django-powered webengine!
+[Slingsby](http://en.wikipedia.org/wiki/William_Slingsby) was also the first man to conquer Store
+Vengetind in Romsdalen, along with hundreds of summits in Jotunheimen. One of the hardest ski
+routes in Romsdalen, down the east side of Store Vengetind, is named after his ascent.
 
-[Slingsby](http://en.wikipedia.org/wiki/William_Slingsby) was also the first man to conquer Store Vengetind in Romsdalen, along with hundreds of summits
-in Jotunheimen. One of the hardest ski routes in Romsdalen, down the east side of Store Vengetind, is
-named after his ascent.
 
-Features
---------
+Goals
+-----
 
-* Write and publish articles
-* User authentication integrated with ntnui.no
-* Host events, let people sign up for events
-* Users may suggest and vote on songs for our monday evening excersises
-* Image gallery
+* Easily readable code (read: pythonic python and idiomatic javascript)
+* Easy to get started for new developers
+* Deployment handled automatically
+* Well tested code
+* Site works on all devices (but not necessarily look the same or provide the same experience)
+* RESTful
+
+
+About
+-----
+
+Our server is running on AWS, with deployments handled automatically by Travis CI.
+
 
 Local development
 -----------------
+
+**tl;dr**: To setup a build environment and run the tests, check out `.travis.yml`. For more
+in-depth explanation, read on.
 
 We're advise using [virtualenvs](http://virtualenv.readthedocs.org/en/latest/virtualenv.html) when
 working on slingsby. First off, get pip and virtualenv if you haven't already:
@@ -34,8 +44,8 @@ Fetch the source code:
 
 Set up a virtualenv and install the python requirements:
 
-    $ virtualenv venv_slingsby
-    $ . venv_slingsby/bin/activate
+    $ virtualenv venv
+    $ . venv/bin/activate # windows: .\venv\Scripts\activate.bat
     $ pip install -r dev-requirements.txt
 
 You now have everything needed to run the tests:
@@ -45,84 +55,80 @@ You now have everything needed to run the tests:
 To run the server to test it in your browser, you need a little bit more work, because you need to
 build the project first.
 
-Slingsby uses [Grunt](http://gruntjs.com/) to run boring tasks that should be automated, like compiling SASS stylesheet and such.
-To use grunt, you need NodeJS installed. Follow the instructions over at [NodeJS](http://nodejs.org/) to install it for your system.
-The node package manager *npm* is bundled with recent versions of node, we're using npm to install grunt plugins we use. These are
-defined in the package.json file.
+Slingsby uses [Grunt](http://gruntjs.com/) to run boring tasks that should be automated, like
+compiling SASS stylesheet, minifying js and similar. To use grunt, you need NodeJS installed.
+Follow the instructions over at [NodeJS](http://nodejs.org/) to install it for your system. The
+node package manager *npm* is bundled with recent versions of node, we'll use that to install grunt
+plugins we use. These are defined in the `package.json` file.
 
-Once you have node and npm installed, you should install the grunt-cli, bower and all the grunt plugins and frontend dependencies:
+Once you have node and npm installed, you should install the grunt-cli, bower and all the grunt
+plugins and frontend dependencies:
 
     $ npm install -g grunt-cli bower
     $ npm install
     $ bower install
 
-You also need Compass for the stylesheets, which can be installed with [RubyGems](https://rubygems.org/):
+You also need Compass for the stylesheets, which can be installed with
+[RubyGems](https://rubygems.org/):
 
     $ gem install compass
 
 Great! Now you can compile all the static files:
 
-    $ grunt prep
+    $ grunt prep watch
+
+Adding the `watch` task makes sure grunt will stay awake and listen for changes to the project
+files, and re-run whatever has to be done for those files *and* reload your browser when done.
+Magic!
 
 And now, you can start the devserver:
 
     $ python manage.py runserver
 
-This should start the devserver at port 8000, browse to http://localhost:8000 to see it! Eventually you can use the grunt
-task `grunt server`, which will run both `grunt watch` and start the devserver on port **80** (port can be override with
-the `--port` flag). This also uses the `secret_settings.py` module, so make sure to create that one first (see a couple of
-paragraphs further down for how and why to do that).
+This should start the devserver at port 8000, browse to `http://localhost:8000` to see it!
+Starting the devserver like this will create a SQLite database you can use locally. Note that some
+features will not work just like this, notably login, since you need to know our Facebook app
+secret to be able to use that.
 
-If you want to log in to the devserver, you need to start the devserver on port 80 and add a line to your hosts file to redirect 
-requests to ntnuita.no to the devserver, since facebook will only authenticate towards that domain. Add this line to 
-your hosts file (`/etc/hosts` on *nix, `C:\Windows\System32\Drivers\etc\hosts` on windows):
+If you need to test login (and probably are lead developer of this project), you can decrypt the
+secrets needed and start the devserver on port 80. You also need to add the following line to your
+hosts file:
 
-    127.0.0.1 ntnuita.no
+    127.0.0.1 ntnuita.local
 
-Remmember to comment out this line when you're done testing, so that you'll be able to reach the actual pages later.
-
-Note that for the Facebook auth to work, you need to have the correct SOCIAL_AUTH_FACEBOOK_SECRET set in your settings.
-To achieve this you can either edit the dev_settings.py to include the correct key, but this might be a bit dangerous in
-case you accidentally commit the change to the repo. A better solution might be to have a very simple file `secret_settings.py`
-that only contains two lines:
+Now add a very simple file `secret_settings.py` that only contains two lines:
 
     $ echo "from dev_settings import *" > secret_settings.py
     $ echo "SOCIAL_AUTH_FACEBOOK_SECRET='<secret>'" >> secret_settings.py
 
-You might notice that there's not much in your database yet. You can of course start populating it manually by
-creating articles, events, songs, sponsors etc, but that's boring, so instead you can find a complete db dump in the dropbox folder
-that you can import into mysql, and then you should have an environment that quite closely matches what we have in production.
+You can now start the devserver and use Facebook login:
 
-You should now be all set to start making your changes. If you're not the dev lead, submit your changes as pull requests on GitHub, and dev
-lead will take a look at them, and hopefully admit your change into the repo.
+    $ python manage.py runserver 80 --settings secret_settings
 
-If you want to test files after the build step (like the output from uglify), you need the start the devserver with `DEBUG=False` in
-dev_settings.py and the `--insecure` flag to tell staticfiles to serve the files even though we're not in debug mode.
+Hack away!
 
-About
------
 
-Our server is running on AWS, with deployments handled automatically by Travis CI. Static files are hosted on org.ntnu.no.
+Testing on a server
+-------------------
 
-### Goals
+To test that stuff works in the same environment (or rather, very similar) to the one in
+production, you can start a local machine with all the same software we're using in production by
+using [VirtualBox](https://www.virtualbox.org/) and [Vagrant](http://www.vagrantup.com/). Once you
+have installed the two, simply execute the following to start your VM and deploy the app to it:
 
-We strive towards a clean, predictable URL scheme, and try to provide every resource as both HTML and JSON. Try browsing the site with Firefox,
-with network.http.accept.default set to any string that prioritizes JSON over HTML, like text/html,application/json;q=1.1. This API is not entirely
-documented yet and is subject to large changes, but if you want to program towards the site, this is how you want to do it.
+    $ vagrant up
+    $ fab deploy_vagrant
 
-A major goal for the site is to try to follow best practices as far as possible, as the site will be the first entry point to the "real world"
-for many of the developers working on it, and we try to make that as easy as possible. This goes for both compliance to protocols like HTTP,
-that GETS never should have any consquences, and we try to be RESTful, and it means trying to write Django as it's supposed to be written,
-and it means writing easy to understand Python code.
+(This requires the app to have been built already: run `grunt build` first). You now have a server
+running the app behind nginx, with uwsgi doing the heavy lifting, memcached doing caching, etc.
 
-On possible controversy might be that we don't document much code. I'm a huge fan of the "clean code" approach, and think that code should be
-self-documenting. If you cannot express yourself clearly in code, you're not doing it simple enough or you do not understand what you're doing well
-enough. Others might disagree, but with short functions with descriptive names, this has worked for us so far.
-
-We also strive towards implementing as mush as possible with native HTML5 elements, like audio and video. We also hope to provide more responsive
-pages soon, enhancing the mobile experience.
 
 Dependencies
 ------------
 
-See salt\slingsby\requirements.txt, bower.json and package.json.
+Handled by four (!) different package managers for three different purposes: `pip` handles python
+libraries we use, defined in `salt/slingsby/requirements.txt`. `bower` handles frontend
+dependencies like jQuery and Handlebars, defined in `bower.json`. `npm` handles build dependencies
+like grunt and the grunt plugins for SASS transiling and js minification, defined in
+`package.json`. And lastly, you also need RubyGems (`gem`) be able to install compass, which is
+needed by grunt-compass.
