@@ -96,13 +96,9 @@ hosts file:
 
     127.0.0.1 ntnuita.local
 
-Now add a very simple file `secret_settings.py` that only contains two lines:
+Decrypt the secrets and start the devserver with them:
 
-    $ echo "from dev_settings import *" > secret_settings.py
-    $ echo "SOCIAL_AUTH_FACEBOOK_SECRET='<secret>'" >> secret_settings.py
-
-You can now start the devserver and use Facebook login:
-
+    $ python tools/secure_data.py decrypt -k <repo key from Kontoer.kdbx>
     $ python manage.py runserver 80 --settings secret_settings
 
 Hack away!
