@@ -29,9 +29,6 @@ install:
   - npm install
   - bower install
 
-  # Decrypt secrets needed to deploy
-  - python ./tools/secure_data.py decrypt --key $SALT_SECRET
-
 script:
   # Lint the code, but don't fail the build if there's errors
   - grunt lint --force
@@ -42,9 +39,8 @@ script:
   # Build
   - grunt build
 
-  # Include the provisioning and deployment in the script so that it can determine whether a build was successful or not
-  # Everything A-OK, provision the server to make it's up to date, and deploy
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then grunt provision && grunt deploy; fi
+  # Decrypt secrets needed to deploy, provision the server to make sure it's up to date, and deploy
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then python ./tools/secure_data.py decrypt --key $SALT_SECRET && grunt provision && grunt deploy; fi
 
 
 env:
