@@ -52,6 +52,9 @@ You now have everything needed to run the tests:
 
     $ python manage.py test
 
+If you set the envvar `WITH_COVERAGE` you will get a code coverage report. This can also be found
+online, at [our GitHub pages site](https://telemarkalpint.github.com/slingsby).
+
 To run the server to test it in your browser, you need a little bit more work, because you need to
 build the project first.
 
