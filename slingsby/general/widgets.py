@@ -1,4 +1,6 @@
+from .templatetags.revved_static import get_revved_url
 from .time import utc_to_nor
+
 from django.contrib.admin import widgets
 from django.forms.widgets import Textarea
 from datetime import datetime
@@ -27,7 +29,7 @@ class WidgEditorWidget(Textarea):
 
 
     class Media:
-        js = ('js/widgEditor.min.js',)
+        js = (get_revved_url('js/widgEditor.min.js') or 'js/widgEditor.min.js',)
         css = {
-            'all': ('stylesheets/widgEditor.css',)
+            'all': (get_revved_url('stylesheets/widgEditor.css') or 'stylesheets/widgEditor.css',)
         }

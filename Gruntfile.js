@@ -234,7 +234,11 @@ module.exports = function (grunt) {
         length: 8,
       },
       gfx: {
-        src: 'build/static/gfx/**/*.{png,jpg,gif}',
+        src: [
+          'build/static/gfx/**/*.{png,jpg,gif}',
+          '!build/static/gfx/widgEditor/**',
+          '!build/static/gfx/zoombox/**',
+        ]
       },
       styles: {
         src: 'build/static/stylesheets/*.css',
@@ -297,7 +301,7 @@ module.exports = function (grunt) {
             'bower_components/moment/moment.js',
             'slingsby/events/static/js/event_detail.js',
           ],
-          'build/static/js/socialSummary.min.js': 'slingsby/general/static/js/socialSummary.js',
+          'build/static/js/socialSummary.min.js': 'slingsby/articles/static/js/socialSummary.js',
           'build/static/js/widgEditor.min.js': 'slingsby/general/static/js/widgEditor.js',
         }
       }

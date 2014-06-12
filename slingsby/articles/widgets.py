@@ -1,3 +1,5 @@
+from ..general.templatetags.revved_static import get_revved_url
+
 from django.forms.widgets import Textarea
 
 class SocialSummaryWidget(Textarea):
@@ -14,6 +16,5 @@ class SocialSummaryWidget(Textarea):
 
     class Media:
         js = (
-            'libs/jquery/jquery.min.js',
-            'js/socialSummary.min.js'
+            get_revved_url('js/socialSummary.min.js') or 'js/socialSummary.min.js',
         )

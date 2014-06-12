@@ -36,7 +36,7 @@ class FileRevNode(StaticFilesNode):
 
     def url(self, context):
         path = self.path.resolve(context)
-        revved_path = settings.FILEREVS.get(path)
+        revved_path = get_revved_url(path)
         if revved_path is not None:
             return staticfiles_storage.url(revved_path)
         else:
@@ -46,3 +46,7 @@ class FileRevNode(StaticFilesNode):
 @register.tag
 def static(parser, token):
     return FileRevNode.handle_token(parser, token)
+
+
+def get_revved_url(path):
+    return settings.FILEREVS.get(path)
