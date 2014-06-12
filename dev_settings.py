@@ -3,6 +3,7 @@
 # Override settings locally
 from slingsby.settings import *
 from os import path
+import os
 
 DEBUG = True
 
@@ -66,3 +67,11 @@ if DEBUG_TOOLBAR:
     ] + list(MIDDLEWARE_CLASSES)
 
     INSTALLED_APPS.append('debug_toolbar')
+
+if os.environ.get('WITH_COVERAGE', False):
+    NOSE_ARGS = [
+        '--with-coverage',
+        '--cover-package=slingsby',
+        '--cover-html',
+        '--cover-branches',
+    ]

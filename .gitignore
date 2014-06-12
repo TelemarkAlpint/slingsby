@@ -15,3 +15,5 @@ pillar/secure
 log.log
 slingsby/server-assets
 .vagrant
+.coverage
+cover
