@@ -81,6 +81,10 @@ Adding the `watch` task makes sure grunt will stay awake and listen for changes 
 files, and re-run whatever has to be done for those files *and* reload your browser when done.
 Magic!
 
+Add some dummy data to work with:
+
+    $ python manage.py syncdb --noinput && python manage.py bootstrap
+
 And now, you can start the devserver:
 
     $ python manage.py runserver
@@ -151,3 +155,8 @@ will be the name it will be added to pillar as.
 
 **Q**: The server is fubar, how do I create a new one?  
 **A**: See the steps under `salt/README.md`.
+
+**Q**: How do I get the devserver back to untouched state?  
+**A**: Delete the sqlite database: `rm slingsby_rel.sqlite`, recreate an empty one: `python
+manage.py syncdb --noinput`, and optionally fill it with some dummy data: `python manage.py
+bootstrap`.
