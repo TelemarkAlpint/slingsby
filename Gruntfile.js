@@ -4,11 +4,16 @@
 /*
 This file configures common tasks when developing on slingsby.
 
-Static files like css and js needs to be 'compiled' (minified and concatenated) before they can be served,
-and SASS needs to be compiled to CSS and so on. In broad steps this process is first collecting all files needed
-in the ./tmp directory, and then building the final set of files into ./build, which is also served by the
-devserver. Some processes might skip the ./tmp directory entirely, like the imagemin step which takes the
-graphics directly from slingsby/static-src to build/static.
+Static files like css and js needs to be transpiled (minified and concatenated) before they can be
+served, and SASS needs to be compiled to CSS and so on. In broad steps this process is first
+collecting all files needed in the ./tmp directory, and then building the final set of files into
+./build, which is also served by the devserver. Some processes might skip the ./tmp directory
+entirely, like the imagemin step which takes the graphics directly from slingsby/static-src to
+build/static.
+
+To just run the devserver, all you need to do is `grunt prep`. This will generate all the files you
+need, and when deploying Travis will run `grunt build` which in addition to prep also packages the
+python code and the static files into tarballs that can be pushed to the server.
 */
 module.exports = function (grunt) {
   "use strict";
@@ -129,24 +134,6 @@ module.exports = function (grunt) {
       buildPython: {
         command: 'python setup.py sdist --dist-dir build --formats gztar',
       },
-      provision: {
-        options: {
-          stdout: true,
-        },
-        command: (function () {
-          if (!grunt.file.exists('pillar/secure/init.sls')) {
-            grunt.fail.warn("Can't provisoin until you've decrypted the secrets!\n\nRun " +
-                "`python tools/secure_data.py decrypt` to do so.");
-          }
-          return [
-              'tar czf build/salt_and_pillar.tar.gz salt pillar',
-              'scp build/salt_and_pillar.tar.gz slingsby:/tmp/',
-              'ssh slingsby "sudo tar xf /tmp/salt_and_pillar.tar.gz -C /srv/',
-              'sudo salt-call --local state.highstate --force-color',
-              'rm /tmp/salt_and_pillar.tar.gz"'
-            ].join('&&');
-        })(),
-      },
       collectstatic: {
         command: function () {
           // The build/static directory needs to exist for the collectstatic command to succeed
@@ -159,37 +146,6 @@ module.exports = function (grunt) {
           'cd build/static',
           'tar czf ../static_files.tar.gz *',
         ].join(' && '),
-      },
-      deployCode: {
-        options: {
-          stdout: true
-        },
-        command: [
-          'scp build/slingsby-1.0.0.tar.gz slingsby:/tmp/slingsby.tar.gz',
-          'ssh slingsby "sudo /srv/ntnuita.no/venv/bin/pip install --upgrade /tmp/slingsby.tar.gz',
-          'sudo restart uwsgi',
-          'rm /tmp/slingsby.tar.gz"'
-        ].join(' && '),
-      },
-      deployStatic: {
-        options: {
-          stdout: true,
-        },
-        command: [
-          'scp build/static_files.tar.gz slingsby:/tmp/static_files.tar.gz',
-          'ssh slingsby "cd /srv/ntnuita.no',
-          'sudo tar xf /tmp/static_files.tar.gz -C static',
-          'sudo chown -R root:www static',
-          'find static -type f -print0 | xargs -0 sudo chmod 444',
-          'find static -type d -print0 | xargs -0 sudo chmod 555',
-          'rm /tmp/static_files.tar.gz"'
-        ].join(' && '),
-      },
-      devserver: {
-        options: {
-          stdout: true,
-        },
-        command: 'python manage.py runserver --settings secret_settings <%= grunt.option("port") || 80 %>'
       },
     },
 
@@ -317,15 +273,8 @@ module.exports = function (grunt) {
     'jshint',
     'pylint',
   ]);
-  grunt.registerTask('deploy', [
-    'shell:deployStatic',
-    'shell:deployCode',
-  ]);
   grunt.registerTask('pybuild', [
     'shell:buildPython',
-  ]);
-  grunt.registerTask('provision', [
-    'shell:provision',
   ]);
   grunt.registerTask('rev-files', [
     'filerev',
