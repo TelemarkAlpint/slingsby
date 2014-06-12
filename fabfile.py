@@ -17,13 +17,15 @@
 from fabric.api import run, sudo, put, cd, hosts, env, local
 from fabric.context_managers import shell_env
 import os
+import sys
 
 try:
     import colorama
     colorama.init()
-except:
-    print('Colorama not installed, if stuff looks weird you might get better results by running' +
-        ' `pip install colorama` first. ')
+except ImportError:
+    if sys.platform.startswith('win'):
+        print('Colorama not installed!\n\nIf stuff looks weird you might get better results by ' +
+            'running `pip install colorama` first. ')
 
 
 def deploy():
