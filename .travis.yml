@@ -1,6 +1,4 @@
-language:
-  - python
-  - node_js
+language: python
 
 python:
   - "2.7"
@@ -11,9 +9,6 @@ before_install:
   - echo -n $id_rsa_{00..43} >> ~/.ssh/id_rsa_base64
   - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
-
-  # Make sure we can connect by the alias 'slingsby' and without prompts
-  - echo -e "Host slingsby\n\tHostName ntnuita.no\n\tStrictHostKeyChecking no\n\tPort 3271\n" >> ~/.ssh/config
 
 install:
 
@@ -40,8 +35,7 @@ script:
   - grunt build
 
   # Decrypt secrets needed to deploy, provision the server to make sure it's up to date, and deploy
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then python ./tools/secure_data.py decrypt --key $SALT_SECRET && grunt provision && grunt deploy; fi
-
+  - "if [[ $TRAVIS_BRANCH == 'master' ]]; then python ./tools/secure_data.py decrypt --key $SALT_SECRET && fab provision deploy -H travis@ntnuita.no:3271; fi"
 
 env:
   global:
