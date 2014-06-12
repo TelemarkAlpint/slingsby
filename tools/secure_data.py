@@ -79,7 +79,7 @@ def decrypt(secret_key):
 
 
 def aes_encrypt(key, plaintext):
-    iv = Crypto.Random.new().read(Crypto.Cipher.AES.block_size)
+    iv = Crypto.Random.new().read(Crypto.Cipher.AES.block_size) # pylint: disable=invalid-name
     cipher = Crypto.Cipher.AES.new(key, Crypto.Cipher.AES.MODE_CFB, iv)
     ciphertext = iv + cipher.encrypt(plaintext.encode('utf-8'))
     b64_ciphertext = base64.b64encode(ciphertext)
@@ -88,7 +88,7 @@ def aes_encrypt(key, plaintext):
 
 def aes_decrypt(key, b64_ciphertext):
     iv_ciphertext = base64.b64decode(b64_ciphertext)
-    iv = iv_ciphertext[:Crypto.Cipher.AES.block_size]
+    iv = iv_ciphertext[:Crypto.Cipher.AES.block_size] # pylint: disable=invalid-name
     ciphertext = iv_ciphertext[Crypto.Cipher.AES.block_size:]
     cipher = Crypto.Cipher.AES.new(key, Crypto.Cipher.AES.MODE_CFB, iv)
     plaintext = cipher.decrypt(ciphertext)

@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 from django.contrib.webdesign.lorem_ipsum import paragraphs
 
 def bootstrap():
-    johnny, created = User.objects.get_or_create(username='johnnydev', first_name='Johnny', last_name='Dev')
-    pedro, created = User.objects.get_or_create(username='pedro', first_name='Pedro', last_name='Trenersjef')
+    johnny, _ = User.objects.get_or_create(username='johnnydev', first_name='Johnny', last_name='Dev')
+    pedro, _ = User.objects.get_or_create(username='pedro', first_name='Pedro', last_name='Trenersjef')
     Article.objects.get_or_create(title='Ny funksjonalitet på nettsidene oppe snart',
         content='''<p>
                 Masse nye spennende greier på vei, dette blir kult.

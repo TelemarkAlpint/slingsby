@@ -1,4 +1,4 @@
-# pylint: disable=unused-wildcard-import,wildcard-import
+# pylint: disable=unused-wildcard-import,wildcard-import,invalid-name
 
 from dev_settings import *
 
