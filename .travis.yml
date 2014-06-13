@@ -40,6 +40,9 @@ script:
   # Add code coverage to gh-pages
   - ./tools/coverage_to_gh_pages.sh
 
+notifications:
+  email: false
+
 env:
   global:
 
