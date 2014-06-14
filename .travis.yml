@@ -13,7 +13,10 @@ before_install:
 install:
 
   # Python stuff
-  - pip install -r dev-requirements.txt
+  - pip install -r dev-requirements.txt --no-deps
+
+  # Dump vagrant pubkey to .ssh/authorized_keys for SSH tests
+  - python -c "import yaml; fh = open('pillar/vagrant.sls'); d = yaml.load(fh); print d['developers']['vagrant']['ssh_keys'][0]" >> ~/.ssh/authorized_keys
 
   # Install compass
   - gem update --system
@@ -24,12 +27,15 @@ install:
   - npm install
   - bower install
 
+  # Install sox and lame (required for the musikk task tests)
+  - sudo apt-get install sox lame
+
 script:
   # Lint the code, but don't fail the build if there's errors
   - grunt lint --force
 
   # Unit tests
-  - WITH_COVERAGE=1 python manage.py test
+  - WITH_COVERAGE=1 RUN_SSH_TESTS=1 FILESERVER=travis@127.0.0.1 python manage.py test
 
   # Build
   - grunt build
@@ -38,7 +44,7 @@ script:
   - "if [[ $TRAVIS_BRANCH == 'master' ]]; then python ./tools/secure_data.py decrypt --key $SALT_SECRET && fab provision deploy -H travis@ntnuita.no:3271; fi"
 
   # Add code coverage to gh-pages
-  - ./tools/coverage_to_gh_pages.sh
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./tools/coverage_to_gh_pages.sh; fi
 
 notifications:
   email: false
