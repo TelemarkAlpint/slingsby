@@ -151,7 +151,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 #### Settings defined only for slingsby
 #######################################
 
-MEDIA_DIR = 'http://org.ntnu.no/telemark/media/'
+MEDIA_URL = 'http://org.ntnu.no/telemark/media/'
 
 JSON_ARCHIVE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/archive.json'
 

@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import TemplateView, RedirectView, View
 from dateutil.parser import parse
 from time import time as get_timestamp
@@ -35,6 +35,7 @@ class TopSongsCache(CachedQuery):
 class AllReadySongsCache(CachedQuery):
     keyword = 'ready_songs'
     queryset = Song.objects.filter(ready=True).order_by('artist', 'title')
+
 
 
 class SongDetailView(ActionView, TemplateView):
@@ -76,9 +77,19 @@ class SongDetailView(ActionView, TemplateView):
             process_new_song.delay(song.id)
             return HttpResponseRedirect(reverse('musikk'))
         else:
+            songs = Song.objects.filter(ready=False, filename='').order_by('date_added')
+            forms = []
+            for _song in songs:
+                if _song == song:
+                    forms.append(form)
+                else:
+                    forms.append(ReadySongForm(instance=_song))
             messages.error(request, 'Du har noen feil i skjemaet, prøv på nytt pretty please?')
-            _logger.info("%s was rejected for approval, invalid form data entered by %s", song, request.user)
-            return HttpResponseRedirect(reverse('musikk'))
+            _logger.info("%s was rejected for approval, invalid form data entered by %s. " +
+                "Errors was: %s", song, request.user, repr(form.errors))
+            context['new_songforms'] = forms
+            context['song_form'] = SongSuggestionForm()
+            return render(request, 'musikk/musikk.html', context, status=400)
 
 
     def vote(self, request, **kwargs):
@@ -115,6 +126,7 @@ def get_vote_dict(user):
         cache.set('vote_dict', dictionary)
     return dictionary
 
+
 class AllSongsView(TemplateView):
 
     template_name = 'musikk/musikk.html'
@@ -125,7 +137,7 @@ class AllSongsView(TemplateView):
 
 
     def post(self, request, **kwargs):
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated():
             return HttpResponse('Authenticate first', status=401)
         form = SongSuggestionForm(request.POST)
         context = self.get_context_data(**kwargs)
@@ -133,15 +145,14 @@ class AllSongsView(TemplateView):
             song = form.save(commit=False)
             song.suggested_by = request.user
             song.save()
-            context['new_songforms'].append(ReadySongForm(instance=song))
             messages.success(request, 'Takker og bukker, webmaster vil se på forslaget og ' \
                 'prøve å få lastet det opp ASAP, hang tight!')
-            return self.render_to_response(context, status=201)
+            return HttpResponseRedirect(reverse('musikk'))
         else:
             messages.warning(request, 'Oops, ser ut til at du har noen feil i skjemaet, ' \
                 'se om du får fikset det og prøv på nytt!')
             context['song_form'] = form
-            return self.render_to_response(context)
+            return self.render_to_response(context, status=400)
 
 
     def get_context_data(self, **kwargs):
@@ -159,7 +170,7 @@ class AllSongsView(TemplateView):
         context['all_songs_second_half'] = second_half
         context['song_form'] = SongSuggestionForm()
         context['title'] = make_title('Musikk')
-        context['song_dir'] = settings.MEDIA_DIR + 'songs/'
+        context['MEDIA_URL'] = settings.MEDIA_URL
 
         if user.is_staff:
             context['new_songforms'] = self._get_new_songforms()
@@ -176,7 +187,10 @@ class AllSongsView(TemplateView):
 
 
     def _get_new_songforms(self):
-        songs = Song.objects.filter(ready=False).order_by('date_added')
+        """ Get suggested songs that have not been processed yet (ie ready=False and
+        no filename)
+        """
+        songs = Song.objects.filter(ready=False, filename='').order_by('date_added')
         forms = [ReadySongForm(instance=song) for song in songs]
         return forms
 
