@@ -5,6 +5,7 @@ from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.time import _nor as nor_timezone
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
+from .tasks import process_new_song
 
 from django.conf import settings
 from django.contrib import messages
@@ -67,12 +68,12 @@ class SongDetailView(ActionView, TemplateView):
         context = self.get_context_data(**kwargs)
         _logger.info("%s is approving song %s", request.user, context['song'])
         song = context['song']
-        form = ReadySongForm(request.POST, instance=song)
+        form = ReadySongForm(request.POST, request.FILES, instance=song)
         if form.is_valid():
-            song.ready = True
             song.save()
             messages.success(request, '%s ble registrert, takker og bukker!' % song)
             _logger.info("%s approved by %s", song, request.user)
+            process_new_song.delay(song.id)
             return HttpResponseRedirect(reverse('musikk'))
         else:
             messages.error(request, 'Du har noen feil i skjemaet, prøv på nytt pretty please?')
