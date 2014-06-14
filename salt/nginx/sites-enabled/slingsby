@@ -18,6 +18,8 @@ server {
   listen 80;
   server_name {{ bind_url }};
   charset utf-8;
+  # Bump max upload size to allow uploading FLACs of trimmed songs (5-7MB usually)
+  client_max_body_size 10M;
 
   location / {
     include uwsgi_params;
@@ -28,7 +30,6 @@ server {
     uwsgi_param X-Real-IP $remote_addr;
     uwsgi_param X-Forwarded-For $proxy_add_x_forwarded_for;
     uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
-
   }
 
   location /static {
@@ -37,6 +38,12 @@ server {
     access_log off;
     add_header Cache-Control "public";
   }
+
+  {% if grains['id'] == 'vagrant' %}
+  location /media {
+    alias /srv/ntnuita.no/media/;
+  }
+  {% endif %}
 
   # Restrict access to the tasks, so that they can only be accessed locally
   location ~ ^/tasks {

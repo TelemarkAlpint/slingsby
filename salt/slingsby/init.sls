@@ -3,15 +3,21 @@
 include:
   - .cron
 
-virtualenv:
-  pip.installed
+slingsby-deps:
+  pip.installed:
+    - name: virtualenv
+
+  pkg.installed:
+    - pkgs:
+      - lame
+      - sox
 
 slingsby:
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
     - requirements: salt://slingsby/prod-requirements.txt
     - require:
-      - pip: virtualenv
+      - pip: slingsby-deps
       - pkg: python-dev # required for db bindings to compile
       - pkg: mysql # Needed to compile db bindings
 
@@ -53,3 +59,22 @@ slingsby-static-dir:
     - user: root
     - group: www
     - mode: 755
+
+
+slingsby-media-dir:
+  file.directory:
+    - name: /srv/ntnuita.no/media
+    - makedirs: True
+    - user: root
+    - group: www
+    - mode: 775
+
+
+slingsby-celery:
+  file.managed:
+    - name: /etc/init/slingsby-celery.conf
+    - source: salt://slingsby/celery_job_conf
+
+  service.running:
+    - watch:
+      - file: slingsby-celery
