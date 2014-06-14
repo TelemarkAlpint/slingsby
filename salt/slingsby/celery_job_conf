@@ -1,0 +1,15 @@
+description "Slingsby celery daemon"
+
+start on startup
+stop on runlevel [016]
+
+setuid www
+setgid www
+
+respawn
+
+env DJANGO_SETTINGS_MODULE=prod_settings
+env PYTHONPATH=/srv/ntnuita.no/
+
+exec /srv/ntnuita.no/venv/bin/celery worker \
+        --app slingsby.settings:celery_app

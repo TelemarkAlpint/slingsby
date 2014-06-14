@@ -4,12 +4,15 @@
 # with whatever tools support for cache and database.
 
 # Direct dependencies:
+celery==3.1.11
 django==1.6.5
 pyyaml==3.11
 python-dateutil==2.2
 pytz==2014.3
 beautifulsoup4==4.3.2
 requests==2.3.0
+# fabric needs paramiko < 1.13 on py2.x
+paramiko==1.12.0
 python-social-auth==0.1.24
 
 # Python-social-auth dependencies:
@@ -19,3 +22,13 @@ requests-oauthlib==0.4.0
 
 # python-dateutil dependencies:
 six==1.6.1
+
+# paramiko dependencies:
+ecdsa==0.11
+pycrypto==2.6.1
+
+# celery dependencies:
+billiard==3.3.0.17
+amqp==1.4.5
+kombu==3.0.16
+anyjson==0.3.3

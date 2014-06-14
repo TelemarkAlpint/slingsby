@@ -6,7 +6,9 @@ base:
     - nginx
     - pip
     - pkg
+    - rabbitmq
     - slingsby
+    - sudo
     - users
     - uwsgi
 

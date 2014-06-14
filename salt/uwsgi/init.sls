@@ -19,7 +19,7 @@ uwsgi:
       - pip: uwsgi
     - watch:
       - file: uwsgi
-      - file: slingsby_uwsgi_conf
+      - file: slingsby-uwsgi-conf
 
 
 log_dir:

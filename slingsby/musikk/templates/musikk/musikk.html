@@ -39,7 +39,7 @@
         </p>
 
         {% for form in new_songforms %}
-            <form class="inline" action="{% url 'approve_song' song_id=form.instance.id %}" method="post">
+            <form class="inline" action="{% url 'approve_song' song_id=form.instance.id %}" method="post" enctype="multipart/form-data">
             <table>
                 {{ form.as_table }}
             </table>
@@ -72,8 +72,8 @@
                 <img src="{% static 'gfx/wait.gif' %}" style="display: none;">
             </div>
             <audio controls preload="none">
-                <source src="{{ song_dir }}{{ song.filename|urlencode }}.ogg" type="audio/ogg">
-                <source src="{{ song_dir }}{{ song.filename|urlencode }}.mp3" type="audio/mp3">
+                <source src="{{ MEDIA_URL }}{{ song.filename|urlencode }}.ogg" type="audio/ogg">
+                <source src="{{ MEDIA_URL }}{{ song.filename|urlencode }}.mp3" type="audio/mp3">
                 Nettleseren din støtter dessverre ikke HTML5-lyd. Vi beklager dette, men kan varmt anbefale både
                 <a href="https://www.google.com/chrome">Chrome</a> og <a href="http://firefox.no/">Firefox</a>.
             </audio>

@@ -163,3 +163,17 @@ will be the name it will be added to pillar as.
 **A**: Delete the sqlite database: `rm slingsby_rel.sqlite`, recreate an empty one: `python
 manage.py syncdb --noinput`, and optionally fill it with some dummy data: `python manage.py
 bootstrap`.
+
+
+Testing web/fileserver integration
+----------------------------------
+
+Some tests require a fileserver to dump files to, notably the music upload. You can run these tests
+by starting the vagrant box with `vagrant up` and run the tests like this:
+
+    $ RUN_SSH_TESTS=1 python manage.py test
+
+(Windows user have to set the RUN_SSH_TESTS envvar separately, ie `set RUN_SSH_TESTS=1` and then
+run the tests as normal). If your fileserver is not reachable by `vagrant@localhost:2222`, set
+the `FILESERVER` envvar to point to the one you want to use. Make sure that the user can log in
+with the pubkey listed under `pillar/vagrant.sls`.

@@ -30,3 +30,6 @@ loggers:
     slingsby:
         handlers: [console, file]
         level: INFO
+    paramiko:
+        handlers: [console, file]
+        level: WARNING

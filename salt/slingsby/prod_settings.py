@@ -24,3 +24,15 @@ DATABASES = {
 }
 
 STATIC_URL = '/static/'
+
+FILESERVER = "{{ slingsby.get('fileserver', 'tarjeikl@login.stud.ntnu.no') }}"
+
+FILESERVER_MEDIA_ROOT = "{{ slingsby.get('fileserver_media_root', '/home/groupswww/telemark/media/') }}"
+
+FILESERVER_KEY = """{{ pillar.get('FILESERVER_KEY') }}"""
+
+MEDIA_ROOT = '/srv/ntnuita.no/media'
+
+{% if slingsby.get('media_url') %}
+MEDIA_URL = '{{ slingsby.media_url }}'
+{% endif %}
