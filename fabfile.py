@@ -50,6 +50,7 @@ def deploy():
     run('rm /tmp/static_files.tar.gz')
     migrate_db()
     sudo('service uwsgi restart')
+    sudo('service slingsby-celery restart')
 
 
 @hosts('vagrant@127.0.0.1:2222')
