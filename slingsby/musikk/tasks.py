@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from .models import Song
+from .models import Song, Vote
 
 from celery import shared_task
 from collections import namedtuple
@@ -92,6 +92,35 @@ def process_new_song(song_id):
             upload_file_to_fileserver(ssh_client, converted_file, new_filename)
     song.ready = True
     song.save()
+
+
+@shared_task
+@log_errors
+def count_votes():
+    """ Count up all new votes and recalculate song ratings. """
+    from .views import _EXPONENTIAL_BASE
+    _logger.info('Starting to count new votes...')
+    all_songs = list(Song.objects.all())
+    votes = Vote.objects.select_related('song').filter(counted=False)
+    max_rating = 0.0
+    vote_array = []
+    for vote in votes:
+        vote_array.append(vote.song.id)
+        vote.counted = True
+        vote.save()
+    _logger.info('%d new votes found.', len(vote_array))
+    for song in all_songs:
+        for voted_song in vote_array:
+            if voted_song == song.id:
+                song.votes += 1
+            else:
+                song.votes *= _EXPONENTIAL_BASE
+        if song.votes > max_rating:
+            max_rating = song.votes
+    for song in all_songs:
+        song.popularity = song.votes * 100 / max_rating
+        song.save()
+    _logger.info('All votes counted.')
 
 
 def upload_file_to_fileserver(ssh_client, src, dest):

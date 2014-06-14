@@ -2,8 +2,9 @@
 
 from __future__ import unicode_literals
 
-from .models import Song
-from .tasks import process_new_song, get_ssh_client, slugify, get_ssh_connection_params
+from .models import Song, Vote
+from .tasks import (process_new_song, get_ssh_client, slugify, get_ssh_connection_params,
+    count_votes)
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -105,6 +106,8 @@ class AuthenticatedSongTest(TestCase):
         self.assertFalse(song.ready)
 
 
+
+
 class SongTasksTest(TestCase):
 
     def setUp(self):
@@ -170,3 +173,46 @@ class UtilTest(TestCase):
         for connection_string, expected_result in tests:
             result = get_ssh_connection_params(connection_string)
             self.assertEqual(result, expected_result)
+
+
+class SongActionsTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
+        self.song = Song.objects.create(title='I Love It', artist='Icona Pop', ready=True,
+            filename='iloveit')
+
+
+    def test_vote_on_song(self):
+        with mock.patch('slingsby.musikk.views.count_votes') as count_votes_mock:
+            response = self.client.post('/musikk/%d/vote/' % self.song.id)
+            count_votes_mock.delay.assert_called_once()
+        self.assertEqual(response.status_code, 200)
+        num_votes = Vote.objects.count()
+        self.assertEqual(num_votes, 1)
+
+
+class VoteCountTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.iloveit = Song.objects.create(title='I Love It', artist='Icona Pop', ready=True,
+            filename='iloveit')
+        self.hammertime = Song.objects.create(title="U Can't Touch This", artist='MC Hammer', ready=True,
+            filename='canttouchthis')
+        Vote.objects.create(song=self.hammertime, user=self.user)
+
+
+    def test_count_votes(self):
+        count_votes()
+        hammertime = Song.objects.get(pk=self.hammertime.id)
+        iloveit = Song.objects.get(pk=self.iloveit.id)
+        self.assertEqual(hammertime.popularity, 100)
+        self.assertEqual(iloveit.popularity, 0)
+        Vote.objects.create(song=iloveit, user=self.user)
+        count_votes()
+        hammertime = Song.objects.get(pk=self.hammertime.id)
+        iloveit = Song.objects.get(pk=self.iloveit.id)
+        self.assertTrue(iloveit.popularity > hammertime.popularity)

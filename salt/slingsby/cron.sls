@@ -8,7 +8,7 @@ empty_vote_cache:
     - hour: 23
 
 count_new_votes:
-  cron.present:
+  cron.absent:
     - name: 'curl -v localhost/tasks/count_votes -H "Host: ntnuita.no"'
     - hour: 23
     - minute: 1

@@ -1,11 +1,9 @@
 # coding: utf-8
 
 from ..general import make_title, cache, time
-from ..general.cache import CachedQuery, empty_on_changes_to
-from ..general.time import _nor as nor_timezone
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
-from .tasks import process_new_song
+from .tasks import process_new_song, count_votes
 
 from django.conf import settings
 from django.contrib import messages
@@ -15,7 +13,6 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import TemplateView, RedirectView, View
 from dateutil.parser import parse
 from time import time as get_timestamp
-import datetime
 import json
 import logging
 import requests
@@ -25,17 +22,8 @@ _EXPONENTIAL_BASE = 0.9917
 
 _logger = logging.getLogger(__name__)
 
-
-class TopSongsCache(CachedQuery):
-    keyword = 'top_songs'
-    queryset = Song.objects.filter(ready=True).filter(votes__gt=0)[:_SONGS_IN_TOP_SONGS]
-
-
-@empty_on_changes_to(Song)
-class AllReadySongsCache(CachedQuery):
-    keyword = 'ready_songs'
-    queryset = Song.objects.filter(ready=True).order_by('artist', 'title')
-
+top_songs = Song.objects.filter(ready=True).filter(votes__gt=0)[:_SONGS_IN_TOP_SONGS]
+all_songs = Song.objects.filter(ready=True).order_by('artist', 'title')
 
 
 class SongDetailView(ActionView, TemplateView):
@@ -96,35 +84,28 @@ class SongDetailView(ActionView, TemplateView):
         """ Register a vote for a song, if the user can vote on it. """
         context = self.get_context_data(**kwargs)
         _logger.info("%s is trying to vote on %s", request.user, context['song'])
-        vote_dict = get_vote_dict(request.user)
-        can_vote = context['song'].id not in vote_dict[request.user.id] and context['song'].ready
+        votes = get_votes_from_today(request.user)
+        can_vote = context['song'].id not in votes and context['song'].ready
         if can_vote:
-            vote = Vote()
-            vote.user = request.user
-            vote.song = context['song']
-            vote.save()
-            vote_dict[request.user.id].append(context['song'].id)
-            cache.set('vote_dict', vote_dict)
+            Vote.objects.create(user=request.user, song=context['song'])
             logging.info('%s voted on %s.', request.user, context['song'])
+            count_votes.delay()
             return HttpResponse('Vote registered on %s.' % context['song'])
         else:
-            logging.info('%s tried to vote more than once on %s.', request.user.username, context['song'])
-            return HttpResponse("Du har allerede stemt på denne sangen i dag!", content_type='text/plain', status=403)
+            logging.info('%s tried to vote more than once on %s.',
+                request.user.username, context['song'])
+            return HttpResponse("Du har allerede stemt på denne sangen i dag!",
+                content_type='text/plain', status=403)
 
 
-def get_vote_dict(user):
+def get_votes_from_today(user):
     """ Find the ids of the songs the user has voted on today. """
     if not user.is_authenticated():
-        return {}
-    dictionary = cache.get('vote_dict')
-    if dictionary is None or user.id not in dictionary.keys():
-        date = time.now().date()
-        start = nor_timezone.localize(datetime.datetime(date.year, date.month, date.day))
-        values = Vote.objects.filter(date_added__gte=start).filter(user=user).values('song')
-        ids = [d.values()[0] for d in values]
-        dictionary = {user.id: ids}
-        cache.set('vote_dict', dictionary)
-    return dictionary
+        return set()
+    start_of_day = time.now().replace(hour=0, minute=0, second=1)
+    values = list(Vote.objects.filter(date_added__gte=start_of_day, user=user).values_list('song', flat=True))
+    print 'Values retrieved: %s' % values
+    return set(values)
 
 
 class AllSongsView(TemplateView):
@@ -157,14 +138,10 @@ class AllSongsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AllSongsView, self).get_context_data(**kwargs)
-        all_songs = AllReadySongsCache.get_cached()
         user = self.request.user
         first_half, second_half = self._split_list_in_half(all_songs)
-        vote_dict = get_vote_dict(user)
-        songs_voted_on = vote_dict.get(user.id, [])
-        top_songs = TopSongsCache.get_cached()
 
-        context['songs_voted_on'] = songs_voted_on
+        context['songs_voted_on'] = get_votes_from_today(user)
         context['top_songs'] = top_songs
         context['all_songs_first_half'] = first_half
         context['all_songs_second_half'] = second_half
@@ -222,7 +199,7 @@ class TopSong(RedirectView):
 class TopSongsList(View):
 
     def get(self, request):
-        top_song_objects = TopSongsCache.update_cache()
+        top_song_objects = top_songs
         top_songs_data = [song.to_json() for song in top_song_objects]
         return HttpResponse(json.dumps(top_songs_data, indent=2), mimetype='application/json')
 
