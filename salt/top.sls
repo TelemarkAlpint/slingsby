@@ -8,6 +8,7 @@ base:
     - pkg
     - rabbitmq
     - slingsby
+    - sudo
     - users
     - uwsgi
 

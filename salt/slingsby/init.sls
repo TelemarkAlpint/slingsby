@@ -34,7 +34,7 @@ slingsby:
     - watch_in:
       - service: uwsgi
 
-slingsby_uwsgi_conf:
+slingsby-uwsgi-conf:
   file.managed:
     - name: /srv/ntnuita.no/uwsgi.ini
     - source: salt://slingsby/uwsgi_conf
@@ -43,7 +43,7 @@ slingsby_uwsgi_conf:
       - virtualenv: slingsby
 
 
-slingsby_log_dir:
+slingsby-log-dir:
   file.directory:
     - name: /var/log/slingsby
     - makedirs: True
