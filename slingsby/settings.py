@@ -2,6 +2,8 @@
 
 from __future__ import print_function
 
+from .celery import app as celery_app # pylint: disable=unused-import
+
 import os
 import yaml
 import json
@@ -135,12 +137,21 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 
 #######################################
+### Celery settings
+#######################################
+
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+#######################################
 #### Settings defined only for slingsby
 #######################################
 
 MEDIA_DIR = 'http://org.ntnu.no/telemark/media/'
-
-MUSIC_DIR = MEDIA_DIR + 'songs/'
 
 JSON_ARCHIVE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/archive.json'
 
