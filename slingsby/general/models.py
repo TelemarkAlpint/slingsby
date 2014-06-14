@@ -24,7 +24,7 @@ class Sponsor(models.Model):
         return self.name
 
     def get_img_url(self):
-        return settings.MEDIA_DIR + 'img/sponsors/' + urlquote(self.filename)
+        return settings.MEDIA_URL + 'img/sponsors/' + urlquote(self.filename)
 
 class SponsorsQuery(CachedQuery):
     keyword = 'sponsors'
