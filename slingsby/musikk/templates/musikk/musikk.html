@@ -33,9 +33,8 @@
 
         <p>
         Dette er sangene som er foreslått, men som vi ikke har fått tak i enda. Hvis du sitter på en av disse, finn et parti på omtrent
-        40-45s som er bra å trene til, og lagre dette partiet som både MP3 og OGG (teknisk ansvarlig kan hjelpe til med dette).
-        Deretter er det bare å trykke inn filnavnet, uten filendelsen, så vil den bli tilgjengelig for folk å stemme på.
-        Startpunkt i sekunder er det som er foreslått av brukeren, og trenger overhodet ikke å stemme, det er kun til hjelp når du skal lage fila.
+        40-45s som er bra å trene til, og last det opp her. Startpunkt i sekunder er det som er foreslått av brukeren, og trenger
+        overhodet ikke å stemme, det er kun til hjelp når du skal lage fila.
         </p>
 
         {% for form in new_songforms %}
@@ -43,7 +42,7 @@
             <table>
                 {{ form.as_table }}
             </table>
-            <input type="submit" class="btn" value="Registrer sang">
+            <input type="submit" class="btn" value="Last opp">
             </form>
 
             <form class="inline" action="{% url 'song_details' song_id=form.instance.id %}" method="post">
