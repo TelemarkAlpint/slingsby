@@ -9,7 +9,7 @@
         </div>
     </a>
     <span title="{{ song.artist }}">{{ song.artist|shorten:17 }}</span> -
-    <a href="{{ MEDIA_URL }}{{ song.filename|urlencode }}.mp3" title="{{ song.title }}">{{ song.title|truncatechars:16 }}</a>
+    <a href="{{ MEDIA_URL }}{{ song.filename|urlencode }}.mp3" title="{{ song.title }}">{{ song.title|truncatechars:15 }}</a>
     {% if user.is_authenticated %}
         {% if song.id not in songs_voted_on %}
             <img id="{{ song.id }}" alt="Stem opp!" title="Stem opp {{ song.title }}!" class="clickable song_vote_button" src="{% static "gfx/up.png" %}" >
