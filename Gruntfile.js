@@ -267,7 +267,9 @@ module.exports = function (grunt) {
 
   // Default task
   grunt.registerTask('default', [
-    'server',
+    'clean',
+    'prep',
+    'watch',
   ]);
   grunt.registerTask('lint', [
     'jshint',
