@@ -97,7 +97,7 @@ module.exports = function (grunt) {
         livereload: true
       },
       css: {
-        files: ['slingsby/static-src/stylesheets/sass/*.scss'],
+        files: ['slingsby/static-src/sass/*.scss'],
         tasks: ['compass', 'clean:build', 'copy:tmpToBuild']
       },
       js: {
