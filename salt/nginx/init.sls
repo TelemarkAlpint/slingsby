@@ -30,7 +30,7 @@ nginx_log_dir:
     - name: /usr/share/nginx/logs
     - user: root
     - group: www
-    - mode: 770
+    - mode: 775
 
 
 slingsby-site:
