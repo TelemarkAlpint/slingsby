@@ -2,7 +2,7 @@
 # so all times should be specified as UTC.
 
 empty_vote_cache:
-  cron.present:
+  cron.absent:
     - name: 'curl -v localhost/tasks/empty_cache -H "Host: ntnuita.no"'
     - minute: 0
     - hour: 23
