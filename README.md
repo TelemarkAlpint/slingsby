@@ -48,6 +48,13 @@ Set up a virtualenv and install the python requirements:
     $ . venv/bin/activate # windows: .\venv\Scripts\activate.bat
     $ pip install -r dev-requirements.txt
 
+**Note**: If you're having trouble installing PyCrypto on windows due to missing C compiler, you
+can install the precompiled binaries from
+[the voidspace python modules](http://www.voidspace.org.uk/python/modules.shtml#pycrypto). If you
+install PyCrypto globally, you can copy it into your virtualenv manually by copying `Crypto` and
+`pycrypto-2.6-py2.7.egg-info` from `C:\Python2.7\Lib\site-packages` into `venv\Lib\site-packages`
+and edit the `salt\slingsby\requirements.txt` to use pycrypto==2.6.
+
 You now have everything needed to run the tests:
 
     $ python manage.py test
@@ -135,6 +142,30 @@ dependencies like jQuery and Handlebars, defined in `bower.json`. `npm` handles 
 like grunt and the grunt plugins for SASS transiling and js minification, defined in
 `package.json`. And lastly, you also need RubyGems (`gem`) be able to install compass, which is
 needed by grunt-compass.
+
+
+It doesn't work!
+----------------
+
+Relax, take a deep breath, check the logs. Relevant logs to check include:
+
+**uwsgi**: `/var/log/uwsgi/uwsgi.log`
+**nginx**: `/usr/share/nginx/logs/error.log`
+**slingsby**: `/var/log/slingsby/log.log`
+
+Try restarting uwsgi and nginx, to see if it makes a difference:
+
+    $ sudo service uwsgi restart
+    $ sudo service nginx restart
+
+Try to see if you can import the settings without failure:
+
+    $ sudo /srv/ntnuita.no/venv/bin/python -c "import prod_settings"
+
+Or, that you can import slingsby without failure:
+
+    $ /srv/ntnuita.no/venv/bin/python -c "import slingsby"
+
 
 
 How do I...
