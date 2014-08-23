@@ -139,7 +139,7 @@ def upload_file_to_fileserver(ssh_client, src, dest):
     _logger.info('Uploading file to fileserver: %s, dest: %s', media_src, dest)
     target_dir = os.path.dirname(dest)
     # umask to make dirs 775 such that future telemark admins can use them as well
-    ssh_client.exec_command('test -d {0} || (umask 002 && mkdir -p {0})'.format(target_dir))
+    ssh_client.exec_command('test -d {0} || (umask 002 && mkdir -p {0} && chmod g+s {0})'.format(target_dir))
     sftp = ssh_client.open_sftp()
     sftp.put(media_src, dest)
     # Make sure future telemark admins have sufficient permissions:
