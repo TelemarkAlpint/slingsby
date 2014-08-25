@@ -193,7 +193,7 @@ class TopSong(RedirectView):
         """ Get the location of the latest song merged from the top songs. """
         metadata = get_top_song_metadata()
         filename = metadata['filename']
-        return settings.MUSIC_DIR + filename
+        return settings.MEDIA_URL + 'musikk/' + filename
 
 
 class TopSongsList(View):
@@ -207,5 +207,5 @@ class TopSongsList(View):
 def get_top_song_metadata():
     """ Fetch the JSON metadata about the latest top song from the fileserver. """
     cache_buster = '?v=%s' % get_timestamp()
-    response = requests.get(settings.MUSIC_DIR + 'top_meta.json' + cache_buster)
+    response = requests.get(settings.MEDIA_URL + 'musikk/top_meta.json' + cache_buster)
     return response.json()
