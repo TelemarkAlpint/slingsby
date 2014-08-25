@@ -41,7 +41,7 @@ class Song(models.Model):
             'artist': self.artist,
             'date_added': self.date_added.isoformat(),
             'popularity': self.popularity,
-            'filename': self.filename,
+            'filename': self.filename.url,
         }
         return json
 
