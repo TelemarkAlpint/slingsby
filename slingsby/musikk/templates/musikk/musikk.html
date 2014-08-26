@@ -87,7 +87,7 @@
     <h1>Alle sanger</h1>
 
     <p>
-        Dette er alle sangene dere kan stemme på. Savner du noe? Foreslå flere på toppen av siden da vel! Den grønne baren angir <a href="#rating">sangens rating</a>, logg inn for å avgi din stemme!
+        Dette er alle sangene dere kan stemme på. Savner du noe? Foreslå flere på toppen av siden da vel! Den grønne baren angir <a href="#about-rating">sangens rating</a>, logg inn for å avgi din stemme!
         Du kan stemme én gang på hver sang hver dag. Ratingen oppdateres fortløpende.
     </p>
 
@@ -111,13 +111,15 @@
         </ul>
         </li></ul>
     </div>
-    <p id="song_help_text">
+
+    <p id="about-rating">
         Ratingen beregnes slik:<br>
         Når en sang mottar en stemme, økes den sangens rating med 1, mens alle andre sangers rating blir ganget med
         en eksponentialfaktor på 0.9917. Dette gjør at nye stemmer vektlegges mer enn gamle, og gjør det
         lettere å få inn nye sanger på lista. <br>
         En stemme er dermed halvert i verdi når det har kommet inn 0.5 = 0.9917<sup>x</sup>, x = ln(0.5)/ln(0.9917) ≈ 83 nye stemmer.
     </p>
+
 {% endblock %}
 
 {% block extrascripts %}
