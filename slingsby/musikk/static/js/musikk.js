@@ -7,7 +7,7 @@
     }
 
     function vote(songId) {
-        setIcon(songId, 'wait.gif');
+        setIcon(songId, slingsby.urls.musikk.waitingSpinner);
         $.ajax({
             url: '/musikk/' + songId + '/vote/',
             type: 'POST',
