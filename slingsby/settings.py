@@ -14,6 +14,8 @@ TEMPLATE_DEBUG = DEBUG
 
 USE_TZ = True
 
+LANGUAGE_CODE = 'nb-NO'
+
 TIME_ZONE = 'Europe/Oslo'
 
 FIRST_DAY_OF_WEEK = 1 # Søndag = 0, Mandag = 1
