@@ -212,3 +212,11 @@ by starting the vagrant box with `vagrant up` and run the tests like this:
 run the tests as normal). If your fileserver is not reachable by `vagrant@localhost:2222`, set
 the `FILESERVER` envvar to point to the one you want to use. Make sure that the user can log in
 with the pubkey listed under `pillar/vagrant.sls`.
+
+
+Handy oneliners
+---------------
+
+Wipe local database and bootstrap new one, without wiping the user data:
+
+    $ sqlite3 slingsby_rel.sqlite ".tables" | python -c "import sys; tables = sys.stdin.read().split(); tables.remove('auth_user'); print ' '.join('DROP TABLE %s;' % table for table in tables)" | sqlite3 slingsby_rel.sqlite && python manage.py syncdb --noinput && python manage.py bootstrap
