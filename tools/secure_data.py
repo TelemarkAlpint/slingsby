@@ -72,7 +72,7 @@ def decrypt(secret_key):
     output_file = os.path.join(os.path.dirname(__file__), '..', 'pillar', 'secure', 'init.sls')
     output_dir = os.path.dirname(output_file)
     if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
+        os.makedirs(output_dir)
     with open(output_file, 'w') as fh:
         yaml.dump(plaintext_data, fh, default_flow_style=False)
     print 'Done. Data has been decrypted to pillar/secure/init.sls'

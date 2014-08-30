@@ -5,6 +5,7 @@ from slingsby.settings import *
 from os import path
 import os
 import textwrap
+import yaml
 
 DEBUG = True
 
@@ -113,3 +114,18 @@ FILESERVER_KEY = textwrap.dedent('''\
     NSddVYNEowsH3azzX3txUGhHu/uxwykUGE0HKTkSjJaZHFjqtTu0eA==
     -----END RSA PRIVATE KEY-----
     ''')
+
+# Load secrets from pillar/secure/init.sls if available
+secrets_file = os.path.join(os.path.dirname(__file__), 'pillar', 'secure', 'init.sls')
+
+if path.exists(secrets_file):
+    local_variables = locals()
+    with open(secrets_file) as secrets_fh:
+        secret_data = yaml.load(secrets_fh)
+    for key, val in secret_data.items():
+        local_variables[key] = val
+else:
+    print('Decrypted secrets not found, some functionality will not be available, notably ' +
+        'social authentication.\n\nTo decrypt these secrets, run ' +
+        '`python tools/secure_data.py decrypt` to do so.\nThe decryption key can be found in ' +
+        'Kontoer.kdbx in the webkom dropbox')
