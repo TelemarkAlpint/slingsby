@@ -199,8 +199,9 @@ class TopSong(RedirectView):
 class TopSongsList(View):
 
     def get(self, request):
-        top_song_objects = top_songs
-        top_songs_data = [song.to_json() for song in top_song_objects]
+        top_songs_data = {
+            'songs': [song.to_json() for song in top_songs.all()],
+        }
         return HttpResponse(json.dumps(top_songs_data, indent=2), mimetype='application/json')
 
 
