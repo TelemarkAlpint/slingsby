@@ -1,5 +1,6 @@
 absent_users:
   - ubuntu
+  - henrik
 
 daemon_users:
   www: Nginx/uWSGI worker
@@ -12,13 +13,6 @@ developers:
     ssh_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEAoJ8Q8yYAzP9WeUBz92ChLqTdxhw7U0OesVoOFhprq9uHtH1LOOvCAytDN+EDapFKc11atDEOWjERRwXlD87FdAeoBoDVx8l60UV2xreVTH6wdsFMukUayt8HXO8xX6zHmu3k+KTvw+7Xrg+I8iLowF1TevoGQRfQbcIcvtFq4xvl/tsVTcXejsdn6HkRDTJR5Fti2z67quf5NQMGvvwdGAub5uCzRJMLNQtf8H7vXL2f118qEVoHdG7XaSrceoWtNNvO2HJKQiq7PPv2J+K8qtebZMR9nOps1a4WPMRFKx3qgnTnIiqVTAZroDEniF6rOMgmsDE18QVcv/eOyKtxb2ZYOPeh9a7csvZLUDpnG9KguEHmHvY0u5ruQrxtNK6AWWfwkBBwbavQY1VImtgtGPa7gmLSB88hmU3Y1oFSOG+K3z0zyem817gLuTthIg7cdu2LZZATR80fsuBdgXcH7fZGVF4cpba+qft6pDDE7RQtSIspMD5Gc2HXsvFoYZhqfrgptYtGgk7sLaDH+xwgGyWbGokC5/abiGJyM1Oy26YOvOvJrf70vjIrrUTJQaAvQS3pN6mcc0LDmNbyHU/USlRptO+WNu2fRYhFpjzR1Do++G19RcyZoCWJ4OtpSWwlXxs51LmIZoZvUCsgsvQ5shd0RK3Q0zZbQ6Gt8MwkZR0= Tarjei@313
     password_pillar: TARJEI_PASSWORD
-
-  henrik:
-    fullname: Henrik Heggelund Svendsen
-    groups:
-      - admin
-    ssh_keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVrxWtx5acuTAZLea/dj0QxgxHmmj/fFk2ILnxol9CAsv5YRc2ixWo53cl0UzwS0s5Tb4n3eoGUfT/FxKo/02JyFkuJh4+WplTUj32qDAnM86my+LrrXsB8B28R7lorvEiNGD6GcBWErThdHAp/qWmRGrnxrTs8vpnuXVOodyCvYmbdfK049DsD4ZbX1CvTubreAWJaoQz4k4DKCAg8iyOYJ1oipkghqMNK3nYQD+/voDn7Uf67jbnM2Hqw+02eylFNSbowsGmELdU5gWZZ5ZsBiuutTFtuccIP3380yAvj+4s2DvjI+yteEoWdn90b6prE50kPDZlEzu7KqHrwwp5
 
   travis:
     fullname: Travis CI [automated]
