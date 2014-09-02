@@ -175,6 +175,11 @@ Or, that you can import slingsby without failure:
 How do I...
 -----------
 
+**Q**: Create a user for myself on the server?  
+**A**: 1) Find your password hash by using the `tools/create_password_hash.py` tool, 2) encrypt
+your password hash with `tools/secure_data.py encrypt <YOURNAME>_PASSWORD=<hash>`, 3) add your
+details to `pillar/users/init.sls`, optionally also an SSH key, and Travis will create your user.
+
 **Q**: Add a new frontend library?  
 **A**: Install the library with bower: `bower install <new-libary> --save`. This will save it into
 `bower_components`, now add it to an existing script or create a new one in the uglify task in
