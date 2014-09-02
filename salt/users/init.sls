@@ -7,7 +7,11 @@
       {% for group in user['groups'] %}
         - {{ group }}
       {% endfor %}
+    {% if 'password_pillar' in user %}
+    - password: "{{ pillar[user['password_pillar']] }}"
+    {% endif %}
 
+  {% if 'ssh_keys' in user %}
   ssh_auth.present:
     - user: {{ username }}
     - require:
@@ -16,6 +20,7 @@
       {% for ssh_key in user['ssh_keys'] %}
       - {{ ssh_key }}
       {% endfor %}
+  {% endif %}
 {% endfor %}
 
 
