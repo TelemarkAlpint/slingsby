@@ -192,8 +192,8 @@ class TopSong(RedirectView):
     def get_redirect_url(self, **kwargs):
         """ Get the location of the latest song merged from the top songs. """
         metadata = get_top_song_metadata()
-        filename = metadata['filename']
-        return settings.MEDIA_URL + 'musikk/' + filename
+        song_url = metadata['url']
+        return song_url
 
 
 class TopSongsList(View):
