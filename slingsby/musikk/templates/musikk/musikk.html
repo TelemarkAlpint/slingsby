@@ -59,11 +59,11 @@
     {% for song in top_songs %}
         <tr>
         <td class="left">
-            <a href="{{ song.get_absolute_url }}" class="song_rating">
+            <span class="song_rating">
                 <div class="rating" style="width: 40px;border: 1px solid black;height: 10px;display: inline-block;">
                     <div style="width: {{ song.popularity }}%;background-color: green;height: 10px;"></div>
                     </div>
-            </a>
+            </span>
             {{ song.artist }} - {{ song.title }}
         </td>
         <td class="right">
