@@ -179,11 +179,10 @@ class TopSongsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TopSongsView, self).get_context_data(**kwargs)
         song_metadata = get_top_song_metadata()
-        cache.set('top_song_filename', song_metadata['filename'])
         last_updated = parse(song_metadata['last_updated'])
         context['last_updated'] = last_updated.strftime("%d.%m.%y %H:%M")
         context['num_songs'] = _SONGS_IN_TOP_SONGS
-        context['top_song_filename'] = song_metadata['filename']
+        context['top_song_url'] = song_metadata['url']
         return context
 
 
