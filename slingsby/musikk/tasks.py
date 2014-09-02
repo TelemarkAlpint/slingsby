@@ -123,6 +123,16 @@ def count_votes():
     _logger.info('All votes counted.')
 
 
+@shared_task
+@log_errors
+def create_new_compilation():
+    """ Creates a new song for monday excercise, merging all the top-rated ones. """
+    print('Establishing connection to fileserver to start creating new monday compilation')
+    with fileserver_ssh_client() as ssh_client:
+        ssh_client.exec_command('python /home/groups/telemark/expeditious/update_top_song.py')
+    print('Compilation created.')
+
+
 def upload_file_to_fileserver(ssh_client, src, dest):
     """ Uploads a file to the media dir on the remote fileserver.
 
