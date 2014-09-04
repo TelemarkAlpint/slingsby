@@ -77,7 +77,7 @@ class Event(models.Model):
 
     def has_opened(self):
         if self.registration_opens:
-            return time.is_past(self.registration_opens)
+            return time.is_past(time.utc_to_nor(self.registration_opens))
         else:
             return True
 
