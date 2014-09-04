@@ -14,7 +14,7 @@
     "grunt-contrib-clean": "~0.6.0",
     "grunt-pylint": "~0.4.0",
     "grunt-shell": "~1.0.1",
-    "grunt-css-url-embed": "~1.0.0",
+    "grunt-css-url-embed": "1.0.1",
     "grunt-filerev": "^0.2.1",
     "grunt-filerev-assets": "~0.3.2"
   }
