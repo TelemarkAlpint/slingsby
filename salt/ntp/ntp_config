@@ -39,10 +39,6 @@ restrict -6 default kod notrap nomodify nopeer noquery
 restrict 127.0.0.1
 restrict ::1
 
-# Don't listen to any interfaces
-interface ignore 0.0.0.0
-interface ignore ::
-
 # Clients from this (example!) subnet have unlimited access, but only if
 # cryptographically authenticated.
 #restrict 192.168.123.0 mask 255.255.255.0 notrust
