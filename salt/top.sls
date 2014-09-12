@@ -13,7 +13,6 @@ base:
     - uwsgi
 
   'ntnuita.no':
-    - newrelic
     - ssh
 
   'vagrant':
