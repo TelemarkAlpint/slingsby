@@ -34,8 +34,13 @@ urlpatterns += patterns('',
     (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
 )
 
-if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
-    import debug_toolbar
+if settings.DEBUG:
+    from .users.views import DevLogin
     urlpatterns += patterns('',
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r'^devlogin/', DevLogin.as_view(), name='devlogin')
     )
+    if 'debug_toolbar' in settings.INSTALLED_APPS:
+        import debug_toolbar
+        urlpatterns += patterns('',
+            url(r'^__debug__/', include(debug_toolbar.urls)),
+        )
