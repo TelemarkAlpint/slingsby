@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for slingsby.general.time: 61%</title>
+    <title>Coverage for slingsby.general.time: 57%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     
     <script type='text/javascript' src='jquery.min.js'></script>
@@ -21,13 +21,13 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>slingsby.general.time</b> :
-            <span class='pc_cov'>61%</span>
+            <span class='pc_cov'>57%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
             45 statements &nbsp;
-            <span class='run hide_run shortkey_r button_toggle_run'>29 run</span>
-            <span class='mis shortkey_m button_toggle_mis'>16 missing</span>
+            <span class='run hide_run shortkey_r button_toggle_run'>27 run</span>
+            <span class='mis shortkey_m button_toggle_mis'>18 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
                 <span class='par run hide_run shortkey_p button_toggle_par'>2 partial</span>
@@ -119,12 +119,12 @@
 <p id='n54' class='stm mis'><a href='#n54'>54</a></p>
 <p id='n55' class='pln'><a href='#n55'>55</a></p>
 <p id='n56' class='stm run hide_run'><a href='#n56'>56</a></p>
-<p id='n57' class='stm run hide_run'><a href='#n57'>57</a></p>
+<p id='n57' class='stm mis'><a href='#n57'>57</a></p>
 <p id='n58' class='stm mis'><a href='#n58'>58</a></p>
 <p id='n59' class='stm mis'><a href='#n59'>59</a></p>
 <p id='n60' class='pln'><a href='#n60'>60</a></p>
 <p id='n61' class='stm run hide_run'><a href='#n61'>61</a></p>
-<p id='n62' class='stm run hide_run'><a href='#n62'>62</a></p>
+<p id='n62' class='stm mis'><a href='#n62'>62</a></p>
                 
             </td>
             <td class='text' valign='top'>
@@ -184,12 +184,12 @@
 <p id='t54' class='stm mis'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>seconds_between</span><span class='op'>(</span><span class='nam'>now</span><span class='op'>(</span><span class='op'>)</span><span class='op'>,</span> <span class='nam'>date</span><span class='strut'>&nbsp;</span></p>
 <p id='t55' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t56' class='stm run hide_run'><span class='key'>def</span> <span class='nam'>seconds_between</span><span class='op'>(</span><span class='nam'>date1</span><span class='op'>,</span> <span class='nam'>date2</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t57' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>dst_date1</span> <span class='op'>=</span> <span class='nam'>aware_time</span><span class='op'>(</span><span class='nam'>date1</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t57' class='stm mis'>&nbsp; &nbsp; <span class='nam'>dst_date1</span> <span class='op'>=</span> <span class='nam'>aware_time</span><span class='op'>(</span><span class='nam'>date1</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t58' class='stm mis'>&nbsp; &nbsp; <span class='nam'>dst_date2</span> <span class='op'>=</span> <span class='nam'>aware_time</span><span class='op'>(</span><span class='nam'>date2</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t59' class='stm mis'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>int</span><span class='op'>(</span><span class='op'>(</span><span class='nam'>dst_date1</span> <span class='op'>-</span> <span class='nam'>dst_date2</span><span class='op'>)</span><span class='op'>.</span><span class='nam'>total_seconds</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t60' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t61' class='stm run hide_run'><span class='key'>def</span> <span class='nam'>seconds_to</span><span class='op'>(</span><span class='nam'>date</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t62' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>seconds_between</span><span class='op'>(</span><span class='nam'>date</span><span class='op'>,</span> <span class='nam'>now</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t62' class='stm mis'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>seconds_between</span><span class='op'>(</span><span class='nam'>date</span><span class='op'>,</span> <span class='nam'>now</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
