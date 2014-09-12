@@ -2,11 +2,13 @@
 
 from ..general import time, validate_text
 from ..general.widgets import WidgEditorWidget
+from datetime import timedelta
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
+
 
 _WEEKDAYS = [u'mandag', u'tirsdag', u'onsdag', u'torsdag', u'fredag', u'lørdag', u'søndag']
 _MONTHS = [u'januar', u'februar', u'mars', u'april', u'mai', u'juni', u'juli',
@@ -63,6 +65,9 @@ class Event(models.Model):
     def _format_date(self, date):
         return '%s %d. %s %s' % (_WEEKDAYS[date.weekday()], date.day, _MONTHS[date.month - 1], date.strftime('%H:%M'))
 
+    def seconds_until_registration_opens(self):
+        return time.seconds_to(self.registration_opens)
+
     def registration_closes_as_string(self):
         return self._format_date(time.utc_to_nor(self.registration_closes))
 
@@ -96,7 +101,7 @@ class Event(models.Model):
         if self.registration_opens is None:
             return True
         if self.registration_closes is None:
-            return time.is_past(self.registration_opens)
+            return time.is_past(self.registration_opens - timedelta(seconds=1))
         else:
             return time.is_past(self.registration_opens) and time.is_future(self.registration_closes)
 
