@@ -22,7 +22,12 @@ uwsgi:
       - file: slingsby-uwsgi-conf
 
 
-log_dir:
+uwsgi-apps-dir:
+  file.directory:
+    - name: /opt/apps
+
+
+uwsgi-log-dir:
   file.directory:
     - name: /var/log/uwsgi
     - user: root
