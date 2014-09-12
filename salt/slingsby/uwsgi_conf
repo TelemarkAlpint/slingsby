@@ -1,6 +1,7 @@
 [uwsgi]
 uid = www
 gid = www
+vassal_name = slingsby
 socket = /tmp/slingsby.socket
 virtualenv = /srv/ntnuita.no/venv/
 pythonpath = /srv/ntnuita.no/
