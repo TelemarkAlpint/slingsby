@@ -10,7 +10,7 @@ venv
 .tmp
 build
 *.egg-info
-slingsby_rel.sqlite
+db-dev.sqlite
 pillar/secure
 log.log
 slingsby/server-assets
