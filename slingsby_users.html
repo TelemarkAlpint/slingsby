@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for slingsby.users: 100%</title>
+    <title>Coverage for slingsby.users: 0%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     
     <script type='text/javascript' src='jquery.min.js'></script>
@@ -21,13 +21,13 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>slingsby.users</b> :
-            <span class='pc_cov'>100%</span>
+            <span class='pc_cov'>0%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
-            0 statements &nbsp;
+            9 statements &nbsp;
             <span class='run hide_run shortkey_r button_toggle_run'>0 run</span>
-            <span class='mis shortkey_m button_toggle_mis'>0 missing</span>
+            <span class='mis shortkey_m button_toggle_mis'>9 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
                 <span class='par run hide_run shortkey_p button_toggle_par'>0 partial</span>
@@ -63,9 +63,49 @@
     <table cellspacing='0' cellpadding='0'>
         <tr>
             <td class='linenos' valign='top'>
+<p id='n1' class='pln'><a href='#n1'>1</a></p>
+<p id='n2' class='pln'><a href='#n2'>2</a></p>
+<p id='n3' class='pln'><a href='#n3'>3</a></p>
+<p id='n4' class='pln'><a href='#n4'>4</a></p>
+<p id='n5' class='pln'><a href='#n5'>5</a></p>
+<p id='n6' class='pln'><a href='#n6'>6</a></p>
+<p id='n7' class='pln'><a href='#n7'>7</a></p>
+<p id='n8' class='pln'><a href='#n8'>8</a></p>
+<p id='n9' class='stm mis'><a href='#n9'>9</a></p>
+<p id='n10' class='pln'><a href='#n10'>10</a></p>
+<p id='n11' class='stm mis'><a href='#n11'>11</a></p>
+<p id='n12' class='pln'><a href='#n12'>12</a></p>
+<p id='n13' class='stm mis'><a href='#n13'>13</a></p>
+<p id='n14' class='stm mis'><a href='#n14'>14</a></p>
+<p id='n15' class='pln'><a href='#n15'>15</a></p>
+<p id='n16' class='stm mis'><a href='#n16'>16</a></p>
+<p id='n17' class='stm mis'><a href='#n17'>17</a></p>
+<p id='n18' class='stm mis'><a href='#n18'>18</a></p>
+<p id='n19' class='stm mis'><a href='#n19'>19</a></p>
+<p id='n20' class='stm mis'><a href='#n20'>20</a></p>
                 
             </td>
             <td class='text' valign='top'>
+<p id='t1' class='pln'><span class='str'>&quot;&quot;&quot; Enabled in dev environemnts to be able to test the site as different users.</span><span class='strut'>&nbsp;</span></p>
+<p id='t2' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t3' class='pln'><span class='str'>Doesn&#39;t require passwords, and should obviously NEVER be enabled in a prod environment.</span><span class='strut'>&nbsp;</span></p>
+<p id='t4' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t5' class='pln'><span class='str'>Both DEBUG=True (url routing) and adding this to AUTHENTICATION_BACKENDS needs to be in place</span><span class='strut'>&nbsp;</span></p>
+<p id='t6' class='pln'><span class='str'>for this to work.</span><span class='strut'>&nbsp;</span></p>
+<p id='t7' class='pln'><span class='str'>&quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
+<p id='t8' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t9' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>auth</span><span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>User</span><span class='strut'>&nbsp;</span></p>
+<p id='t10' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t11' class='stm mis'><span class='key'>class</span> <span class='nam'>DevAuthBackend</span><span class='op'>(</span><span class='nam'>object</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t12' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t13' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>authenticate</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>,</span> <span class='nam'>username</span><span class='op'>=</span><span class='nam'>None</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t14' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>User</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>get</span><span class='op'>(</span><span class='nam'>username</span><span class='op'>=</span><span class='nam'>username</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t15' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t16' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>get_user</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>,</span> <span class='nam'>user_id</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t17' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>try</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t18' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>User</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>get</span><span class='op'>(</span><span class='nam'>pk</span><span class='op'>=</span><span class='nam'>user_id</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t19' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>except</span> <span class='nam'>User</span><span class='op'>.</span><span class='nam'>DoesNotExist</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t20' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>None</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
