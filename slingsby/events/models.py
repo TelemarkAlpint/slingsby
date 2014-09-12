@@ -66,7 +66,10 @@ class Event(models.Model):
         return '%s %d. %s %s' % (_WEEKDAYS[date.weekday()], date.day, _MONTHS[date.month - 1], date.strftime('%H:%M'))
 
     def seconds_until_registration_opens(self):
-        return time.seconds_to(self.registration_opens)
+        if self.has_registration:
+            return time.seconds_to(self.registration_opens)
+        else:
+            return 0
 
     def registration_closes_as_string(self):
         return self._format_date(time.utc_to_nor(self.registration_closes))
