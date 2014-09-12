@@ -1,6 +1,7 @@
 [uwsgi]
 uid = www
 gid = www
+threads = 3
 vassal_name = slingsby
 socket = /tmp/slingsby.socket
 virtualenv = /srv/ntnuita.no/venv/
