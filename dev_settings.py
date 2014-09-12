@@ -20,7 +20,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'pleasedontusethisinprod'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'slingsby_rel.sqlite',
+        'NAME': 'db-dev.sqlite',
     }
 }
 
