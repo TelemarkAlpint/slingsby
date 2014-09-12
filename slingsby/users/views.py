@@ -3,6 +3,9 @@ from ..general.views import ActionView
 from ..events.models import Event
 from ..musikk.models import Vote, Song
 
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from django.views.generic.base import TemplateView
 
 class UserProfileView(ActionView, TemplateView):
@@ -47,3 +50,21 @@ class UserProfileView(ActionView, TemplateView):
         for song in songs:
             song_dict[song['id']] = {'artist': song['artist'], 'title': song['title'], 'votes': top[song['id']]}
         return [song_dict[s_id] for s_id in top_ids]
+
+
+class DevLogin(TemplateView):
+
+    template_name = 'users/devlogin.html'
+
+    def get_context_data(self, **kwargs):
+        users = User.objects.all()
+        return {'users': users}
+
+
+    def post(self, request):
+        username = request.POST.get('username')
+        if not username:
+            return HttpResponse(status=400)
+        user = authenticate(username=username)
+        login(request, user)
+        return HttpResponseRedirect('/')

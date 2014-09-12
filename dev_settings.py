@@ -31,6 +31,10 @@ CACHES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = list(AUTHENTICATION_BACKENDS) + [
+    'slingsby.users.DevAuthBackend',
+]
+
 # Used for the query debugger that's run in dev mode.
 INTERNAL_IPS = ("127.0.0.1", "::1")
 
