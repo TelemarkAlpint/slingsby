@@ -100,13 +100,13 @@ And now, you can start the devserver:
     $ python manage.py runserver
 
 This should start the devserver at port 8000, browse to `http://localhost:8000` to see it!
-Starting the devserver like this will create a SQLite database you can use locally. Note that some
-features will not work just like this, notably login, since you need to know our Facebook app
-secret to be able to use that.
+Starting the devserver like this will create a SQLite database you can use locally. Note that
+social login will not work out of the box, since authenticating with Facebook requires you to know
+our Facebook app secret. You only need this to test that Facebook auth works however, as in the dev
+environment you can log in as any user at `/devlogin`
 
-If you need to test login (and probably are lead developer of this project), you can decrypt the
-secrets needed and start the devserver on port 80. You also need to add the following line to your
-hosts file:
+If you need to test social login you can decrypt the secrets needed and start the devserver on port
+80. You also need to add the following line to your hosts file:
 
     127.0.0.1 ntnuita.local
 
