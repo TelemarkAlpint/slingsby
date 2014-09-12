@@ -1,6 +1,6 @@
 # These are AES-encrypted versions of secrets needed on the production server
 # Use tools/secure_salt_values.py to decrypt these (or add new ones), secret key can be
-# found in the Webkom Dropbox Kontoer.kdbx KeePass file.
+# found in the styre-dropbox Kontoer.kdbx KeePass file.
 
 MYSQL_PASSWORD: FcKcoqflJosehNqsJdfvkkfvSsNqCR9e261F/C0VqB0c1DD2zoTFCKmw9fMC6wyDCRt2nPAdfzfZeArP
 NEWRELIC_LICENSE_KEY: VHsi8IXvviaffOam/dHDRhXS/+FUaTGo5zSbqxXnYM10aTXZ11trPt/5obn5jhKr9f+3KQzy4xw=

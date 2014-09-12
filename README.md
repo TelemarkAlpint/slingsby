@@ -115,7 +115,7 @@ Decrypt the secrets and start the devserver with them:
     $ python tools/secure_data.py decrypt
     $ python manage.py runserver 80
 
-You'll find the secret needed for decryption in the webkom dropbox, in the file `Kontoer.kdbx`.
+You'll find the secret needed for decryption in the styre-dropbox, in the file `Kontoer.kdbx`.
 You'll need [KeePass](http://keepass.info/) to open it, the password for that file should be
 given to you by the webmaster if you're deemed worthy.
 

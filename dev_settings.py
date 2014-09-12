@@ -128,4 +128,4 @@ else:
     print('Decrypted secrets not found, some functionality will not be available, notably ' +
         'social authentication.\n\nTo decrypt these secrets, run ' +
         '`python tools/secure_data.py decrypt` to do so.\nThe decryption key can be found in ' +
-        'Kontoer.kdbx in the webkom dropbox')
+        'Kontoer.kdbx in the styre-dropbox')

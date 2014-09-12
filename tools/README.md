@@ -27,4 +27,4 @@ secure_data.py
 --------------
 
 Used to encrypt and decrypt secret values that are stored in `./salt/secure/init.sls`. Decryption
-key can be found in the webkom dropbox Kontoer.kdbx file.
+key can be found in the styre-dropbox `Kontoer.kdbx` file.
