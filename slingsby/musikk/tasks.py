@@ -76,22 +76,28 @@ def process_new_song(song_id):
     """
     _logger.info('Processing song from celery')
     song = Song.objects.get(pk=song_id)
-    src_file = str(song.filename)
-    wav_file = to_wav(src_file)
-    _logger.debug('Wav file: %s', wav_file)
-    converted_files = convert_file(wav_file)
-    _logger.debug('Converted files: %s', converted_files)
-    os.remove(wav_file)
-    new_basename = '/'.join(['musikk', slugify(song.artist), slugify(song.title)])
-    _logger.debug('New basename for song is %s', new_basename)
-    song.filename = new_basename
-    with fileserver_ssh_client() as ssh_client:
-        for converted_file in converted_files:
-            extension = os.path.splitext(converted_file)[1]
-            new_filename = new_basename + extension
-            upload_file_to_fileserver(ssh_client, converted_file, new_filename)
-    song.ready = True
-    song.save()
+    try:
+        src_file = str(song.filename)
+        wav_file = to_wav(src_file)
+        _logger.debug('Wav file: %s', wav_file)
+        converted_files = convert_file(wav_file)
+        _logger.debug('Converted files: %s', converted_files)
+        os.remove(wav_file)
+        new_basename = '/'.join(['musikk', slugify(song.artist), slugify(song.title)])
+        _logger.debug('New basename for song is %s', new_basename)
+        song.filename = new_basename
+        with fileserver_ssh_client() as ssh_client:
+            for converted_file in converted_files:
+                extension = os.path.splitext(converted_file)[1]
+                new_filename = new_basename + extension
+                upload_file_to_fileserver(ssh_client, converted_file, new_filename)
+        song.ready = True
+        song.save()
+    except:
+        # Reset filename in case of errors, so that admins can try again
+        song.filename = ''
+        song.save()
+        raise
 
 
 @shared_task
