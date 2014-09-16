@@ -116,6 +116,9 @@
                                 <li><a href="/{{ subpage.slug }}">{{ subpage.title }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
                             {% endif %}
                         {% endfor %}
+                        <li>
+                            <a href="{% url 'all_instagram' %}">Instagram</a>
+                        </li>
                     </ul>
                 </nav>
 
