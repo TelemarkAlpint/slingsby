@@ -12,4 +12,5 @@ env DJANGO_SETTINGS_MODULE=prod_settings
 env PYTHONPATH=/srv/ntnuita.no/
 
 exec /srv/ntnuita.no/venv/bin/celery worker \
-        --app slingsby.settings:celery_app
+        --app slingsby.settings:celery_app \
+        -B --scheduler djcelery.schedulers.DatabaseScheduler

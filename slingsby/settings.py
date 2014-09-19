@@ -54,6 +54,10 @@ INSTALLED_APPS = (
     'slingsby.tasks',
     'slingsby.users',
 
+    # Most of the functionality of django-celery has been merged into celery itself, but the admin
+    # interface remains, which is why we need it. This allows us to configure periodic tasks from
+    # the admin page.
+    'djcelery',
     'social.apps.django_app.default',
 )
 
