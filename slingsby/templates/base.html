@@ -107,9 +107,11 @@
         {% block sidebar %}
 
             <aside id="sidebar">
-                <a href="{% url 'frontpage' %}" id="logo" class="non-select"><img class="non-select" width="230" height="190" src="{% static "gfx/logo.png" %}" alt="" /></a>
-
                 <nav>
+                    <a href="{% url 'frontpage' %}" id="logo" class="non-select">
+                        <img class="non-select" width="230" height="190" src="{% static "gfx/logo.png" %}" alt="" />
+                    </a>
+
                     <ul>
                         {% for subpage in subpages %}
                             {% if subpage.visible or user.is_staff %}

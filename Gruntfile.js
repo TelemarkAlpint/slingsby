@@ -59,7 +59,10 @@ module.exports = function (grunt) {
           sassDir: 'slingsby/static-src/sass/',
           cssDir: '.tmp/static/stylesheets',
           outputStyle: 'compressed',
-          importPath: ['.tmp/sass'],
+          importPath: [
+            '.tmp/sass',
+            'bower_components/bootstrap-sass-official/assets/stylesheets',
+          ],
         }
       }
     },
