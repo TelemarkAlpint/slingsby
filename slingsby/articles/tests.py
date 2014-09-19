@@ -1,7 +1,8 @@
 from .models import Article, SubPageArticle
 from ..general.time import now
+from ..instagram.models import InstagramMedia
 
-from datetime import timedelta
+import datetime
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
@@ -16,13 +17,25 @@ class ArticleViewTest(TestCase):
             published_date=now(),
             author=testauthor,
         )
+        InstagramMedia.objects.create(
+            media_type='image',
+            poster='ntnuitaadmin',
+            poster_image='/admin.png',
+            thumbnail_url='/thumb.jpg',
+            media_url='/fullsize.jpg',
+            like_count=1337,
+            caption='Snow and awesome stuff this weekend with #ntnuita',
+            created_time=datetime.datetime.now(),
+            instagram_id='cafed00d',
+        )
 
 
-    def test_get_article_list(self):
+    def test_get_frontpage(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Testarticle' in response.content.decode('utf-8'))
         self.assertTrue('<p>News here</p>' in response.content.decode('utf-8'))
+        self.assertTrue('Snow and awesome' in response.content.decode('utf-8'))
 
 
     def test_get_article_details(self):
@@ -65,7 +78,7 @@ class AllArticlesTest(TestCase):
             Article.objects.create(
                 title='Article #%d' % i,
                 content='<p>%d</p>' % i,
-                published_date=(now() - timedelta(hours=i)),
+                published_date=(now() - datetime.timedelta(hours=i)),
                 author=testauthor,
             )
 

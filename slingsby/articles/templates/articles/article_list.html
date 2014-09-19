@@ -6,6 +6,17 @@
 
 {% block content %}
 
+    {% if instagram_latest %}
+        {# we're on the frontpage, show latest stuff from instagram #}
+        <div>
+            <h2>
+                Siste <a href="{% url 'all_instagram' %}">#ntnuita</a> på instagram</h2>
+            {% for media in instagram_latest %}
+                {% include 'instagram/render_media.html' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     {% for article in articles %}
         {% if user.is_superuser or article.visible %}
             <article data-datetime="{{ article.published_date.isoformat }}">
@@ -24,4 +35,7 @@
 
 {% block extrascripts %}
     <script async defer src="{% static 'js/articles.min.js' %}"></script>
+    {% if instagram_latest %}
+        <script async defer src="{% static 'js/instagram.min.js' %}"></script>
+    {% endif %}
 {% endblock %}
