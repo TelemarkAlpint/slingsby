@@ -164,7 +164,7 @@ module.exports = function (grunt) {
         '.tmp',
       ],
       serverAssets: [
-        'sligsby/server-assets',
+        'slingsby/server-assets',
       ],
     },
 
