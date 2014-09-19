@@ -1,0 +1,28 @@
+.instagram-media-small {
+    width: 160px;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 5px;
+
+    &:hover {
+        background-color: #ddd;
+    }
+}
+
+.instagram-byline {
+    width: 150px;
+    word-wrap: break-word;
+}
+
+.instagram-poster {
+    max-width: 150px;
+}
+
+.instagram-comment-profile {
+    width: 20px;
+}
+
+video {
+    max-width: 100%;
+}

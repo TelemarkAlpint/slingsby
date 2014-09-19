@@ -18,6 +18,10 @@ class InstagramMedia(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.poster, self.caption[:80])
 
+    @property
+    def comments(self):
+        return self._comments.all()
+
 
 class InstagramComment(models.Model):
     poster = models.CharField('poster', max_length=40)
@@ -25,7 +29,7 @@ class InstagramComment(models.Model):
     created_time = models.DateTimeField('tid opprettet')
     instagram_id = models.CharField('instagram id', max_length=100)
     text = models.TextField('tekst')
-    media = models.ForeignKey(InstagramMedia, related_name='comments')
+    media = models.ForeignKey(InstagramMedia, related_name='_comments')
 
     def __unicode__(self):
         return '%s: %s' % (self.poster, self.text[:80])

@@ -1,5 +1,68 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
- hey
+
+    <p>
+        Vi bruker Instagram når vi er på tur, bruk #ntnuita du òg så får vi andre se hvor det er snø og hva som skjer i gruppa.
+    </p>
+
+    <p>
+        Dette er alle bildene vi har delt:
+    </p>
+
+    {% for media in all_media %}
+        <div class="instagram-media-small" data-toggle="modal" data-target="#instagram-detail-{{ forloop.counter }}">
+            <img src="{{ media.thumbnail_url }}" alt="Instagram-bilde av {{ media.poster }}">
+            <div>
+                <p class="instagram-byline">
+                    <img src="{% static 'gfx/heart.png' %}"> {{ media.like_count }}
+                    <span class="pull-right instagram-poster">
+                        @{{ media.poster}}
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div id="instagram-detail-{{ forloop.counter }}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">
+                            {% if media.media_type == 'video' %}Film{% else %}Bilde{% endif %} av <a href="http://instagram.com/{{ media.poster }}/">{{ media.poster }}</a>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        {% if media.media_type == 'video' %}
+                            <video width="640" heigth="640" controls>
+                                <source src="{{ media.media_url }}" type="video/mp4">
+                                Beklager, nettleseren din klarer ikke spille av HTML5-video. Oppdatert Firefox eller Chrome anbefales!
+                            </video>
+                        {% else %}
+                            <img src="{{ media.media_url }}" alt="Instagram-bilde av {{ media.poster }}">
+                        {% endif %}
+                        <p>
+                            {{ media.caption }}
+                        </p>
+                        {% for comment in media.comments %}
+                            <img src="{{ comment.poster_image }}" alt="{{ comment.poster }}s profilbilde" class="instagram-comment-profile">
+                            <strong><span>{{ comment.poster }}</span></strong>
+                            <p>
+                                {{ comment.text }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block extrascripts %}
+    <script async defer src="{% static 'js/instagram.min.js' %}"></script>
 {% endblock %}
