@@ -10,7 +10,7 @@ def bootstrap():
         recent_media = json.load(fh)
         for media in recent_media['data']:
             type_plural = 'videos' if media['type'] == 'video' else 'images'
-            instagram_media, created = InstagramMedia.objects.get_or_create(
+            instagram_media, created = InstagramMedia.objects.get_or_create( # pylint: disable=unused-variable
                 media_type=media['type'],
                 poster=media['user']['username'],
                 poster_image=media['user']['profile_picture'],
