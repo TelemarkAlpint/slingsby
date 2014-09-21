@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from ..general import make_title, cache, time
+from ..general import make_title, time
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
 from .tasks import process_new_song, count_votes

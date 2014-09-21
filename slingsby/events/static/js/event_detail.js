@@ -1,4 +1,4 @@
-(function ($, moment) {
+(function ($) {
     "use strict";
 
     function countdownToSignup() {
@@ -23,4 +23,4 @@
     }
     countdownToSignup();
 
-})(jQuery, moment);
+})(jQuery);

@@ -254,7 +254,6 @@ module.exports = function (grunt) {
             'slingsby/musikk/static/js/musikk.js',
           ],
           '.tmp/static/js/event_detail.min.js': [
-            'bower_components/moment/moment.js',
             'slingsby/events/static/js/event_detail.js',
           ],
           'build/static/js/socialSummary.min.js': 'slingsby/articles/static/js/socialSummary.js',

@@ -99,14 +99,14 @@ class-rgx=[A-Z_][a-zA-Z0-9]+$
 class-attribute-rgx=(([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$|js)
 
 # Regular expression which should only match correct function names
-function-rgx=[a-z_][a-z0-9_]{2,30}$
+function-rgx=[a-z_][a-z0-9_]{2,50}$
 
 # Regular expression which should only match correct method names
 # We allow setUp and tearDown, since they are required by unittest
-method-rgx=([a-z_][a-z0-9_]{2,30}$|test_*|setUp|tearDown)
+method-rgx=([a-z_][a-z0-9_]{2,50}$|test_*|setUp|tearDown)
 
 # Regular expression which should only match correct instance attribute names
-# attr-rgx=[a-z_][a-z0-9_]{2,30}$
+# attr-rgx=[a-z_][a-z0-9_]{2,40}$
 attr-rgx=.*
 
 # Regular expression which should only match correct argument names
