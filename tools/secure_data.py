@@ -45,7 +45,7 @@ def get_args():
 
 def encrypt(secret_key, value):
     key, val = value.split('=', 1)
-    print 'Encryping %s...' % key
+    print 'Encrypting %s...' % key
     if val[0] == '@':
         with open(val[1:]) as plaintext_fh:
             plaintext = plaintext_fh.read()
