@@ -69,13 +69,6 @@
                 {% if user.is_authenticated %}
 
                     <span class="clickable">
-                      {% comment %}
-                          {% if user.small_img %}
-                              <img width=25 height=25 class="small_profile" src="{{ user.small_img }}" alt="Profilbildet ditt">
-                          {% else %}
-                              <img width=25 height=25 class="small_profile" src="{% static "gfx/missing_picture-25.png" %}" alt="Profilbilde mangler!">
-                          {% endif %}
-                        {% endcomment %}
                         {{ user.username|truncatechars:30 }} <span class="click_symbol">&#9664;</span>
                     </span>
 
@@ -107,15 +100,20 @@
         {% block sidebar %}
 
             <aside id="sidebar">
-                <a href="{% url 'frontpage' %}" id="logo" class="non-select"><img class="non-select" width="230" height="190" src="{% static "gfx/logo.png" %}" alt="" /></a>
-
                 <nav>
+                    <a href="{% url 'frontpage' %}" id="logo" class="non-select">
+                        <img class="non-select" width="230" height="190" src="{% static "gfx/logo.png" %}" alt="" />
+                    </a>
+
                     <ul>
                         {% for subpage in subpages %}
                             {% if subpage.visible or user.is_staff %}
                                 <li><a href="/{{ subpage.slug }}">{{ subpage.title }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
                             {% endif %}
                         {% endfor %}
+                        <li>
+                            <a href="{% url 'all_instagram' %}">Instagram</a>
+                        </li>
                     </ul>
                 </nav>
 
@@ -234,7 +232,7 @@
 
 {% block scripts %}
     <script>
-        {# This objects holds configuration that can be used client-side, to avoid hardcoding stuff #}
+        {# This object holds configuration that can be used client-side, to avoid hardcoding stuff #}
         var slingsby = {
             urls: {
                 {% for url_name, url in slingsby_urls.items %}

@@ -26,6 +26,7 @@ mysql-server:
 slingsby-db:
   mysql_database.present:
     - name: slingsby_rel
+    - character_set: utf8mb4
     - require:
       - service: mysql-server
 

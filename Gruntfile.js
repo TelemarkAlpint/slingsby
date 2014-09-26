@@ -59,7 +59,10 @@ module.exports = function (grunt) {
           sassDir: 'slingsby/static-src/sass/',
           cssDir: '.tmp/static/stylesheets',
           outputStyle: 'compressed',
-          importPath: ['.tmp/sass'],
+          importPath: [
+            '.tmp/sass',
+            'bower_components/bootstrap-sass-official/assets/stylesheets',
+          ],
         }
       }
     },
@@ -164,7 +167,7 @@ module.exports = function (grunt) {
         '.tmp',
       ],
       serverAssets: [
-        'sligsby/server-assets',
+        'slingsby/server-assets',
       ],
     },
 
@@ -255,6 +258,10 @@ module.exports = function (grunt) {
           ],
           '.tmp/static/js/event_detail.min.js': [
             'slingsby/events/static/js/event_detail.js',
+          ],
+          '.tmp/static/js/instagram.min.js': [
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js',
+            'slingsby/instagram/static/js/instagram.js',
           ],
           'build/static/js/socialSummary.min.js': 'slingsby/articles/static/js/socialSummary.js',
           'build/static/js/widgEditor.min.js': 'slingsby/general/static/js/widgEditor.js',

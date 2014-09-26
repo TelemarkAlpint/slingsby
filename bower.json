@@ -6,6 +6,7 @@
     "jquery": "~1.10",
     "handlebars": "~1.0.0",
     "moment": "~2.3.1",
-    "Zoombox": "https://github.com/Grafikart/Zoombox.git#23cbb921c7456e36910a7a8029274b9a466b22d1"
+    "Zoombox": "https://github.com/Grafikart/Zoombox.git#23cbb921c7456e36910a7a8029274b9a466b22d1",
+    "bootstrap-sass-official": "~3.2.0"
   }
 }

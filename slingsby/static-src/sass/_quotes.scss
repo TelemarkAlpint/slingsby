@@ -1,7 +1,7 @@
 .quote {
     overflow: hidden;
     color: white;
-    width: 240px;
+    width: 250px;
     margin-left: 0;
     margin-right: 0;
 
@@ -25,6 +25,10 @@
         line-height: 0.9em;
         width: 1.1em;
         padding: 0;
+    }
+
+    pre {
+        white-space: pre-wrap;
     }
 }
 

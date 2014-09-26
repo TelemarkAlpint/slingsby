@@ -3,6 +3,8 @@ from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.time import aware_from_utc
 from ..general.mixins import JSONMixin
 from .models import SubPageArticle, Article
+from ..instagram.models import InstagramMedia
+
 from dateutil.parser import parse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -24,6 +26,17 @@ class LatestArticlesQuery(CachedQuery):
 @empty_on_changes_to(Article)
 class AllArticlesQuery(CachedQuery):
     queryset = Article.objects.all().select_related()
+
+
+class Frontpage(TemplateView):
+
+    template_name = 'articles/article_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Frontpage, self).get_context_data(**kwargs)
+        context['articles'] = LatestArticlesQuery.get_cached()
+        context['instagram_latest'] = InstagramMedia.objects.filter(visible=True)[:4]
+        return context
 
 
 class AllArticlesList(JSONMixin, TemplateView):
@@ -51,16 +64,6 @@ class AllArticlesList(JSONMixin, TemplateView):
     def get_json(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
         return {'articles': [article.__json__() for article in context['articles']]}
-
-
-class LatestArticlesList(TemplateView):
-
-    template_name = 'articles/article_list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(LatestArticlesList, self).get_context_data(**kwargs)
-        context['articles'] = LatestArticlesQuery.get_cached()
-        return context
 
 
 class ArticleDetail(TemplateView):

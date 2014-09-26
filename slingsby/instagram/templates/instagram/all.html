@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load revved_static %}
+
+{% block content %}
+    <div class="jumbotron">
+        <p>
+            Vi bruker Instagram når vi er på tur, bruk <strong>#ntnuita</strong> du òg så får vi andre se hvor det er snø og hva som skjer i gruppa.
+        </p>
+
+    </div>
+
+    <p>
+        Dette er alle bildene vi har delt:
+    </p>
+
+    {% for media in all_media %}
+        {% include 'instagram/render_media.html' %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block extrascripts %}
+    <script async defer src="{% static 'js/instagram.min.js' %}"></script>
+{% endblock %}
