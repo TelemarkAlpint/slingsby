@@ -49,6 +49,9 @@ def fetch_instagram_media():
                 'created_time': datetime.datetime.utcfromtimestamp(float(media['created_time'])),
             }
         )
+        if created:
+            _logger.info('New instagram media added (%s): %s', instagram_media.instagram_id,
+                instagram_media.caption)
         for comment in media['comments']['data']:
             InstagramComment.objects.get_or_create(
                 instagram_id=comment['id'],
@@ -60,3 +63,6 @@ def fetch_instagram_media():
                     'media': instagram_media,
                 }
             )
+            if comment_created:
+                _logger.info('New comment to %s added (%s): %s', instagram_media.instagram_id,
+                    instagram_comment.instagram_id, instagram_comment.text)
