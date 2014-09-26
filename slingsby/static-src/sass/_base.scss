@@ -51,6 +51,11 @@ h6 {
     @include box-sizing(border-box);
     clear: both;
     font-family: "Bitter", serif;
+
+}
+
+.jumbotron {
+    padding: 30px 30px;
 }
 
 a.header-link:link,
