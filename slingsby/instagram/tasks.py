@@ -26,16 +26,8 @@ def log_errors(func):
     return wrapper
 
 
-@shared_task
-@log_errors
-def fetch_instagram_media():
-    """ Takes a raw song uploaded (assumed to be FLAC), converts it into mp3 and ogg,
-    pushes it to the fileserver, and updates the song filename and marks it as ready.
-    """
-    _logger.info('Fetching media from instagram')
-    recent_media = requests.get('https://api.instagram.com/v1/tags/ntnuita/media/recent',
-        params={'client_id': settings.INSTAGRAM_CLIENT_ID}).json()
-    for media in recent_media['data']:
+def load_media_from_instagram_response(json_data):
+    for media in json_data['data']:
         media_key = 'videos' if media['type'] == 'video' else 'images'
         instagram_media, created = InstagramMedia.objects.get_or_create(
             instagram_id=media['id'],
@@ -67,3 +59,15 @@ def fetch_instagram_media():
             if comment_created:
                 _logger.info('New comment to %s added (%s): %s', instagram_media.instagram_id,
                     instagram_comment.instagram_id, instagram_comment.text)
+
+
+@shared_task
+@log_errors
+def fetch_instagram_media():
+    """ Takes a raw song uploaded (assumed to be FLAC), converts it into mp3 and ogg,
+    pushes it to the fileserver, and updates the song filename and marks it as ready.
+    """
+    _logger.info('Fetching media from instagram')
+    recent_media = requests.get('https://api.instagram.com/v1/tags/ntnuita/media/recent',
+        params={'client_id': settings.INSTAGRAM_CLIENT_ID}).json()
+    load_media_from_instagram_response(recent_media)
