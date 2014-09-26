@@ -200,7 +200,7 @@ will be the name it will be added to pillar as.
 **A**: See the steps under `salt/README.md`.
 
 **Q**: How do I get the devserver back to untouched state?  
-**A**: Delete the sqlite database: `rm slingsby_rel.sqlite`, recreate an empty one: `python
+**A**: Delete the sqlite database: `rm db-dev.sqlite`, recreate an empty one: `python
 manage.py syncdb --noinput`, and optionally fill it with some dummy data: `python manage.py
 bootstrap`.
 
@@ -224,7 +224,7 @@ Handy oneliners
 
 Wipe local database and bootstrap new one, without wiping the user data:
 
-    $ sqlite3 slingsby_rel.sqlite ".tables" | python -c "import sys; tables = sys.stdin.read().split(); tables.remove('auth_user'); print ' '.join('DROP TABLE %s;' % table for table in tables)" | sqlite3 slingsby_rel.sqlite && python manage.py syncdb --noinput && python manage.py bootstrap
+    $ sqlite3 db-dev.sqlite ".tables" | python -c "import sys; tables = sys.stdin.read().split(); tables.remove('auth_user'); print ' '.join('DROP TABLE %s;' % table for table in tables)" | sqlite3 db-dev.sqlite && python manage.py syncdb --noinput && python manage.py bootstrap
 
 
 Random notes that might someday be necessary
