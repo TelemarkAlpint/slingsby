@@ -8,9 +8,12 @@
 
     {% if instagram_latest %}
         {# we're on the frontpage, show latest stuff from instagram #}
-        <div>
-            <h2>
-                Siste <a href="{% url 'all_instagram' %}">#ntnuita</a> på instagram</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    Siste <a class="header-link" href="{% url 'all_instagram' %}">#ntnuita</a> på instagram
+                </h2>
+            </div>
             {% for media in instagram_latest %}
                 {% include 'instagram/render_media.html' %}
             {% endfor %}

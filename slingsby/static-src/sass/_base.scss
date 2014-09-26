@@ -3,6 +3,7 @@
 /* Define some constants that will be used later.
 These can also be used in stylesheets import after this one. */
 $headers-color: rgb(215, 73, 55);
+$header-link-color: rgb(193, 224, 255);
 $button-color: #357DF3;
 
 body {
@@ -37,6 +38,10 @@ body {
     }
 }
 
+.panel-default {
+    @include panel-variant($headers-color, #fff, $headers-color, $headers-color);
+}
+
 h1,
 h2,
 h3,
@@ -46,6 +51,13 @@ h6 {
     @include box-sizing(border-box);
     clear: both;
     font-family: "Bitter", serif;
+}
+
+a.header-link:link,
+a.header-link:hover,
+a.header-link:visited,
+a.header-link:active {
+    color: $header-link-color;
 }
 
 h1 { font-size: 20px; }
