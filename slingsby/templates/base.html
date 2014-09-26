@@ -69,13 +69,6 @@
                 {% if user.is_authenticated %}
 
                     <span class="clickable">
-                      {% comment %}
-                          {% if user.small_img %}
-                              <img width=25 height=25 class="small_profile" src="{{ user.small_img }}" alt="Profilbildet ditt">
-                          {% else %}
-                              <img width=25 height=25 class="small_profile" src="{% static "gfx/missing_picture-25.png" %}" alt="Profilbilde mangler!">
-                          {% endif %}
-                        {% endcomment %}
                         {{ user.username|truncatechars:30 }} <span class="click_symbol">&#9664;</span>
                     </span>
 
