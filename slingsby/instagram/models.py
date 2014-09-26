@@ -13,6 +13,7 @@ class InstagramMedia(models.Model):
 
     class Meta:
         verbose_name_plural = 'instagram media'
+        ordering = ['-created_time']
 
 
     def __unicode__(self):
@@ -30,6 +31,9 @@ class InstagramComment(models.Model):
     instagram_id = models.CharField('instagram id', max_length=100, unique=True)
     text = models.TextField('tekst')
     media = models.ForeignKey(InstagramMedia, related_name='_comments')
+
+    class Meta:
+        ordering = ['-created_time']
 
     def __unicode__(self):
         return '%s: %s' % (self.poster, self.text[:80])
