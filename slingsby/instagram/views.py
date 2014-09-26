@@ -13,5 +13,5 @@ class AllInstagramMediaView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AllInstagramMediaView, self).get_context_data(**kwargs)
-        context['all_media'] = InstagramMedia.objects.all()
+        context['all_media'] = InstagramMedia.objects.filter(visible=True)
         return context

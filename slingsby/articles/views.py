@@ -35,7 +35,7 @@ class Frontpage(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Frontpage, self).get_context_data(**kwargs)
         context['articles'] = LatestArticlesQuery.get_cached()
-        context['instagram_latest'] = InstagramMedia.objects.all()[:4]
+        context['instagram_latest'] = InstagramMedia.objects.filter(visible=True)[:4]
         return context
 
 

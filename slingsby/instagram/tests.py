@@ -41,7 +41,7 @@ class InstagramPageTest(TestCase):
 
     def setUp(self):
         self.client = Client()
-        InstagramMedia.objects.create(
+        valid_media = InstagramMedia.objects.create(
             media_type='image',
             poster='ntnuitaadmin',
             poster_image='/admin.png',
@@ -52,9 +52,31 @@ class InstagramPageTest(TestCase):
             created_time=datetime.datetime.now(),
             instagram_id='cafed00d',
         )
+        InstagramMedia.objects.create(
+            media_type='image',
+            poster='idiot',
+            poster_image='/idiot.png',
+            thumbnail_url='/small-idiot.jpg',
+            media_url='/nobrains.jpg',
+            like_count=0,
+            caption='Offensive crap',
+            created_time=datetime.datetime.now(),
+            instagram_id='notworthy',
+            visible=False,
+        )
+        InstagramComment.objects.create(
+            poster='idiot',
+            poster_image='/idiot.png',
+            text='Stupid shit',
+            created_time=datetime.datetime.now(),
+            visible=False,
+            media=valid_media,
+        )
 
 
     def test_instagram_page(self):
         response = self.client.get('/instagram/')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Snow and awesome stuff' in response.content.decode('utf-8'))
+        self.assertFalse('Offensive crap' in response.content.decode('utf-8'))
+        self.assertFalse('Stupid shit' in response.content.decode('utf-8'))

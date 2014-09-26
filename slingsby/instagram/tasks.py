@@ -38,6 +38,7 @@ def load_media_from_instagram_response(json_data):
                 'thumbnail_url': media['images']['thumbnail']['url'],
                 'media_url': media[media_key]['standard_resolution']['url'],
                 'like_count': media['likes']['count'],
+                'visible': True,
                 'caption': media['caption']['text'],
                 'created_time': datetime.utcfromtimestamp(float(media['created_time'])),
             }
