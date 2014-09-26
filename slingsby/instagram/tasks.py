@@ -36,26 +36,27 @@ def fetch_instagram_media():
     recent_media = requests.get('https://api.instagram.com/v1/tags/ntnuita/media/recent',
         params={'client_id': settings.INSTAGRAM_CLIENT_ID}).json()
     for media in recent_media['data']:
-        instagram_media = InstagramMedia()
-        instagram_media.media_type = media['type']
-        instagram_media.poster = media['user']['username']
-        instagram_media.poster_image = media['user']['profile_picture']
-        instagram_media.thumbnail_url = media['images']['thumbnail']['url']
-        if instagram_media.media_type == 'video':
-            instagram_media.media_url = media['videos']['standard_resolution']['url']
-        else:
-            instagram_media.media_url = media['images']['standard_resolution']['url']
-        instagram_media.like_count = media['likes']['count']
-        instagram_media.caption = media['caption']['text']
-        instagram_media.created_time = datetime.datetime.utcfromtimestamp(float(media['created_time']))
-        instagram_media.instagram_id = media['id']
-        instagram_media.save()
+        instagram_media, created = InstagramMedia.objects.get_or_create(
+            instagram_id=media['id'],
+            defaults={
+                'media_type': media['type'],
+                'poster': media['user']['username'],
+                'poster_image': media['user']['profile_picture'],
+                'thumbnail_url': media['images']['thumbnail']['url'],
+                'media_url': media['videos' if media['type'] == 'video' else 'images']['standard_resolution']['url'],
+                'like_count': media['likes']['count'],
+                'caption': media['caption']['text'],
+                'created_time': datetime.datetime.utcfromtimestamp(float(media['created_time'])),
+            }
+        )
         for comment in media['comments']['data']:
-            instagram_comment = InstagramComment()
-            instagram_comment.poster = comment['from']['username']
-            instagram_comment.poster_image = comment['from']['profile_picture']
-            instagram_comment.created_time = datetime.datetime.utcfromtimestamp(float(comment['created_time']))
-            instagram_comment.instagram_id = comment['id']
-            instagram_comment.text = comment['text']
-            instagram_comment.media = instagram_media
-            instagram_comment.save()
+            InstagramComment.objects.get_or_create(
+                instagram_id=comment['id'],
+                defaults={
+                    'poster': comment['from']['username'],
+                    'poster_image': comment['from']['profile_picture'],
+                    'created_time': datetime.datetime.utcfromtimestamp(float(comment['created_time'])),
+                    'text': comment['text'],
+                    'media': instagram_media,
+                }
+            )

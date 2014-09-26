@@ -9,7 +9,7 @@ class InstagramMedia(models.Model):
     like_count = models.IntegerField('antall likes')
     caption = models.TextField('tekst')
     created_time = models.DateTimeField('tid opprettet')
-    instagram_id = models.CharField('instgram id', max_length=100)
+    instagram_id = models.CharField('instgram id', max_length=100, unique=True)
 
     class Meta:
         verbose_name_plural = 'instagram media'
@@ -27,7 +27,7 @@ class InstagramComment(models.Model):
     poster = models.CharField('poster', max_length=40)
     poster_image = models.URLField('posters profilbilde')
     created_time = models.DateTimeField('tid opprettet')
-    instagram_id = models.CharField('instagram id', max_length=100)
+    instagram_id = models.CharField('instagram id', max_length=100, unique=True)
     text = models.TextField('tekst')
     media = models.ForeignKey(InstagramMedia, related_name='_comments')
 

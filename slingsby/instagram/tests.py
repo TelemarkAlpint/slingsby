@@ -31,6 +31,12 @@ class InstagramTasksTest(TestCase):
         self.assertEqual(InstagramMedia.objects.count(), 20)
         self.assertEqual(InstagramComment.objects.count(), 33)
 
+        # Test that new runs don't re-add the same stuff
+        with patch('slingsby.instagram.tasks.requests.get', _instagram_recent_media):
+            fetch_instagram_media()
+        self.assertEqual(InstagramMedia.objects.count(), 20)
+        self.assertEqual(InstagramComment.objects.count(), 33)
+
 class InstagramPageTest(TestCase):
 
     def setUp(self):
