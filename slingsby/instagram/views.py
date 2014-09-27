@@ -1,4 +1,5 @@
 from .models import InstagramMedia
+from ..general import make_title
 
 from django.views.generic.base import TemplateView
 
@@ -14,4 +15,5 @@ class AllInstagramMediaView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AllInstagramMediaView, self).get_context_data(**kwargs)
         context['all_media'] = InstagramMedia.objects.filter(visible=True)
+        context['title'] = make_title('Instagram')
         return context
