@@ -2,11 +2,12 @@
 
 from .general.templatetags.revved_static import get_revved_url
 
+from django import http
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic.base import RedirectView
 from django.shortcuts import render_to_response
+from django.utils.cache import add_never_cache_headers
 
 admin.autodiscover()
 
@@ -32,9 +33,21 @@ urlpatterns += patterns('',
     url(r'', include('social.apps.django_app.urls', namespace='social')),
 )
 
+def redirect_to_static(request, static_file=None):
+    """ Use this to redirect static stuff with custom urls, such as /favicon.ico and /robots.txt.
+
+    The response will be a 302 redirect (not permanent since the URL will change if target is
+    modified), and with no-cache headers.
+    """
+    revved_url = settings.STATIC_URL + get_revved_url(static_file)
+    response = http.HttpResponseRedirect(revved_url)
+    add_never_cache_headers(response)
+    return response
+
+
 urlpatterns += patterns('',
-    (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + get_revved_url('favicon.ico'), permanent=False)),
-    (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + get_revved_url('robots.txt'), permanent=False)),
+    url(r'^favicon.ico$', redirect_to_static, {'static_file': 'favicon.ico'}),
+    url(r'^robots.txt$', redirect_to_static, {'static_file': 'robots.txt'}),
 )
 
 if settings.DEBUG:

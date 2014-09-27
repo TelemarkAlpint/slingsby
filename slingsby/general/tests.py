@@ -1,7 +1,7 @@
 from slingsby.general.middleware import HttpAcceptMiddleware, HttpMethodOverride
 from slingsby.settings import fix_nonexistent_file_handlers
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.template import Template, Context
 from mock import Mock
 
@@ -144,3 +144,14 @@ class RevvedFileTagTest(TestCase):
             template = Template("{% load revved_static %}{% static 'css/styles.css' %}")
             rendered = template.render(Context())
             self.assertEqual(rendered, '/static/css/styles.cafed00d.css')
+
+
+class StaticRedirectTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_static_redirects(self):
+        response = self.client.get('/robots.txt')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.get('cache-control'), 'max-age=0')
