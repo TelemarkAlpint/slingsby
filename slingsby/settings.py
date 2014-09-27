@@ -4,6 +4,8 @@ from __future__ import print_function
 
 from .celery import app as celery_app # pylint: disable=unused-import
 
+from django.core.urlresolvers import reverse_lazy
+
 import os
 import yaml
 import json
@@ -95,6 +97,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
 )
+
+LOGIN_URL = reverse_lazy('social:begin', kwargs={'backend': 'facebook'})
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
