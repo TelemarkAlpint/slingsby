@@ -1,7 +1,5 @@
-from .models import InstagramMedia, InstagramComment
 from .tasks import load_media_from_instagram_response
 
-import datetime
 import json
 import os
 
