@@ -49,4 +49,4 @@ def static(parser, token):
 
 
 def get_revved_url(path):
-    return settings.FILEREVS.get(path)
+    return settings.FILEREVS.get(path, path)
