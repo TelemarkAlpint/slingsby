@@ -33,8 +33,8 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('',
-    (r'^favicon.ico$', RedirectView.as_view(url=get_revved_url('favicon.ico'))),
-    (r'^robots.txt$', RedirectView.as_view(url=get_revved_url('robots.txt'))),
+    (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + get_revved_url('favicon.ico'))),
+    (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + get_revved_url('robots.txt'))),
 )
 
 if settings.DEBUG:
