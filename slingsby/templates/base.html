@@ -30,7 +30,7 @@
     <meta property="og:description" content="{% block og_description %}Norges største idrettslag inviterer deg med på ski! Bli med til alpene, Vassfjellet, på trening, på skifilmkvelder og mye moro!{% endblock %}" />
     <meta property="og:title" content="{% block og_title %}{{ title|default:"NTNUI Telemark/Alpint" }}{% endblock %}" />
     <meta property="og:type" content="{% block og_type %}sports_team{% endblock %}" />
-    <meta property="og:url" content="{{ request.get_full_path }}" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
     {% block og_image %}
         <meta property="og:image" content="{% static "gfx/logo_svart_tekst.png" %}" />
         <meta property="og:image:width" content="190" />
