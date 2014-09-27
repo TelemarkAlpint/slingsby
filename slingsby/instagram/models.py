@@ -39,7 +39,7 @@ class InstagramComment(models.Model):
     media = models.ForeignKey(InstagramMedia, related_name='_comments')
 
     class Meta:
-        ordering = ['-created_time']
+        ordering = ['created_time']
 
     def __unicode__(self):
         return '%s: %s' % (self.poster, self.text[:80])
