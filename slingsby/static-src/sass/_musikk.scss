@@ -28,6 +28,18 @@
     }
 }
 
+.rating {
+    width: 30px;
+    border: 1px solid black;
+    height: 10px;
+    display: inline-block;
+}
+
+.rating-bar {
+    background-color: rgb(1, 165, 21);
+    height: 9px;
+}
+
 .multicolumn ul {
     float:left;
     list-style: none;

@@ -3,8 +3,8 @@
 
 <li data-filter="{{ song.artist }} {{ song.title }}">
     <span class="song_rating">
-        <div class="rating" style="width: 30px;border: 1px solid black;height: 10px;display: inline-block;">
-            <div style="width: {{ song.popularity|floatformat:"4" }}%;background-color: green;height: 10px;">
+        <div class="rating">
+            <div class="rating-bar" style="width: {{ song.popularity|floatformat:"4" }}%;">
             </div>
         </div>
     </span>
