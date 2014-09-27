@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+from .general.templatetags.revved_static import get_revved_url
+
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
@@ -31,8 +33,8 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('',
-    (r'^favicon.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
-    (r'^robots.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
+    (r'^favicon.ico$', RedirectView.as_view(url=get_revved_url('favicon.ico'))),
+    (r'^robots.txt$', RedirectView.as_view(url=get_revved_url('robots.txt'))),
 )
 
 if settings.DEBUG:
