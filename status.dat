@@ -858,7 +858,7 @@ I1
 sg19
 I12
 sg20
-I100
+I104
 sg21
 I0
 sg22
@@ -868,7 +868,7 @@ I30
 sg24
 I10
 sbssg25
-S'\xe9\x83\xd6)\x00#\x9f\xab\x9dvc\x9e(\x03\x81\x03'
+S'\xdb"A(\x9d\xab\xd4\x9a\xea_ni\xe1\xc9\x01J'
 p218
 ssS'slingsby_auth'
 p219
@@ -2295,7 +2295,7 @@ I41
 sg24
 I9
 sbssg25
-S'7Dw*\x16\x92\xa1\xe0?R\x8f$Z\x0b\xcab'
+S'\x8c#\xc0\xf2b\xb2]Q\x99T\xc8_\x0b\x0c\xbb\xc5'
 p553
 ssS'slingsby_general_templatetags'
 p554
