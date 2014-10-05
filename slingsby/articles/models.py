@@ -30,6 +30,8 @@ class Article(models.Model):
 
 
     class Meta:
+        verbose_name = 'artikkel'
+        verbose_name_plural = 'artikler'
         ordering = ['-published_date']
 
 
@@ -106,11 +108,13 @@ class SubPageArticle(models.Model):
 
 
     class Meta:
+        verbose_name = 'underside'
+        verbose_name_plural = 'undersider'
         ordering = ['-sort_key', 'title']
 
 
     def __unicode__(self):
-        return "<SubPageArticle: %s -> %s>" % (self.slug, self.title)
+        return "Underside: /%s -> %s" % (self.slug, self.title)
 
 
     def __json__(self):
