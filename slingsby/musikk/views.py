@@ -22,8 +22,8 @@ _EXPONENTIAL_BASE = 0.9917
 
 _logger = logging.getLogger(__name__)
 
-top_songs = Song.objects.filter(ready=True).filter(votes__gt=0)[:_SONGS_IN_TOP_SONGS]
-all_songs = Song.objects.filter(ready=True).order_by('artist', 'title')
+top_songs = Song.objects.filter(ready=True).filter(votes__gt=0)[:_SONGS_IN_TOP_SONGS] # pylint: disable=invalid-name
+all_songs = Song.objects.filter(ready=True).order_by('artist', 'title') # pylint: disable=invalid-name
 
 
 class SongDetailView(ActionView, TemplateView):
