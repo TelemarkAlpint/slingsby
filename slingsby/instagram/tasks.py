@@ -27,22 +27,26 @@ def log_errors(func):
 
 
 def load_media_from_instagram_response(json_data):
+    """ Loads new media from the data provided, and detects changes like comments deleted
+    and new likes.
+    """
     for media in json_data['data']:
         media_key = 'videos' if media['type'] == 'video' else 'images'
         instagram_media, created = InstagramMedia.objects.get_or_create(
             instagram_id=media['id'],
             defaults={
                 'media_type': media['type'],
-                'poster': media['user']['username'],
-                'poster_image': media['user']['profile_picture'],
                 'thumbnail_url': media['images']['thumbnail']['url'],
                 'media_url': media[media_key]['standard_resolution']['url'],
-                'like_count': media['likes']['count'],
                 'visible': True,
-                'caption': media['caption']['text'],
                 'created_time': datetime.utcfromtimestamp(float(media['created_time'])),
             }
         )
+        instagram_media.like_count = media['likes']['count']
+        instagram_media.caption = media['caption']['text']
+        instagram_media.poster = media['user']['username']
+        instagram_media.poster_image = media['user']['profile_picture']
+        instagram_media.save()
         if created:
             _logger.info('New instagram media added (%s): %s', instagram_media.instagram_id,
                 instagram_media.caption)

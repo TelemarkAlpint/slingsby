@@ -8,7 +8,7 @@ class InstagramMedia(models.Model):
     poster_image = models.URLField('posters profilbilde')
     thumbnail_url = models.URLField('link til thumbnail')
     media_url = models.URLField('link til media')
-    like_count = models.IntegerField('antall likes')
+    like_count = models.IntegerField('antall likes', default=0)
     visible = models.BooleanField('synlig', default=True, help_text='Huk vekk her hvis noen vil ' +
         'ha et bilde fjernet, hvis det slettes så vil det bare dukke opp igjen')
     caption = models.TextField('tekst')

@@ -8,6 +8,7 @@ from mock import patch
 from django.test import Client, TestCase
 
 class ResponseMock(object):
+    """ Mock a response of `requests.get` """
 
     def __init__(self, data):
         self.data = data
@@ -17,25 +18,34 @@ class ResponseMock(object):
         return self.data
 
 
-def _instagram_recent_media(*args, **kwargs):
-    mock_data = os.path.join(os.path.dirname(__file__), 'test-data', 'recent_media.json')
-    with open(mock_data) as fh:
-        return ResponseMock(json.load(fh))
+def _instagram_recent_media(mock_data):
+    def requests_get_mock(*args, **kwargs):
+        return ResponseMock(mock_data)
+    return requests_get_mock
 
 
 class InstagramTasksTest(TestCase):
 
     def test_fetch_instagram_media(self):
-        with patch('slingsby.instagram.tasks.requests.get', _instagram_recent_media):
+        mock_data_path = os.path.join(os.path.dirname(__file__), 'test-data', 'recent_media.json')
+        with open(mock_data_path) as fh:
+            mock_data = json.load(fh)
+        with patch('slingsby.instagram.tasks.requests.get', _instagram_recent_media(mock_data)):
             fetch_instagram_media()
         self.assertEqual(InstagramMedia.objects.count(), 20)
         self.assertEqual(InstagramComment.objects.count(), 33)
 
-        # Test that new runs don't re-add the same stuff
-        with patch('slingsby.instagram.tasks.requests.get', _instagram_recent_media):
+        # Set new like count of item 804753730683972274_39861449
+        mock_data['data'][0]['likes']['count'] = 1337
+
+        # Test that new runs don't re-add the same stuff, but changes should be saved
+        with patch('slingsby.instagram.tasks.requests.get', _instagram_recent_media(mock_data)):
             fetch_instagram_media()
         self.assertEqual(InstagramMedia.objects.count(), 20)
         self.assertEqual(InstagramComment.objects.count(), 33)
+        modified_item = InstagramMedia.objects.get(instagram_id="804753730683972274_39861449")
+        self.assertEqual(modified_item.like_count, 1337)
+
 
 class InstagramPageTest(TestCase):
 
