@@ -93,6 +93,9 @@
 
                 <ul style="display: none">
                     <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">Login via facebook</a></li>
+                    {% if debug %}
+                        <li><a href="{% url 'devlogin' %}">Developer login</a></li>
+                    {% endif %}
                 </ul>
                 {% endif %}
             {% endblock %}
