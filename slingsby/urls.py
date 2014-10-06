@@ -15,12 +15,11 @@ handler500 = lambda req: render_to_response('500.html')
 
 urlpatterns = patterns('',
     url(r'^', include('slingsby.articles.urls')),
+    url(r'^', include('slingsby.users.urls')),
     url(r'^musikk/', include('slingsby.musikk.urls')),
     url(r'^arkiv/', include('slingsby.archive.urls')),
-    url(r'^profil/', include('slingsby.users.urls')),
     url(r'^quotes/', include('slingsby.quotes.urls')),
     url(r'^instagram/', include('slingsby.instagram.urls')),
-    (r'^auth/', include('slingsby.auth.urls')),
     (r'^tasks/', include('slingsby.tasks.urls')),
     (r'^program/', include('slingsby.events.urls')),
     (r'^gear/', include('slingsby.gear.urls')),

@@ -23,5 +23,5 @@ class JSONMixin(object):
         if request.prefer_json and request.method.lower() in self.http_method_names:
             handler = getattr(self, request.method.lower() + '_json', handler)
             json_data = handler(request, *args, **kwargs)
-            return HttpResponse(json.dumps(json_data), mimetype='application/json')
+            return HttpResponse(json.dumps(json_data), content_type='application/json')
         return handler(request, *args, **kwargs)

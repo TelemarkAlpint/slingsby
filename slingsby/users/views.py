@@ -1,12 +1,19 @@
+# -*- coding: utf-8 -*-
+
 from ..general.time import now
 from ..general.views import ActionView
 from ..events.models import Event
 from ..musikk.models import Vote, Song
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.views.generic.base import TemplateView
+from django.contrib.auth.models import User
+from django.contrib.auth.views import logout as social_logout
+from django.contrib import messages
+from django.views.generic.base import View, TemplateView
+from logging import getLogger
+
+_logger = getLogger(__name__)
 
 class UserProfileView(ActionView, TemplateView):
 
@@ -50,6 +57,16 @@ class UserProfileView(ActionView, TemplateView):
         for song in songs:
             song_dict[song['id']] = {'artist': song['artist'], 'title': song['title'], 'votes': top[song['id']]}
         return [song_dict[s_id] for s_id in top_ids]
+
+
+class LogoutView(View):
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            _logger.info('User #%d logged out', request.user.id)
+            social_logout(request)
+            messages.success(request, 'Du er nå logget ut, ha en fortsatt fin dag!')
+        return HttpResponseRedirect('/')
 
 
 class DevLogin(TemplateView):

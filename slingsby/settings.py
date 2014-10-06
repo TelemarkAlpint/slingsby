@@ -47,7 +47,6 @@ INSTALLED_APPS = (
 
     'slingsby.archive',
     'slingsby.articles',
-    'slingsby.auth',
     'slingsby.events',
     'slingsby.gear',
     'slingsby.general',

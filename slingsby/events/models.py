@@ -18,7 +18,7 @@ class Event(models.Model):
     name = models.CharField('navn', max_length=100)
     startdate = models.DateTimeField('startdato')
     enddate = models.DateTimeField('sluttdato')
-    has_registration = models.BooleanField(SafeUnicode(u'påmelding'))
+    has_registration = models.BooleanField(SafeUnicode(u'påmelding'), default=False)
     registration_opens = models.DateTimeField(SafeUnicode(u'påmeldingen åpner'), null=True, blank=True)
     registration_closes = models.DateTimeField(SafeUnicode(u'påmeldingen stenger'), null=True, blank=True)
     binding_registration = models.BooleanField(SafeUnicode(u'bindende påmelding'), default=False)
