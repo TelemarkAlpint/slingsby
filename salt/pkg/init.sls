@@ -3,6 +3,7 @@ core-packages:
     - order: 1
     - pkgs:
       - curl
+      - python-software-properties
       - vim
       - wget
 
