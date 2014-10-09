@@ -66,7 +66,7 @@ def deploy_vagrant():
 def migrate_db():
     """ Install and/or migrate the database to the latest version. """
     with shell_env(DJANGO_SETTINGS_MODULE='prod_settings', PYTHONPATH='/srv/ntnuita.no/'):
-        sudo('/srv/ntnuita.no/venv/bin/manage.py syncdb --noinput', user='www')
+        sudo('/srv/ntnuita.no/venv/bin/manage.py migrate --noinput', user='www')
 
 
 @hosts('vagrant@127.0.0.1:2222')
