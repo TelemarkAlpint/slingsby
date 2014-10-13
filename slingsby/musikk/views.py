@@ -188,6 +188,8 @@ class TopSongsView(TemplateView):
 
 class TopSong(RedirectView):
 
+    permanent = False
+
     def get_redirect_url(self, **kwargs):
         """ Get the location of the latest song merged from the top songs. """
         metadata = get_top_song_metadata()
@@ -201,7 +203,7 @@ class TopSongsList(View):
         top_songs_data = {
             'songs': [song.to_json() for song in top_songs.all()],
         }
-        return HttpResponse(json.dumps(top_songs_data, indent=2), mimetype='application/json')
+        return HttpResponse(json.dumps(top_songs_data, indent=2), content_type='application/json')
 
 
 def get_top_song_metadata():
