@@ -13,6 +13,7 @@ mysql-deps:
 mysql-server:
   pkg.installed:
     - name: mysql-server-5.6
+    - skip_verify: True
     - require:
       - pkg: mysql-deps
 
