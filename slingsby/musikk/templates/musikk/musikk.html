@@ -60,8 +60,8 @@
         <tr>
         <td class="left">
             <span class="song_rating">
-                <div class="rating" style="width: 40px;border: 1px solid black;height: 10px;display: inline-block;">
-                    <div style="width: {{ song.popularity }}%;background-color: green;height: 10px;"></div>
+                <div class="rating">
+                    <div class="rating-bar" style="width: {{ song.popularity }}%;"></div>
                     </div>
             </span>
             {{ song.artist }} - {{ song.title }}
