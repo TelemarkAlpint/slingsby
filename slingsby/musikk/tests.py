@@ -194,6 +194,23 @@ class SongActionsTest(TestCase):
         self.assertEqual(num_votes, 1)
 
 
+class TopSongsTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+
+    def test_top_musikk_pages(self):
+        response = self.client.get('/musikk/top/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/musikk/top/list/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/musikk/top/song/')
+        self.assertEqual(response.status_code, 302)
+
+
 class VoteCountTest(TestCase):
 
     def setUp(self):
