@@ -59,11 +59,10 @@
     {% for song in top_songs %}
         <tr>
         <td class="left">
-            <span class="song_rating">
-                <div class="rating">
-                    <div class="rating-bar" style="width: {{ song.popularity }}%;"></div>
-                    </div>
-            </span>
+            <div class="rating">
+                <div class="rating-bar" style="width: {{ song.popularity }}%;">
+                </div>
+            </div>
             {{ song.artist }} - {{ song.title }}
         </td>
         <td class="right">

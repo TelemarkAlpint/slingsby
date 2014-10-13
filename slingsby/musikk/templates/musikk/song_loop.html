@@ -2,12 +2,10 @@
 {% load revved_static %}
 
 <li data-filter="{{ song.artist }} {{ song.title }}">
-    <span class="song_rating">
-        <div class="rating">
-            <div class="rating-bar" style="width: {{ song.popularity|floatformat:"4" }}%;">
-            </div>
+    <div class="rating">
+        <div class="rating-bar" style="width: {{ song.popularity|floatformat:"4" }}%;">
         </div>
-    </span>
+    </div>
     <span title="{{ song.artist }}">{{ song.artist|shorten:17 }}</span> -
     <a href="{{ MEDIA_URL }}{{ song.filename|urlencode }}.mp3" title="{{ song.title }}">{{ song.title|truncatechars:15 }}</a>
     {% if user.is_authenticated %}
