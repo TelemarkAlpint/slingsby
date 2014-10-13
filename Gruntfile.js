@@ -124,6 +124,7 @@ module.exports = function (grunt) {
       slingsby: {
         options: {
           rcfile: '.pylintrc',
+          ignore: 'migrations',
         },
         src: ['slingsby', '*.py', 'tools/*.py'],
       }
