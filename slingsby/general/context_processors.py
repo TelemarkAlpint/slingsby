@@ -1,7 +1,7 @@
 from ..articles.views import SingleArticlePageQuery
 from ..events.models import Event
 from ..general import time
-from .models import SponsorsQuery
+from .models import Sponsor
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 
 def default(request):
     context = {
-        'sponsors': SponsorsQuery.get_cached(),
+        'sponsors': Sponsor.objects.all(),
         'next_events': Event.objects.filter(enddate__gte=time.now()).values('id', 'name', 'startdate')[:3],
         'subpages': SingleArticlePageQuery.get_cached(),
 
