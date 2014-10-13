@@ -25,9 +25,9 @@
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
-            14 statements &nbsp;
+            11 statements &nbsp;
             <span class='run hide_run shortkey_r button_toggle_run'>0 run</span>
-            <span class='mis shortkey_m button_toggle_mis'>14 missing</span>
+            <span class='mis shortkey_m button_toggle_mis'>11 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
                 <span class='par run hide_run shortkey_p button_toggle_par'>0 partial</span>
@@ -66,48 +66,42 @@
 <p id='n1' class='pln'><a href='#n1'>1</a></p>
 <p id='n2' class='pln'><a href='#n2'>2</a></p>
 <p id='n3' class='stm mis'><a href='#n3'>3</a></p>
-<p id='n4' class='stm mis'><a href='#n4'>4</a></p>
+<p id='n4' class='pln'><a href='#n4'>4</a></p>
 <p id='n5' class='stm mis'><a href='#n5'>5</a></p>
 <p id='n6' class='stm mis'><a href='#n6'>6</a></p>
-<p id='n7' class='pln'><a href='#n7'>7</a></p>
+<p id='n7' class='stm mis'><a href='#n7'>7</a></p>
 <p id='n8' class='stm mis'><a href='#n8'>8</a></p>
-<p id='n9' class='stm mis'><a href='#n9'>9</a></p>
+<p id='n9' class='pln'><a href='#n9'>9</a></p>
 <p id='n10' class='stm mis'><a href='#n10'>10</a></p>
 <p id='n11' class='stm mis'><a href='#n11'>11</a></p>
 <p id='n12' class='pln'><a href='#n12'>12</a></p>
-<p id='n13' class='stm mis'><a href='#n13'>13</a></p>
+<p id='n13' class='pln'><a href='#n13'>13</a></p>
 <p id='n14' class='stm mis'><a href='#n14'>14</a></p>
-<p id='n15' class='pln'><a href='#n15'>15</a></p>
+<p id='n15' class='stm mis'><a href='#n15'>15</a></p>
 <p id='n16' class='pln'><a href='#n16'>16</a></p>
 <p id='n17' class='stm mis'><a href='#n17'>17</a></p>
 <p id='n18' class='stm mis'><a href='#n18'>18</a></p>
-<p id='n19' class='pln'><a href='#n19'>19</a></p>
-<p id='n20' class='stm mis'><a href='#n20'>20</a></p>
-<p id='n21' class='stm mis'><a href='#n21'>21</a></p>
                 
             </td>
             <td class='text' valign='top'>
 <p id='t1' class='pln'><span class='com'># coding: utf-8</span><span class='strut'>&nbsp;</span></p>
 <p id='t2' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t3' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>conf</span> <span class='key'>import</span> <span class='nam'>settings</span><span class='strut'>&nbsp;</span></p>
-<p id='t4' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>db</span> <span class='key'>import</span> <span class='nam'>models</span><span class='strut'>&nbsp;</span></p>
-<p id='t5' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>db</span><span class='op'>.</span><span class='nam'>models</span><span class='op'>.</span><span class='nam'>signals</span> <span class='key'>import</span> <span class='nam'>post_save</span><span class='strut'>&nbsp;</span></p>
-<p id='t6' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>utils</span><span class='op'>.</span><span class='nam'>http</span> <span class='key'>import</span> <span class='nam'>urlquote</span><span class='strut'>&nbsp;</span></p>
-<p id='t7' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t8' class='stm mis'><span class='key'>class</span> <span class='nam'>Sponsor</span><span class='op'>(</span><span class='nam'>models</span><span class='op'>.</span><span class='nam'>Model</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t9' class='stm mis'>&nbsp; &nbsp; <span class='nam'>name</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>CharField</span><span class='op'>(</span><span class='str'>&#39;navn&#39;</span><span class='op'>,</span> <span class='nam'>max_length</span><span class='op'>=</span><span class='num'>100</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t10' class='stm mis'>&nbsp; &nbsp; <span class='nam'>date_added</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>DateField</span><span class='op'>(</span><span class='nam'>auto_now_add</span><span class='op'>=</span><span class='nam'>True</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t11' class='stm mis'>&nbsp; &nbsp; <span class='nam'>image</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>CharField</span><span class='op'>(</span><span class='str'>&#39;bilde&#39;</span><span class='op'>,</span> <span class='nam'>max_length</span><span class='op'>=</span><span class='num'>255</span><span class='op'>,</span> <span class='nam'>default</span><span class='op'>=</span><span class='str'>&#39;&#39;</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
-<p id='t12' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>help_text</span><span class='op'>=</span><span class='str'>&#39;&#39;&#39;URL til bilde. Bildet b&#248;r v&#230;re 240x40px.&#39;&#39;&#39;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t13' class='stm mis'>&nbsp; &nbsp; <span class='nam'>webpage</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>URLField</span><span class='op'>(</span><span class='str'>&#39;hjemmeside&#39;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t14' class='stm mis'>&nbsp; &nbsp; <span class='nam'>importance</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>IntegerField</span><span class='op'>(</span><span class='str'>&#39;viktighet&#39;</span><span class='op'>,</span> <span class='nam'>default</span><span class='op'>=</span><span class='num'>1</span><span class='op'>,</span> <span class='nam'>help_text</span><span class='op'>=</span><span class='op'>(</span><span class='str'>&#39;Brukes til &#229; sortere &#39;</span><span class='strut'>&nbsp;</span></p>
-<p id='t15' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&#39;sponsorene p&#229; siden, jo h&#248;yere tall jo lenger opp kommer de&#39;</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t3' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>db</span> <span class='key'>import</span> <span class='nam'>models</span><span class='strut'>&nbsp;</span></p>
+<p id='t4' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t5' class='stm mis'><span class='key'>class</span> <span class='nam'>Sponsor</span><span class='op'>(</span><span class='nam'>models</span><span class='op'>.</span><span class='nam'>Model</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t6' class='stm mis'>&nbsp; &nbsp; <span class='nam'>name</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>CharField</span><span class='op'>(</span><span class='str'>&#39;navn&#39;</span><span class='op'>,</span> <span class='nam'>max_length</span><span class='op'>=</span><span class='num'>100</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t7' class='stm mis'>&nbsp; &nbsp; <span class='nam'>date_added</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>DateField</span><span class='op'>(</span><span class='nam'>auto_now_add</span><span class='op'>=</span><span class='nam'>True</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t8' class='stm mis'>&nbsp; &nbsp; <span class='nam'>image</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>CharField</span><span class='op'>(</span><span class='str'>&#39;bilde&#39;</span><span class='op'>,</span> <span class='nam'>max_length</span><span class='op'>=</span><span class='num'>255</span><span class='op'>,</span> <span class='nam'>default</span><span class='op'>=</span><span class='str'>&#39;&#39;</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
+<p id='t9' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>help_text</span><span class='op'>=</span><span class='str'>&#39;&#39;&#39;URL til bilde. Bildet b&#248;r v&#230;re 240x40px.&#39;&#39;&#39;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t10' class='stm mis'>&nbsp; &nbsp; <span class='nam'>webpage</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>URLField</span><span class='op'>(</span><span class='str'>&#39;hjemmeside&#39;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t11' class='stm mis'>&nbsp; &nbsp; <span class='nam'>importance</span> <span class='op'>=</span> <span class='nam'>models</span><span class='op'>.</span><span class='nam'>IntegerField</span><span class='op'>(</span><span class='str'>&#39;viktighet&#39;</span><span class='op'>,</span> <span class='nam'>default</span><span class='op'>=</span><span class='num'>1</span><span class='op'>,</span> <span class='nam'>help_text</span><span class='op'>=</span><span class='op'>(</span><span class='str'>&#39;Brukes til &#229; sortere &#39;</span><span class='strut'>&nbsp;</span></p>
+<p id='t12' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&#39;sponsorene p&#229; siden, jo h&#248;yere tall jo lenger opp kommer de&#39;</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t13' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t14' class='stm mis'>&nbsp; &nbsp; <span class='key'>class</span> <span class='nam'>Meta</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t15' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>ordering</span> <span class='op'>=</span> <span class='op'>[</span><span class='str'>&#39;-importance&#39;</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
 <p id='t16' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t17' class='stm mis'>&nbsp; &nbsp; <span class='key'>class</span> <span class='nam'>Meta</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t18' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>ordering</span> <span class='op'>=</span> <span class='op'>[</span><span class='str'>&#39;-importance&#39;</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
-<p id='t19' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t20' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>__unicode__</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t21' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>name</span><span class='strut'>&nbsp;</span></p>
+<p id='t17' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>__unicode__</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t18' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>name</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
