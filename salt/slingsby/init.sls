@@ -16,6 +16,7 @@ slingsby:
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
     - requirements: salt://slingsby/prod-requirements.txt
+    - no_deps: True
     - require:
       - pip: slingsby-deps
       - pkg: python-dev # required for db bindings to compile
