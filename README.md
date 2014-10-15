@@ -230,9 +230,14 @@ Wipe local database and bootstrap new one, without wiping the user data:
 Random notes that might someday be necessary
 --------------------------------------------
 
-MySQL sucks at has a hard limit on 767 bytes for index keys, which in conjunction with
+### MySQL + django-celery
+
+MySQL sucks and has a hard limit on 767 bytes for index keys, which in conjunction with
 [django-celery causes problems](https://github.com/celery/django-celery/issues/259). To get it
 working `django-celery/models.py` was hand-patched to reduce the size of all indexed fields to
 191 chars, to let migrations run. Once migrations have run, this shouldn't matter anymore, even
 if the modifications are lost, but if the error `Specified key was to long; max key length is 767
 bytes` ever shows up again, this is probably the cause.
+
+**Note**: This is now fixed automatically by our slingsby salt state, by running a replace on
+`djcelery/models.py`.

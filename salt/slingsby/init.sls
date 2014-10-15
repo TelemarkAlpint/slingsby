@@ -77,3 +77,13 @@ slingsby-celery:
   service.running:
     - watch:
       - file: slingsby-celery
+
+
+# Fix a bug in djecelery/mysql where index keys can't be longer than some arbitrary mysql limit
+djcelery-mysql-fix:
+  file.replace:
+    - name: /srv/ntnuita.no/venv/lib/python2.7/site-packages/djcelery/models.py
+    - pattern: max_length=2\d\d
+    - repl: max_length=191
+    - watch:
+      - virtualenv: slingsby
