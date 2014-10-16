@@ -1,0 +1,14 @@
+{% set slingsby = pillar.get('slingsby', {}) -%}
+{% set bind_url = slingsby.get('bind_url', 'ntnuita.no') -%}
+
+server {
+
+  listen 80;
+  server_name 2004.{{ bind_url }};
+  charset utf-8;
+
+  location / {
+    alias /srv/old-sites/2004/;
+  }
+
+}
