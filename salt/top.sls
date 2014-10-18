@@ -4,6 +4,7 @@ base:
     - mysql
     - ntp
     - nginx
+    - old-sites
     - pip
     - pkg
     - rabbitmq

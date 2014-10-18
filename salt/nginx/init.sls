@@ -40,6 +40,17 @@ slingsby-site:
     - template: jinja
     - require:
       - file: nginx-default-site
+    - watch_in:
+      - service: nginx
+
+
+2004-site:
+  file.managed:
+    - name: /etc/nginx/sites-enabled/2004
+    - source: salt://nginx/sites-enabled/2004
+    - template: jinja
+    - watch_in:
+      - service: nginx
 
 
 # Disable default
