@@ -43,14 +43,17 @@ slingsby-site:
     - watch_in:
       - service: nginx
 
-
-2004-site:
+{% for old_site in ['1999', '2004'] %}
+{{ old_site }}-site:
   file.managed:
-    - name: /etc/nginx/sites-enabled/2004
-    - source: salt://nginx/sites-enabled/2004
+    - name: /etc/nginx/sites-enabled/{{ old_site }}
+    - source: salt://nginx/sites-enabled/old-site
     - template: jinja
+    - context:
+      year: {{ old_site }}
     - watch_in:
       - service: nginx
+{% endfor %}
 
 
 # Disable default
