@@ -4,11 +4,11 @@
 server {
 
   listen 80;
-  server_name 2004.{{ bind_url }};
+  server_name {{ year }}.{{ bind_url }};
   charset utf-8;
 
   location / {
-    alias /srv/old-sites/2004/;
+    alias /srv/old-sites/{{ year }}/;
   }
 
 }

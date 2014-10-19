@@ -1,17 +1,21 @@
-/srv/old-sites/2004:
+{% for site in ['1999', '2004'] %}
+
+/srv/old-sites/{{ site }}:
   file.directory:
     - makedirs: True
 
 
-site-2004:
+site-{{ site }}:
   file.managed:
-    - name: /usr/local/src/2004.tar.gz
-    - source: http://org.ntnu.no/telemark/arkiv/websites/telemark-2004.tar.gz
-    - source_hash: http://org.ntnu.no/telemark/arkiv/websites/telemark-2004.tar.gz.sha
+    - name: /usr/local/src/{{ site }}.tar.gz
+    - source: http://org.ntnu.no/telemark/arkiv/websites/telemark-{{ site }}.tar.gz
+    - source_hash: http://org.ntnu.no/telemark/arkiv/websites/telemark-{{ site }}.tar.gz.sha
 
   cmd.wait:
-    - name: tar xf /usr/local/src/2004.tar.gz -C /srv/old-sites/2004
+    - name: tar xf /usr/local/src/{{ site }}.tar.gz -C /srv/old-sites/{{ site }}
     - require:
-      - file: /srv/old-sites/2004
+      - file: /srv/old-sites/{{ site }}
     - watch:
-      - file: site-2004
+      - file: site-{{ site }}
+
+{% endfor %}
