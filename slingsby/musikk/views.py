@@ -5,11 +5,14 @@ from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
 from .tasks import process_new_song, count_votes
 
+
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, RedirectView, View
 from dateutil.parser import parse
 from time import time as get_timestamp
@@ -42,7 +45,7 @@ class SongDetailView(ActionView, TemplateView):
 
     def delete(self, request, **kwargs):
         _logger.info("%s is trying to delete a song", request.user)
-        if not request.user.is_staff:
+        if not request.user.has_perm('musikk.approve_song'):
             _logger.info("Rejected %s from deleting songs", request.user)
             return HttpResponseForbidden("Du har ikke tilgang til å slette sanger, beklager.")
         context = self.get_context_data(**kwargs)
@@ -53,6 +56,7 @@ class SongDetailView(ActionView, TemplateView):
         return HttpResponseRedirect(reverse('musikk'))
 
 
+    @method_decorator(permission_required('musikk.approve_song'))
     def approve(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
         _logger.info("%s is approving song %s", request.user, context['song'])
@@ -149,7 +153,7 @@ class AllSongsView(TemplateView):
         context['title'] = make_title('Musikk')
         context['MEDIA_URL'] = settings.MEDIA_URL
 
-        if user.is_staff:
+        if user.has_perm('musikk.approve_song'):
             context['new_songforms'] = self._get_new_songforms()
         return context
 

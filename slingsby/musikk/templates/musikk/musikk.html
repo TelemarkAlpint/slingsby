@@ -28,7 +28,7 @@
         </p>
     {% endif %}
 
-    {% if user.is_staff and new_songforms %}
+    {% if perms.musikk.approve_song and new_songforms %}
         <h1>Nye forslag</h1>
 
         <p>

@@ -14,6 +14,12 @@ class Quote(models.Model):
     suggested_by = models.ForeignKey(User, related_name='suggested_quotes', null=True, verbose_name='foreslått av')
     accepted = models.BooleanField('godkjent', default=False)
 
+    class Meta:
+        permissions = (
+            ('approve_quote', 'Can approve a suggested quote'),
+        )
+
+
     def __unicode__(self):
         if self.topic:
             return '%s om %s' % (self.author, self.topic)

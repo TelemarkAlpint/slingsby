@@ -6,8 +6,10 @@ from ..general.views import ActionView
 from .models import Quote, QuoteForm
 
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 import logging
 
@@ -36,6 +38,7 @@ class QuoteDetailView(ActionView, TemplateView):
         return self.render_to_response(context)
 
 
+    @method_decorator(permission_required('musikk.approve_song'))
     def approve(self, request, **kwargs):
         quote_id = kwargs['quote_id']
         quote = get_object_or_404(Quote, id=quote_id)
@@ -47,9 +50,9 @@ class QuoteDetailView(ActionView, TemplateView):
 
 
     def delete(self, request, **kwargs):
-        _logger.info("%s is trying to delete a quote", request.user)
-        if not request.user.is_staff:
-            return HttpResponseForbidden('Kun administratorer kan slette quotes!')
+        if not request.user.has_perm('quotes.delete_quote'):
+            _logger.info("%s was rejected from deleting quote %d", request.user, kwargs['quote_id'])
+            return HttpResponseForbidden('Du har ikke tilgang til å slette denne quoten.')
         quote_id = kwargs['quote_id']
         quote = get_object_or_404(Quote, id=quote_id)
         quote.delete()
