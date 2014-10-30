@@ -6,6 +6,7 @@ from django import http
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.utils.cache import add_never_cache_headers
 
@@ -23,6 +24,9 @@ urlpatterns = patterns('',
     (r'^tasks/', include('slingsby.tasks.urls')),
     (r'^program/', include('slingsby.events.urls')),
     (r'^gear/', include('slingsby.gear.urls')),
+
+    # Override admin login to our social login
+    url(r'^admin/login/', lambda r: http.HttpResponseRedirect(reverse('social:begin', kwargs={'backend': 'facebook'}))),
     (r'^admin/', include(admin.site.urls)),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
