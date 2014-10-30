@@ -38,7 +38,7 @@
                 </div>
             {% endif %}
 
-            {% if user.is_staff %}
+            {% if perms.events.add_event %}
                 <p>E-post-adresser: {{ event.get_participating_emails|join:", " }}</p>
             {% endif %}
 
