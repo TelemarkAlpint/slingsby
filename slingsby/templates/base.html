@@ -79,7 +79,7 @@
 
                 <ul style="display: none;">
                         {% if user.is_staff %}
-                            <li><a href="/admin/">Administrer</a></li>
+                            <li><a href="{% url 'admin:index' %}">Administrer</a></li>
                         {% endif %}
 
                         <li><a href="{% url 'profile' %}">Profil</a></li>
