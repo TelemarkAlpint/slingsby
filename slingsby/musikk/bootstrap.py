@@ -4,6 +4,7 @@ from django.contrib.webdesign.lorem_ipsum import words
 import random
 
 def bootstrap():
+    # Create some songs on the toplist
     Song.objects.get_or_create(title='Danger Zone',
         artist='Kenny Loggins',
         popularity=30,
@@ -20,6 +21,8 @@ def bootstrap():
         votes=3,
         ready=True,
     )
+
+    # Create some random filler songs
     for i in range(41):
         Song.objects.get_or_create(
             artist='Artist %d' % i,
@@ -29,3 +32,8 @@ def bootstrap():
                 'title': ' '.join(random.sample(words(40).split(), random.randint(2, 5))).title(),
             }
         )
+
+    # Create some new song suggestions
+    Song.objects.get_or_create(title='The Bumpi Song',
+        artist='Spritney Bears',
+    )

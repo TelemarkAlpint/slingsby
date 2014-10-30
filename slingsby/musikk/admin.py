@@ -18,5 +18,6 @@ class VoteAdmin(admin.ModelAdmin):
                 return False
         return True
 
+
 admin.site.register(Song, SongAdmin)
 admin.site.register(Vote, VoteAdmin)

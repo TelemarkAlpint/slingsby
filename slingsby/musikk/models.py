@@ -30,9 +30,14 @@ class Song(models.Model):
 
     class Meta:
         ordering = ['-votes', 'artist', 'title']
+        permissions = (
+            ('approve_song', 'Can upload new songs to suggestions'),
+        )
+
 
     def __unicode__(self):
         return '%s - %s' % (self.artist, self.title)
+
 
     def to_json(self):
         json = {
@@ -44,6 +49,7 @@ class Song(models.Model):
             'filename': self.filename.url,
         }
         return json
+
 
     def get_absolute_url(self):
         return reverse('song_details', kwargs={'song_id': str(self.id)})
