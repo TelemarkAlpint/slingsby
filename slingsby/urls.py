@@ -21,14 +21,14 @@ urlpatterns = patterns('',
     url(r'^arkiv/', include('slingsby.archive.urls')),
     url(r'^quotes/', include('slingsby.quotes.urls')),
     url(r'^instagram/', include('slingsby.instagram.urls')),
-    (r'^tasks/', include('slingsby.tasks.urls')),
-    (r'^program/', include('slingsby.events.urls')),
-    (r'^gear/', include('slingsby.gear.urls')),
+    url(r'^tasks/', include('slingsby.tasks.urls')),
+    url(r'^program/', include('slingsby.events.urls')),
+    url(r'^gear/', include('slingsby.gear.urls')),
 
     # Override admin login to our social login
     url(r'^admin/login/', lambda r: http.HttpResponseRedirect(reverse('social:begin', kwargs={'backend': 'facebook'}))),
-    (r'^admin/', include(admin.site.urls)),
-    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
 # social auth urls
