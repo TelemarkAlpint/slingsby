@@ -142,7 +142,7 @@
                             </div>
                         {% endif %}
 
-                        {% if user.is_staff %}
+                        {% if perms.quotes.approve_quote %}
                             {% for suggested_q in suggested_quotes %}
                                 <div class="suggested_quote_wrapper">
                                     <div class="suggested_quote sidebar_box">
