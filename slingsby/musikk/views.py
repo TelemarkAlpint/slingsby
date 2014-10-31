@@ -130,6 +130,7 @@ class AllSongsView(TemplateView):
             song = form.save(commit=False)
             song.suggested_by = request.user
             song.save()
+            _logger.info('%s suggested song %s', request.user, song)
             messages.success(request, 'Takker og bukker, webmaster vil se på forslaget og ' \
                 'prøve å få lastet det opp ASAP, hang tight!')
             return HttpResponseRedirect(reverse('musikk'))
