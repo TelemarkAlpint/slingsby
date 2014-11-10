@@ -43,7 +43,8 @@ def load_media_from_instagram_response(json_data):
             }
         )
         instagram_media.like_count = media['likes']['count']
-        instagram_media.caption = media['caption']['text']
+        # Not all images have captions
+        instagram_media.caption = media['caption']['text'] if media['caption'] else ''
         instagram_media.poster = media['user']['username']
         instagram_media.poster_image = media['user']['profile_picture']
         instagram_media.save()
