@@ -144,10 +144,10 @@ class AllSongsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AllSongsView, self).get_context_data(**kwargs)
         user = self.request.user
-        first_half, second_half = self._split_list_in_half(all_songs)
+        first_half, second_half = self._split_list_in_half(all_songs.all())
 
         context['songs_voted_on'] = get_votes_from_today(user)
-        context['top_songs'] = top_songs
+        context['top_songs'] = top_songs.all()
         context['all_songs_first_half'] = first_half
         context['all_songs_second_half'] = second_half
         context['song_form'] = SongSuggestionForm()
