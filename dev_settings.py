@@ -140,3 +140,5 @@ else:
         'social authentication.\n\nTo decrypt these secrets, run ' +
         '`python tools/secure_data.py decrypt` to do so.\nThe decryption key can be found in ' +
         'Kontoer.kdbx in the styre-dropbox')
+
+MEDIA_URL = 'http://127.0.0.1:8001/'

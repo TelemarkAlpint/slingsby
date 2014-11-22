@@ -1,6 +1,14 @@
-from .models import ArchiveEvent, ImageGallery, Image
+from .models import Event, Image, ImageForm
+
 from django.contrib import admin
 
-admin.site.register(ArchiveEvent)
-admin.site.register(ImageGallery)
-admin.site.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    form = ImageForm
+    readonly_fields = (
+        'original_height',
+        'original_width',
+        'original_filename',
+    )
+
+admin.site.register(Event)
+admin.site.register(Image, ImageAdmin)

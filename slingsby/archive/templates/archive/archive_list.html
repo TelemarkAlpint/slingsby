@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 
-{% load staticfiles %}
-{% load url from future %}
-
-{% block title %}{{ title }}{% endblock %}
+{% load revved_static %}
 
 {% block extrastyles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "libs/Zoombox/zoombox.css" %}">
+    <link rel="stylesheet" href="{% static "stylesheets/archive.css" %}">
 {% endblock %}
 
 {% block content %}
@@ -27,6 +24,17 @@
         ordnet det!
     </p>
 
+    {% if perms.archive.can_upload_images %}
+        <form method="post" action="{% url 'archive' %}" enctype="multipart/form-data">
+            {{ event_form.as_p }}
+            <label for="image-form-photographer">Fotograf:</label><input id="image-form-photographer" type="text" name="photographer">
+            <br>
+            <label for="image-form-images">Bilder:</label><input id="image-form-images" type="file" name="images" multiple>
+            <br>
+            <input type="submit" value="Lag nytt galleri" class="btn">
+        </form>
+    {% endif %}
+
     <h2>Gamle nettsider</h2>
     <p>
         Her kan du se noen av de gamle nettsidene våre og hva folk preiket om den gang da.
@@ -39,56 +47,51 @@
     </ul>
 
     {% for event in events %}
-        {% ifchanged event.date %}
-            <h1>{{ event.date }}</h1>
+
+        {% ifchanged event.year %}
+            <h1>{{ event.year }}</h1>
         {% endifchanged %}
-        <div class="archive_event" id="{{ event.pk }}">
-            <h2>{{ event.name }}</h2>
-            <div class="event_details" id="details-{{ event.pk }}" style="display: none">
-                Laster...
+
+        <div class="small-indent clickable" id="{{ event.pk }}">
+
+            {# link only followed by non-js browsers, js intercepts the others #}
+            <a href="{% url 'archive' %}?showEvent={{ event.id }}">
+                <h2 class="js-event-title" data-event-url="{% url 'event_details' event.id %}">{{ event.name }}</h2>
+            </a>
+
+            {# Loader that appears until js has rendered the images #}
+            <div class="event-images" style="display: none;">
+                <img src="{% static 'gfx/wait.gif' %}" alt="Laster&hellip;">
             </div>
+
+            {# For non-js browsers that has requested this event, show the event #}
+            {% if show_event == event.id %}
+                <div>
+                    {% for image in event.images %}
+                        <a href="{{ image.websize }}" data-gallery data-description="{{ image.description }}" title="{{ event.name }} ({{ event.year }})">
+                            <img src="{{ image.thumbnail }}">
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
         </div>
 
     {% endfor %}
 
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <p class="description"></p>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+    </div>
+
 {% endblock %}
 
 {% block extrascripts %}
-    {{ block.super }}
-    <script>
-        /* Set up click handling for the events */
-        $('.archive_event').each(function() {
-            $(this).click(function(){
-                var id = $(this).attr('id');
-                var event_details = $('.event_details#details-' + id);
-                $.ajax({
-                    url: {% url 'archive' %} + id,
-                    method: 'GET',
-                    success: function(data, status, jqxhr){
-                        event_details.html(data);
-                        $('a.zoombox').zoombox({
-                            theme       : 'darkprettyphoto',//available themes : zoombox,lightbox, prettyphoto, darkprettyphoto, simple
-                            opacity     : 0.8,              // Black overlay opacity
-                            duration    : 400,              // Animation duration
-                            animation   : true,             // Do we have to animate the box ?
-                            width       : 1500,              // Default width
-                            height      : 800,              // Default height
-                            gallery     : true,             // Allow gallery thumb view
-                            autoplay : false                // Autoplay for video
-                        });
-                    },
-                });
-                if (event_details.hasClass('active')){
-                    event_details.slideUp();
-                    event_details.removeClass('active');
-                } else {
-                    event_details.slideDown();
-                    $('.event_details.active').removeClass('active').slideUp();
-                    event_details.addClass('active');
-                }
-            });
-        });
-    </script>
-    <script src="{% static "libs/Zoombox/zoombox.js" %}"></script>
-
+    <script async defer src="{% static 'js/archive.min.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,46 @@
+@import "blueimp-gallery";
+
+.small-indent {
+    margin-left: 10px;
+}
+
+img.gallery {
+    position: absolute;
+    margin-top: -75px;
+    top: 50%;
+    width: 100%;
+}
+
+.gallery_img_wrapper {
+    height: 150px;
+    width: 45%;
+    overflow: hidden;
+    padding: 5px 0px;
+    position: relative;
+    float: left;
+    margin: 5px;
+    padding: 0;
+
+    p.credits {
+        background-color: rgba(40, 40, 40, 0.9);
+        color: white;
+        font-weight: bold;
+        margin: 0;
+        opacity: 0.5;
+        padding: 10px;
+        position: absolute;
+        z-index: 1;
+    }
+}
+
+.blueimp-gallery > .description {
+  position: absolute;
+  top: 30px;
+  left: 15px;
+  color: #fff;
+  display: none;
+}
+
+.blueimp-gallery-controls > .description {
+  display: block;
+}

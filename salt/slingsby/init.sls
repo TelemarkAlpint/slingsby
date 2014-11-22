@@ -13,6 +13,7 @@ slingsby-deps:
   pkg.installed:
     - pkgs:
       - lame
+      - libjpeg-dev # Needed for PIL to decode JPEGs
       - python-dev # required for db bindings to compile
       - python-pip
       - python-virtualenv
