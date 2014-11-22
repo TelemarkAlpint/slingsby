@@ -74,9 +74,8 @@ plugins we use. These are defined in the `package.json` file.
 Once you have node and npm installed, you should install the grunt-cli, bower and all the grunt
 plugins and frontend dependencies:
 
-    $ npm install -g grunt-cli bower
+    $ npm install -g grunt-cli
     $ npm install
-    $ bower install
 
 You also need Compass for the stylesheets, which can be installed with
 [RubyGems](https://rubygems.org/):

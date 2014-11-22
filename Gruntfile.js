@@ -28,6 +28,14 @@ module.exports = function (grunt) {
 
     pkg: grunt.file.readJSON('package.json'),
 
+    bower: {
+      install: {
+        options: {
+          copy: false,
+        }
+      }
+    },
+
     /*
      * Compile all .hbs (handlebars) templates to a shared file
      */
@@ -311,5 +319,8 @@ module.exports = function (grunt) {
   grunt.registerTask('buildScripts', [
     'handlebars',
     'uglify',
+  ]);
+  grunt.registerTask('init-bower-deps', [
+    'bower',
   ]);
 };
