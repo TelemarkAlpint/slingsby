@@ -1,3 +1,13 @@
+uwsgi-user:
+  user.present:
+    - name: uwsgi
+    - fullname: uWSGI worker
+    - system: True
+    - createhome: False
+    - shell: /usr/sbin/nologin
+    - home: /nonexistent
+
+
 uwsgi-deps:
   pkg.installed:
     - pkgs:
@@ -18,6 +28,8 @@ uwsgi:
   service.running:
     - require:
       - pip: uwsgi
+      - user: uwsgi-user
+      - file: uwsgi-log-dir
     - watch:
       - file: uwsgi
       - file: slingsby-uwsgi-conf
@@ -32,5 +44,7 @@ uwsgi-log-dir:
   file.directory:
     - name: /var/log/uwsgi
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 775
+    - require:
+      - user: uwsgi-user

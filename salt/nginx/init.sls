@@ -7,15 +7,17 @@ nginx:
   pkg.installed:
     - require:
       - pkgrepo: nginx
+      - user: nginx
 
   file.managed:
     - name: /etc/nginx/nginx.conf
     - source: salt://nginx/nginx.conf
     - mode: 644
     - user: root
-    - group: www
+    - group: root
     - require:
       - pkg: nginx
+      - user: nginx
 
   service.running:
       - service: uwsgi
@@ -23,13 +25,20 @@ nginx:
       - file: nginx
       - file: slingsby-site
 
+  user.present:
+    - name: nginx
+    - systemuser: True
+    - fullname: Nginx worker
+    - createhome: False
+    - shell: /usr/sbin/nologin
+    - home: /nonexistent
 
 # Make sure nginx log dir has correct users and permissions
 nginx-log-dir:
   file.directory:
     - name: /var/log/nginx
     - user: root
-    - group: www
+    - group: nginx
     - mode: 775
 
 

@@ -1,6 +1,6 @@
 [uwsgi]
-uid = www
-gid = www
+uid = uwsgi
+gid = uwsgi
 threads = 3
 vassal_name = slingsby
 socket = /tmp/slingsby.socket
@@ -10,6 +10,7 @@ env = DJANGO_SETTINGS_MODULE=prod_settings
 module = django.core.handlers.wsgi:WSGIHandler()
 logto = /var/log/uwsgi/uwsgi.log
 chmod-socket = 664
+chown-socket = uwsgi:nginx
 reload-on-exception = true
 enable-threads = true
 single-interpreter = true

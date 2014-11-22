@@ -6,9 +6,6 @@ never have to ssh to the servers to fix anything, if it's dead you kill it and f
 
 We have an AMI with all users and salt-minion installed, so if anything happens, fire up one of those instances, run salt, and re-associate the elastic IP to point to the new server.
 
-Note that all users account operations are performed as the first step in the salt step (by the key order: 1), so that you
-don't always have to require the user account 'www' for example everywhere.
-
 The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed these steps:
 
 - ssh in to the box with the master key (located in dropbox accounts db) and the 'ubuntu' user

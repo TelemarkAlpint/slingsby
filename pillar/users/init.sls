@@ -2,9 +2,6 @@ absent_users:
   - ubuntu
   - henrik
 
-daemon_users:
-  www: Nginx/uWSGI worker
-
 developers:
   tarjei:
     fullname: Tarjei Husoy

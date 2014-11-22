@@ -28,10 +28,11 @@ slingsby:
     - template: jinja
     - show_diff: False
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 640
     - require:
       - virtualenv: slingsby
+      - user: uwsgi-user
     - watch_in:
       - service: uwsgi
 
@@ -48,8 +49,10 @@ slingsby-log-dir:
     - name: /var/log/slingsby
     - makedirs: True
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 775
+    - require:
+      - user: uwsgi-user
 
 
 slingsby-static-dir:
@@ -57,8 +60,10 @@ slingsby-static-dir:
     - name: /srv/ntnuita.no/static
     - makedirs: True
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 755
+    - require:
+      - user: uwsgi-user
 
 
 slingsby-media-dir:
@@ -66,8 +71,10 @@ slingsby-media-dir:
     - name: /srv/ntnuita.no/media
     - makedirs: True
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 775
+    - require:
+      - user: uwsgi-user
 
 
 slingsby-celery:
