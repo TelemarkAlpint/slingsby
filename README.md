@@ -92,7 +92,7 @@ Magic!
 
 Add some dummy data to work with:
 
-    $ python manage.py syncdb --noinput && python manage.py bootstrap
+    $ python manage.py migrate --noinput && python manage.py bootstrap
 
 And now, you can start the devserver:
 
@@ -131,15 +131,21 @@ Testing on a server
 -------------------
 
 To test that stuff works in the same environment (or rather, very similar) to the one in
-production, you can start a local machine with all the same software we're using in production by
+production, you can start two local machines with all the same software we're using in production by
 using [VirtualBox](https://www.virtualbox.org/) and [Vagrant](http://www.vagrantup.com/). Once you
-have installed the two, simply execute the following to start your VM and deploy the app to it:
+have installed the two, simply execute the following to start your VMs and deploy the app to it:
 
+    $ grunt build
     $ vagrant up
     $ fab deploy_vagrant
 
-(This requires the app to have been built already: run `grunt build` first). You now have a server
-running the app behind nginx, with uwsgi doing the heavy lifting, memcached doing caching, etc.
+Make sure you have the following entries in your hosts file:
+
+    127.0.0.1 ntnuita.local
+    127.0.0.1 media.ntnuita.local
+
+You can now visit `http://ntnuita.local` in your webbrowser to test how the app runs behind nginx
+and uwsgi, with caching and the fileserver and all the bells and whistles.
 
 
 Dependencies
@@ -227,9 +233,9 @@ with the pubkey listed under `pillar/vagrant.sls`.
 Handy oneliners
 ---------------
 
-Wipe local database and bootstrap new one, without wiping the user data:
+Wipe the local database and bootstrap a new one:
 
-    $ sqlite3 db-dev.sqlite ".tables" | python -c "import sys; tables = sys.stdin.read().split(); tables.remove('auth_user'); print ' '.join('DROP TABLE %s;' % table for table in tables)" | sqlite3 db-dev.sqlite && python manage.py syncdb --noinput && python manage.py bootstrap
+    $ rm db-dev.sqlite && python manage.py migrate --noinput && python manage.py bootstrap
 
 
 Random notes that might someday be necessary
