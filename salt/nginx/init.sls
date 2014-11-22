@@ -18,18 +18,16 @@ nginx:
       - pkg: nginx
 
   service.running:
-    - require:
-      - file: nginx_log_dir
       - service: uwsgi
     - watch:
       - file: nginx
       - file: slingsby-site
 
 
-# For the pre-config loaded directory
-nginx_log_dir:
+# Make sure nginx log dir has correct users and permissions
+nginx-log-dir:
   file.directory:
-    - name: /usr/share/nginx/logs
+    - name: /var/log/nginx
     - user: root
     - group: www
     - mode: 775
