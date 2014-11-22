@@ -1,0 +1,6 @@
+id: vagrant-fileserver
+file_client: local
+grains:
+    hostname: media.ntnuita.local
+    roles:
+        - fileserver

@@ -1,0 +1,6 @@
+id: vagrant
+file_client: local
+grains:
+    hostname: ntnuita.local
+    roles:
+        - web
