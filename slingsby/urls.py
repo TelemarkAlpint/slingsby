@@ -21,7 +21,6 @@ urlpatterns = patterns('',
     url(r'^arkiv/', include('slingsby.archive.urls')),
     url(r'^quotes/', include('slingsby.quotes.urls')),
     url(r'^instagram/', include('slingsby.instagram.urls')),
-    url(r'^tasks/', include('slingsby.tasks.urls')),
     url(r'^program/', include('slingsby.events.urls')),
     url(r'^gear/', include('slingsby.gear.urls')),
 

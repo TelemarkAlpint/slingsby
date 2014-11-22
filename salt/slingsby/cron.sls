@@ -12,9 +12,3 @@ count_new_votes:
     - name: 'curl -v localhost/tasks/count_votes -H "Host: ntnuita.no"'
     - hour: 23
     - minute: 1
-
-update_archive:
-  cron.present:
-    - name: 'curl -v localhost/tasks/update_archive -H "Host: ntnuita.no"'
-    - hour: 23
-    - minute: 10
