@@ -1,29 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from ..general.utils import log_errors
 from .models import InstagramMedia, InstagramComment
 
 import requests
 from celery import shared_task
 from datetime import datetime
 from django.conf import settings
-from functools import wraps
 from logging import getLogger
 
 
 _logger = getLogger('slingsby.musikk.tasks')
-
-
-def log_errors(func):
-    """ Decorator to wrap a function in a try/except, and log errors. """
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except: # pylint: disable=bare-except
-            _logger.exception("Task failed!")
-
-    return wrapper
 
 
 def load_media_from_instagram_response(json_data):

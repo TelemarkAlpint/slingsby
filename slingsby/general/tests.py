@@ -1,5 +1,10 @@
-from slingsby.general.middleware import HttpAcceptMiddleware, HttpMethodOverride
-from slingsby.settings import fix_nonexistent_file_handlers
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
+from ..settings import fix_nonexistent_file_handlers
+from .utils import _get_ssh_connection_params, slugify
+from .middleware import HttpAcceptMiddleware, HttpMethodOverride
 
 from django.test import TestCase, Client
 from django.template import Template, Context
@@ -155,3 +160,27 @@ class StaticRedirectTest(TestCase):
         response = self.client.get('/robots.txt')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.get('cache-control'), 'max-age=0')
+
+
+class UtilTest(TestCase):
+
+    def test_get_connection_params(self):
+        tests = [
+            ('localhost', ('vagrant', 'localhost', 22)),
+            ('vagrant@localhost:22', ('vagrant', 'localhost', 22)),
+            ('travis@127.0.0.1:2222', ('travis', '127.0.0.1', 2222)),
+        ]
+        for connection_string, expected_result in tests:
+            result = _get_ssh_connection_params(connection_string)
+            self.assertEqual(result, expected_result)
+
+
+    def test_slugify(self):
+        tests = (
+            ("I love it'", 'i-love-it'),
+            ("J'ai parlée français, un peu", 'jai-parlee-francais-un-peu'),
+            ("Åge og sambandet e hærlig, sjø!, ", 'age-og-sambandet-e-haerlig-sjo'),
+            ("Ærlighet varer lengst", 'aerlighet-varer-lengst'),
+        )
+        for value, expected in tests:
+            self.assertEqual(slugify(value), expected)

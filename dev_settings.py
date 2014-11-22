@@ -2,6 +2,7 @@
 
 # Override settings locally
 from slingsby.settings import *
+from slingsby.general.utils import MockSSHClient
 from os import path
 import os
 import textwrap
@@ -12,6 +13,8 @@ DEBUG = True
 DEBUG_TOOLBAR = os.environ.get('DJANGO_DEBUG_TOOLBAR', False)
 
 TEMPLATE_DEBUG = DEBUG
+
+CELERY_ALWAYS_EAGER = True
 
 SECRET_KEY = 'pleasedontusethisinprod'
 
@@ -82,13 +85,11 @@ if os.environ.get('WITH_COVERAGE', False):
         '--cover-branches',
     ]
 
-MEDIA_ROOT = path.abspath('media')
+if os.environ.get('FILESERVER'):
+    FILESERVER = os.environ.get('FILESERVER')
 
-FILESERVER = os.environ.get('FILESERVER', '127.0.0.1:2222')
-
-FILESERVER_MEDIA_ROOT = '/srv/ntnuita.no/media'
-
-# This is the vagrant ssh key
+# This is the private key used to SSH into the travis box, pubkey added
+# to .ssh/authorized_keys by .travis.yml. Only used when RUN_SSH_TESTS=1.
 FILESERVER_KEY = textwrap.dedent('''\
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAoyOL+iiEDqQE78dTGr5QVTS3ZdVGgJbKYqSJwq4sAENwPXf1
@@ -118,6 +119,12 @@ FILESERVER_KEY = textwrap.dedent('''\
     NSddVYNEowsH3azzX3txUGhHu/uxwykUGE0HKTkSjJaZHFjqtTu0eA==
     -----END RSA PRIVATE KEY-----
     ''')
+
+MEDIA_ROOT = path.abspath('media')
+
+SSH_CLIENT = MockSSHClient()
+
+FILESERVER_MEDIA_ROOT = path.abspath('media')
 
 # Load secrets from pillar/secure/init.sls if available
 secrets_file = os.path.join(os.path.dirname(__file__), 'pillar', 'secure', 'init.sls')
