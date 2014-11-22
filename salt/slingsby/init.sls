@@ -2,13 +2,17 @@
 
 include:
   - .cron
+  - memcached
+  - mysql
+  - nginx
+  - rabbitmq
+  - uwsgi
 
 
 slingsby-deps:
   pkg.installed:
     - pkgs:
       - lame
-      - mysql # Needed to compile db bindings
       - python-dev # required for db bindings to compile
       - python-pip
       - python-virtualenv
@@ -21,6 +25,7 @@ slingsby:
     - no_deps: True
     - require:
       - pkg: slingsby-deps
+      - pkg: mysql
 
   file.managed:
     - name: /srv/ntnuita.no/prod_settings.py

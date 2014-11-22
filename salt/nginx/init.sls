@@ -20,7 +20,6 @@ nginx:
       - user: nginx
 
   service.running:
-      - service: uwsgi
     - watch:
       - file: nginx
       - file: nginx-default-site
