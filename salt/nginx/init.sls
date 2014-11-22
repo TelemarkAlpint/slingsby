@@ -1,3 +1,5 @@
+{% set old_sites = pillar.get('old_sites', []) %}
+
 nginx:
   pkgrepo.managed:
    - ppa: nginx/stable
@@ -43,7 +45,7 @@ slingsby-site:
     - watch_in:
       - service: nginx
 
-{% for old_site in ['1999', '2004'] %}
+{% for old_site in old_sites %}
 {{ old_site }}-site:
   file.managed:
     - name: /etc/nginx/sites-enabled/{{ old_site }}

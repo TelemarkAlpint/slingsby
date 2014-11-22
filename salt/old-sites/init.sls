@@ -1,4 +1,6 @@
-{% for site in ['1999', '2004'] %}
+{% set old_sites = pillar.get('old_sites', []) %}
+
+{% for site in old_sites %}
 
 /srv/old-sites/{{ site }}:
   file.directory:
