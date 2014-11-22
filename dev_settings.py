@@ -8,6 +8,13 @@ import os
 import textwrap
 import yaml
 
+import sys
+if len(sys.argv) >= 2 and sys.argv[1] == 'test':
+    # Reduce logger verbosity in test to see only the relevant data
+    import logging
+    logging.disable(logging.WARNING)
+    NOSE_ARGS = ['-x']
+
 DEBUG = True
 
 DEBUG_TOOLBAR = os.environ.get('DJANGO_DEBUG_TOOLBAR', False)
