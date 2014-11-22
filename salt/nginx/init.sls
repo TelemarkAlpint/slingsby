@@ -23,7 +23,7 @@ nginx:
       - service: uwsgi
     - watch:
       - file: nginx
-      - file: slingsby-site
+      - file: nginx-default-site
 
   user.present:
     - name: nginx
@@ -41,16 +41,6 @@ nginx-log-dir:
     - group: nginx
     - mode: 775
 
-
-slingsby-site:
-  file.managed:
-    - name: /etc/nginx/sites-enabled/slingsby
-    - source: salt://nginx/sites-enabled/slingsby
-    - template: jinja
-    - require:
-      - file: nginx-default-site
-    - watch_in:
-      - service: nginx
 
 {% for old_site in old_sites %}
 {{ old_site }}-site:

@@ -85,6 +85,18 @@ slingsby-celery:
   service.running:
     - watch:
       - file: slingsby-celery
+      - file: slingsby
+
+
+slingsby-nginx-site:
+  file.managed:
+    - name: /etc/nginx/sites-enabled/slingsby
+    - source: salt://slingsby/slingsby-nginx-site
+    - template: jinja
+    - require:
+      - pkg: nginx
+    - watch_in:
+      - service: nginx
 
 
 # Fix a bug in djecelery/mysql where index keys can't be longer than some arbitrary mysql limit
