@@ -53,7 +53,6 @@ INSTALLED_APPS = (
     'slingsby.instagram',
     'slingsby.musikk',
     'slingsby.quotes',
-    'slingsby.tasks',
     'slingsby.users',
 
     # Most of the functionality of django-celery has been merged into celery itself, but the admin

@@ -28,6 +28,14 @@ module.exports = function (grunt) {
 
     pkg: grunt.file.readJSON('package.json'),
 
+    bower: {
+      install: {
+        options: {
+          copy: false,
+        }
+      }
+    },
+
     /*
      * Compile all .hbs (handlebars) templates to a shared file
      */
@@ -62,6 +70,7 @@ module.exports = function (grunt) {
           importPath: [
             '.tmp/sass',
             'bower_components/bootstrap-sass-official/assets/stylesheets',
+            'bower_components/blueimp-gallery/css',
           ],
         }
       }
@@ -130,6 +139,17 @@ module.exports = function (grunt) {
       }
     },
 
+    rename: {
+      blueimp_gallery: {
+        files: [
+          {
+            src: 'bower_components/blueimp-gallery/css/blueimp-gallery.min.css',
+            dest: 'bower_components/blueimp-gallery/css/_blueimp-gallery.scss'
+          }
+        ]
+      }
+    },
+
     // Shortcuts for some often used commands
     shell: {
       options: {
@@ -170,6 +190,10 @@ module.exports = function (grunt) {
       serverAssets: [
         'slingsby/server-assets',
       ],
+      media: [
+        'media/**',
+        '!media',
+      ]
     },
 
     imagemin: {
@@ -185,7 +209,7 @@ module.exports = function (grunt) {
           ],
           dest: '.tmp/static/gfx',
         }]
-      }
+      },
     },
 
     filerev: {
@@ -197,7 +221,7 @@ module.exports = function (grunt) {
         src: [
           'build/static/gfx/**/*.{png,jpg,gif}',
           '!build/static/gfx/widgEditor/**',
-          '!build/static/gfx/zoombox/**',
+          '!build/static/stylesheets/img/**',
         ]
       },
       styles: {
@@ -264,6 +288,20 @@ module.exports = function (grunt) {
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js',
             'slingsby/instagram/static/js/instagram.js',
           ],
+          '.tmp/static/js/archive.min.js': [
+            // Only add required parts of blueimp-gallery
+
+            //'bower_components/blueimp-gallery/js/blueimp-helper.js',
+            'bower_components/blueimp-gallery/js/blueimp-gallery.js',
+            'bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js',
+            'bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js',
+            //'bower_components/blueimp-gallery/js/blueimp-gallery-video.js',
+            //'bower_components/blueimp-gallery/js/blueimp-gallery-youtube.js',
+            //'bower_components/blueimp-gallery/js/blueimp-gallery-vimeo.js',
+            'bower_components/blueimp-gallery/js/jquery.blueimp-gallery.js',
+
+            'slingsby/archive/static/js/archive.js',
+          ],
           'build/static/js/socialSummary.min.js': 'slingsby/articles/static/js/socialSummary.js',
           'build/static/js/widgEditor.min.js': 'slingsby/general/static/js/widgEditor.js',
         }
@@ -311,5 +349,9 @@ module.exports = function (grunt) {
   grunt.registerTask('buildScripts', [
     'handlebars',
     'uglify',
+  ]);
+  grunt.registerTask('init-bower-deps', [
+    'bower',
+    'rename:blueimp_gallery',
   ]);
 };

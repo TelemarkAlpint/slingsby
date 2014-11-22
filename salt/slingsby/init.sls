@@ -2,14 +2,21 @@
 
 include:
   - .cron
+  - memcached
+  - mysql
+  - nginx
+  - rabbitmq
+  - uwsgi
+
 
 slingsby-deps:
-  pip.installed:
-    - name: virtualenv
-
   pkg.installed:
     - pkgs:
       - lame
+      - libjpeg-dev # Needed for PIL to decode JPEGs
+      - python-dev # required for db bindings to compile
+      - python-pip
+      - python-virtualenv
       - sox
 
 slingsby:
@@ -18,9 +25,8 @@ slingsby:
     - requirements: salt://slingsby/prod-requirements.txt
     - no_deps: True
     - require:
-      - pip: slingsby-deps
-      - pkg: python-dev # required for db bindings to compile
-      - pkg: mysql # Needed to compile db bindings
+      - pkg: slingsby-deps
+      - pkg: mysql
 
   file.managed:
     - name: /srv/ntnuita.no/prod_settings.py
@@ -28,10 +34,11 @@ slingsby:
     - template: jinja
     - show_diff: False
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 640
     - require:
       - virtualenv: slingsby
+      - user: uwsgi-user
     - watch_in:
       - service: uwsgi
 
@@ -48,8 +55,10 @@ slingsby-log-dir:
     - name: /var/log/slingsby
     - makedirs: True
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 775
+    - require:
+      - user: uwsgi-user
 
 
 slingsby-static-dir:
@@ -57,8 +66,10 @@ slingsby-static-dir:
     - name: /srv/ntnuita.no/static
     - makedirs: True
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 755
+    - require:
+      - user: uwsgi-user
 
 
 slingsby-media-dir:
@@ -66,8 +77,10 @@ slingsby-media-dir:
     - name: /srv/ntnuita.no/media
     - makedirs: True
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 775
+    - require:
+      - user: uwsgi-user
 
 
 slingsby-celery:
@@ -78,6 +91,18 @@ slingsby-celery:
   service.running:
     - watch:
       - file: slingsby-celery
+      - file: slingsby
+
+
+slingsby-nginx-site:
+  file.managed:
+    - name: /etc/nginx/sites-enabled/slingsby
+    - source: salt://slingsby/slingsby-nginx-site
+    - template: jinja
+    - require:
+      - pkg: nginx
+    - watch_in:
+      - service: nginx
 
 
 # Fix a bug in djecelery/mysql where index keys can't be longer than some arbitrary mysql limit

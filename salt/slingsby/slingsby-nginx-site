@@ -1,0 +1,59 @@
+{% set slingsby = pillar.get('slingsby', {}) -%}
+{% set bind_url = slingsby.get('bind_url', 'ntnuita.no') -%}
+
+upstream slingsby {
+  least_conn;
+  server unix:///tmp/slingsby.socket;
+}
+
+# Redirect www.nnuita.no -> ntnuita.no
+server {
+  listen 80;
+  server_name www.{{ bind_url }};
+  return 301 $scheme://{{ bind_url }}$request_uri;
+}
+
+server {
+
+  listen 80;
+  server_name {{ bind_url }};
+  charset utf-8;
+  # Bump max upload size. Archive image uploads can be quite big since we accept originals,
+  # they have more than 200M they should either split it up in several uploads (typically
+  # large images), or reduce they number of image (taken too many crappy shots).
+  client_max_body_size 200M;
+
+  location / {
+    include uwsgi_params;
+
+    uwsgi_pass slingsby;
+
+    uwsgi_param Host $host;
+    uwsgi_param X-Real-IP $remote_addr;
+    uwsgi_param X-Forwarded-For $proxy_add_x_forwarded_for;
+    uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
+  location /static {
+    alias /srv/ntnuita.no/static/;
+    expires 1y;
+    access_log off;
+    add_header Cache-Control "public";
+  }
+
+  {% if grains['id'] == 'vagrant' %}
+  location /media {
+    alias /srv/ntnuita.no/media/;
+  }
+  {% endif %}
+
+  # Restrict access to the tasks, so that they can only be accessed locally
+  location ~ ^/tasks {
+    allow 127.0.0.1;
+    deny all;
+
+    include uwsgi_params;
+    uwsgi_pass slingsby;
+  }
+
+}

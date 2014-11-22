@@ -1,0 +1,10 @@
+server {
+  listen 80;
+  server_name media.ntnuita.local;
+  charset utf-8;
+
+  location / {
+    alias /srv/fileserver/;
+    add_header Cache-Control "public";
+  }
+}

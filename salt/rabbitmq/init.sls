@@ -8,6 +8,9 @@ rabbitmq:
     - name: rabbitmq-server
     - require:
       - pkgrepo: rabbitmq
+      {% if grains['id'] == 'vagrant' %}
+      - cmd: hostname
+      {% endif %}
 
   service.running:
     - name: rabbitmq-server

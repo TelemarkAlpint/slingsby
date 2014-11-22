@@ -31,16 +31,3 @@
     - purge: True
     - force: True
 {% endfor %}
-
-
-
-{% for daemon_user, daemon_fullname in pillar.get('daemon_users', {}).items() %}
-{{ daemon_user }}:
-  user.present:
-    - order: 1
-    - fullname: {{ daemon_fullname }}
-    - createhome: False
-    - system: True
-    - shell: /usr/sbin/nologin
-    - home: /nonexistent
-{% endfor %}

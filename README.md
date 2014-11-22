@@ -74,9 +74,8 @@ plugins we use. These are defined in the `package.json` file.
 Once you have node and npm installed, you should install the grunt-cli, bower and all the grunt
 plugins and frontend dependencies:
 
-    $ npm install -g grunt-cli bower
+    $ npm install -g grunt-cli
     $ npm install
-    $ bower install
 
 You also need Compass for the stylesheets, which can be installed with
 [RubyGems](https://rubygems.org/):
@@ -93,20 +92,26 @@ Magic!
 
 Add some dummy data to work with:
 
-    $ python manage.py syncdb --noinput && python manage.py bootstrap
+    $ python manage.py migrate --noinput && python manage.py bootstrap
 
 And now, you can start the devserver:
 
     $ python manage.py runserver
 
 This should start the devserver at port 8000, browse to `http://localhost:8000` to see it!
-Starting the devserver like this will create a SQLite database you can use locally. Note that
-social login will not work out of the box, since authenticating with Facebook requires you to know
-our Facebook app secret. You only need this to test that Facebook auth works however, as in the dev
-environment you can log in as any user at `/devlogin`
+Starting the devserver like this will create a SQLite database you can use locally.
+If you need to test anything using the fileserver (archive, musikk), you need to start a
+lightweight HTTP server in the `media` directory. If it doesn't exist, create it first, and then
+start the server:
 
-If you need to test social login you can decrypt the secrets needed and start the devserver on port
-80. You also need to add the following line to your hosts file:
+    $ mkdir media
+    $ cd media
+    $ python -m SimpleHTTPServer 8001
+
+**Note**: Social login will not work out of the box, since authenticating with Facebook requires
+you to know our Facebook app secret. If you need to test social login you can decrypt the secrets
+needed and start the devserver on port 80. You also need to add the following line to your hosts
+file:
 
     127.0.0.1 ntnuita.local
 
@@ -126,15 +131,21 @@ Testing on a server
 -------------------
 
 To test that stuff works in the same environment (or rather, very similar) to the one in
-production, you can start a local machine with all the same software we're using in production by
+production, you can start two local machines with all the same software we're using in production by
 using [VirtualBox](https://www.virtualbox.org/) and [Vagrant](http://www.vagrantup.com/). Once you
-have installed the two, simply execute the following to start your VM and deploy the app to it:
+have installed the two, simply execute the following to start your VMs and deploy the app to it:
 
+    $ grunt build
     $ vagrant up
     $ fab deploy_vagrant
 
-(This requires the app to have been built already: run `grunt build` first). You now have a server
-running the app behind nginx, with uwsgi doing the heavy lifting, memcached doing caching, etc.
+Make sure you have the following entries in your hosts file:
+
+    127.0.0.1 ntnuita.local
+    127.0.0.1 media.ntnuita.local
+
+You can now visit `http://ntnuita.local` in your webbrowser to test how the app runs behind nginx
+and uwsgi, with caching and the fileserver and all the bells and whistles.
 
 
 Dependencies
@@ -222,9 +233,9 @@ with the pubkey listed under `pillar/vagrant.sls`.
 Handy oneliners
 ---------------
 
-Wipe local database and bootstrap new one, without wiping the user data:
+Wipe the local database and bootstrap a new one:
 
-    $ sqlite3 db-dev.sqlite ".tables" | python -c "import sys; tables = sys.stdin.read().split(); tables.remove('auth_user'); print ' '.join('DROP TABLE %s;' % table for table in tables)" | sqlite3 db-dev.sqlite && python manage.py syncdb --noinput && python manage.py bootstrap
+    $ rm db-dev.sqlite && python manage.py migrate --noinput && python manage.py bootstrap
 
 
 Random notes that might someday be necessary

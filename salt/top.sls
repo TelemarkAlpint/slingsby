@@ -1,20 +1,25 @@
 base:
   '*':
-    - memcached
-    - mysql
     - ntp
-    - nginx
-    - old-sites
-    - pip
     - pkg
-    - rabbitmq
-    - slingsby
     - sudo
     - users
-    - uwsgi
 
   'ntnuita.no':
     - ssh
 
   'vagrant':
     - mysql.server
+    - networking
+
+  'vagrant-fileserver':
+    - networking
+
+  'roles:fileserver':
+    - match: grain
+    - fileserver
+
+  'roles:web':
+    - match: grain
+    - old-sites
+    - slingsby

@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
+from ..general.utils import _get_ssh_client
 from .models import Song, Vote
-from .tasks import (process_new_song, get_ssh_client, slugify, get_ssh_connection_params,
-    count_votes)
+from .tasks import process_new_song, count_votes
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from django.test.utils import override_settings
 from nose.tools import nottest
+import datetime
 import mock
 import os
 import shutil
@@ -125,7 +124,7 @@ class SongTasksTest(TestCase):
 
     @needs_ssh
     def test_process_new_song(self):
-        with self.settings(MEDIA_ROOT=self.media_root,
+        with self.settings(MEDIA_ROOT=self.media_root, SSH_CLIENT=None,
                            FILESERVER_MEDIA_ROOT=self.fileserver_media_root):
             process_new_song(self.song.id)
             media_files = os.listdir(os.path.join(settings.MEDIA_ROOT, 'musikk'))
@@ -134,6 +133,7 @@ class SongTasksTest(TestCase):
             fileserver_media_files = _get_fileserver_media_files()
             self.assertTrue('test-artist/approved.mp3' in fileserver_media_files)
             self.assertTrue('test-artist/approved.ogg' in fileserver_media_files)
+
             # fetch updated song from db
             self.song = Song.objects.first()
             self.assertEqual(str(self.song.filename), 'musikk/test-artist/approved')
@@ -141,7 +141,7 @@ class SongTasksTest(TestCase):
 
 
 def _get_fileserver_media_files():
-    ssh_client = get_ssh_client()
+    ssh_client = _get_ssh_client()
     music_dir = settings.FILESERVER_MEDIA_ROOT + '/musikk'
     stdout = ssh_client.exec_command('find %s' % music_dir)[1]
     output = stdout.read()
@@ -150,29 +150,6 @@ def _get_fileserver_media_files():
     clean_lines = [path[len(music_dir):].lstrip('/') for path in output_lines]
     ssh_client.exec_command('rm -rf %s' % music_dir)
     return clean_lines
-
-
-class UtilTest(TestCase):
-
-    def test_slugify(self):
-        tests = (
-            ("I love it'", 'i-love-it'),
-            ("J'ai parlée français, un peu", 'jai-parlee-francais-un-peu'),
-            ("Åge og sambandet e hærlig, sjø!, ", 'age-og-sambandet-e-haerlig-sjo'),
-        )
-        for value, expected in tests:
-            self.assertEqual(slugify(value), expected)
-
-
-    def test_get_connection_params(self):
-        tests = [
-            ('localhost', ('vagrant', 'localhost', 22)),
-            ('vagrant@localhost:22', ('vagrant', 'localhost', 22)),
-            ('travis@127.0.0.1:2222', ('travis', '127.0.0.1', 2222)),
-        ]
-        for connection_string, expected_result in tests:
-            result = get_ssh_connection_params(connection_string)
-            self.assertEqual(result, expected_result)
 
 
 class SongActionsTest(TestCase):
@@ -201,14 +178,21 @@ class TopSongsTest(TestCase):
 
 
     def test_top_musikk_pages(self):
-        response = self.client.get('/musikk/top/')
-        self.assertEqual(response.status_code, 200)
+        requests_mock = mock.Mock()
+        requests_mock.get.return_value.json.return_value = {
+            'last_updated': datetime.datetime.now().strftime("%d.%m.%y %H:%M"),
+            'url': '/popular-song',
+        }
+        with mock.patch('slingsby.musikk.views.requests', requests_mock):
+            response = self.client.get('/musikk/top/')
+            self.assertEqual(response.status_code, 200)
+
+            response = self.client.get('/musikk/top/song/')
+            self.assertEqual(response.status_code, 302)
 
         response = self.client.get('/musikk/top/list/')
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get('/musikk/top/song/')
-        self.assertEqual(response.status_code, 302)
 
 
 class VoteCountTest(TestCase):

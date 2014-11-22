@@ -1,13 +1,24 @@
-# required to compile uwsgi
-python-dev:
-  pkg.installed
+uwsgi-user:
+  user.present:
+    - name: uwsgi
+    - fullname: uWSGI worker
+    - system: True
+    - createhome: False
+    - shell: /usr/sbin/nologin
+    - home: /nonexistent
+
+
+uwsgi-deps:
+  pkg.installed:
+    - pkgs:
+      - python-dev
+      - python-pip
 
 
 uwsgi:
   pip.installed:
     - require:
-      - pkg: python-pip
-      - pkg: python-dev
+      - pkg: uwsgi-deps
 
   file.managed:
     - name: /etc/init/uwsgi.conf
@@ -17,6 +28,8 @@ uwsgi:
   service.running:
     - require:
       - pip: uwsgi
+      - user: uwsgi-user
+      - file: uwsgi-log-dir
     - watch:
       - file: uwsgi
       - file: slingsby-uwsgi-conf
@@ -31,5 +44,7 @@ uwsgi-log-dir:
   file.directory:
     - name: /var/log/uwsgi
     - user: root
-    - group: www
+    - group: uwsgi
     - mode: 775
+    - require:
+      - user: uwsgi-user
