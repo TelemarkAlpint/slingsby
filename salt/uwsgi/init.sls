@@ -1,13 +1,14 @@
-# required to compile uwsgi
-python-dev:
-  pkg.installed
+uwsgi-deps:
+  pkg.installed:
+    - pkgs:
+      - python-dev
+      - python-pip
 
 
 uwsgi:
   pip.installed:
     - require:
-      - pkg: python-pip
-      - pkg: python-dev
+      - pkg: uwsgi-deps
 
   file.managed:
     - name: /etc/init/uwsgi.conf

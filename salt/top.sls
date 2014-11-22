@@ -5,7 +5,6 @@ base:
     - ntp
     - nginx
     - old-sites
-    - pip
     - pkg
     - rabbitmq
     - slingsby

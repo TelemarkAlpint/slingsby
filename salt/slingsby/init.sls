@@ -3,13 +3,15 @@
 include:
   - .cron
 
-slingsby-deps:
-  pip.installed:
-    - name: virtualenv
 
+slingsby-deps:
   pkg.installed:
     - pkgs:
       - lame
+      - mysql # Needed to compile db bindings
+      - python-dev # required for db bindings to compile
+      - python-pip
+      - python-virtualenv
       - sox
 
 slingsby:
@@ -18,9 +20,7 @@ slingsby:
     - requirements: salt://slingsby/prod-requirements.txt
     - no_deps: True
     - require:
-      - pip: slingsby-deps
-      - pkg: python-dev # required for db bindings to compile
-      - pkg: mysql # Needed to compile db bindings
+      - pkg: slingsby-deps
 
   file.managed:
     - name: /srv/ntnuita.no/prod_settings.py
