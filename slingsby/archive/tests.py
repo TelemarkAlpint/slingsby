@@ -20,7 +20,7 @@ class ArchiveEventUploadTest(TestCase):
 
 
     def test_create_new_event(self):
-        test_image = os.path.join(os.path.dirname(__file__), 'test-data', '1.jpg')
+        test_image = os.path.join(os.path.dirname(__file__), 'test-data', '1-thumb.jpg')
         with open(test_image, 'rb') as img_fh:
             event_data = {
                 'name': 'Skifestivalen',
@@ -35,7 +35,7 @@ class ArchiveEventUploadTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Next upload should not create new event
-        test_image2 = os.path.join(os.path.dirname(__file__), 'test-data', '2.jpg')
+        test_image2 = os.path.join(os.path.dirname(__file__), 'test-data', '2-thumb.jpg')
         with open(test_image2, 'rb') as img_fh:
             event_data = {
                 'name': 'Skifestivalen',
