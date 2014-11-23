@@ -18,6 +18,20 @@ import StringIO
 _logger = getLogger(__name__)
 
 
+@contextmanager
+def ignored(*exceptions):
+    """ Backport of ignored from python 3.4, use instead of try: risky() except: pass.
+
+    Usage:
+        with ignored(OSError):
+            os.remove('maybe-present-file')
+    """
+    try:
+        yield
+    except exceptions:
+        pass
+
+
 def slugify(text):
     """ Custom slugify that gracefully handles æ, ø and å. """
     text = text.lower().replace('æ', 'ae').replace('ø', 'o').replace('å', 'a')

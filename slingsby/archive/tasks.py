@@ -1,4 +1,5 @@
-from ..general.utils import log_errors, fileserver_ssh_client, upload_file_to_fileserver, slugify
+from ..general.utils import (log_errors, fileserver_ssh_client, upload_file_to_fileserver, slugify,
+    ignored)
 from .models import Image
 
 from celery import shared_task
@@ -38,10 +39,8 @@ def process_image(image_id):
     finally:
         if files_to_transfer:
             for src, _ in files_to_transfer:
-                try:
+                with ignored(OSError):
                     os.remove(src)
-                except OSError:
-                    pass
 
 
 def create_resizes_of_image(image):
