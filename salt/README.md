@@ -19,6 +19,14 @@ The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed t
 
     $ curl -L http://bootstrap.saltstack.org | sudo sh -s -- git develop
 
+- Add a minion config to `/etc/salt/minion`:
+
+    id: ntnuita.no
+    file_client: local
+    grains:
+      roles:
+        - web
+
 - On your local machine, tar the salt and the pillar directories and scp it to the server:
     
     $ tar czf salt_and_pillar.tar.gz salt pillar
