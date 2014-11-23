@@ -68,7 +68,7 @@
             {% if show_event == event.id %}
                 <div>
                     {% for image in event.images %}
-                        <a href="{{ image.websize }}" data-gallery data-description="{{ image.description }}" title="{{ event.name }} ({{ event.year }})">
+                        <a href="{{ image.websize }}" data-gallery data-description="{{ image.description }}" title="Foto: {{ image.photographer|default:'ukjent' }}">
                             <img src="{{ image.thumbnail }}">
                         </a>
                     {% endfor %}
