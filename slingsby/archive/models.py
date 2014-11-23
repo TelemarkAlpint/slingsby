@@ -4,11 +4,15 @@ from __future__ import unicode_literals
 
 from os import path
 from datetime import datetime
+from django.core.files.images import get_image_dimensions
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from django import forms
 from django.db import models
 from django.conf import settings
 from django.forms import ModelForm
 from logging import getLogger
+from PIL import Image as PILImage
 import time
 import re
 
@@ -66,10 +70,10 @@ class Image(models.Model):
     original_filename = models.CharField('opprinnelig filnavn', max_length=100)
     original_height = models.IntegerField('Original høyde')
     original_width = models.IntegerField('Original bredde')
-    datetime_taken = models.DateTimeField('dato tatt')
+    datetime_taken = models.DateTimeField('dato tatt', default=datetime.utcnow)
     _description = models.TextField(blank=True, default='')
     event = models.ForeignKey(Event, related_name='_images')
-    photographer = models.CharField('fotograf', max_length=100)
+    photographer = models.CharField('fotograf', max_length=100, blank=True, default='')
     ready = models.BooleanField(default=False)
 
 
@@ -173,3 +177,48 @@ class EventForm(ModelForm):
         if value:
             value = self.validate_datestring(value)
         return value
+
+
+@receiver(post_save, sender=Image, dispatch_uid='process_image_signal_handler')
+def process_image_signal_handler(sender, instance, **kwargs):
+    """ Add the celery task for resizing and moving to the fileserver. """
+    # Import here to avoid circular import issues
+    from .tasks import process_image
+
+    # Only trigger if it's a recently uploaded image (ie stored locally in a temp dir)
+    if instance.original.name.startswith('temp'):
+        process_image.delay(instance.id)
+
+
+def get_image_capture_time(image):
+    """ Extract the capture time from the EXIF of a image, or return None if nothing was found. """
+    # EXIF data is on the format (id, value), the ID for "DateTimeOriginal", ie. the capture time,
+    # is 36867
+    datetimeoriginal = 36867
+    try:
+        img = PILImage.open(image)
+        if hasattr(img, '_getexif'):
+            exifinfo = img._getexif() # pylint: disable=protected-access
+            if exifinfo != None:
+                datestring = exifinfo.get(datetimeoriginal)
+                if datestring and not datestring == '0000:00:00 00:00:00':
+                    return datetime.strptime(datestring, '%Y:%m:%d %H:%M:%S')
+    except Exception: # pylint: disable=broad-except
+        _logger.exception('Error occured extracting capture time from image: %s', image)
+    return None
+
+
+@receiver(pre_save, sender=Image, dispatch_uid='image_pre_save')
+def image_pre_save(sender, instance, **kwargs):
+    """ Add extra parameters to the saved image, such as original filename, dimensions and capture
+    time.
+    """
+    # Getting dimensions will only work when a new image was uploaded and the file exists locally
+    dimensions = get_image_dimensions(instance.original)
+    if dimensions is not None:
+        capture_time = get_image_capture_time(instance.original)
+        width, height = dimensions # pylint: disable=unpacking-non-sequence
+        instance.original_width = width
+        instance.original_height = height
+        if capture_time:
+            instance.datetime_taken = capture_time

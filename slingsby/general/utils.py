@@ -35,6 +35,19 @@ def get_permission(label):
     raise ValueError('No such permission: %s' % label)
 
 
+@contextmanager
+def disconnect_signal(signal, sender):
+    """ Use as a context manager to prevent signals from being run for some time:
+
+        with disconnect_signal(pre_save, sender=MyModel):
+            do_stuff_without_signal_interfering()
+    """
+    receivers = signal.receivers
+    signal.receivers = []
+    yield
+    signal.receivers = receivers
+
+
 def log_errors(func):
     """ Decorator to wrap a function in a try/except, and log errors. """
 

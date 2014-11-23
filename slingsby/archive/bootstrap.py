@@ -1,10 +1,10 @@
 # pylint: disable=unpacking-non-sequence,too-many-locals
 
 from .models import Event, Image
-from .views import get_image_capture_time
+from ..general.utils import disconnect_signal
 
 from django.core.files import File
-from django.core.files.images import get_image_dimensions
+from django.db.models.signals import post_save
 import datetime
 import os
 import random
@@ -31,16 +31,13 @@ def bootstrap():
                 img_path = os.path.join(os.path.dirname(__file__), 'test-data', '%d.jpg' % img_number)
                 with open(img_path, 'rb') as img_fh:
                     img_file = File(img_fh)
-                    width, height = get_image_dimensions(img_file)
-                    image, _ = Image.objects.get_or_create(
-                        original=img_file,
-                        original_height=height,
-                        original_width=width,
-                        datetime_taken=get_image_capture_time(img_path),
-                        event=event,
-                        photographer=random.choice(photographers),
-                        ready=True,
-                    )
+                    with disconnect_signal(post_save, sender=Image):
+                        image, _ = Image.objects.get_or_create(
+                            original=img_file,
+                            event=event,
+                            photographer=random.choice(photographers),
+                            ready=True,
+                        )
                 shutil.copy2(
                     os.path.join(os.path.dirname(__file__), 'test-data', '%s-web.jpg' % img_number),
                     image.original.path.replace('original', 'web')
