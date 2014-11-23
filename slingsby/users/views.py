@@ -69,7 +69,7 @@ class LogoutView(View):
         return HttpResponseRedirect('/')
 
 
-class DevLogin(TemplateView):
+class DevLogin(TemplateView): # pragma: no cover
 
     template_name = 'users/devlogin.html'
 

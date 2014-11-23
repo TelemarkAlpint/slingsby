@@ -8,7 +8,7 @@ for this to work.
 
 from django.contrib.auth.models import User
 
-class DevAuthBackend(object):
+class DevAuthBackend(object): # pragma: no cover
 
     def authenticate(self, username=None):
         return User.objects.get(username=username)
