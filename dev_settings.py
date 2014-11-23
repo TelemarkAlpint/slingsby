@@ -84,14 +84,6 @@ if DEBUG_TOOLBAR:
 
     INSTALLED_APPS.append('debug_toolbar')
 
-if os.environ.get('WITH_COVERAGE', False):
-    NOSE_ARGS = [
-        '--with-coverage',
-        '--cover-package=slingsby',
-        '--cover-html',
-        '--cover-branches',
-    ]
-
 if os.environ.get('FILESERVER'):
     FILESERVER = os.environ.get('FILESERVER')
 
