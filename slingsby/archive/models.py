@@ -213,9 +213,18 @@ def image_pre_save(sender, instance, **kwargs):
     """ Add extra parameters to the saved image, such as original filename, dimensions and capture
     time.
     """
-    # Getting dimensions will only work when a new image was uploaded and the file exists locally
-    dimensions = get_image_dimensions(instance.original)
-    if dimensions is not None:
+    # Getting dimensions will only work when a new image was uploaded and the file can be read
+    # locally
+    has_new_image = False
+    try:
+        instance.original.read(1)
+        instance.original.seek(0)
+        has_new_image = True
+    except IOError:
+        pass
+    if has_new_image:
+        print 'Found image locally, fetching meta...'
+        dimensions = get_image_dimensions(instance.original)
         capture_time = get_image_capture_time(instance.original)
         width, height = dimensions # pylint: disable=unpacking-non-sequence
         instance.original_width = width
