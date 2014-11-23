@@ -52,10 +52,10 @@
             <h1>{{ event.year }}</h1>
         {% endifchanged %}
 
-        <div class="small-indent clickable" id="{{ event.pk }}">
+        <div class="small-indent clickable" id="event-{{ event.pk }}">
 
             {# link only followed by non-js browsers, js intercepts the others #}
-            <a href="{% url 'archive' %}?showEvent={{ event.id }}">
+            <a href="{% url 'archive' %}?showEvent={{ event.id }}#event-{{ event.pk }}">
                 <h2 class="js-event-title" data-event-url="{% url 'event_details' event.id %}">{{ event.name }}</h2>
             </a>
 
