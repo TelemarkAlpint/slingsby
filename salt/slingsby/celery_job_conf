@@ -13,4 +13,6 @@ env PYTHONPATH=/srv/ntnuita.no/
 
 exec /srv/ntnuita.no/venv/bin/celery worker \
         --app slingsby.settings:celery_app \
-        -B --scheduler djcelery.schedulers.DatabaseScheduler
+        -B --scheduler djcelery.schedulers.DatabaseScheduler \
+        -P processes \
+        --autoscale=20,0
