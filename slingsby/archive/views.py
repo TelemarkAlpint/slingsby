@@ -70,8 +70,8 @@ def get_image_capture_time(image):
                 datestring = exifinfo.get(datetimeoriginal)
                 if datestring:
                     return datetime.strptime(datestring, '%Y:%m:%d %H:%M:%S')
-    except IOError:
-        _logger.warning('IOError when opening image to extract EXIF: %s', image)
+    except Exception: # pylint: disable=broad-except
+        _logger.exception('Error occured extracting capture time from image: %s', image)
     return None
 
 
