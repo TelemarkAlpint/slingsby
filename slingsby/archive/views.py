@@ -68,7 +68,7 @@ def get_image_capture_time(image):
             exifinfo = img._getexif() # pylint: disable=protected-access
             if exifinfo != None:
                 datestring = exifinfo.get(datetimeoriginal)
-                if datestring:
+                if datestring and not datestring == '0000:00:00 00:00:00':
                     return datetime.strptime(datestring, '%Y:%m:%d %H:%M:%S')
     except Exception: # pylint: disable=broad-except
         _logger.exception('Error occured extracting capture time from image: %s', image)
