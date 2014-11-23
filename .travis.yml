@@ -35,7 +35,7 @@ script:
   - grunt lint --force
 
   # Unit tests
-  - RUN_SSH_TESTS=1 FILESERVER=travis@127.0.0.1 coverage run ./manage.py test
+  - RUN_SSH_TESTS=1 FILESERVER=travis@127.0.0.1 coverage run --source slingsby ./manage.py test
 
   # Generate HTML coverage report
   - coverage html -d cover
