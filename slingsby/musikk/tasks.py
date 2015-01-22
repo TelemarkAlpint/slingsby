@@ -46,6 +46,7 @@ def process_new_song(song_id):
                 extension = os.path.splitext(converted_file)[1]
                 new_filename = new_basename + extension
                 upload_file_to_fileserver(ssh_client, converted_file, new_filename)
+                os.remove(converted_file)
         song.ready = True
         song.save()
     except:
