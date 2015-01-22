@@ -150,11 +150,11 @@ I0
 sg22
 I0
 sg23
-I26
+I41
 sg24
 I0
 sbssg25
-S"+^\xd9|\xd0\xffp\x95\x80^2t\xb6i'\x90"
+S'\xda9\xabA2\x02\xd8\x9fb\x1a_\xbfj\xd9\xf8\x16'
 p50
 ssS'slingsby_general_management_commands_bootstrap'
 p51
@@ -354,11 +354,11 @@ I12
 sg22
 I0
 sg23
-I9
+I30
 sg24
 I0
 sbssg25
-S'yA\x9e!e\xb3\xbb\xdds5P\xf1)Z\xf1\x89'
+S'\xe7\xd6\xfd\t\xed{5\x1a\xc0\xa7v\x00~\xfb\x9f.'
 p98
 ssS'slingsby_events___init__'
 p99
@@ -1918,11 +1918,11 @@ I0
 sg22
 I0
 sg23
-I1
+I40
 sg24
 I0
 sbssg25
-S'\xc5\x0b\n\x88\x8eQ\xb8G\xd8d\xa9\x8d2q\x05\x01'
+S'4hw\xb5Xo\xc24Hs\x18"\xca\x1a`\xd8'
 p466
 ssS'slingsby_events_tests'
 p467
@@ -2020,11 +2020,11 @@ I0
 sg22
 I0
 sg23
-I0
+I11
 sg24
 I0
 sbssg25
-S'\x18\x8eT8\xae\xad]\x87\x8cF\xf7\x114 \xa0:'
+S'\xb0\xb6\x05\x07\x92\t\xef\x19PU@\xa6\x0b^\xfd '
 p490
 ssS'slingsby_instagram_migrations_0001_initial'
 p491
@@ -2422,7 +2422,7 @@ I1
 sg19
 I0
 sg20
-I72
+I81
 sg21
 I0
 sg22
@@ -2432,7 +2432,7 @@ I0
 sg24
 I0
 sbssg25
-S'\x1d-qs\xf2\xbd\xd4\xab\x02\xfb\x17\x1b\x08\x8bh\x91'
+S'\xbd\x85\x0f\x8f\xf1|B\x90\xfe\x06\x93\xce\xd9A\xa0['
 p586
 ssS'slingsby_gear_views'
 p587
@@ -2660,17 +2660,17 @@ I1
 sg19
 I0
 sg20
-I95
+I96
 sg21
 I0
 sg22
 I0
 sg23
-I9
+I31
 sg24
 I0
 sbssg25
-S'\xeaO\xe5zAiq\x9b\x93M\x93\xab\xe0=mH'
+S'\xa8\xc0\x9a%\xcf\xc7\x90\xb5\x18\x97\xd9\x8b\xa0\xbf\x86t'
 p642
 ssS'slingsby_users_urls'
 p643
