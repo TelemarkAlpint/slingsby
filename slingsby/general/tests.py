@@ -192,16 +192,17 @@ class ActionViewTest(TestCase):
 
     def setUp(self):
         class TestView(ActionView):
-            actions = ('test',)
+            actions = ('test', 'other_action')
 
             def get(self, request, **kwargs):
                 return HttpResponse('GET')
 
             def test(self, request, **kwargs):
                 return HttpResponse('Test')
-
+        self.TestView = TestView
         self.action_view = TestView.as_view(action='test')
         self.plain_view = TestView.as_view()
+        self.not_implemented_action_view = TestView.as_view(action='other_action')
         self.rf = RequestFactory()
 
 
@@ -222,3 +223,17 @@ class ActionViewTest(TestCase):
         request = self.rf.get('/test')
         response = self.action_view(request)
         self.assertEqual(response.status_code, 405)
+
+        # Make sure the response contains the correct Allow methods
+        allowed_methods = response['Allow']
+        self.assertFalse('GET' in allowed_methods)
+        self.assertTrue('POST' in allowed_methods)
+
+
+    def test_unimplemented_action(self):
+        request = self.rf.post('/other-action')
+        self.assertRaises(NotImplementedError, self.not_implemented_action_view, request)
+
+
+    def test_invalid_action(self):
+        self.assertRaises(TypeError, self.TestView.as_view, action='invalid')

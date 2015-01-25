@@ -39,18 +39,26 @@ class ActionView(View):
                                 % (key, cls.__name__))
             if not hasattr(cls, key):
                 # These two lines was added to the original source:
-                valid_action = key == 'action' and initkwargs[key] in getattr(cls, 'actions', ())
-                if not valid_action:
-                    raise TypeError(u"%s() received an invalid keyword %r" % (
+                if key == 'action':
+                    if not initkwargs[key] in getattr(cls, 'actions', ()):
+                        raise TypeError(u"%s.as_view() received an invalid action '%s', possible "
+                            "actions are %s" % (cls.__name__, initkwargs[key],
+                                getattr(cls, 'actions')))
+                else:
+                    raise TypeError(u"%s.as_view() received an invalid keyword %r" % (
                         cls.__name__, key))
 
         def view(request, *args, **kwargs):
             self = cls(**initkwargs)
             if hasattr(self, 'get') and not hasattr(self, 'head'):
                 self.head = self.get
-            # These two lines added to original source:
-            if 'action' in initkwargs:
-                kwargs['action'] = initkwargs['action']
+            self.request = request
+            self.args = args
+            self.kwargs = kwargs
+
+            # This line added to original implementation
+            self.action = initkwargs.get('action')
+
             return self.dispatch(request, *args, **kwargs)
 
         # take name and docstring from class
@@ -62,22 +70,30 @@ class ActionView(View):
         return view
 
 
+
     def dispatch(self, request, *args, **kwargs):
         # Try to dispatch to the right method; if a method doesn't exist,
         # defer to the error handler. Also defer to the error handler if the
         # request method isn't on the approved list.
 
-        action = kwargs.get('action')
-        if action and not request.method.lower() == 'post':
-            handler = self.http_method_not_allowed
-        elif request.method.lower() == 'post' and action in self.actions:
-            handler = getattr(self, kwargs['action'])
-        elif action is None and request.method.lower() in self.http_method_names:
-            #from nose.tools import set_trace as f; f()
-            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+        # if action is not set, this should just behave like a normal view
+        if not self.action:
+            return super(ActionView, self).dispatch(request, *args, **kwargs)
+
+        if request.method.lower() == 'post':
+            handler = getattr(self, self.action, self.action_not_implemented)
         else:
             handler = self.http_method_not_allowed
-        self.request = request
-        self.args = args
-        self.kwargs = kwargs
         return handler(request, *args, **kwargs)
+
+
+    def _allowed_methods(self):
+        if self.action:
+            return ['POST', 'OPTIONS']
+        else:
+            return super(ActionView, self)._allowed_methods()
+
+
+    def action_not_implemented(self, request, *args, **kwargs):
+        raise NotImplementedError('You requested an URL with an action %s that has not been '
+            'implemented yet' % self.action)
