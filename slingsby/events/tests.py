@@ -33,6 +33,14 @@ class EventTest(TestCase):
         self.event = Event.objects.create(name='Testevent', startdate=datetime.now(), has_registration=True,
             binding_registration=False, enddate=(datetime.now() + timedelta(hours=1)))
 
+
+    def test_join_event_without_signup_open_time(self):
+        # No signup time should just imply that the event is open for signup immediately
+        response = self.client.post('/program/1/join/')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(Event.objects.first().get_participating_users()), 1)
+
+
     def test_load_event_without_signup_open_time(self):
         response = self.client.get('/program/1/')
         self.assertEqual(response.status_code, 200)

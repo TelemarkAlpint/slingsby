@@ -114,7 +114,7 @@ class Event(models.Model):
         return time.is_past(self.registration_closes)
 
     def is_full(self):
-        if self.number_of_spots == 0:
+        if self.number_of_spots is None or self.number_of_spots == 0:
             return False
         else:
             return self.num_participants() >= self.number_of_spots
