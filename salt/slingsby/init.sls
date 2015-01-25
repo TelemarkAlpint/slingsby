@@ -1,5 +1,7 @@
 # Actual code deployed by Travis and fabric, just set up the virtualenv and the directories needed
 
+{% set requirements_files = ['prod-requirements.txt', 'requirements.txt'] %}
+
 include:
   - .cron
   - memcached
@@ -19,14 +21,24 @@ slingsby-deps:
       - python-virtualenv
       - sox
 
+{% for req_file in requirements_files %}
+slingsby-requirements-{{ req_file }}:
+  file.managed:
+    - name: /srv/ntnuita.no/{{ req_file }}
+    - source: salt://slingsby/{{ req_file }}
+{% endfor %}
+
 slingsby:
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
-    - requirements: salt://slingsby/prod-requirements.txt
+    - requirements: /srv/ntnuita.no/prod-requirements.txt
     - no_deps: True
     - require:
       - pkg: slingsby-deps
       - pkg: mysql
+      {% for req_file in requirements_files %}
+      - file: slingsby-requirements-{{ req_file }}
+      {% endfor %}
 
   file.managed:
     - name: /srv/ntnuita.no/prod_settings.py
