@@ -66,7 +66,7 @@ class Event(models.Model):
         return '%s %d. %s %s' % (_WEEKDAYS[date.weekday()], date.day, _MONTHS[date.month - 1], date.strftime('%H:%M'))
 
     def seconds_until_registration_opens(self):
-        if self.has_registration:
+        if self.has_registration and self.registration_opens:
             return time.seconds_to(self.registration_opens)
         else:
             return 0
@@ -128,7 +128,7 @@ class Event(models.Model):
         """ Add the user to the event, if possible.
 
         Possible causes if this fails is that the event is not yet open
-        for registration, the event is full, or the user is allready registered."""
+        for registration, the event is full, or the user is already registered."""
 
         if not self.is_open_for_registration():
             raise UserAddError("%s isn't open for registration yet! Registration opens %s."
