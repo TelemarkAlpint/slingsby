@@ -67,10 +67,13 @@ class ActionView(View):
         # defer to the error handler. Also defer to the error handler if the
         # request method isn't on the approved list.
 
-        # These two lines added to original source:
-        if request.method.lower() == 'post' and 'action' in kwargs and kwargs['action'] in self.actions:
+        action = kwargs.get('action')
+        if action and not request.method.lower() == 'post':
+            handler = self.http_method_not_allowed
+        elif request.method.lower() == 'post' and action in self.actions:
             handler = getattr(self, kwargs['action'])
-        elif request.method.lower() in self.http_method_names:
+        elif action is None and request.method.lower() in self.http_method_names:
+            #from nose.tools import set_trace as f; f()
             handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
         else:
             handler = self.http_method_not_allowed

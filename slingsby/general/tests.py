@@ -4,9 +4,11 @@ from __future__ import unicode_literals
 
 from ..settings import fix_nonexistent_file_handlers
 from .utils import _get_ssh_connection_params, slugify
+from .views import ActionView
 from .middleware import HttpAcceptMiddleware, HttpMethodOverride
 
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
+from django.http import HttpResponse
 from django.template import Template, Context
 from mock import Mock
 
@@ -184,3 +186,39 @@ class UtilTest(TestCase):
         )
         for value, expected in tests:
             self.assertEqual(slugify(value), expected)
+
+
+class ActionViewTest(TestCase):
+
+    def setUp(self):
+        class TestView(ActionView):
+            actions = ('test',)
+
+            def get(self, request, **kwargs):
+                return HttpResponse('GET')
+
+            def test(self, request, **kwargs):
+                return HttpResponse('Test')
+
+        self.action_view = TestView.as_view(action='test')
+        self.plain_view = TestView.as_view()
+        self.rf = RequestFactory()
+
+
+    def test_get(self):
+        request = self.rf.get('/')
+        response = self.plain_view(request)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_action(self):
+        request = self.rf.post('/test')
+        response = self.action_view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, 'Test')
+
+
+    def test_action_post_only(self):
+        request = self.rf.get('/test')
+        response = self.action_view(request)
+        self.assertEqual(response.status_code, 405)
