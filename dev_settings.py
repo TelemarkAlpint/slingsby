@@ -123,7 +123,9 @@ MEDIA_ROOT = path.abspath('media')
 
 SSH_CLIENT = MockSSHClient()
 
-FILESERVER_MEDIA_ROOT = path.abspath('media')
+# When testing locally this will just be any local folder. In vagrant or prod, this will
+# be a sshfs mount
+EXTERNAL_MEDIA_ROOT = path.join(MEDIA_ROOT, 'external')
 
 # Load secrets from pillar/secure/init.sls if available
 secrets_file = os.path.join(os.path.dirname(__file__), 'pillar', 'secure', 'init.sls')
@@ -140,4 +142,4 @@ else:
         '`python tools/secure_data.py decrypt` to do so.\nThe decryption key can be found in ' +
         'Kontoer.kdbx in the styre-dropbox')
 
-MEDIA_URL = 'http://127.0.0.1:8001/'
+MEDIA_URL = '/media/external/'

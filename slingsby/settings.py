@@ -104,6 +104,8 @@ TEMPLATE_DIRS = (
 
 ROOT_URLCONF = 'slingsby.urls'
 
+FILE_UPLOAD_PERMISSIONS = 0664
+
 def fix_nonexistent_file_handlers(log_config):
     # If the target log directory doesn't exists, log to current
     # directory. This ensures you don't need /var/log/slingsby to

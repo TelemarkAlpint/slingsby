@@ -57,9 +57,6 @@ def load_media_from_instagram_response(json_data):
 @shared_task
 @log_errors
 def fetch_instagram_media():
-    """ Takes a raw song uploaded (assumed to be FLAC), converts it into mp3 and ogg,
-    pushes it to the fileserver, and updates the song filename and marks it as ready.
-    """
     _logger.info('Fetching media from instagram')
     recent_media = requests.get('https://api.instagram.com/v1/tags/ntnuita/media/recent',
         params={'client_id': settings.INSTAGRAM_CLIENT_ID}).json()

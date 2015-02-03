@@ -22,7 +22,8 @@ Goals
 About
 -----
 
-Our server is running on AWS, with deployments handled automatically by Travis CI.
+Our server is running on AWS, with deployments handled automatically by Travis CI. User uploaded
+media is stored on our studorg server at org.ntnu.no/telemark.
 
 
 Local development
@@ -31,8 +32,8 @@ Local development
 **tl;dr**: To setup a build environment and run the tests, check out `.travis.yml`. For more
 in-depth explanation, read on.
 
-We're advise using [virtualenvs](http://virtualenv.readthedocs.org/en/latest/virtualenv.html) when
-working on slingsby. First off, get pip and virtualenv if you haven't already:
+It's recommended to use [virtualenvs](http://virtualenv.readthedocs.org/en/latest/virtualenv.html)
+when working on slingsby. First off, get pip and virtualenv if you haven't already:
 
     $ easy_install pip
     $ pip install virtualenv
@@ -98,16 +99,16 @@ And now, you can start the devserver:
     $ python manage.py runserver
 
 This should start the devserver at port 8000, browse to `http://localhost:8000` to see it!
-Starting the devserver like this will create a SQLite database you can use locally.
-If you need to test anything using the fileserver (archive, musikk), you need to start a
-lightweight HTTP server in the `media` directory. If it doesn't exist, create it first, and then
-start the server:
+Starting the devserver like this will create a SQLite database you can use locally. You can
+log in as an admin by clicking "login" in the upper-right corner, and click "Developer login".
 
-    $ mkdir media
-    $ cd media
-    $ python -m SimpleHTTPServer 8001
 
-**Note**: Social login will not work out of the box, since authenticating with Facebook requires
+Hack away!
+
+
+### Testing social logon
+
+Social login will not work out of the box, since authenticating with Facebook requires
 you to know our Facebook app secret. If you need to test social login you can decrypt the secrets
 needed and start the devserver on port 80. You also need to add the following line to your hosts
 file:
@@ -122,8 +123,6 @@ Decrypt the secrets and start the devserver with them:
 You'll find the secret needed for decryption in the styre-dropbox, in the file `Kontoer.kdbx`.
 You'll need [KeePass](http://keepass.info/) to open it, the password for that file should be
 given to you by the webmaster if you're deemed worthy.
-
-Hack away!
 
 
 Testing on a server
@@ -180,6 +179,10 @@ Or, that you can import slingsby without failure:
 
     $ /srv/ntnuita.no/venv/bin/python -c "import slingsby"
 
+If you're truly dumbfounded and have no idea what's going on and just need to fix something
+quick, send Tarjei a mail (or call if it's urgent) at tarjei (at) roms.no, 90765431. He built most of
+the mess and can probably help. And yes he's old and probably graduated, but he's (hopefully) still
+alive, and will happily give you a hand.
 
 
 How do I...

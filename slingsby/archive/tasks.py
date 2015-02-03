@@ -1,5 +1,4 @@
-from ..general.utils import (log_errors, fileserver_ssh_client, upload_file_to_fileserver, slugify,
-    ignored)
+from ..general.utils import log_errors, slugify
 from .models import Image
 
 from celery import shared_task
@@ -9,6 +8,7 @@ from PIL import Image as PILImage, ImageOps
 from pilkit.processors import ResizeToFit
 from pilkit.utils import save_image
 import os
+import shutil
 
 _logger = getLogger(__name__)
 
@@ -20,15 +20,19 @@ def process_image(image_id):
     """
     files_to_transfer = None
     image = None
+    old_umask = os.umask(002)
     try:
         image = Image.objects.get(pk=image_id)
         if not image:
             raise ValueError('No image with id %d found.' % image_id)
         _logger.info('Processing image %s at %s', image.id, image.original)
         files_to_transfer = create_resizes_of_image(image)
-        with fileserver_ssh_client() as ssh_client:
-            for src, dest in files_to_transfer:
-                upload_file_to_fileserver(ssh_client, src, dest)
+        for src, dest in files_to_transfer:
+            target_dir = os.path.dirname(dest)
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            _logger.info('Moving image from %s to %s', src, dest)
+            shutil.move(src, dest)
         image.ready = True
         image.save()
         _logger.info("New image #%d processed successfully", image.id)
@@ -37,10 +41,7 @@ def process_image(image_id):
             image.delete()
         raise
     finally:
-        if files_to_transfer:
-            for src, _ in files_to_transfer:
-                with ignored(OSError):
-                    os.remove(src)
+        os.umask(old_umask)
 
 
 def create_resizes_of_image(image):
@@ -49,11 +50,12 @@ def create_resizes_of_image(image):
     """
     event = image.event
     year = event.startdate.split('-')[0]
-    dest_media_folder = '/'.join(['archive', year, slugify(event.name)])
+    dest_media_folder = os.path.join('archive', year, slugify(event.name))
 
     # Add original to files to be transferred
     files_to_transfer = [
-        (image.original.path, '/'.join([dest_media_folder, '%d-original.jpg' % image.id]))
+        (image.original.path, os.path.join(settings.EXTERNAL_MEDIA_ROOT, dest_media_folder,
+            '%d-original.jpg' % image.id))
     ]
 
     # Do the actual conversion
@@ -63,12 +65,12 @@ def create_resizes_of_image(image):
     websize = ResizeToFit(1500, 800, upscale=False).process(pil_img)
     for size, appendix in [(thumb, 'thumb'), (websize, 'web')]:
         filename = '%s-%s.jpg' % (image.id, appendix)
-        local_path = os.path.join(settings.MEDIA_ROOT, 'temp-archive-images', filename)
+        local_path = os.path.join(settings.MEDIA_ROOT, 'local', 'raw-archive-images', filename)
         if not os.path.exists(os.path.dirname(local_path)):
             os.mkdir(os.path.dirname(local_path))
         save_image(size, local_path, 'jpeg')
         files_to_transfer.append(
-            (local_path, '/'.join([dest_media_folder, filename]))
+            (local_path, os.path.join(settings.EXTERNAL_MEDIA_ROOT, dest_media_folder, filename))
         )
 
     # Set the new URL to the original image
