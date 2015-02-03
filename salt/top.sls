@@ -23,3 +23,4 @@ base:
     - match: grain
     - old-sites
     - slingsby
+    - sshfs

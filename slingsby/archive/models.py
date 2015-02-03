@@ -60,7 +60,7 @@ def get_image_filename(instance, orig_filename):
     Will get a new name when moved to the fileserver.
     """
     extension = path.splitext(orig_filename)[1]
-    filename = 'temp-archive-images/%s-original%s' % (int(time.time()*1000), extension)
+    filename = 'local/raw-archive-images/%s-original%s' % (int(time.time()*1000), extension)
     _logger.info('Saving uploaded image to %s', filename)
     return filename
 
@@ -186,7 +186,7 @@ def process_image_signal_handler(sender, instance, **kwargs):
     from .tasks import process_image
 
     # Only trigger if it's a recently uploaded image (ie stored locally in a temp dir)
-    if instance.original.name.startswith('temp'):
+    if instance.original.name.startswith('local'):
         process_image.delay(instance.id)
 
 
@@ -223,11 +223,10 @@ def image_pre_save(sender, instance, **kwargs):
     except IOError:
         pass
     if has_new_image:
-        print 'Found image locally, fetching meta...'
-        dimensions = get_image_dimensions(instance.original)
-        capture_time = get_image_capture_time(instance.original)
-        width, height = dimensions # pylint: disable=unpacking-non-sequence
+        _logger.info('Found image locally, fetching meta...')
+        width, height = get_image_dimensions(instance.original) # pylint: disable=unpacking-non-sequence
         instance.original_width = width
         instance.original_height = height
+        capture_time = get_image_capture_time(instance.original)
         if capture_time:
             instance.datetime_taken = capture_time

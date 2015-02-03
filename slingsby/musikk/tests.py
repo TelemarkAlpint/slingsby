@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ..general.utils import _get_ssh_client
 from .models import Song, Vote
 from .tasks import process_new_song, count_votes
 
@@ -115,7 +114,7 @@ class SongTasksTest(TestCase):
         self.song = Song.objects.create(title='Approved', artist='Test artist', ready=False,
             filename=raw_song_file)
         self.media_root = tempfile.mkdtemp()
-        self.fileserver_media_root = '/tmp/fileserver-media-root'
+        self.external_media_root = os.path.join(self.media_root, 'external')
 
 
     def tearDown(self):
@@ -125,31 +124,17 @@ class SongTasksTest(TestCase):
     @needs_ssh
     def test_process_new_song(self):
         with self.settings(MEDIA_ROOT=self.media_root, SSH_CLIENT=None,
-                           FILESERVER_MEDIA_ROOT=self.fileserver_media_root):
+            EXTERNAL_MEDIA_ROOT=self.external_media_root):
             process_new_song(self.song.id)
-            media_files = os.listdir(os.path.join(settings.MEDIA_ROOT, 'musikk'))
-            self.assertTrue('flytta.mp3' in media_files)
-            self.assertTrue('flytta.ogg' in media_files)
-            fileserver_media_files = _get_fileserver_media_files()
-            self.assertTrue('test-artist/approved.mp3' in fileserver_media_files)
-            self.assertTrue('test-artist/approved.ogg' in fileserver_media_files)
+            media_files = os.listdir(os.path.join(settings.EXTERNAL_MEDIA_ROOT, 'musikk',
+                'test-artist'))
+            self.assertTrue('approved.mp3' in media_files)
+            self.assertTrue('approved.ogg' in media_files)
 
             # fetch updated song from db
             self.song = Song.objects.first()
             self.assertEqual(str(self.song.filename), 'musikk/test-artist/approved')
             self.assertTrue(self.song.ready)
-
-
-def _get_fileserver_media_files():
-    ssh_client = _get_ssh_client()
-    music_dir = settings.FILESERVER_MEDIA_ROOT + '/musikk'
-    stdout = ssh_client.exec_command('find %s' % music_dir)[1]
-    output = stdout.read()
-    output_lines = output.split()
-    # Strip paths like /tmp/filserver_media_dir/musikk/artist/song.mp3 to musikk/artist/song.mp3
-    clean_lines = [path[len(music_dir):].lstrip('/') for path in output_lines]
-    ssh_client.exec_command('rm -rf %s' % music_dir)
-    return clean_lines
 
 
 class SongActionsTest(TestCase):

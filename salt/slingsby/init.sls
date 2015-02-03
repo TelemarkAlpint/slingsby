@@ -26,6 +26,7 @@ slingsby-requirements-{{ req_file }}:
   file.managed:
     - name: /srv/ntnuita.no/{{ req_file }}
     - source: salt://slingsby/{{ req_file }}
+    - makedirs: True
 {% endfor %}
 
 slingsby:

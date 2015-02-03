@@ -106,31 +106,6 @@ def fileserver_ssh_client():
             _logger.info('SSH connection to filserver closed')
 
 
-def upload_file_to_fileserver(ssh_client, src, dest):
-    """ Uploads a file to the media dir on the remote fileserver.
-
-    Src path must either be absolute or relative to MEDIA_ROOT.
-    """
-    # We assume that the target fileserver is always running linux, but the local
-    # machine might be running windows, so we can't use the os.path module for
-    # path manipulation, as it would use the separator from the local machine.
-    fileserver_media_root = settings.FILESERVER_MEDIA_ROOT
-    if not fileserver_media_root[-1] == '/':
-        fileserver_media_root += '/'
-    dest = fileserver_media_root + dest
-    media_src = os.path.join(settings.MEDIA_ROOT, src)
-    _logger.info('Uploading file to fileserver: %s, dest: %s', media_src, dest)
-    target_dir = os.path.dirname(dest)
-    # umask to make dirs 775 so that future telemark admins can use them as well
-    command = 'test -d {0} || (umask 002 && mkdir -p {0} && chmod g+s {0})'.format(target_dir)
-    ssh_client.exec_command(command)
-    sftp = ssh_client.open_sftp()
-    sftp.put(media_src, dest)
-    # Make sure future telemark admins have sufficient permissions:
-    sftp.chmod(dest, 0664)
-    _logger.info('File upload completed')
-
-
 def _get_ssh_client():
     if hasattr(settings, 'SSH_CLIENT') and settings.SSH_CLIENT:
         return settings.SSH_CLIENT
