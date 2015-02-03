@@ -239,6 +239,10 @@ Wipe the local database and bootstrap a new one:
 
     $ rm db-dev.sqlite && python manage.py migrate --noinput && python manage.py bootstrap
 
+Assuming you've logged in on vagrant, give a given used id admin access (like yourself):
+
+    $ echo "update auth_user set is_superuser=1, is_staff=1 where id=1;" | mysql -u root slingsby_rel
+
 
 Random notes that might someday be necessary
 --------------------------------------------
