@@ -1,4 +1,5 @@
 Host *
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
+    PasswordAuthentication no
     IdentityFile /srv/ntnuita.no/fileserver_key.pem
