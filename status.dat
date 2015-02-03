@@ -280,7 +280,7 @@ I1
 sg19
 I0
 sg20
-I96
+I132
 sg21
 I0
 sg22
@@ -290,7 +290,7 @@ I0
 sg24
 I0
 sbssg25
-S'G\xb6\x83vRE\xbd\xc8&\xf6t\xf3\xf8Mr\xc1'
+S'|t\x07\xf8N\x8fA\x94\\\xebL\x89\xe9\x95>W'
 p82
 ssS'slingsby_articles_bootstrap'
 p83
@@ -490,11 +490,11 @@ I0
 sg22
 I0
 sg23
-I22
+I14
 sg24
 I0
 sbssg25
-S'I\xe7\x97\xc3=e\xb7\xa8\xfdb\xbc\x89\x99\xa0Q]'
+S'd\xa7\xa7\x10\x86\x1d\xb0Z\xb7\xdc\xe6f]1".'
 p130
 ssS'slingsby_instagram_urls'
 p131
@@ -586,7 +586,7 @@ I1
 sg19
 I0
 sg20
-I32
+I38
 sg21
 I0
 sg22
@@ -596,7 +596,7 @@ I3
 sg24
 I0
 sbssg25
-S'z\xba\x896-\x1aC8\x16\xa7\x1e\xbf\xec\xbc\xf1\xa5'
+S'A\xe5\xf9(\x84\xff\x96\xccu\xf5\xe4\xbf\x00T0H'
 p154
 ssS'slingsby_events_urls'
 p155
@@ -1850,11 +1850,11 @@ I0
 sg22
 I0
 sg23
-I80
+I53
 sg24
 I0
 sbssg25
-S'\xe5c?|\xd1\xda\xefy\x97\x1a_\xa9\x05q\xc8g'
+S"5?\x81s\x1b\x0e\xa4\xa7:\t'\xb6\xbd\xc6\xc5*"
 p450
 ssS'slingsby_instagram___init__'
 p451
@@ -1946,7 +1946,7 @@ I1
 sg19
 I0
 sg20
-I15
+I29
 sg21
 I0
 sg22
@@ -1956,7 +1956,7 @@ I0
 sg24
 I0
 sbssg25
-S'\x83\xdf\xe1\x0f\x8eB\xf9\xa0\xb4\x8d~\x039\x98\xc2\x1c'
+S'\xcf\x99\xc1\xa1m\xe0\x1af\x8d[\x88\xb0\xe4\xa8\xfb\xc9'
 p474
 ssS'slingsby_celery'
 p475
