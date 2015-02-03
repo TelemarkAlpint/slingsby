@@ -3,6 +3,7 @@ base:
     - ntp
     - pkg
     - sudo
+    - swap
     - users
 
   'ntnuita.no':
