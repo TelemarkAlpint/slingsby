@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # This script is executed by Travis to test and deploy the application
-grunt () { echo; }
 
 # Fail the script if any statements fail
 set -e
