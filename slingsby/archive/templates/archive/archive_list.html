@@ -2,6 +2,8 @@
 
 {% load revved_static %}
 
+{% block og_description %}Arkivet vårt dokumenterer mye av det som har skjedd i gruppa siden oppstarten i 1986. Retrowarning!{% endblock %}
+
 {% block extrastyles %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static "stylesheets/archive.css" %}">
