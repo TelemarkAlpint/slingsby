@@ -92,7 +92,7 @@ class AuthenticatedSongTest(TestCase):
                 processing_mock.delay.assert_called_once()
         os.remove(songfile.name)
         self.assertEqual(response.status_code, 302)
-        song_dir = os.path.join(settings.MEDIA_ROOT, 'musikk')
+        song_dir = os.path.join(settings.MEDIA_ROOT, 'local', 'musikk')
         uploaded_song = os.path.join(song_dir, os.listdir(song_dir)[0])
         with open(uploaded_song) as song_fh:
             self.assertEqual(song_fh.read(), 'mysong')
