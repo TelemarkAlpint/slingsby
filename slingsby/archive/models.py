@@ -112,10 +112,7 @@ class Image(models.Model):
 
     @property
     def description(self):
-        descr = 'Foto av %s.' % self.photographer
-        if self._description:
-            descr += ' ' + self._description
-        return descr
+        return self._description or ''
 
 
     def to_json(self):
