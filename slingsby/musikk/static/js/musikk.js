@@ -9,7 +9,7 @@
     function vote(songId) {
         setIcon(songId, slingsby.urls.musikk.waitingSpinner);
         $.ajax({
-            url: '/musikk/' + songId + '/vote/',
+            url: '/musikk/' + songId + '/vote',
             type: 'POST',
             success: function () {
                 setIcon(songId, slingsby.urls.musikk.successIcon);

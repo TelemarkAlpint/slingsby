@@ -39,7 +39,7 @@ class ArticleViewTest(TestCase):
 
 
     def test_get_article_details(self):
-        response = self.client.get('/articles/%d/' % self.article.id)
+        response = self.client.get('/articles/%d' % self.article.id)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Testarticle' in response.content.decode('utf-8'))
         self.assertTrue('<p>News here</p>' in response.content.decode('utf-8'))
@@ -84,7 +84,7 @@ class AllArticlesTest(TestCase):
 
 
     def test_get_all_articles(self):
-        response = self.client.get('/articles/')
+        response = self.client.get('/articles')
         self.assertEqual(response.status_code, 200)
         for i in range(10):
             self.assertTrue('Article #%s' % i in response.content.decode('utf-8'))
@@ -94,7 +94,7 @@ class AllArticlesTest(TestCase):
     def test_get_with_limits_json(self):
         last_article_on_frontpage = Article.objects.get(title='Article #5')
         before = last_article_on_frontpage.published_date.isoformat()
-        response = self.client.get('/articles/',
+        response = self.client.get('/articles',
             {'before': before, 'limit': 1},
             HTTP_ACCEPT='application/json')
         self.assertEqual(response.status_code, 200)

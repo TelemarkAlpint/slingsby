@@ -34,14 +34,14 @@ class SongListTest(TestCase):
 
 
     def test_get_song_list(self):
-        response = self.client.get('/musikk/')
+        response = self.client.get('/musikk')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Test song' in response.content.decode('utf-8'))
         self.assertFalse('Not approved' in response.content.decode('utf-8'))
 
 
     def test_suggest_song_anon(self):
-        response = self.client.post('/musikk/', {'title': 'I Love It', 'artist': 'Icona Pop'})
+        response = self.client.post('/musikk', {'title': 'I Love It', 'artist': 'Icona Pop'})
         self.assertEqual(response.status_code, 401)
 
 
@@ -66,9 +66,9 @@ class AuthenticatedSongTest(TestCase):
             'artist': 'Icona Pop',
             'startpoint_in_s': 0,
         }
-        response = self.client.post('/musikk/', song)
+        response = self.client.post('/musikk', song)
         self.assertEqual(response.status_code, 302)
-        admin_response = self.admin_client.get('/musikk/')
+        admin_response = self.admin_client.get('/musikk')
         self.assertEqual(admin_response.status_code, 200)
         self.assertTrue('I Love It' in admin_response.content.decode('utf-8'))
 
@@ -87,7 +87,7 @@ class AuthenticatedSongTest(TestCase):
             }
             processing_mock = mock.MagicMock()
             with mock.patch('slingsby.musikk.views.process_new_song', processing_mock):
-                response = self.admin_client.post('/musikk/%d/approve/' % self.unapproved_song.id,
+                response = self.admin_client.post('/musikk/%d/approve' % self.unapproved_song.id,
                     approval_form)
                 processing_mock.delay.assert_called_once()
         os.remove(songfile.name)
@@ -149,7 +149,7 @@ class SongActionsTest(TestCase):
 
     def test_vote_on_song(self):
         with mock.patch('slingsby.musikk.views.count_votes') as count_votes_mock:
-            response = self.client.post('/musikk/%d/vote/' % self.song.id)
+            response = self.client.post('/musikk/%d/vote' % self.song.id)
             count_votes_mock.delay.assert_called_once()
         self.assertEqual(response.status_code, 200)
         num_votes = Vote.objects.count()
@@ -169,13 +169,13 @@ class TopSongsTest(TestCase):
             'url': '/popular-song',
         }
         with mock.patch('slingsby.musikk.views.requests', requests_mock):
-            response = self.client.get('/musikk/top/')
+            response = self.client.get('/musikk/top')
             self.assertEqual(response.status_code, 200)
 
-            response = self.client.get('/musikk/top/song/')
+            response = self.client.get('/musikk/top/song')
             self.assertEqual(response.status_code, 302)
 
-        response = self.client.get('/musikk/top/list/')
+        response = self.client.get('/musikk/top/list')
         self.assertEqual(response.status_code, 200)
 
 

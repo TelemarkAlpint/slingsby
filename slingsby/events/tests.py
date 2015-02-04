@@ -13,13 +13,13 @@ class EventListTest(TestCase):
 
 
     def test_get_event_list(self):
-        response = self.client.get('/program/')
+        response = self.client.get('/program')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Testevent' in response.content.decode('utf-8'))
 
 
     def test_get_event_details(self):
-        response = self.client.get('/program/%d/' % self.event.id)
+        response = self.client.get('/program/%d' % self.event.id)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Testevent' in response.content.decode('utf-8'))
 
@@ -36,11 +36,11 @@ class EventTest(TestCase):
 
     def test_join_event_without_signup_open_time(self):
         # No signup time should just imply that the event is open for signup immediately
-        response = self.client.post('/program/1/join/')
+        response = self.client.post('/program/1/join')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(Event.objects.first().get_participating_users()), 1)
 
 
     def test_load_event_without_signup_open_time(self):
-        response = self.client.get('/program/1/')
+        response = self.client.get('/program/1')
         self.assertEqual(response.status_code, 200)

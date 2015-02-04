@@ -13,10 +13,6 @@ _LEGAL_TAGS = set(['p', 'br', 'ol', 'li', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h
                   'tbody', 'thead', 'tfoot', 'span', 'q', 'blockquote', 'dd', 'dl', 'dt'])
 
 
-def append_slash(request, page):
-    return HttpResponseRedirect('/%s/' % page)
-
-
 def validate_text(text):
     raw = BeautifulSoup(text)
     illegal_tags = []

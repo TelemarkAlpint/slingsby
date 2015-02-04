@@ -18,7 +18,7 @@ class ActionView(View):
             ...
 
     In your URLConf, you'd then do this to dispatch requests to this view:
-    url(r'^(?P<song_id>\\d+)/vote/$', SongDetailView.as_view(action='vote')
+    url(r'^(?P<song_id>\\d+)/vote$', SongDetailView.as_view(action='vote')
     """
     # Pylint doesn't catch on to the classonlymethod decorator:
     # pylint: disable=no-self-argument,not-callable

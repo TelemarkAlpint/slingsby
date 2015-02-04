@@ -17,17 +17,17 @@ handler500 = lambda req: render_to_response('500.html')
 urlpatterns = patterns('',
     url(r'^', include('slingsby.articles.urls')),
     url(r'^', include('slingsby.users.urls')),
-    url(r'^musikk/', include('slingsby.musikk.urls')),
-    url(r'^arkiv/', include('slingsby.archive.urls')),
-    url(r'^quotes/', include('slingsby.quotes.urls')),
-    url(r'^instagram/', include('slingsby.instagram.urls')),
-    url(r'^program/', include('slingsby.events.urls')),
-    url(r'^gear/', include('slingsby.gear.urls')),
+    url(r'^musikk', include('slingsby.musikk.urls')),
+    url(r'^arkiv', include('slingsby.archive.urls')),
+    url(r'^quotes', include('slingsby.quotes.urls')),
+    url(r'^instagram', include('slingsby.instagram.urls')),
+    url(r'^program', include('slingsby.events.urls')),
+    url(r'^gear', include('slingsby.gear.urls')),
 
     # Override admin login to our social login
-    url(r'^admin/login/', lambda r: http.HttpResponseRedirect(reverse('social:begin', kwargs={'backend': 'facebook'}))),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/login', lambda r: http.HttpResponseRedirect(reverse('social:begin', kwargs={'backend': 'facebook'}))),
+    url(r'^admin', include(admin.site.urls)),
+    url(r'^admin/doc', include('django.contrib.admindocs.urls')),
 )
 
 # social auth urls
@@ -55,7 +55,7 @@ urlpatterns += patterns('',
 if settings.DEBUG:
     from .users.views import DevLogin
     urlpatterns += patterns('',
-        url(r'^devlogin/', DevLogin.as_view(), name='devlogin')
+        url(r'^devlogin', DevLogin.as_view(), name='devlogin')
     )
     if 'debug_toolbar' in settings.INSTALLED_APPS:
         import debug_toolbar

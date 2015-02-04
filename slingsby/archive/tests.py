@@ -29,7 +29,7 @@ class ArchiveEventUploadTest(TestCase):
                 'startdate': '2013',
                 'images': img_fh,
             }
-            response = self.uploader.post('/arkiv/', event_data)
+            response = self.uploader.post('/arkiv', event_data)
         self.assertEqual(Event.objects.count(), 1)
         event = Event.objects.first()
 
@@ -44,14 +44,14 @@ class ArchiveEventUploadTest(TestCase):
                 'startdate': '2013',
                 'images': img_fh,
             }
-            response = self.uploader.post('/arkiv/', event_data)
+            response = self.uploader.post('/arkiv', event_data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Event.objects.count(), 1)
 
 
     def test_create_invalid_event(self):
         # No posted image
-        response = self.uploader.post('/arkiv/', {'name': 'Invalid event', 'startdate': '2014'})
+        response = self.uploader.post('/arkiv', {'name': 'Invalid event', 'startdate': '2014'})
         self.assertEqual(response.status_code, 400)
 
 
@@ -64,7 +64,7 @@ class ArchiveEventUploadTest(TestCase):
                     'startdate': '2013',
                     'images': img_fh,
                 }
-                response = self.uploader.post('/arkiv/', event_data)
+                response = self.uploader.post('/arkiv', event_data)
         self.assertEqual(response.status_code, 302)
 
 
@@ -91,12 +91,12 @@ class ArchiveFrontPageTest(TestCase):
 
 
     def test_archive_page(self):
-        response = self.client.get('/arkiv/')
+        response = self.client.get('/arkiv')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Testevent' in response.content.decode('utf-8'))
         self.assertFalse('web.jpg' in response.content.decode('utf-8'))
 
-        response = self.client.get('/arkiv/?showEvent=1')
+        response = self.client.get('/arkiv?showEvent=1')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('web.jpg' in response.content.decode('utf-8'))
 
@@ -143,5 +143,5 @@ class ArchiveBaseTest(TestCase):
 
 
     def test_unauthenticated_archive_access(self):
-        response = self.client.post('/arkiv/')
+        response = self.client.post('/arkiv')
         self.assertEqual(response.status_code, 403)

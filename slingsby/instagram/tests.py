@@ -85,7 +85,7 @@ class InstagramPageTest(TestCase):
 
 
     def test_instagram_page(self):
-        response = self.client.get('/instagram/')
+        response = self.client.get('/instagram')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Snow and awesome stuff' in response.content.decode('utf-8'))
         self.assertFalse('Offensive crap' in response.content.decode('utf-8'))
