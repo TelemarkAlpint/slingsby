@@ -21,7 +21,7 @@ server {
   # Bump max upload size. Archive image uploads can be quite big since we accept originals,
   # they have more than 200M they should either split it up in several uploads (typically
   # large images), or reduce they number of image (taken too many crappy shots).
-  client_max_body_size 200M;
+  client_max_body_size 500M;
 
   location / {
     include uwsgi_params;
