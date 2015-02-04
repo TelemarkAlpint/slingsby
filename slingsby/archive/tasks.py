@@ -47,8 +47,7 @@ def create_resizes_of_image(image):
 
     # Add original to files to be transferred
     files_to_transfer = [
-        (image.original.path, os.path.join(settings.EXTERNAL_MEDIA_ROOT, dest_media_folder,
-            '%d-original.jpg' % image.id))
+        (image.original.path, os.path.join(dest_media_folder, '%d-original.jpg' % image.id))
     ]
 
     # Do the actual conversion
@@ -63,7 +62,7 @@ def create_resizes_of_image(image):
             os.mkdir(os.path.dirname(local_path))
         save_image(size, local_path, 'jpeg')
         files_to_transfer.append(
-            (local_path, os.path.join(settings.EXTERNAL_MEDIA_ROOT, dest_media_folder, filename))
+            (local_path, os.path.join(dest_media_folder, filename))
         )
 
     # Set the new URL to the original image
