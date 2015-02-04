@@ -166,11 +166,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 MEDIA_URL = 'http://org.ntnu.no/telemark/media/'
 
-JSON_ARCHIVE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/archive.json'
-
 DEFAULT_TITLE = 'NTNUI Telemark/Alpint'
-
-ARCHIVE_BASE_PATH = 'http://org.ntnu.no/telemark/arkiv/arrangement/'
 
 DISQUS_IDENTIFIER = 'telemarkalpint'
 
