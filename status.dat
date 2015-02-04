@@ -1922,7 +1922,7 @@ I1
 sg24
 I0
 sbssg25
-S'\x16?Z\xfcb\t\x04\xc6\x15\xb4\x80\x1a\xac\xbd\xb2\xf6'
+S'\xe7Z\xbcC9I\xfe-\x85\\\x03xz\x8f\xba\xd1'
 p466
 ssS'slingsby_events_tests'
 p467
@@ -2252,7 +2252,7 @@ I1
 sg19
 I0
 sg20
-I81
+I91
 sg21
 I0
 sg22
@@ -2262,7 +2262,7 @@ I33
 sg24
 I0
 sbssg25
-S'\xe1\x91\xc3\x11\x0f\x1c\xb2\xfd \x11\xb4\xf0zm\xa5\xc4'
+S'\x86D)\x8fS?\xfd\x1d\xfb\xaa\xfa-\xed:&`'
 p546
 ssS'slingsby_archive_bootstrap'
 p547
@@ -2354,7 +2354,7 @@ I1
 sg19
 I0
 sg20
-I54
+I48
 sg21
 I0
 sg22
@@ -2364,7 +2364,7 @@ I6
 sg24
 I0
 sbssg25
-S'\xa2\xe1Z\xe4\x87U\xb0\x9b\x13ry\x9a\x9d\x04df'
+S'\xe9\x18\xee\xf8\x1b.\xe0L\xdf\xe9\x0f\x1f"k\xd1\xfc'
 p570
 ssS'slingsby_general_models'
 p571
@@ -2422,7 +2422,7 @@ I1
 sg19
 I0
 sg20
-I81
+I83
 sg21
 I0
 sg22
@@ -2432,7 +2432,7 @@ I0
 sg24
 I0
 sbssg25
-S'0T/y\x9f,\x17^%z\xf1r;\x0cvS'
+S'y\xac\x80\xdf4\xa5\x9e\x9aAId9\xdf\xd6\xfd\x18'
 p586
 ssS'slingsby_gear_views'
 p587
@@ -2660,7 +2660,7 @@ I1
 sg19
 I0
 sg20
-I101
+I94
 sg21
 I0
 sg22
@@ -2670,7 +2670,7 @@ I9
 sg24
 I0
 sbssg25
-S'\x1c\x04A\xf7\x92Z\xc2\xbc\x9aA \xbb\x1d\xea`\xd7'
+S'\xab\xbb\xce\xff\xd0S?\x98\xd3\x05\x1e\x99u\xca/\xa1'
 p642
 ssS'slingsby_users_urls'
 p643
@@ -3248,7 +3248,7 @@ I6
 sg24
 I0
 sbssg25
-S'\x8d\x00\x17\xd5\xcc\xe6\x1c5\\\xa2\xea\xf4\x98\xc4\x0e3'
+S'\x86y\x8a>\x03\xcep%\x02#\xaaO\xf2\xaf&\x02'
 p778
 ssS'slingsby_articles_tests'
 p779
