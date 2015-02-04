@@ -1,4 +1,4 @@
-from ..general.utils import log_errors, slugify
+from ..general.utils import log_errors, slugify, upload_media
 from .models import Image
 
 from celery import shared_task
@@ -8,7 +8,6 @@ from PIL import Image as PILImage, ImageOps
 from pilkit.processors import ResizeToFit
 from pilkit.utils import save_image
 import os
-import shutil
 
 _logger = getLogger(__name__)
 
@@ -20,7 +19,6 @@ def process_image(image_id):
     """
     files_to_transfer = None
     image = None
-    old_umask = os.umask(002)
     try:
         image = Image.objects.get(pk=image_id)
         if not image:
@@ -28,11 +26,8 @@ def process_image(image_id):
         _logger.info('Processing image %s at %s', image.id, image.original)
         files_to_transfer = create_resizes_of_image(image)
         for src, dest in files_to_transfer:
-            target_dir = os.path.dirname(dest)
-            if not os.path.exists(target_dir):
-                os.makedirs(target_dir)
             _logger.info('Moving image from %s to %s', src, dest)
-            shutil.move(src, dest)
+            upload_media(src, dest)
         image.ready = True
         image.save()
         _logger.info("New image #%d processed successfully", image.id)
@@ -40,8 +35,6 @@ def process_image(image_id):
         if image:
             image.delete()
         raise
-    finally:
-        os.umask(old_umask)
 
 
 def create_resizes_of_image(image):

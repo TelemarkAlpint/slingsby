@@ -31,6 +31,8 @@ class ArchiveEventUploadTest(TestCase):
             }
             response = self.uploader.post('/arkiv', event_data)
         self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(Image.objects.count(), 1)
+
         event = Event.objects.first()
 
         self.assertEqual(event.name, 'Skifestivalen')
@@ -47,6 +49,9 @@ class ArchiveEventUploadTest(TestCase):
             response = self.uploader.post('/arkiv', event_data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(Image.objects.count(), 2)
+
+
 
 
     def test_create_invalid_event(self):

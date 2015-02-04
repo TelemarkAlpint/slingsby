@@ -11,7 +11,7 @@ def get_song_filename(instance, orig_filename):
 
     Will get a new name when moved to the filserver."""
     extension = path.splitext(orig_filename)[1]
-    filename = 'musikk/%s-raw%s' % (instance.id, extension)
+    filename = path.join('local', 'musikk', '%s-raw%s' % (instance.id, extension))
     return filename
 
 

@@ -13,6 +13,7 @@ import mock
 import os
 import paramiko
 import StringIO
+import shutil
 
 
 _logger = getLogger(__name__)
@@ -36,6 +37,20 @@ def slugify(text):
     """ Custom slugify that gracefully handles æ, ø and å. """
     text = text.lower().replace('æ', 'ae').replace('ø', 'o').replace('å', 'a')
     return _slugify(text)
+
+
+def upload_media(src, dest):
+    """ Upload a local filename specified by `src` to the fileserver, at path specified by
+    `dest`.
+    """
+    full_dest_path = os.path.join(settings.EXTERNAL_MEDIA_ROOT, dest)
+    target_dir = os.path.dirname(full_dest_path)
+    old_umask = os.umask(0002)
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir, 0775)
+    shutil.move(src, full_dest_path)
+    os.chmod(full_dest_path, 0664)
+    os.umask(old_umask)
 
 
 def get_permission(label):

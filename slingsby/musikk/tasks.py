@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from ..general.utils import log_errors, slugify, fileserver_ssh_client
+from ..general.utils import log_errors, slugify, fileserver_ssh_client, upload_media
 from .models import Song, Vote
 
 from celery import shared_task
@@ -11,7 +11,6 @@ from logging import getLogger
 import os
 import os.path
 import shlex
-import shutil
 import subprocess
 
 
@@ -33,7 +32,6 @@ def process_new_song(song_id):
     _logger.info('Processing song from celery')
     song = Song.objects.get(pk=song_id)
     # Make sure new files and directories are created with correct permissions
-    old_umask = os.umask(002)
     try:
         src_file = str(song.filename)
         wav_file = to_wav(src_file)
@@ -47,11 +45,7 @@ def process_new_song(song_id):
         for converted_file in converted_files:
             extension = os.path.splitext(converted_file)[1]
             new_filename = new_basename + extension
-            dest = os.path.join(settings.EXTERNAL_MEDIA_ROOT, new_filename)
-            target_dir = os.path.dirname(dest)
-            if not os.path.exists(target_dir):
-                os.makedirs(target_dir)
-            shutil.move(converted_file, dest)
+            upload_media(converted_file, new_filename)
         song.ready = True
         song.save()
     except:
@@ -59,8 +53,6 @@ def process_new_song(song_id):
         song.filename = ''
         song.save()
         raise
-    finally:
-        os.umask(old_umask)
 
 
 @shared_task
@@ -119,7 +111,7 @@ def convert_file(src_path):
     """ Converts a WAV file into mp3 and ogg (web versions) """
     filename = os.path.split(src_path)[1]
     basename = os.path.splitext(filename)[0]
-    target_folder = os.path.join(settings.MEDIA_ROOT, 'musikk')
+    target_folder = os.path.join(settings.MEDIA_ROOT, 'local', 'musikk')
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)
     converted = []
