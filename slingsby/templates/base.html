@@ -32,9 +32,9 @@
     <meta property="og:type" content="{% block og_type %}sports_team{% endblock %}" />
     <meta property="og:url" content="{{ request.build_absolute_uri }}" />
     {% block og_image %}
-        <meta property="og:image" content="{% static "gfx/logo_svart_tekst.png" %}" />
-        <meta property="og:image:width" content="190" />
-        <meta property="og:image:height" content="157" />
+        <meta property="og:image" content="{{ request.is_secure|yesno:"https,http" }}://{{ request.get_host }}{% static "gfx/logo-dark.png" %}" />
+        <meta property="og:image:width" content="500" />
+        <meta property="og:image:height" content="413" />
     {% endblock %}
     <meta property="og:site_name" content="NTNUI Telemark/Alpint" />
     <meta property="og:locale" content="nb_NO" />
@@ -110,7 +110,7 @@
             <aside id="sidebar">
                 <nav>
                     <a href="{% url 'frontpage' %}" id="logo" class="non-select">
-                        <img class="non-select" width="230" height="190" src="{% static "gfx/logo.png" %}" alt="" />
+                        <img class="non-select" width="230" height="190" src="{% static "gfx/logo-light-transparent.png" %}" alt="" />
                     </a>
 
                     <ul>
