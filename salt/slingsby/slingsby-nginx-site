@@ -37,7 +37,7 @@ server {
     uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
   }
 
-  location ~ ^/(login|complete) {
+  location ~ ^/(login|complete|admin) {
     # Identical as the location above, but without the redirect, since the social auth app
     # requires trailing slashes.
     include uwsgi_params;
