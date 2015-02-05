@@ -37,6 +37,17 @@ server {
     uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
   }
 
+  location ~ ^/(login|complete) {
+    # Identical as the location above, but without the redirect, since the social auth app
+    # requires trailing slashes.
+    include uwsgi_params;
+    uwsgi_pass slingsby;
+    uwsgi_param Host $host;
+    uwsgi_param X-Real-IP $remote_addr;
+    uwsgi_param X-Forwarded-For $proxy_add_x_forwarded_for;
+    uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
   location /static {
     alias /srv/ntnuita.no/static/;
     expires 1y;
