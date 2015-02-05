@@ -26,8 +26,8 @@ urlpatterns = patterns('',
 
     # Override admin login to our social login
     url(r'^admin/login', lambda r: http.HttpResponseRedirect(reverse('social:begin', kwargs={'backend': 'facebook'}))),
-    url(r'^admin', include(admin.site.urls)),
-    url(r'^admin/doc', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
 # social auth urls
