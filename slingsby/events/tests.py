@@ -4,7 +4,7 @@ from django.test import Client, TestCase
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 
-class EventListTest(TestCase):
+class BasicEventTest(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -24,7 +24,7 @@ class EventListTest(TestCase):
         self.assertTrue('Testevent' in response.content.decode('utf-8'))
 
 
-class EventTest(TestCase):
+class EventWithoutSignupOpenTimeTest(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -41,6 +41,19 @@ class EventTest(TestCase):
         self.assertEqual(len(Event.objects.first().get_participating_users()), 1)
 
 
-    def test_load_event_without_signup_open_time(self):
+    def test_show_event_without_signup_open_time(self):
         response = self.client.get('/program/1')
         self.assertEqual(response.status_code, 200)
+
+
+class EventSignupTest(TestCase):
+
+    def setUp(self):
+        self.anon_user = Client()
+        self.logged_in_user = Client()
+        User.objects.create_user(username='joe', password='joespw')
+        self.logged_in_user.login(username='joe', password='joespw')
+        self.no_signup_event = Event.objects.create(name='Skifestivalen',
+            startdate=(datetime.now() + timedelta(days=3)), enddate=(datetime.now() +
+                timedelta(days=3, hours=5))
+        self.
