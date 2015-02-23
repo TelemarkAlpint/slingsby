@@ -32,3 +32,9 @@ sshfs:
       - pkg: sshfs
       - file: sshfs
       - file: sshfs-ssh-config
+
+  # Add a cron job to re-mount in case the mount is lost and not caught by the 'reconnect' option
+  cron.present:
+    - name: mount -a
+    - identifier: sshfs-remount
+    - minute: random
