@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
+from django.utils.html import strip_tags
 from django.views.generic import TemplateView
 from logging import getLogger
 
@@ -29,6 +30,6 @@ def validate_text(text):
 
 def make_title(subpage=None):
     if subpage:
-        return '%s :: NTNUI Telemark/Alpint' % subpage
+        return '%s :: NTNUI Telemark/Alpint' % strip_tags(subpage)
     else:
         return 'NTNUI Telemark/Alpint'
