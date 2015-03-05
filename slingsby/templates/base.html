@@ -116,7 +116,7 @@
                     <ul>
                         {% for subpage in subpages %}
                             {% if subpage.visible or user.is_staff %}
-                                <li><a href="/{{ subpage.slug }}">{{ subpage.title }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
+                                <li><a href="/{{ subpage.slug }}">{{ subpage.title|safe }}{% if not subpage.visible %} (usynlig){% endif %}</a></li>
                             {% endif %}
                         {% endfor %}
                         <li>

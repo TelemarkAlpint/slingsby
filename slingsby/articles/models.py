@@ -89,7 +89,7 @@ class ArticleForm(ModelForm):
 #This class is a copy-paste of Article, with some extra fields in the top. They should have both inherited from a parent
 #base class, but sadly multi-table inheritance is not supported on GAE.
 class SubPageArticle(models.Model):
-    title = models.CharField('tittel', unique=True, blank=False, max_length=30, help_text='Hva skal undersiden hete?')
+    title = models.CharField('tittel', unique=True, blank=False, max_length=200, help_text='Hva skal undersiden hete?')
     slug = models.CharField('slug', unique=True, max_length=15, help_text="URLen siden får.")
     sort_key = models.IntegerField('sorteringsnøkkel', default=0, help_text='Jo høyere tall, jo høyere kommer siden')
 
