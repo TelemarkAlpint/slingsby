@@ -3,7 +3,7 @@
 {% load revved_static %}
 
 {% block og_description %}{% firstof article.social_summary article.content|striptags|truncatewords:40 %}{% endblock %}
-{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_title %}{{ article.title|striptags }}{% endblock %}
 
 {% block content %}
 

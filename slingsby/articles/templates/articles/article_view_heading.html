@@ -1,5 +1,5 @@
 {% if article.visible %}
-    <h1>{{ article.title }}</h1>
+    <h1>{{ article.title|striptags }}</h1>
 {% else %}
-    <h1><i>IKKE SYNLIG: {{ article.title }} </i></h1>
+    <h1><i>IKKE SYNLIG: {{ article.title|striptags }} </i></h1>
 {% endif %}
