@@ -43,6 +43,7 @@ disable=unused-argument,
     too-many-public-methods,
     no-self-use,
     super-on-old-class,
+    bad-continuation,
     I,
 
 [REPORTS]
