@@ -19,7 +19,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'slingsby_rel',
-        'HOST': '{{ pillar['env']['db_uri'] }}',
+        'HOST': '',
         'USER': 'slingsby',
         'PASSWORD': '{{ slingsby.db_password }}',
     },

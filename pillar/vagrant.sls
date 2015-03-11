@@ -7,16 +7,15 @@ developers:
     ssh_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjI4v6KIQOpATvx1MavlBVNLdl1UaAlspipInCriwAQ3A9d/XH0GWyBXNoo6LmL65iU6Owc1xLxWuUHdghxJ1d5XaBOHOhJ2Zrn6+85XISXwqzo2Kj1MxSpy7DB24v6/JQfTH/4XQfLwv1ubZZwVR9ycz8JORBFc4PCLP9rKmCkagT9PZk9nL0FXzs067Y0zZXidsBzNeY1ZHOhDcAlVt9er7KTjbfX7frzq/TGr87TB8mrqz3Gs6BValhrg9Pd+axWHMDCCNyAP4OEsvPBKJ6jzYXxSyRvSfj+oF+/vt3QLIXduKubwsD/gjIwUwRQk7roL66aLJGAMPaJPVAZbt5 vagrant@vagrant-ubuntu-trusty-64
 
-env:
-  db_uri: localhost
-
 slingsby:
   bind_url: ntnuita.local
   secret_key: verysecretindeed
-  db_password: notthatsecret
+  db_password: vagrant
   media_url: http://media.ntnuita.local/
   fileserver: fileserver@10.10.10.11
   fileserver_media_root: /srv/fileserver/
+
+DUPLICITY_PASSPHRASE: vagrant
 
 # vagrant fileserver key
 FILESERVER_KEY: '-----BEGIN RSA PRIVATE KEY-----
