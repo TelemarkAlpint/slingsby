@@ -10,9 +10,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '{{ pillar.get("SOCIAL_AUTH_FACEBOOK_SECRET", 'you
 
 ALLOWED_HOSTS = (
     '{{ slingsby.get('bind_url', 'ntnuita.no') }}',
-
-    # localhost needed so that curl can access /tasks/
-    'localhost',
 )
 
 DATABASES = {
