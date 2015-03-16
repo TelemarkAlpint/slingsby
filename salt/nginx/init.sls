@@ -2,9 +2,17 @@
 
 nginx:
   pkgrepo.managed:
-   - ppa: nginx/stable
+    {% if grains['lsb_distrib_codename'] == 'wheezy' %}
+    # We're on the rasbian server, no ppa support
+    - name: deb http://nginx.org/packages/debian wheezy nginx
+    - keyid: ABF5BD827BD9BF62
+    - keyserver: keyserver.ubuntu.com
+    {% else %}
+    - ppa: nginx/stable
+    {% endif %}
 
   pkg.installed:
+    - name: nginx-light
     - require:
       - pkgrepo: nginx
       - user: nginx

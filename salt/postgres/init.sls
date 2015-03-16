@@ -1,16 +1,16 @@
 {% set version = pillar.get('postgres.version', '9.4') %}
+{% set install_from_source = pillar.get('postgres.install_from_source', True) %}
+{% set postgres_server_type = 'cmd' if install_from_source else 'pkg' %}
 
-postgresql-server:
-  pkgrepo.managed:
-    - humanname: PostgreSQL repo
-    - name: deb http://apt.postgresql.org/pub/repos/apt/ {{ grains['lsb_distrib_codename'] }}-pgdg main
-    - key_url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+include:
+{% if install_from_source %}
+  - .source
+{% else %}
+  - .pkg
+{% endif %}
 
-  pkg.installed:
-    - name: postgresql-{{ version }}
-    - require:
-      - pkgrepo: postgresql-server
 
+postgresql-server-common:
   file.managed:
     - name: /etc/postgresql/{{ version }}/main/pg_hba.conf
     - source: salt://postgres/pg_hba.conf
@@ -18,14 +18,15 @@ postgresql-server:
     - group: postgres
     - mode: 640
     - require:
-      - pkg: postgresql-server
+      - {{ postgres_server_type }}: postgresql-server
 
   service.running:
     - name: postgresql
     - require:
-      - pkg: postgresql-server
+      - {{ postgres_server_type }}: postgresql-server
     - watch:
-      - file: postgresql-server
+      - file: postgresql-server-common
+      - file: postgresql-config
 
 
 postgresql-config:
@@ -33,9 +34,7 @@ postgresql-config:
     - name: /etc/postgresql/{{ version }}/main/postgresql.conf
     - source: salt://postgres/postgresql.conf
     - require:
-      - pkg: postgresql-server
-    - watch_in:
-      - service: postgresql-server
+      - {{ postgres_server_type }}: postgresql-server
 
 
 # Create on-disk dumps of the postgres db so that it can be backed up by other utilities
@@ -60,7 +59,6 @@ postgresql-client:
     - pkgs:
       - postgresql-client-common
       - postgresql-client-{{ version }}
-
 
 
 slingsby-postgres:

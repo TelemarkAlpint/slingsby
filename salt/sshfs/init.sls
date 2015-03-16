@@ -1,9 +1,19 @@
 {% set slingsby = pillar.get('slingsby') %}
 
+root-ssh-dir:
+  file.directory:
+    - name: /root/.ssh
+    - user: root
+    - group: root
+    - mode: 700
+
+
 sshfs-ssh-config:
   file.managed:
     - name: /root/.ssh/config
     - source: salt://sshfs/ssh_config
+    - require:
+      - file: root-ssh-dir
 
 sshfs:
   pkg:

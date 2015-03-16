@@ -16,6 +16,7 @@ slingsby:
   fileserver_media_root: /srv/fileserver/
   backup_directory: '/var/backups/slingsby'
 
+postgres.install_from_source: False
 DUPLICITY_PASSPHRASE: vagrant
 
 # vagrant fileserver key
