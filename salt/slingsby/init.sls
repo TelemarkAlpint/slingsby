@@ -5,7 +5,6 @@
 include:
   - .cron
   - memcached
-  - mysql
   - nginx
   - rabbitmq
   - uwsgi
@@ -15,6 +14,7 @@ slingsby-deps:
   pkg.installed:
     - pkgs:
       - lame
+      - libpq-dev
       - libjpeg-dev # Needed for PIL to decode JPEGs
       - python-dev # required for db bindings to compile
       - python-pip
@@ -36,7 +36,6 @@ slingsby:
     - no_deps: True
     - require:
       - pkg: slingsby-deps
-      - pkg: mysql
       {% for req_file in requirements_files %}
       - file: slingsby-requirements-{{ req_file }}
       {% endfor %}
@@ -116,13 +115,3 @@ slingsby-nginx-site:
       - pkg: nginx
     - watch_in:
       - service: nginx
-
-
-# Fix a bug in djecelery/mysql where index keys can't be longer than some arbitrary mysql limit
-djcelery-mysql-fix:
-  file.replace:
-    - name: /srv/ntnuita.no/venv/lib/python2.7/site-packages/djcelery/models.py
-    - pattern: max_length=2\d\d
-    - repl: max_length=191
-    - watch:
-      - virtualenv: slingsby

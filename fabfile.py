@@ -49,7 +49,7 @@ def deploy():
         sudo('find static -type f -print0 | xargs -0 chmod 644')
         sudo('find static -type d -print0 | xargs -0 chmod 755')
     run('rm /tmp/static_files.tar.gz')
-    migrate_db()
+    #migrate_db()
     sudo('service uwsgi restart')
     sudo('service slingsby-celery restart')
 
@@ -133,6 +133,16 @@ def restore_from_backup(passphrase=None, fileserver=None, backup_directory=None)
             'sftp://%s/%s' % (fileserver, backup_directory),
             '/',
         )))
+
+    # Initialize database tables
+    with shell_env(DJANGO_SETTINGS_MODULE='prod_settings', PYTHONPATH='/srv/ntnuita.no/'):
+        sudo('/srv/ntnuita.no/venv/bin/manage.py migrate', user='uwsgi')
+
+    # Empty the content type tables initialized by django
+    sudo('echo "TRUNCATE TABLE django_content_type CASCADE;" | psql slingsby_rel', user='postgres')
+
+    # Load database from dump
+    sudo('gzip -cd /var/backups/postgres/dump.sql.gz | psql slingsby_rel', user='postgres')
 
 
 @hosts('vagrant@127.0.0.1:2222')
