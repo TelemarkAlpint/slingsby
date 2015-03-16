@@ -55,5 +55,15 @@ class EventSignupTest(TestCase):
         self.logged_in_user.login(username='joe', password='joespw')
         self.no_signup_event = Event.objects.create(name='Skifestivalen',
             startdate=(datetime.now() + timedelta(days=3)), enddate=(datetime.now() +
-                timedelta(days=3, hours=5))
-        self.
+                timedelta(days=3, hours=5)), has_registration=True)
+
+
+    def test_event_signup_logged_in_only(self):
+        response = self.anon_user.post('/program/1/join')
+        # Non-authenticated requests should redirect to logged_in_user
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('/login' in response.get('location'))
+
+        response = self.logged_in_user.post('/program/1/join')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('/program/1' in response.get('location'))
