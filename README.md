@@ -241,4 +241,4 @@ Wipe the local database and bootstrap a new one:
 
 Assuming you've logged in on vagrant, give a given used id admin access (like yourself):
 
-    $ echo "update auth_user set is_superuser=1, is_staff=1 where id=1;" | mysql -u root slingsby_rel
+    $ echo "update auth_user set is_superuser=1, is_staff=1 where id=1;" | sudo -u postgres psql slingsby_rel

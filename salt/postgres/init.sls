@@ -30,8 +30,10 @@ postgresql-server:
 
 postgresql-config:
   file.managed:
-    - name: /etc/postgresql/main/{{ version }}/postgresql.conf
+    - name: /etc/postgresql/{{ version }}/main/postgresql.conf
     - source: salt://postgres/postgresql.conf
+    - require:
+      - pkg: postgresql-server
     - watch_in:
       - service: postgresql-server
 

@@ -2,7 +2,7 @@
 # Use tools/secure_salt_values.py to decrypt these (or add new ones), secret key can be
 # found in the styre-dropbox Kontoer.kdbx KeePass file.
 
-MYSQL_PASSWORD: FcKcoqflJosehNqsJdfvkkfvSsNqCR9e261F/C0VqB0c1DD2zoTFCKmw9fMC6wyDCRt2nPAdfzfZeArP
+DB_PASSWORD: FcKcoqflJosehNqsJdfvkkfvSsNqCR9e261F/C0VqB0c1DD2zoTFCKmw9fMC6wyDCRt2nPAdfzfZeArP
 SECRET_KEY: VwhS/d+3GqqeJIbu0r+f7Lcjwl8mQbGHAukvZWHojpxxauYQ/e9j6o7eIWqykqEPuYvQYyqFzwmGRHi6+NKAceNbono/dNAq6jtS3BQtVpgJ0ynBsdu8D05M6HJT5k/WPT3QTMyw
 SOCIAL_AUTH_FACEBOOK_SECRET: pFvgerCkFHRABHZRW5NDm+EpopyO7Jlh82ikK6CU9WYzdT7YDI63wEYRa7+d8KGA
 # private key authorized to tarjeikl's account
