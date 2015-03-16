@@ -9,6 +9,13 @@ postgres-deps:
     - pkgs:
       - libreadline-dev
 
+  user.present:
+    - name: postgres
+    - system: True
+    - home: /var/lib/postgresql
+    - fullname: PostgreSQL administrator
+
+
 postgres-source:
   file.managed:
     - name: /usr/local/src/postgresql-{{ version }}.tar.bz2
@@ -29,5 +36,6 @@ postgresql-server:
     - cwd: /usr/local/src/postgresql-{{ version }}
     - require:
       - pkg: postgres-deps
+      - user: postgres-deps
     - watch:
       - cmd: postgres-source
