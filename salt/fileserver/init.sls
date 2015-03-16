@@ -31,3 +31,11 @@ fileserver-nginx-site:
       - pkg: nginx
     - watch_in:
       - service: nginx
+
+
+fileserver-backup-directory:
+  file.directory:
+    - name: /var/backups/slingsby
+    - user: root
+    - group: fileserver
+    - mode: 775

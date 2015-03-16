@@ -17,6 +17,7 @@
 from fabric.api import run, sudo, put, cd, hosts, env, local
 from fabric.context_managers import shell_env
 import os
+import yaml
 import sys
 
 try:
@@ -84,3 +85,74 @@ def provision():
     sudo('tar xf /tmp/salt_and_pillar.tar.gz -C /srv')
     sudo('salt-call state.highstate --force-color --local')
     sudo('rm /tmp/salt_and_pillar.tar.gz')
+
+
+def backup(passphrase=None, fileserver=None, backup_directory=None):
+    passphrase = passphrase or _get_backup_passphrase()
+    if not fileserver or not backup_directory:
+        slingsby_pillar = _get_slingsby_pillar()
+        fileserver = fileserver or slingsby_pillar['fileserver']
+        backup_directory = backup_directory or slingsby_pillar['backup_directory']
+
+    with shell_env(PASSPHRASE=passphrase):
+        sudo(' '.join((
+            'duplicity',
+             '--gpg-options="--cipher-algo=AES256 --digest-algo=SHA512 --s2k-digest-algo=SHA512"',
+             '--ssh-options="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oIdentityFile=/srv/ntnuita.no/fileserver_key.pem"',
+             '--include /etc',
+             '--include /home',
+             '--include /opt',
+             '--include /srv',
+             '--include /var',
+             "--exclude '**'",
+             '--exclude /srv/ntnuita.no/media/external',
+             '/',
+             'sftp://%s/%s' % (fileserver, backup_directory)
+        )))
+
+
+@hosts('vagrant@127.0.0.1:2222')
+def backup_vagrant():
+    env.password = 'vagrant'
+    backup(passphrase='vagrant', fileserver='fileserver@10.10.10.11',
+        backup_directory='/var/backups/slingsby')
+
+
+def restore_from_backup(passphrase=None, fileserver=None, backup_directory=None):
+    passphrase = passphrase or _get_backup_passphrase()
+    if not fileserver or not backup_directory:
+        slingsby_pillar = _get_slingsby_pillar()
+        fileserver = fileserver or slingsby_pillar['fileserver']
+        backup_directory = backup_directory or slingsby_pillar['backup_directory']
+
+    with shell_env(PASSPHRASE=passphrase):
+        sudo(' '.join((
+            'duplicity',
+            '--ssh-options="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oIdentityFile=/srv/ntnuita.no/fileserver_key.pem"',
+            '--force',
+            'sftp://%s/%s' % (fileserver, backup_directory),
+            '/',
+        )))
+
+
+@hosts('vagrant@127.0.0.1:2222')
+def restore_from_backup_vagrant():
+    env.password = 'vagrant'
+    restore_from_backup(passphrase='vagrant', fileserver='fileserver@10.10.10.11',
+        backup_directory='/var/backups/slingsby')
+
+
+def _get_backup_passphrase():
+    secrets_file = os.path.join(os.path.dirname(__file__), 'pillar', 'secure', 'init.sls')
+    if not os.path.isfile(secrets_file):
+        print('Decrypt secrets to perform this action')
+        sys.exit(1)
+    with open(secrets_file) as fh:
+        secret_data = yaml.load(fh)
+    return secret_data.get('DUPLICITY_PASSPHRASE')
+
+
+def _get_slingsby_pillar():
+    slingsby_pillar_file = os.path.join(os.path.dirname(__file__), 'pillar', 'slingsby', 'init.sls')
+    with open(slingsby_pillar_file) as fh:
+        return yaml.load(fh)['slingsby']
