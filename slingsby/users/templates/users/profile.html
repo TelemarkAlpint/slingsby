@@ -11,6 +11,10 @@
             <th>E-post:</th>
             <td>{{ user.email }}</td>
         </tr>
+        <tr>
+            <th>Tilgang til komitémedlempåmelding:</th>
+            <td>{{ perms.events.early_signup|yesno:"Ja,Nei" }}</td>
+        </tr>
     </table>
 
     <h1>Mine events</h1>
