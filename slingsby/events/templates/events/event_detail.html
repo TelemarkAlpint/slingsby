@@ -5,7 +5,7 @@
 {% block og_description %}{{ event.summary }}{% endblock %}
 
 {% block content %}
-    <div class="event" data-time-remaining-to-signup-opens="{{ event.seconds_until_registration_opens }}">
+    <div class="event" data-time-remaining-to-signup-opens="{{ seconds_until_registration_opens_for_user }}">
         {% include "events/event_header.html" %}
 
         {% autoescape off %}
@@ -25,7 +25,10 @@
                 <div class="participants">
                     <h4>Påmeldte</h4>
                     <ul>
-                    {% for user in event.get_participating_users %}
+                    {% for user in participating_users %}
+                        {% if event.number_of_spots and forloop.counter > event.number_of_spots %}
+                        </ul><h4>Venteliste</h4><ul>
+                        {% endif %}
                         {% if user.first_name and user.last_name %}
                             <li>{{ user.get_full_name }}</li>
                         {% else %}

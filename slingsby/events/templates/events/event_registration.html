@@ -2,37 +2,23 @@
 
 <h3>Påmelding</h3>
 
+{% if event.number_of_spots %}
+    <p>
+        {% if perms.events.early_signup %}
+            Eventet har {{ event.number_of_spots }} plasser, hvorav {{ event.number_of_committee_member_spots }} er reservert for komitémedlemmer. Ordinær påmelding åpner {{ event.regular_registration_opens_as_string }}.
+        {% else %}
+            Eventet har {{ event.number_of_spots }} plasser.
+        {% endif %}
+    </p>
+{% endif %}
+
+
 {% if user.is_authenticated %}
 
-    {% if user.id not in event.get_participants_id %}
-        {# Ikke påmeldt enda #}
-
-        <form class="inline" action="{% url 'join_event' event.id %}" method="post">
-            {% if event.is_open_for_registration %}
-
-                {% if event.registration_closes %}
-                    <p class="event_info">Påmeldingen stenger {{ event.registration_closes_as_string }}.</p>
-                {% endif %}
-
-                {% if event.is_full %}
-                    <span>Beklager, eventet er fullt.</span>
-                {% else %}
-                    <input type="submit" class="btn" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}">
-                {% endif %}
-
-            {% else %}
-                {% if event.is_registration_closed %}
-                    <p class="event_info">Påmeldingen stengte {{ event.registration_closes_as_string }}.</p>
-                {% endif %}
-
-                <input type="submit" class="btn" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}" disabled>
-            {% endif %}
-        </form>
-
-    {% else %}
+    {% if user_is_signed_up %}
         {# Brukeren er påmeldt #}
 
-        {% if event.is_open_for_registration %}
+        {% if event_open_for_user %}
 
             <form class="inline" action="{% url 'leave_event' event.id %}" method="post">
                 {% if event.registration_closes and not event.binding_registration %}
@@ -51,7 +37,33 @@
             <p class="event_info">Du er påmeldt, og påmeldingen har stengt.</p>
 
         {% endif %}
+    {% else %}
+        {# Ikke påmeldt enda #}
 
+        <form class="inline" action="{% url 'join_event' event.id %}" method="post">
+            {% if event_open_for_user %}
+
+                {% if event.registration_closes %}
+                    <p class="event_info">Påmeldingen stenger {{ event.registration_closes_as_string }}.</p>
+                {% endif %}
+
+                {% if event.is_full %}
+                    <p>
+                        Eventet er fullt, men du kan sette deg på venteliste hvis du vil?
+                    </p>
+                    <input type="submit" class="btn" value="Ja takk, sett meg på venteliste">
+                {% else %}
+                    <input type="submit" class="btn" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}">
+                {% endif %}
+
+            {% else %}
+                {% if event.is_registration_closed %}
+                    <p class="event_info">Påmeldingen stengte {{ event.registration_closes_as_string }}.</p>
+                {% endif %}
+
+                <input type="submit" class="btn" value="Meld meg på!{{ event.binding_registration|yesno:" (bindende!),"}}" disabled>
+            {% endif %}
+        </form>
     {% endif %}
 
 {% else %}

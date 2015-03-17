@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from .models import Event, UserAddError, EventError
+from .models import Event, UserAddError, EventError, _format_date
 from ..general import make_title, time
 from ..general.views import ActionView
 
@@ -39,6 +39,14 @@ class EventDetailView(ActionView, TemplateView):
         event = get_object_or_404(Event, pk=event_id)
         context['event'] = event
         context['title'] = make_title(event.name)
+        context['user_is_signed_up'] = event.is_user_participant(self.request.user)
+        context['event_open_for_user'] = event.can_user_register_now(self.request.user)
+        context['participating_users'] = event.get_participating_users(self.request.user)
+        if event.registration_opens:
+            context['registration_opens_for_user_as_string'] = _format_date(time.utc_to_nor(
+                event.registration_opens_for_user(self.request.user)))
+            context['seconds_until_registration_opens_for_user'] = event.seconds_until_registration_opens_for_user(
+                self.request.user)
         return context
 
 
@@ -53,10 +61,12 @@ class EventDetailView(ActionView, TemplateView):
         event = get_object_or_404(Event, pk=event_id)
         try:
             event.add_user(request.user)
+            _logger.info("%s meldte seg på eventet %s", request.user, event)
+            messages.success(request, 'Du er nå påmeldt %s!' % event)
         except UserAddError as error:
             _logger.info(error)
-        messages.success(request, 'Du er nå påmeldt %s!' % event)
-        _logger.info("%s meldte seg på eventet %s", request.user, event)
+            messages.error(request, error.reason)
+            return self.render_to_response(self.get_context_data(**kwargs), status=400)
         return HttpResponseRedirect(event.get_absolute_url())
 
 
