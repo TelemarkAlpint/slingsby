@@ -133,7 +133,7 @@ class Event(models.Model):
 
     def registration_opens_for_user(self, user):
         opening_time_for_user = self.registration_opens
-        if user.has_perm('events.early_signup'):
+        if user and user.has_perm('events.early_signup'):
             opening_time_for_user = self.comittee_registration_opens
         return opening_time_for_user
 
@@ -196,7 +196,16 @@ class Event(models.Model):
     remove_user.alters_data = True
 
     def get_participating_users(self, user_asking=None):
-        if (not user_asking or not user_asking.has_perm('events.early_signup')) and not self.has_opened():
+        """ Users with early access should be able to see other people that has signed up after
+        the early bird registration has opened, but not before that (admin presignups).
+
+        Normal users should not be able to see any signups until the regular registration opens.
+        """
+        opening_time = self.registration_opens_for_user(user_asking)
+        if opening_time and time.is_future(opening_time):
+            return []
+        if (not user_asking or
+            not user_asking.has_perm('events.early_signup')) and not self.has_opened():
             return []
         signups = Signup.objects.select_related().filter(event=self)
         users = [s.user for s in signups]

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .models import Event
+from .models import Event, Signup
 
 from django.test import Client, TestCase
 from django.contrib.auth.models import User, Group, Permission
@@ -54,8 +54,11 @@ class EventSignupTest(TestCase):
         self.anon_user = Client()
         self.logged_in_user1 = Client()
         self.logged_in_user2 = Client()
-        User.objects.create_user(username='joe', password='joespw')
-        User.objects.create_user(username='knut', password='knutspw')
+        joe = User.objects.create_user(username='joe', password='joespw')
+        self.knut = User.objects.create_user(username='knut', password='knutspw')
+        arrkom = Group.objects.create(name='Arrkom')
+        arrkom.permissions.add(Permission.objects.get(codename='early_signup'))
+        self.knut.groups.add(arrkom)
         self.logged_in_user1.login(username='joe', password='joespw')
         self.logged_in_user2.login(username='knut', password='knutspw')
         self.no_signup_time_event = Event.objects.create(name='Testevent',
@@ -65,6 +68,24 @@ class EventSignupTest(TestCase):
             startdate=(datetime.now() + timedelta(days=1)), enddate=(datetime.now() +
                 timedelta(days=2)), has_registration=True, registration_opens=(datetime.now() -
                 timedelta(minutes=10)), number_of_spots=1)
+        self.event_with_presignups = Event.objects.create(name='Other testevent',
+            startdate=(datetime.now() + timedelta(days=3)), registration_opens=(datetime.now() +
+                timedelta(days=2)), has_registration=True, enddate=(datetime.now() + timedelta(days=4)))
+        self.event_with_presignups._add_user(joe)
+
+
+    def test_event_hides_presignups(self):
+        self.assertEqual(self.event_with_presignups.get_participating_users(), [])
+        self.assertEqual(self.event_with_presignups.get_participating_users(self.knut), [])
+
+
+    def test_event_unregister(self):
+        event_id = self.event_with_presignups.id
+        response = self.logged_in_user1.post('/program/%d/leave' % event_id)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('/program/%d' % event_id in response.get('location'))
+
+        self.assertEqual(Signup.objects.count(), 0)
 
 
     def test_event_signup_logged_in_only(self):
