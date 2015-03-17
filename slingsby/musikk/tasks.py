@@ -55,6 +55,38 @@ def process_new_song(song_id):
         raise
 
 
+def to_wav(src_path):
+    """ Takes a file like `loose_yourself-raw.flac` and converts it into `loose_yourself.wav`.
+
+    Path must be either absolute or relative to MEDIA_ROOT."""
+    _logger.debug('Converting %s to wav..', src_path)
+    new_filename = src_path[:src_path.rindex('-raw')] + '.wav'
+    src_path = os.path.join(settings.MEDIA_ROOT, src_path)
+    new_path = os.path.join(settings.MEDIA_ROOT, new_filename)
+    command = ['sox', src_path, new_path]
+    subprocess.check_call(command)
+    return new_path
+
+
+def convert_file(src_path):
+    """ Converts a WAV file into mp3 and ogg (web versions) """
+    filename = os.path.split(src_path)[1]
+    basename = os.path.splitext(filename)[0]
+    target_folder = os.path.join(settings.MEDIA_ROOT, 'local', 'musikk')
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    converted = []
+    for extension, cli_call in WEB_SONG_FORMATS.items():
+        new_filename = '%s.%s' % (basename, extension)
+        dest = os.path.join(target_folder, new_filename)
+        command = cli_call % {'src': src_path, 'dest': dest}
+        args = _get_subprocess_args(command)
+        _logger.debug("New file: %s", new_filename)
+        subprocess.check_call(args)
+        converted.append(dest)
+    return converted
+
+
 @shared_task
 @log_errors
 def count_votes():
@@ -88,42 +120,98 @@ def count_votes():
 @log_errors
 def create_new_compilation():
     """ Creates a new song for monday excercise, merging all the top-rated ones. """
-    _logger.info('Establishing connection to fileserver to start creating new monday compilation')
-    with fileserver_ssh_client() as ssh_client:
-        ssh_client.exec_command('python /home/groups/telemark/expeditious/update_top_song.py')
-    _logger.info('Compilation created.')
+    temp_dir = tempfile.mkdtemp()
+    _logger.debug('Creating new song compilation, temp_dir is %s' % temp_dir)
+    silence_file = generate_silence_file(temp_dir)
+    urls = get_song_urls()
+    files = fetch_songs(temp_dir, urls)
+    wav = merge_files(files, silence_file)
+    mp3 = convert_to_mp3(wav)
+    metadata = write_metadata(mp3, urls)
+    _logger.debug('Done. Completed mp3 is here: %s' % mp3)
+    os.remove(wav)
+    shutil.rmtree(temp_dir)
 
 
-def to_wav(src_path):
-    """ Takes a file like `loose_yourself-raw.flac` and converts it into `loose_yourself.wav`.
+def generate_silence_file(temp_dir):
+    _logger.debug('Creating silence file...')
+    filename = os.path.join(temp_dir, 'silence.wav')
+    subprocess.check_call(['sox', '-n', '-r', '44100', '-c', '2', filename, 'trim', '0.0', '15.0'])
+    _logger.debug('Silence created.')
+    return filename
 
-    Path must be either absolute or relative to MEDIA_ROOT."""
-    _logger.debug('Converting %s to wav..', src_path)
-    new_filename = src_path[:src_path.rindex('-raw')] + '.wav'
-    src_path = os.path.join(settings.MEDIA_ROOT, src_path)
-    new_path = os.path.join(settings.MEDIA_ROOT, new_filename)
-    command = ['sox', src_path, new_path]
+
+def get_song_urls():
+    _logger.debug('Fetching top song list...')
+    response = requests.get('http://ntnuita.no/musikk/top/list/')
+    response.raise_for_status()
+    song_data = response.json()
+    song_list = song_data['songs']
+    url_list = [song['filename'] + '.ogg' for song in song_list]
+    _logger.debug('%d songs found.' % len(url_list))
+    return url_list
+
+
+def fetch_songs(temp_dir, song_urls):
+    files = []
+    for song_num, song_url in enumerate(song_urls, 1):
+        target_file = os.path.join(temp_dir, str(song_num) + '.ogg')
+        with open(target_file, 'w') as fh:
+            _logger.debug('Downloading song %s' % song_url)
+            response = requests.get(song_url, stream=True)
+            response.raise_for_status()
+            for block in response.iter_content(1024):
+                if not block:
+                    break
+                fh.write(block)
+        files.append(target_file)
+    return files
+
+
+def merge_files(files, silence_file):
+    _logger.debug('Merging files...')
+    target = get_new_filename()
+    command = ['sox']
+    for song_file in files:
+        if sys.version_info > (3, 0, 0):
+            command.append(song_file)
+        else:
+            # Python2, wtf?
+            command.append(song_file.encode('latin-1'))
+        command.append(silence_file)
+    command.append(target)
     subprocess.check_call(command)
-    return new_path
+    return target
 
 
-def convert_file(src_path):
-    """ Converts a WAV file into mp3 and ogg (web versions) """
-    filename = os.path.split(src_path)[1]
-    basename = os.path.splitext(filename)[0]
-    target_folder = os.path.join(settings.MEDIA_ROOT, 'local', 'musikk')
-    if not os.path.exists(target_folder):
-        os.makedirs(target_folder)
-    converted = []
-    for extension, cli_call in WEB_SONG_FORMATS.items():
-        new_filename = '%s.%s' % (basename, extension)
-        dest = os.path.join(target_folder, new_filename)
-        command = cli_call % {'src': src_path, 'dest': dest}
-        args = _get_subprocess_args(command)
-        _logger.info("New file: %s", new_filename)
-        subprocess.check_call(args)
-        converted.append(dest)
-    return converted
+def get_new_filename():
+    todays_date = datetime.now().strftime('%Y.%m.%d')
+    return '%s.wav' % todays_date
+
+
+def convert_to_mp3(source):
+    _logger.debug('Converting merged file to mp3...')
+    dest = path.splitext(source)[0] + '.mp3'
+    subprocess.check_call([lame, '-V2', '--vbr-new', '--tt', 'Mandagstrening', '--ta',
+        'NTNUI Telemark-Alpint', '--ty', str(datetime.now().year), '--tc',
+        'Generert %s' % datetime.now().strftime('%Y-%m-%d %H:%M'), '--tl', 'Best of I-bygget',
+        source, dest])
+    return dest
+
+
+def write_metadata(filename, urls):
+    """ Write file used to recreate the file, or see the songs it contains. """
+    song_meta_filename = path.splitext(filename)[0] + '.json'
+    creation_time = datetime.now().strftime('%Y-%m-%d %H:%M')
+    song_meta = {
+        'created': creation_time,
+        'filename': filename,
+        'songs': [{'filename': path.splitext(url)[0]} for url in urls],
+    }
+    with open(song_meta_filename, 'w') as song_meta_fh:
+        json.dump(song_meta, song_meta_fh, indent=2)
+    return song_meta_filename
+    _logger.debug('Compilation created.')
 
 
 def _get_subprocess_args(args_str):
@@ -131,7 +219,7 @@ def _get_subprocess_args(args_str):
     subprocess.check_call(). For windows, this is the same as the input, for *nix it's passed
     through shlex.split() -> ['ls', '-l'].
     """
-    if os.name == 'nt':
+    if os.name == 'nt': # pragma: no-cover
         return args_str
     else:
         return shlex.split(args_str)
