@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from __future__ import unicode_literals
+
 from ..general import time, validate_text
 from ..general.widgets import WidgEditorWidget
 from datetime import timedelta
@@ -14,22 +16,48 @@ _WEEKDAYS = [u'mandag', u'tirsdag', u'onsdag', u'torsdag', u'fredag', u'lørdag'
 _MONTHS = [u'januar', u'februar', u'mars', u'april', u'mai', u'juni', u'juli',
            u'august', u'september', u'oktober', u'november', u'desember']
 
+
+def _format_date(date):
+    return '%s %d. %s %s' % (_WEEKDAYS[date.weekday()], date.day, _MONTHS[date.month - 1], date.strftime('%H:%M'))
+
+
 class Event(models.Model):
+    committee_member_percentage = 0.4
     name = models.CharField('navn', max_length=100)
     startdate = models.DateTimeField('startdato')
     enddate = models.DateTimeField('sluttdato')
     has_registration = models.BooleanField(SafeUnicode(u'påmelding'), default=False)
-    registration_opens = models.DateTimeField(SafeUnicode(u'påmeldingen åpner'), null=True, blank=True)
-    registration_closes = models.DateTimeField(SafeUnicode(u'påmeldingen stenger'), null=True, blank=True)
+    registration_opens = models.DateTimeField(SafeUnicode(u'påmeldingen åpner'), null=True,
+        blank=True)
+    registration_closes = models.DateTimeField(SafeUnicode(u'påmeldingen stenger'), null=True,
+        blank=True)
     binding_registration = models.BooleanField(SafeUnicode(u'bindende påmelding'), default=False)
-    number_of_spots = models.IntegerField('antall plasser', null=True, blank=True, help_text='0 = ubegrenset')
-    participants_by_id = models.CommaSeparatedIntegerField('deltager-IDer', max_length=4000, null=True, blank=True)
+    number_of_spots = models.IntegerField('antall plasser', null=True, blank=True,
+        help_text='0 = ubegrenset')
+    _comittee_registration_opens = models.DateTimeField(SafeUnicode('komitémedlempåmelding åpner'),
+        blank=True, null=True, help_text='Når påmeldingen skal åpne for komitémedlemmer. La være'
+        ' blank for 24 timer før vanlig åpning.')
     summary = models.TextField('sammendrag')
     description = models.TextField('beskrivelse')
     location = models.CharField('sted', max_length=100)
 
     class Meta:
         ordering = ['startdate']
+        permissions = (
+            ('early_signup', 'Can signup to events before regular opening'),
+        )
+
+    @property
+    def comittee_registration_opens(self):
+        if self._comittee_registration_opens:
+            return self._comittee_registration_opens
+        if self.registration_opens:
+            return self.registration_opens - timedelta(days=1)
+        return None
+
+    @property
+    def number_of_committee_member_spots(self):
+        return int(self.number_of_spots*Event.committee_member_percentage)
 
     def __unicode__(self):
         return self.name
@@ -56,26 +84,27 @@ class Event(models.Model):
 
     def duration_as_string(self):
         if time.days_between(self.startdate, self.enddate) != 0:
-            return 'Fra %s til %s' % (self._format_date(time.utc_to_nor(self.startdate)),
-                self._format_date(time.utc_to_nor(self.enddate)))
+            return 'Fra %s til %s' % (_format_date(time.utc_to_nor(self.startdate)),
+                _format_date(time.utc_to_nor(self.enddate)))
         else:
-            return 'Fra %s til %s' % (self._format_date(time.utc_to_nor(self.startdate)),
+            return 'Fra %s til %s' % (_format_date(time.utc_to_nor(self.startdate)),
                 time.utc_to_nor(self.enddate).strftime('%H:%M'))
 
-    def _format_date(self, date):
-        return '%s %d. %s %s' % (_WEEKDAYS[date.weekday()], date.day, _MONTHS[date.month - 1], date.strftime('%H:%M'))
-
-    def seconds_until_registration_opens(self):
-        if self.has_registration and self.registration_opens:
-            return time.seconds_to(self.registration_opens)
+    def seconds_until_registration_opens_for_user(self, user):
+        registration_opens_for_user = self.registration_opens_for_user(user)
+        print 'Finding time until opening for user %s' % user
+        if self.has_registration and registration_opens_for_user:
+            ret = time.seconds_to(registration_opens_for_user)
+            print ret
+            return ret
         else:
             return 0
 
-    def registration_closes_as_string(self):
-        return self._format_date(time.utc_to_nor(self.registration_closes))
+    def regular_registration_opens_as_string(self):
+        return _format_date(time.utc_to_nor(self.registration_opens))
 
-    def registration_opens_as_string(self):
-        return self._format_date(time.utc_to_nor(self.registration_opens))
+    def registration_closes_as_string(self):
+        return _format_date(time.utc_to_nor(self.registration_closes))
 
     def is_over(self):
         return time.is_past(self.enddate)
@@ -95,16 +124,25 @@ class Event(models.Model):
         return int(percentage)
 
     def num_participants(self):
-        return len(self.get_participants_id())
+        return Signup.objects.filter(event=self).count()
 
     def is_user_participant(self, user):
-        return user.id in self.get_participants_id()
+        if not user.is_authenticated():
+            return False
+        return Signup.objects.filter(event=self, user=user).exists()
 
-    def is_open_for_registration(self):
+    def registration_opens_for_user(self, user):
+        opening_time_for_user = self.registration_opens
+        if user.has_perm('events.early_signup'):
+            opening_time_for_user = self.comittee_registration_opens
+        return opening_time_for_user
+
+    def can_user_register_now(self, user):
         if self.registration_opens is None:
             return True
         if self.registration_closes is None:
-            return time.is_past(self.registration_opens - timedelta(seconds=1))
+            opening_time_for_user = self.registration_opens_for_user(user)
+            return time.is_past(opening_time_for_user - timedelta(seconds=1))
         else:
             return time.is_past(self.registration_opens) and time.is_future(self.registration_closes)
 
@@ -119,10 +157,12 @@ class Event(models.Model):
         else:
             return self.num_participants() >= self.number_of_spots
 
+    def is_early_signup_full(self):
+        # Add one to check whether adding a user will push us over the 40% limit
+        return ((self.num_participants() + 1) / float(self.number_of_spots)) > Event.committee_member_percentage
+
     def _add_user(self, user):
-        participants = self.get_participants_id()
-        participants.append(user.id)
-        self.update_participating_users(participants)
+        Signup.objects.create(event=self, user=user)
 
     def add_user(self, user):
         """ Add the user to the event, if possible.
@@ -130,20 +170,22 @@ class Event(models.Model):
         Possible causes if this fails is that the event is not yet open
         for registration, the event is full, or the user is already registered."""
 
-        if not self.is_open_for_registration():
-            raise UserAddError("%s isn't open for registration yet! Registration opens %s."
-                               % (self.name, self.registration_opens_as_string()))
-        if self.is_full():
-            raise UserAddError('All %d spots are taken!' % self.number_of_spots)
+        if not self.can_user_register_now(user):
+            raise UserAddError("%s har ikke åpnet for registrering enda, registreringen åpner %s."
+                               % (self.name, _format_date(time.utc_to_nor(
+                                self.registration_opens_for_user(user)))))
+        if (user.has_perm('events.early_signup') and
+            time.is_future(self.registration_opens) and self.is_early_signup_full()):
+            raise UserAddError('Alle earlybird-plassene til komitémedlemmer er tatt! Du må vente'
+                ' til den vanlige påmeldingen starter')
         if self.is_user_participant(user):
-            raise UserAddError('%s is already registered to %s!' % (user, self.name))
+            raise UserAddError('Du er allerede påmeldt til %s!' % self.name)
         self._add_user(user)
     add_user.alters_data = True
 
     def _remove_user(self, user):
-        participants = self.get_participants_id()
-        participants.remove(user.id)
-        self.update_participating_users(participants)
+        signup = Signup.objects.get(event=self, user=user)
+        signup.delete()
 
     def remove_user(self, user):
         if not self.is_user_participant(user):
@@ -153,24 +195,12 @@ class Event(models.Model):
         self._remove_user(user)
     remove_user.alters_data = True
 
-    def get_participants_id(self):
-        user_ids = []
-        if self.participants_by_id:
-            user_ids = [int(user_id) for user_id in self.participants_by_id.split(',')]
-        return user_ids
-
-    def get_participating_users(self):
-        if not self.has_opened():
+    def get_participating_users(self, user_asking=None):
+        if (not user_asking or not user_asking.has_perm('events.early_signup')) and not self.has_opened():
             return []
-        user_ids = self.get_participants_id()
-        users = [User.objects.get(id=user_id) for user_id in user_ids]
+        signups = Signup.objects.select_related().filter(event=self)
+        users = [s.user for s in signups]
         return users
-
-    def update_participating_users(self, list_of_new_ids):
-        list_of_new_ids = [str(user_id) for user_id in list_of_new_ids]
-        self.participants_by_id = ','.join(list_of_new_ids)
-        self.save()
-    update_participating_users.alters_data = True
 
     def get_participating_emails(self):
         users = self.get_participating_users()
@@ -178,6 +208,7 @@ class Event(models.Model):
         for user in users:
             emails.append(user.email)
         return emails
+
 
 class EventForm(ModelForm):
     class Meta:
@@ -193,6 +224,20 @@ class EventForm(ModelForm):
         data = self.cleaned_data['description']
         clean_data = validate_text(data)
         return clean_data
+
+
+class Signup(models.Model):
+    event = models.ForeignKey(Event)
+    user = models.ForeignKey(User)
+    signup_time = models.DateTimeField(SafeUnicode('påmeldingstid'), auto_now=True)
+
+    class Meta:
+        ordering = ('event', 'signup_time')
+
+
+    def __unicode__(self):
+        return '%s: %s' % (self.event, self.user)
+
 
 class EventError(Exception):
     """ Base class for event-related exceptions. """

@@ -2,7 +2,7 @@
     {{ event.name }}
     <span class="event_extras">
         {% if event.has_registration %}
-            {% if event.has_opened %}
+            {% if event_open_for_user %}
                 {% if not event.number_of_spots %}
                     Antall påmeldte: {{ event.num_participants }}
                 {% else %}
@@ -10,11 +10,11 @@
                     </meter>
                 {% endif %}
             {% else %}
-                Påmeldingen åpner {{ event.registration_opens_as_string }}<span class="countdown"></span>
+                Påmeldingen åpner {{ registration_opens_for_user_as_string }}<span class="countdown"></span>
             {% endif %}
         {% else %}
             Åpent for alle!
         {% endif %}
     </span>
  </h1>
-<span class="event_info"> {{ event.location }} - {{ event.duration_as_string }}.</span>
+<span class="event_info">{{ event.location }} - {{ event.duration_as_string }}.</span>

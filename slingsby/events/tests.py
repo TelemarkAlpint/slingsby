@@ -1,15 +1,17 @@
+# -*- coding: utf-8 -*-
+
 from .models import Event
 
 from django.test import Client, TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from datetime import datetime, timedelta
 
 class BasicEventTest(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.event = Event.objects.create(name='Testevent', startdate=datetime.now(), has_registration=False,
-            binding_registration=False, enddate=(datetime.now() + timedelta(hours=1)))
+        self.event = Event.objects.create(name='Testevent', startdate=datetime.now(),
+            enddate=(datetime.now() + timedelta(hours=1)))
 
 
     def test_get_event_list(self):
@@ -50,12 +52,19 @@ class EventSignupTest(TestCase):
 
     def setUp(self):
         self.anon_user = Client()
-        self.logged_in_user = Client()
+        self.logged_in_user1 = Client()
+        self.logged_in_user2 = Client()
         User.objects.create_user(username='joe', password='joespw')
-        self.logged_in_user.login(username='joe', password='joespw')
-        self.no_signup_event = Event.objects.create(name='Skifestivalen',
+        User.objects.create_user(username='knut', password='knutspw')
+        self.logged_in_user1.login(username='joe', password='joespw')
+        self.logged_in_user2.login(username='knut', password='knutspw')
+        self.no_signup_time_event = Event.objects.create(name='Testevent',
             startdate=(datetime.now() + timedelta(days=3)), enddate=(datetime.now() +
                 timedelta(days=3, hours=5)), has_registration=True)
+        self.single_spot_event = Event.objects.create(name='Testevent',
+            startdate=(datetime.now() + timedelta(days=1)), enddate=(datetime.now() +
+                timedelta(days=2)), has_registration=True, registration_opens=(datetime.now() -
+                timedelta(minutes=10)), number_of_spots=1)
 
 
     def test_event_signup_logged_in_only(self):
@@ -64,6 +73,64 @@ class EventSignupTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue('/login' in response.get('location'))
 
-        response = self.logged_in_user.post('/program/1/join')
+        response = self.logged_in_user1.post('/program/1/join')
         self.assertEqual(response.status_code, 302)
         self.assertTrue('/program/1' in response.get('location'))
+
+
+    def test_waiting_list(self):
+        response = self.logged_in_user1.post('/program/2/join', follow=True)
+        self.assertContains(response, 'joe')
+        self.assertNotContains(response, 'Venteliste')
+
+        response = self.logged_in_user2.post('/program/2/join', follow=True)
+        self.assertContains(response, 'knut')
+        self.assertContains(response, 'Venteliste')
+
+
+class EventSignupCommitteeTest(TestCase):
+
+    def setUp(self):
+        self.anon_user = Client()
+        self.logged_in_user = Client()
+        self.committee_member1 = Client()
+        self.committee_member2 = Client()
+        User.objects.create_user(username='joe', password='joespw')
+        committee_member1 = User.objects.create_user(username='arnulf', password='arnulfspw')
+        committee_member2 = User.objects.create_user(username='øverland', password='øverlandspw')
+        arrkom = Group.objects.create(name='Arrkom')
+        arrkom.permissions.add(Permission.objects.get(codename='early_signup'))
+        committee_member1.groups.add(arrkom)
+        committee_member2.groups.add(arrkom)
+        self.logged_in_user.login(username='joe', password='joespw')
+        self.committee_member1.login(username='arnulf', password='arnulfspw')
+        self.committee_member2.login(username='øverland', password='øverlandspw')
+        self.event = Event.objects.create(name='Testevent',
+            startdate=(datetime.now() + timedelta(days=3)), enddate=(datetime.now() +
+                timedelta(days=3, hours=5)), has_registration=True, number_of_spots=3,
+            registration_opens=(datetime.now() + timedelta(days=1)),
+            comittee_registration_opens=(datetime.now() - timedelta(hours=2)))
+
+
+    def test_event_signup_for_committee_members(self):
+        response = self.anon_user.get('/program/1')
+        self.assertEqual(response.status_code, 200)
+        response = self.anon_user.post('/program/1/join')
+        # Non-authenticated requests should redirect to logged_in_user
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('/login' in response.get('location'))
+
+        response = self.logged_in_user.get('/program/1')
+        self.assertEqual(response.status_code, 200)
+        response = self.logged_in_user.post('/program/1/join')
+        self.assertEqual(response.status_code, 400)
+
+        response = self.committee_member1.get('/program/1')
+        self.assertEqual(response.status_code, 200)
+        response = self.committee_member1.post('/program/1/join')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('/program/1' in response.get('location'))
+
+        # Should reject early signups if total percentage becomes more than 40%
+        response = self.committee_member2.post('/program/1/join')
+        self.assertEqual(response.status_code, 400)
