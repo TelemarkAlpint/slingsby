@@ -32,9 +32,6 @@ install:
 
 script: ./tools/test-and-deploy.sh
 
-notifications:
-  email: false
-
 env:
   global:
 
