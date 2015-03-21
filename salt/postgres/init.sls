@@ -8,6 +8,8 @@ postgresql-server:
     - makedirs: True
     - group: postgres
     - mode: 640
+    - require:
+      - pkg: postgresql-server
 
   pkg.installed:
     - name: postgresql-{{ version }}
@@ -49,6 +51,8 @@ postgresql-server-backups:
         - user: root
         - group: postgres
         - mode: 775
+        - require:
+          - pkg: postgresql-server
 
     cron.present:
         - name: cd /tmp; sudo -u postgres pg_dumpall | gzip > /var/backups/postgres/dump.sql.gz
