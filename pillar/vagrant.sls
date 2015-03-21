@@ -20,6 +20,9 @@ postgres.install_from_source: False
 postgres.version: 9.3
 DUPLICITY_PASSPHRASE: vagrant
 
+# The password 'vagrant' salted and hashed
+TARJEI_PASSWORD: $6$rounds=10000$wiaOUFpq$p5ncFC9AvNNRou2am6SkRbMYyQO14oIa0evaphgOc7YCdVTRA1q0NyV3QSO5J0I76.ZXRlwxlsiC.rZub9jhJ0
+
 # vagrant fileserver key
 FILESERVER_KEY: '-----BEGIN RSA PRIVATE KEY-----
 
