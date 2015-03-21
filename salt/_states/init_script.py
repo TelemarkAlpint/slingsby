@@ -14,7 +14,7 @@ def managed(name, **kwargs):
     """ Make sure an init script is present. Set the name of the service, and a file
     source for each of the different init systems you want to support.
     """
-    for dunder_dict in 'env salt opt grains pillar'.split():
+    for dunder_dict in 'env salt opts grains pillar'.split():
         dunder = '__%s__' % dunder_dict
         file_managed.func_globals[dunder] = globals()[dunder]
     ret = {'name': name, 'changes': {}, 'result': False, 'comment': ''}
