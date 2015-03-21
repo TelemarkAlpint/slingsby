@@ -96,13 +96,13 @@ slingsby-media-dir:
 
 
 slingsby-celery:
-  file.managed:
-    - name: /etc/init/slingsby-celery.conf
-    - source: salt://slingsby/celery_job_conf
+  init_script.managed:
+    - upstart: salt://slingsby/celery_job_conf-upstart
+    - sysvinit: salt://slingsby/celery_job_conf-sysvinit
 
   service.running:
     - watch:
-      - file: slingsby-celery
+      - init_script: slingsby-celery
       - file: slingsby
 
 
@@ -112,6 +112,6 @@ slingsby-nginx-site:
     - source: salt://slingsby/slingsby-nginx-site
     - template: jinja
     - require:
-      - pkg: nginx
+      - cmd: nginx
     - watch_in:
       - service: nginx

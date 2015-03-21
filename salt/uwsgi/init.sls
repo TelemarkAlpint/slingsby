@@ -20,10 +20,9 @@ uwsgi:
     - require:
       - pkg: uwsgi-deps
 
-  file.managed:
-    - name: /etc/init/uwsgi.conf
-    - source: salt://uwsgi/uwsgi.conf
-    - template: jinja
+  init_script.managed:
+    - upstart: salt://uwsgi/uwsgi-upstart
+    - sysvinit: salt://uwsgi/uwsgi-sysvinit
 
   service.running:
     - require:
@@ -31,7 +30,7 @@ uwsgi:
       - user: uwsgi-user
       - file: uwsgi-log-dir
     - watch:
-      - file: uwsgi
+      - init_script: uwsgi
       - file: slingsby-uwsgi-conf
 
 
