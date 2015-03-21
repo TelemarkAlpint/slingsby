@@ -49,7 +49,7 @@ def deploy():
         sudo('find static -type f -print0 | xargs -0 chmod 644')
         sudo('find static -type d -print0 | xargs -0 chmod 755')
     run('rm /tmp/static_files.tar.gz')
-    #migrate_db()
+    migrate_db()
     sudo('service uwsgi restart')
     sudo('service slingsby-celery restart')
 
