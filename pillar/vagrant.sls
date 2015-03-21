@@ -17,6 +17,7 @@ slingsby:
   backup_directory: '/var/backups/slingsby'
 
 postgres.install_from_source: False
+postgres.version: 9.4
 DUPLICITY_PASSPHRASE: vagrant
 
 # vagrant fileserver key

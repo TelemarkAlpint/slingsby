@@ -1,40 +1,43 @@
-{% set version = pillar.get('postgres.version', '9.4') %}
-{% set install_from_source = pillar.get('postgres.install_from_source', True) %}
-{% set postgres_server_type = 'cmd' if install_from_source else 'pkg' %}
+{% set version = pillar.get('postgres.version', '9.1') %}
 
-include:
-{% if install_from_source %}
-  - .source
-{% else %}
-  - .pkg
-{% endif %}
-
-
-postgresql-server-common:
+postgresql-server:
   file.managed:
     - name: /etc/postgresql/{{ version }}/main/pg_hba.conf
     - source: salt://postgres/pg_hba.conf
     - user: postgres
+    - makedirs: True
     - group: postgres
     - mode: 640
-    - require:
-      - {{ postgres_server_type }}: postgresql-server
+
+  pkg.installed:
+    - name: postgresql-{{ version }}
 
   service.running:
     - name: postgresql
     - require:
-      - {{ postgres_server_type }}: postgresql-server
+      - pkg: postgresql-server
     - watch:
-      - file: postgresql-server-common
+      - file: postgresql-server
       - file: postgresql-config
+
+  cmd.run:
+    - name: /usr/lib/postgresql/{{ version }}/bin/initdb /var/lib/postgresql/{{ version }}/main
+    - user: postgres
+    - unless: test -d /var/lib/postgresql/{{ version }}/main
+    - require:
+      - pkg: postgresql-server
 
 
 postgresql-config:
   file.managed:
     - name: /etc/postgresql/{{ version }}/main/postgresql.conf
     - source: salt://postgres/postgresql.conf
-    - require:
-      - {{ postgres_server_type }}: postgresql-server
+    - makedirs: True
+    - template: jinja
+    - context:
+      version: {{ version }}
+    - watch_in:
+      - service: postgresql-server
 
 
 # Create on-disk dumps of the postgres db so that it can be backed up by other utilities
@@ -54,20 +57,13 @@ postgresql-server-backups:
         - hour: '*/4'
 
 
-postgresql-client:
-  pkg.installed:
-    - pkgs:
-      - postgresql-client-common
-      - postgresql-client-{{ version }}
-
-
 slingsby-postgres:
   postgres_user.present:
     - name: slingsby
     - password: "{{ salt['pillar.get']('slingsby:db_password') }}"
     - refresh_password: True
     - require:
-      - pkg: postgresql-client
+      - service: postgresql-server
 
   postgres_database.present:
     - name: slingsby_rel
