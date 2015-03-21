@@ -1,5 +1,5 @@
 import subprocess
-import salt.loader
+from salt.states.file import managed as file_managed
 
 def get_init_system():
     """ Return the name of the init system running on the machine.
@@ -14,8 +14,9 @@ def managed(name, **kwargs):
     """ Make sure an init script is present. Set the name of the service, and a file
     source for each of the different init systems you want to support.
     """
-    __states__ = salt.loader.states(__opts__, __salt__)
-    __states__['file.managed'].func_globals['__env__'] = __env__
+    for dunder_dict in 'env salt opt grains pillar'.split():
+        dunder = '__%s__' % dunder_dict
+        file_managed.func_globals[dunder] = globals()[dunder]
     ret = {'name': name, 'changes': {}, 'result': False, 'comment': ''}
     init_system = get_init_system()
 
@@ -29,7 +30,7 @@ def managed(name, **kwargs):
 
     if init_system in kwargs:
         args['source'] = kwargs[init_system]
-        file_ret = __states__['file.managed'](**args)
+        file_ret = file_managed(**args)
         ret['comment'] = file_ret['comment']
         ret['result'] = file_ret['result']
         ret['changes'] = file_ret['changes']
