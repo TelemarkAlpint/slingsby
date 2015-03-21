@@ -1,3 +1,11 @@
+# Make sure the admin group is present
+admin-group:
+    group.present:
+        - name: admin
+        - order: 1
+        - system: True
+
+
 {% for username, user in salt['pillar.get']('developers', {}).items() %}
 {{ username }}:
   user.present:
@@ -22,7 +30,6 @@
       {% endfor %}
   {% endif %}
 {% endfor %}
-
 
 
 {% for absent_user in pillar.get('absent_users', []) %}
