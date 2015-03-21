@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 dir=""
-user="uwsgi"
+user="root"
 
 cmd="uwsgi --emperor /opt/apps"
 
