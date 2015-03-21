@@ -17,6 +17,7 @@
 from fabric.api import run, sudo, put, cd, hosts, env, local
 from fabric.context_managers import shell_env
 import os
+import time
 import yaml
 import sys
 
@@ -94,18 +95,20 @@ def backup(passphrase=None, fileserver=None, backup_directory=None):
         fileserver = fileserver or slingsby_pillar['fileserver']
         backup_directory = backup_directory or slingsby_pillar['backup_directory']
 
+    # Get a snapshot of database right now
+    sudo('pg_dumpall --clean | gzip > /var/backups/postgres/dbdump.sql.gz', user='postgres')
+
     with shell_env(PASSPHRASE=passphrase):
         sudo(' '.join((
             'duplicity',
              '--gpg-options="--cipher-algo=AES256 --digest-algo=SHA512 --s2k-digest-algo=SHA512"',
              '--ssh-options="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oIdentityFile=/srv/ntnuita.no/fileserver_key.pem"',
-             '--include /etc',
              '--include /home',
-             '--include /opt',
-             '--include /srv',
-             '--include /var',
+             '--include /srv/ntnuita.no/media/local',
+             '--include /var/backups',
+             '--include /var/spool',
+             '--include /var/log',
              "--exclude '**'",
-             '--exclude /srv/ntnuita.no/media/external',
              '/',
              'sftp://%s/%s' % (fileserver, backup_directory)
         )))
@@ -134,15 +137,8 @@ def restore_from_backup(passphrase=None, fileserver=None, backup_directory=None)
             '/',
         )))
 
-    # Initialize database tables
-    with shell_env(DJANGO_SETTINGS_MODULE='prod_settings', PYTHONPATH='/srv/ntnuita.no/'):
-        sudo('/srv/ntnuita.no/venv/bin/manage.py migrate', user='uwsgi')
-
-    # Empty the content type tables initialized by django
-    sudo('echo "TRUNCATE TABLE django_content_type CASCADE;" | psql slingsby_rel', user='postgres')
-
     # Load database from dump
-    sudo('gzip -cd /var/backups/postgres/dump.sql.gz | psql slingsby_rel', user='postgres')
+    sudo('gzip -cd /var/backups/postgres/dbdump.sql.gz | psql slingsby_rel', user='postgres')
 
 
 @hosts('vagrant@127.0.0.1:2222')

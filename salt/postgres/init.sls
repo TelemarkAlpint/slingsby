@@ -55,7 +55,8 @@ postgresql-server-backups:
           - pkg: postgresql-server
 
     cron.present:
-        - name: cd /tmp; sudo -u postgres pg_dumpall | gzip > /var/backups/postgres/dump.sql.gz
+        - name: pg_dumpall --clean | gzip > /var/backups/postgres/dbdump.sql.gz
+        - user: postgres
         - identifier: postgresql-server-backups
         - minute: random
         - hour: '*/4'

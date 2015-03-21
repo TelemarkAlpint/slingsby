@@ -54,7 +54,7 @@ duplicity-backup-web:
                 --no-print-statistics
                 --gpg-options="--cipher-algo=AES256 --digest-algo=SHA512 --s2k-digest-algo=SHA512"
                 --asynchronous-upload
-                {% for dir in ('etc', 'home', 'opt', 'srv', 'var') %}
+                {% for dir in ('home', 'srv/ntnuita.no/media/local', 'var/log', 'var/backups', 'var/spool', 'var/mail') %}
                 --include /{{ dir }}
                 {% endfor %}
                 --exclude '**'
