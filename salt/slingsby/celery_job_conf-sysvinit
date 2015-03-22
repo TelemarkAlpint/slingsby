@@ -55,12 +55,12 @@ case "$1" in
         kill `get_pid`
         for i in {1..10}
         do
+            sleep 1
             if ! is_running; then
                 break
             fi
 
             echo -n "."
-            sleep 1
         done
         echo
 
