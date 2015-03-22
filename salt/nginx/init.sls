@@ -72,3 +72,12 @@ nginx-sites-enabled:
     - require:
       - file: nginx-conf
       - user: nginx-systemuser
+
+nginx-proxy-params:
+  file.managed:
+    - name: /etc/nginx/proxy_params
+    - source: salt://nginx/proxy_params
+    - require:
+      - file: nginx-conf
+    - watch_in:
+      - service: nginx

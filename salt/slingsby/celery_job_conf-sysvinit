@@ -13,7 +13,7 @@ export DJANGO_SETTINGS_MODULE=prod_settings
 export PYTHONPATH=/srv/ntnuita.no/
 
 dir=""
-user="uwsgi"
+user="slingsby"
 
 cmd="/srv/ntnuita.no/venv/bin/celery worker \
     --app slingsby.settings:celery_app \

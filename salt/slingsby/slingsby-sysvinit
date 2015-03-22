@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          uwsgi
+# Provides:          slingsby
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -9,10 +9,19 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir=""
-user="root"
+export DJANGO_SETTINGS_MODULE=prod_settings
+export PYTHONPATH=/srv/ntnuita.no/
 
-cmd="uwsgi --emperor /opt/apps"
+dir=""
+user="slingsby"
+
+cmd="/srv/ntnuita.no/venv/bin/gunicorn \
+    -w 9 \
+    --backlog 30 \
+    -k gevent \
+    -b unix:/tmp/slingsby.socket \
+    --worker-connections=100 \
+    slingsby:application"
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"

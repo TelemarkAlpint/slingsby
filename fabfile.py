@@ -51,7 +51,7 @@ def deploy():
         sudo('find static -type d -print0 | xargs -0 chmod 755')
     run('rm /tmp/static_files.tar.gz')
     migrate_db()
-    sudo('service uwsgi restart')
+    sudo('service slingsby restart')
     sudo('service slingsby-celery restart')
 
 
@@ -68,14 +68,14 @@ def deploy_vagrant():
 def migrate_db():
     """ Install and/or migrate the database to the latest version. """
     with shell_env(DJANGO_SETTINGS_MODULE='prod_settings', PYTHONPATH='/srv/ntnuita.no/'):
-        sudo('/srv/ntnuita.no/venv/bin/manage.py migrate --noinput', user='uwsgi')
+        sudo('/srv/ntnuita.no/venv/bin/manage.py migrate --noinput', user='slingsby')
 
 
 @hosts('vagrant@127.0.0.1:2222')
 def bootstrap_vagrant():
     env.password = 'vagrant'
     with shell_env(DJANGO_SETTINGS_MODULE='prod_settings', PYTHONPATH='/srv/ntnuita.no/'):
-        sudo('/srv/ntnuita.no/venv/bin/manage.py bootstrap', user='uwsgi')
+        sudo('/srv/ntnuita.no/venv/bin/manage.py bootstrap', user='slingsby')
 
 
 def provision():

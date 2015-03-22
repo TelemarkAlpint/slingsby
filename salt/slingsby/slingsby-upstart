@@ -1,0 +1,19 @@
+description "slingsby worker"
+
+start on (filesystem)
+stop on runlevel [016]
+
+respawn
+setuid slingsby
+setgid slingsby
+
+env PYTHONPATH=/srv/ntnuita.no
+env DJANGO_SETTINGS_MODULE=prod_settings
+
+exec /srv/ntnuita.no/venv/bin/gunicorn \
+    -w 9 \
+    --backlog 30 \
+    -k gevent \
+    -b unix:/tmp/slingsby.socket \
+    --worker-connections=100 \
+    slingsby:application

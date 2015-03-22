@@ -7,7 +7,6 @@ include:
   - memcached
   - nginx
   - rabbitmq
-  - uwsgi
 
 
 slingsby-deps:
@@ -30,6 +29,20 @@ slingsby-requirements-{{ req_file }}:
 {% endfor %}
 
 slingsby:
+  user.present:
+    - system: True
+    - shell: /usr/sbin/nologin
+    - createhome: False
+    - fullname: slingsby worker
+
+  init_script.managed:
+    - upstart: salt://slingsby/slingsby-upstart
+    - sysvinit: salt://slingsby/slingsby-sysvinit
+
+  service.running:
+    - watch:
+      - init_script: slingsby
+
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
     - requirements: /srv/ntnuita.no/prod-requirements.txt
@@ -46,20 +59,13 @@ slingsby:
     - template: jinja
     - show_diff: False
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 640
     - require:
       - virtualenv: slingsby
-      - user: uwsgi-user
+      - user: slingsby
     - watch_in:
-      - service: uwsgi
-
-
-slingsby-uwsgi-conf:
-  file.managed:
-    - name: /opt/apps/slingsby.ini
-    - source: salt://slingsby/uwsgi_conf
-    - makedirs: True
+      - serivce: slingsby
 
 
 slingsby-log-dir:
@@ -67,10 +73,10 @@ slingsby-log-dir:
     - name: /var/log/slingsby
     - makedirs: True
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 775
     - require:
-      - user: uwsgi-user
+      - user: slingsby
 
 
 slingsby-static-dir:
@@ -78,10 +84,10 @@ slingsby-static-dir:
     - name: /srv/ntnuita.no/static
     - makedirs: True
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 755
     - require:
-      - user: uwsgi-user
+      - user: slingsby
 
 
 slingsby-media-dir:
@@ -89,10 +95,10 @@ slingsby-media-dir:
     - name: /srv/ntnuita.no/media
     - makedirs: True
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 775
     - require:
-      - user: uwsgi-user
+      - user: slingsby
 
 
 slingsby-celery:

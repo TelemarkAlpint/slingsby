@@ -36,8 +36,8 @@ sshfs:
       - _netdev
       - allow_other
       - reconnect
-      - uid=uwsgi
-      - gid=uwsgi
+      - uid=slingsby
+      - gid=slingsby
     - require:
       - pkg: sshfs
       - file: sshfs

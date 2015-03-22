@@ -1,8 +1,0 @@
-description "uWSGI starter"
-
-start on startup
-stop on runlevel [016]
-
-respawn
-
-exec uwsgi --emperor /opt/apps
