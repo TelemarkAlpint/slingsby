@@ -268,7 +268,7 @@ module.exports = function (grunt) {
       dist: {
         files: {
           '.tmp/static/js/main.min.js': [
-            'bower_components/jquery/jquery.js',
+            'bower_components/jquery/dist/jquery.js',
             'slingsby/general/static/js/main.js',
           ],
           '.tmp/static/js/articles.min.js': [
