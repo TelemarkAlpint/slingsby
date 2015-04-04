@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    moment.lang("nb");
+    moment.locale("nb");
 
     function improveTimestamps() {
         $('.isotimestamp').each(function () {

@@ -275,7 +275,7 @@ module.exports = function (grunt) {
             'bower_components/handlebars/handlebars.runtime.js',
             '.tmp/handlebars_templates.js',
             'bower_components/moment/moment.js',
-            'bower_components/moment/lang/nb.js',
+            'bower_components/moment/locale/nb.js',
             'slingsby/articles/static/js/articles.js',
           ],
           '.tmp/static/js/musikk.min.js': [
