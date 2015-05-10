@@ -20,10 +20,10 @@ class Article(models.Model):
                                           help_text='''Kan settes inn i fremtiden hvis du vil at en artikkel skal bli
                                           synlig ved en senere anledning''')
     last_edited = models.DateTimeField('sist endret', null=True, blank=True)
-    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='User.User.article_set')
+    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='+')
     title = models.CharField('tittel', max_length=200, blank=False)
     content = models.TextField('innhold')
-    author = models.ForeignKey(User, related_name='User.User.article_Set', blank=True)
+    author = models.ForeignKey(User, related_name='articles_written', blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     social_summary = models.TextField('sosialt sammendrag', blank=True, null=True,
         help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')
@@ -99,9 +99,9 @@ class SubPageArticle(models.Model):
                                           help_text='''Kan settes inn i fremtiden hvis du vil at en artikkel skal bli
                                           synlig ved en senere anledning''')
     last_edited = models.DateTimeField('sist endret', null=True, blank=True)
-    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='User.article_set')
+    last_edited_by = models.ForeignKey(User, null=True, blank=True, related_name='+')
     content = models.TextField('innhold')
-    author = models.ForeignKey(User, related_name='User.article_Set', blank=True)
+    author = models.ForeignKey(User, related_name='subpages_written', blank=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     social_summary = models.TextField('sosialt sammendrag', blank=True, null=True,
         help_text='Dette er teksten som vises hvis du deler artikkelen på facebook. Anbefalt maks 300 tegn.')

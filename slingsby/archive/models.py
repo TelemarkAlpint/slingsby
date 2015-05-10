@@ -138,6 +138,7 @@ class ImageForm(ModelForm):
 class EventForm(ModelForm):
     class Meta:
         model = Event
+        exclude = []
 
 
     def validate_datestring(self, datestring):

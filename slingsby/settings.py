@@ -12,8 +12,6 @@ import json
 
 DEBUG = False
 
-TEMPLATE_DEBUG = DEBUG
-
 USE_TZ = True
 
 LANGUAGE_CODE = 'nb-NO'
@@ -82,27 +80,35 @@ AUTHENTICATION_BACKENDS = (
   'django.contrib.auth.backends.ModelBackend',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-    'django.core.context_processors.media',
-    'django.core.context_processors.debug',
+TEMPLATES = [{
+    'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
+    'OPTIONS': {
+        'loaders': [
+            ('django.template.loaders.cached.Loader', [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ])
+        ],
+        'context_processors': (
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+            'django.core.context_processors.request',
+            'django.core.context_processors.media',
+            'django.core.context_processors.debug',
 
-    'slingsby.general.context_processors.default',
-    'slingsby.general.context_processors.slingsby_urls',
-    'slingsby.general.context_processors.slingsby_config',
-    'slingsby.quotes.context_processors.default',
+            'slingsby.general.context_processors.default',
+            'slingsby.general.context_processors.slingsby_urls',
+            'slingsby.general.context_processors.slingsby_config',
+            'slingsby.quotes.context_processors.default',
 
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
-)
+            'social.apps.django_app.context_processors.backends',
+            'social.apps.django_app.context_processors.login_redirect',
+        ),
+        'debug': DEBUG
+    }
+}]
 
 LOGIN_URL = reverse_lazy('social:begin', kwargs={'backend': 'facebook'})
-
-TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates'),
-)
 
 ROOT_URLCONF = 'slingsby.urls'
 

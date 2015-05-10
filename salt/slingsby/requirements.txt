@@ -5,7 +5,7 @@
 
 # Direct dependencies:
 celery==3.1.11
-django==1.7.3
+django==1.8.1
 django-celery==3.1.10
 pyyaml==3.11
 mock==1.0.1

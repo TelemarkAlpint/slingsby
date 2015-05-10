@@ -223,6 +223,7 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         widgets = {'description': WidgEditorWidget()}
+        exclude = []
 
     def clean_summary(self):
         data = self.cleaned_data['summary']
