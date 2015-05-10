@@ -15,11 +15,6 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-@empty_on_changes_to(Quote)
-class AllQuotesQuery(CachedQuery):
-    queryset = Quote.objects.filter(accepted=True)
-
-
 class QuoteDetailView(ActionView, TemplateView):
 
     template_name = 'quotes/show_quote.html'
