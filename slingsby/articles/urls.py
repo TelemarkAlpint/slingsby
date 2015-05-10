@@ -13,5 +13,6 @@ urlpatterns = patterns('slingsby.articles.views',
         lambda req, **kwargs: HttpResponsePermanentRedirect(reverse('article_detail', kwargs=kwargs))),
 )
 
+# TODO: Fetching subpages is half of the database query time on normal pages, needs to be optimized
 for subpage in SingleArticlePageQuery.get_cached():
     urlpatterns += patterns('', url(r'^%s$' % subpage.slug, ArticleDetail.as_view(), {'article_id': subpage.id}))
