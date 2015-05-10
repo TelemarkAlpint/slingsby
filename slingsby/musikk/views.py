@@ -108,7 +108,6 @@ def get_votes_from_today(user):
         return set()
     start_of_day = time.now().replace(hour=0, minute=0, second=1)
     values = list(Vote.objects.filter(date_added__gte=start_of_day, user=user).values_list('song', flat=True))
-    print 'Values retrieved: %s' % values
     return set(values)
 
 
