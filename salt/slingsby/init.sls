@@ -40,6 +40,7 @@ slingsby:
     - sysvinit: salt://slingsby/slingsby-sysvinit
 
   service.running:
+    - enable: True
     - watch:
       - init_script: slingsby
 
@@ -107,6 +108,7 @@ slingsby-celery:
     - sysvinit: salt://slingsby/celery_job_conf-sysvinit
 
   service.running:
+    - enable: True
     - watch:
       - init_script: slingsby-celery
       - file: slingsby
