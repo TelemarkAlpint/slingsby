@@ -33,6 +33,8 @@ slingsby:
     - shell: /usr/sbin/nologin
     - createhome: False
     - fullname: slingsby worker
+    - groups:
+      - memcached
 
   init_script.managed:
     - upstart: salt://slingsby/slingsby-upstart
