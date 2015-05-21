@@ -17,9 +17,10 @@
 from fabric.api import run, sudo, put, cd, hosts, env, local
 from fabric.context_managers import shell_env
 import os
+import requests
+import sys
 import time
 import yaml
-import sys
 
 try:
     import colorama
@@ -53,6 +54,20 @@ def deploy():
     migrate_db()
     sudo('service slingsby restart')
     sudo('service slingsby-celery restart')
+    warm_up_workers('http://ntnuita.no')
+
+
+def warm_up_workers(host, requests_to_send=4):
+    """ Send a couple of initial requests to the host to warm up the workers
+    and lower the initial response times for the app.
+    """
+    user_agent = 'python-requests/slingsby-warmup-request'
+    headers = {
+        'User-Agent': user_agent
+    }
+    for i in range(requests_to_send):
+        response = requests.head(host, timeout=10, headers=headers)
+        response.raise_for_status()
 
 
 @hosts('vagrant@127.0.0.1:2222')
