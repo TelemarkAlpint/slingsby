@@ -9,12 +9,13 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.utils.cache import add_never_cache_headers
+from django.views.static import serve as static_serve
 
 admin.autodiscover()
 
 handler500 = lambda req: render_to_response('500.html')
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^', include('slingsby.articles.urls')),
     url(r'^', include('slingsby.users.urls')),
     url(r'^musikk', include('slingsby.musikk.urls')),
@@ -28,12 +29,12 @@ urlpatterns = patterns('',
     url(r'^admin/login', lambda r: http.HttpResponseRedirect(reverse('social:begin', kwargs={'backend': 'facebook'}))),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-)
+]
 
 # social auth urls
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'', include('social.apps.django_app.urls', namespace='social')),
-)
+]
 
 def redirect_to_static(request, static_file=None):
     """ Use this to redirect static stuff with custom urls, such as /favicon.ico and /robots.txt.
@@ -47,22 +48,22 @@ def redirect_to_static(request, static_file=None):
     return response
 
 
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^favicon.ico$', redirect_to_static, {'static_file': 'favicon.ico'}),
     url(r'^robots.txt$', redirect_to_static, {'static_file': 'robots.txt'}),
-)
+]
 
 if settings.DEBUG:
     from .users.views import DevLogin
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^devlogin', DevLogin.as_view(), name='devlogin')
-    )
+    ]
     if 'debug_toolbar' in settings.INSTALLED_APPS:
         import debug_toolbar
-        urlpatterns += patterns('',
+        urlpatterns += [
             url(r'^__debug__/', include(debug_toolbar.urls)),
-        )
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        ]
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', static_serve,
             {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
-    )
+    ]

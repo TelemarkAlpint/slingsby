@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', AllSongsView.as_view(), name='musikk'),
 
     url(r'^/(?P<song_id>\d+)$', SongDetailView.as_view(), name='song_details'),
@@ -14,4 +14,4 @@ urlpatterns = patterns('',
     url(r'^/top$', TopSongsView.as_view()),
     url(r'^/top/list$', TopSongsList.as_view(), name='top_list'),
     url(r'^/top/song$', TopSong.as_view(), name='top_song'),
-)
+]

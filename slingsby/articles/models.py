@@ -178,6 +178,6 @@ def register_new_url(sender, **kwargs):
     from .views import ArticleDetail
     from django.conf.urls import patterns, url
     subpage = kwargs['instance']
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^%s$' % subpage.slug, ArticleDetail.as_view(), {'article_id': subpage.id}),
-    )
+    ]
