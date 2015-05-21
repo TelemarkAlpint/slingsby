@@ -81,3 +81,14 @@ nginx-proxy-params:
       - file: nginx-conf
     - watch_in:
       - service: nginx
+
+nginx-firewall:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - proto: tcp
+    - match: comment
+    - dport: 80
+    - comment: "nginx: Allow incoming HTTP"
+    - jump: ACCEPT
+    - save: True

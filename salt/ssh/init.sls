@@ -12,3 +12,13 @@ ssh:
   service.running:
     - watch:
        - cmd: ssh
+
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - dport: 3271
+    - jump: ACCEPT
+    - proto: tcp
+    - match: comment
+    - comment: "ssh: Allow incoming SSH"
+    - save: True
