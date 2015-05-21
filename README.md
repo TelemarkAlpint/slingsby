@@ -15,15 +15,15 @@ Goals
 * Easy to get started for new developers
 * Deployment handled automatically
 * Well tested code
-* Site works on all devices (but not necessarily look the same or provide the same experience)
-* RESTful
 
 
 About
 -----
 
-Our server is running on AWS, with deployments handled automatically by Travis CI. User uploaded
-media is stored on our studorg server at org.ntnu.no/telemark.
+Our server is running on a Raspberry Pi 2 hosted by ITEM, with deployments handled automatically by
+Travis CI. User uploaded media is stored on our studorg server at org.ntnu.no/telemark. We utilize
+the studorg MySQL database at `mysql.stud.ntnu.no`, which means that the RPi doesn't contain any
+critical data and can thus easily be rebuilt if it crashes.
 
 
 Local development
