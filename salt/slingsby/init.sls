@@ -3,7 +3,6 @@
 {% set requirements_files = ['prod-requirements.txt', 'requirements.txt'] %}
 
 include:
-  - .cron
   - memcached
   - mysql
   - nginx
