@@ -1,6 +1,6 @@
 absent_users:
   - ubuntu
-  - henrik
+  - pi
 
 developers:
   tarjei:

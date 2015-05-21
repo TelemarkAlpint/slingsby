@@ -108,11 +108,15 @@ def bootstrap_vagrant():
         sudo('/srv/ntnuita.no/venv/bin/manage.py bootstrap', user='slingsby')
 
 
-def provision():
+def provision(exclude_pi_user=False):
     if not os.path.exists('build'):
         os.mkdir('build')
     local('tar czf build/salt_and_pillar.tar.gz salt pillar')
     put('build/salt_and_pillar.tar.gz', '/tmp')
     sudo('tar xf /tmp/salt_and_pillar.tar.gz -C /srv')
-    sudo('salt-call state.highstate --force-color --local')
+    if exclude_pi_user:
+        # We are running with a user that is supposed to be deleted by salt, exclude user purging from this run
+        sudo('sudo salt-call state.highstate exclude="[{\'id\': \'pi-user\'}]"')
+    else:
+        sudo('salt-call state.highstate --force-color')
     sudo('rm /tmp/salt_and_pillar.tar.gz')
