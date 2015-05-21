@@ -20,7 +20,7 @@ class ArchiveView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ArchiveView, self).get_context_data(**kwargs)
-        events = [e for e in Event.objects.all() if e.images]
+        events = [e for e in Event.objects.all()]
         context['events'] = events
         context['title'] = make_title('Arkiv')
         context['event_form'] = EventForm()
