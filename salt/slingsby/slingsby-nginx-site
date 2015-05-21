@@ -31,7 +31,7 @@ server {
     proxy_pass http://slingsby;
   }
 
-  location ~ ^/(admin) {
+  location ~ ^/(admin|__debug__) {
     # Identical as the location above, but without the redirect, since the admin app
     # requires trailing slashes
     include proxy_params;
