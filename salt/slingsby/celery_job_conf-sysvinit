@@ -9,13 +9,12 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-export DJANGO_SETTINGS_MODULE=prod_settings
-export PYTHONPATH=/srv/ntnuita.no/
-
 dir=""
 user="slingsby"
 
-cmd="/srv/ntnuita.no/venv/bin/celery worker \
+cmd="DJANGO_SETTINGS_MODULE=prod_settings \
+    PYTHONPATH=/srv/ntnuita.no/ \
+    /srv/ntnuita.no/venv/bin/celery worker \
     --app slingsby.settings:celery_app \
     -B --scheduler djcelery.schedulers.DatabaseScheduler \
     -P processes \
