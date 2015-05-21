@@ -1,6 +1,8 @@
 memcached:
   pkg:
-    - installed
+    pkgs:
+      - memcached
+      - libmemcached-dev # needed to compile pylibmc
 
   file.managed:
     - name: /etc/memcached.conf

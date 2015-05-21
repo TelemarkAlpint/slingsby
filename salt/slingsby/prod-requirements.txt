@@ -2,10 +2,10 @@
 -r requirements.txt
 
 # Add stuff needed in prod:
-python-memcached==1.53
 psycopg2==2.6
 gevent==1.0.1
 gunicorn==19.3.0
+pylibmc==1.4.3
 
 # gevent dependencies
 greenlet==0.4.5

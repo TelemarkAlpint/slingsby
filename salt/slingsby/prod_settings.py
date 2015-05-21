@@ -14,10 +14,11 @@ ALLOWED_HOSTS = (
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'unix:/tmp/memcached.socket',
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': '/tmp/memcached.socket',
     }
 }
+
 
 DATABASES = {
     'default': {
