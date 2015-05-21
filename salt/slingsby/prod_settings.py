@@ -12,6 +12,13 @@ ALLOWED_HOSTS = (
     '{{ slingsby.get('bind_url', 'ntnuita.no') }}',
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix:/tmp/memcached.socket',
+    }
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

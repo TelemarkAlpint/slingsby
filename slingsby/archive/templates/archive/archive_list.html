@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load revved_static %}
+{% load cache %}
 
 {% block og_description %}Arkivet vårt dokumenterer mye av det som har skjedd i gruppa siden oppstarten i 1986. Retrowarning!{% endblock %}
 
@@ -48,6 +49,7 @@
         <li><a href="http://2004.ntnuita.no">2004-2006</a></li>
     </ul>
 
+    {% cache 900 'archive-events' show_event %}
     {% for event in events %}
 
         {% ifchanged event.year %}
@@ -80,6 +82,7 @@
         </div>
 
     {% endfor %}
+    {% endcache %}
 
     <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
         <div class="slides"></div>
