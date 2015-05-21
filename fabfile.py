@@ -152,9 +152,6 @@ def restore_from_backup(passphrase=None, fileserver=None, backup_directory=None)
             '/',
         )))
 
-    # Load database from dump
-    sudo('gzip -cd /var/backups/postgres/dbdump.sql.gz | psql slingsby_rel', user='postgres')
-
 
 @hosts('vagrant@127.0.0.1:2222')
 def restore_from_backup_vagrant():

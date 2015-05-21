@@ -22,7 +22,7 @@ base:
   'roles:web':
     - match: grain
     - duplicity
+    - mysql.server
     - old-sites
-    - postgres
     - slingsby
     - sshfs
