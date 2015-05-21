@@ -1,10 +1,8 @@
 """
-This module is a wrapper around Googles memcached API.
-
-Here you also find a class you should extend when creating queries than
+This module implements a class you should extend when creating queries than
 should be cached.
 
-If necessary, you may also inject debugging code here.
+If necessary, you may also inject cache debugging code here.
 """
 # pylint: disable=redefined-builtin
 
@@ -15,10 +13,20 @@ from django.db.models.signals import post_save, post_delete
 from logging import getLogger
 import os
 
-# Current version prepended to every keyword, to prevent mixup of the caches between different versions
-_PREFIX = os.environ.get('CURRENT_VERSION_ID', '')
-
 _logger = getLogger(__name__)
+
+def get_prefix():
+    try:
+        import pkg_resources
+        version = pkg_resources.require('slingsby')[0].version
+        return version
+    except:
+        _logger.exception('Failed to lookup package version, non-unique cache prefix will be used!')
+        return ''
+
+# Current version prepended to every keyword, to prevent mixup of the caches between different versions
+_PREFIX = get_prefix()
+
 
 def empty_on_changes_to(model):
     """ A decorator that might be used on CachedQueries to empty them
