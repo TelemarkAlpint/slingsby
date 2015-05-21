@@ -64,6 +64,7 @@ MIDDLEWARE_CLASSES = (
 
     'slingsby.general.middleware.HttpAcceptMiddleware',
     'slingsby.general.middleware.HttpMethodOverride',
+    'slingsby.general.middleware.ProfileMiddleware',
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
