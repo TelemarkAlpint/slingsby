@@ -1,5 +1,6 @@
 base:
   '*':
+    - iptables
     - ntp
     - pkg
     - sudo
