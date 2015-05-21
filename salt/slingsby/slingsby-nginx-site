@@ -31,10 +31,9 @@ server {
     proxy_pass http://slingsby;
   }
 
-  location ~ ^/(login|complete|admin) {
-    # Identical as the location above, but without the redirect, since the social auth app
-    # requires trailing slashes. An issue has been filed for social auth:
-    # https://github.com/omab/python-social-auth/issues/505
+  location ~ ^/(admin) {
+    # Identical as the location above, but without the redirect, since the admin app
+    # requires trailing slashes
     include proxy_params;
     proxy_pass http://slingsby;
   }

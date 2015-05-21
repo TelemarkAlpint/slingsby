@@ -137,6 +137,8 @@ with open(_log_config_path) as log_conf_file:
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 
+SOCIAL_AUTH_TRAILING_SLASH = False
+
 SOCIAL_AUTH_UID_LENGTH = 16
 
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
