@@ -12,7 +12,9 @@
 dir=""
 user="slingsby"
 
-cmd="/srv/ntnuita.no/venv/bin/gunicorn \
+cmd="DJANGO_SETTINGS_MODULE=prod_settings \
+    PYTHONPATH=/srv/ntnuita.no/ \
+    /srv/ntnuita.no/venv/bin/gunicorn \
     -w 9 \
     --backlog 30 \
     -k gevent \
@@ -40,7 +42,7 @@ case "$1" in
     else
         echo "Starting $name"
         cd "$dir"
-        sudo -u "$user" DJANGO_SETTINGS_MODULE=prod_settings PYTHONPATH=/srv/ntnuita.no/ $cmd >> "$stdout_log" 2>> "$stderr_log" &
+        sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
         echo $! > "$pid_file"
         if ! is_running; then
             echo "Unable to start, see $stdout_log and $stderr_log"
