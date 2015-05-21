@@ -23,9 +23,9 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'slingsby_rel',
-        'HOST': '',
-        'USER': 'slingsby',
+        'NAME': 'telemark_slingsby',
+        'HOST': '{{ slingsby.get('db_host', '') }}',
+        'USER': 'telemark_dbadmin',
         'PASSWORD': '{{ slingsby.db_password }}',
     },
 }
