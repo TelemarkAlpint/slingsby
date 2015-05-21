@@ -1,6 +1,12 @@
 memcached:
-  pkg:
-    pkgs:
+  user.present:
+    - fullname: memcached worker
+    - system: True
+    - createhome: False
+    - shell: /usr/sbin/nologin
+
+  pkg.installed:
+    - pkgs:
       - memcached
       - libmemcached-dev # needed to compile pylibmc
 
@@ -13,9 +19,3 @@ memcached:
       - pkg: memcached
     - watch:
       - file: memcached
-
-  user.present:
-    - fullname: memcached worker
-    - system: True
-    - createhome: False
-    - shell: /usr/sbin/nologin
