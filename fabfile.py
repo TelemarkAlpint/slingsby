@@ -16,6 +16,7 @@
 """
 from fabric.api import run, sudo, put, cd, hosts, env, local
 from fabric.context_managers import shell_env
+import collections
 import os
 import requests
 import sys
@@ -31,18 +32,32 @@ except ImportError:
             'running `pip install colorama` first. ')
 
 
+def _get_slingsby_tarball():
+    """ Gets the latest tarball name from the build directory. """
+    tarballs = []
+    Tarball = collections.namedtuple('Tarball', ['filename', 'mtime'])
+    for f in os.listdir('build'):
+        if f.startswith('slingsby-'):
+            mtime = os.stat(os.path.join('build', f)).st_mtime
+            tarballs.append(Tarball(f, mtime))
+    tarballs.sort(key=lambda tarball: tarball.mtime)
+    latest_tarball = tarballs[0]
+    return latest_tarball.filename
+
+
 def deploy():
     """ Package the app and push it to a server.
 
     Assumes the app has already been built (eg `grunt build`).
     """
     # Push the build artifacts to the server
-    put('build/slingsby-1.0.0.tar.gz', '/tmp')
+    tarball_name = _get_slingsby_tarball()
+    put('build/' + tarball_name, '/tmp')
     put('build/static_files.tar.gz', '/tmp')
 
     # Install the new code
-    sudo('/srv/ntnuita.no/venv/bin/pip install -U /tmp/slingsby-1.0.0.tar.gz')
-    run('rm /tmp/slingsby-1.0.0.tar.gz')
+    sudo('/srv/ntnuita.no/venv/bin/pip install -U /tmp/' + tarball_name)
+    run('rm /tmp/' + tarball_name)
 
     # Unpack the static files
     with cd('/srv/ntnuita.no'):
