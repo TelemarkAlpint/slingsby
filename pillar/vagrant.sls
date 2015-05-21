@@ -11,6 +11,7 @@ slingsby:
   bind_url: ntnuita.local
   secret_key: verysecretindeed
   db_password: vagrant
+  db_host: media.ntnuita.local
   media_url: http://media.ntnuita.local/
   fileserver: fileserver@10.10.10.11
   fileserver_media_root: /srv/fileserver/
