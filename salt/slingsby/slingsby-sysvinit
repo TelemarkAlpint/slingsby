@@ -15,11 +15,9 @@ user="slingsby"
 cmd="DJANGO_SETTINGS_MODULE=prod_settings \
     PYTHONPATH=/srv/ntnuita.no/ \
     /srv/ntnuita.no/venv/bin/gunicorn \
-    -w 9 \
-    --backlog 30 \
+    -w 2 \
     -k gevent \
     -b unix:/tmp/slingsby.socket \
-    --worker-connections=100 \
     slingsby:application"
 
 name=`basename $0`
