@@ -10,6 +10,7 @@ base:
     - ssh
 
   'vagrant':
+    - mysql.server
     - networking
 
   'vagrant-fileserver':
@@ -21,8 +22,6 @@ base:
 
   'roles:web':
     - match: grain
-    - duplicity
-    - mysql.server
     - old-sites
     - slingsby
     - sshfs

@@ -14,7 +14,6 @@ slingsby:
   media_url: http://media.ntnuita.local/
   fileserver: fileserver@10.10.10.11
   fileserver_media_root: /srv/fileserver/
-  backup_directory: '/var/backups/slingsby'
 
 postgres.install_from_source: False
 postgres.version: 9.3

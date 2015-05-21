@@ -32,7 +32,7 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
-FILESERVER = "{{ slingsby.fileserver }}"
+FILESERVER = "{{ slingsby.get('fileserver', 'tarjeikl@login.stud.ntnu.no') }}"
 
 FILESERVER_KEY = """{{ pillar.get('FILESERVER_KEY') }}"""
 
