@@ -3,13 +3,27 @@
 from setuptools import setup, find_packages
 import subprocess
 from os import path
+import sys
 
 def get_version():
+    version_file = path.join('slingsby', 'VERSION')
+    with open(version_file) as fh:
+        return fh.read().strip()
+
+
+def update_version():
     """ Set version to git hash for each build. This is used as a prefix for cache keys,
     to keep cached data separate between versions and preventing data bleed.
     """
-    version = subprocess.check_output('git rev-parse --short HEAD').strip()
-    return version
+    version = subprocess.check_output('git rev-parse --short HEAD')
+    version_file = path.join('slingsby', 'VERSION')
+    with open(version_file, 'w') as fh:
+        fh.write(version)
+
+
+if 'sdist' in sys.argv:
+    update_version()
+
 
 setup(
     name='slingsby',
@@ -26,6 +40,7 @@ setup(
             path.join('server-assets', '*'),
             path.join('test-data', '*.json'),
             'log_conf.yaml',
+            'VERSION'
         ],
     },
     zip_safe=False,

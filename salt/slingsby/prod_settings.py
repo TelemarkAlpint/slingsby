@@ -3,6 +3,7 @@
 from slingsby.settings import *
 
 import django
+import pkg_resources
 
 SECRET_KEY = '{{ slingsby.secret_key }}'
 
@@ -16,9 +17,9 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'LOCATION': '/tmp/memcached.socket',
+        'KEY_PREFIX': pkg_resources.require('slingsby')[0].version
     }
 }
-
 
 DATABASES = {
     'default': {
