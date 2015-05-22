@@ -77,13 +77,13 @@
 <p id='t1' class='pln'><span class='com'># coding: utf-8</span><span class='strut'>&nbsp;</span></p>
 <p id='t2' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t3' class='stm run hide_run'><span class='key'>from</span> <span class='op'>.</span><span class='nam'>views</span> <span class='key'>import</span> <span class='nam'>UserProfileView</span><span class='op'>,</span> <span class='nam'>LogoutView</span><span class='strut'>&nbsp;</span></p>
-<p id='t4' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>conf</span><span class='op'>.</span><span class='nam'>urls</span> <span class='key'>import</span> <span class='nam'>patterns</span><span class='op'>,</span> <span class='nam'>url</span><span class='strut'>&nbsp;</span></p>
+<p id='t4' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>conf</span><span class='op'>.</span><span class='nam'>urls</span> <span class='key'>import</span> <span class='nam'>url</span><span class='strut'>&nbsp;</span></p>
 <p id='t5' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>auth</span><span class='op'>.</span><span class='nam'>decorators</span> <span class='key'>import</span> <span class='nam'>login_required</span><span class='strut'>&nbsp;</span></p>
 <p id='t6' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t7' class='stm run hide_run'><span class='nam'>urlpatterns</span> <span class='op'>=</span> <span class='nam'>patterns</span><span class='op'>(</span><span class='str'>&#39;&#39;</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
+<p id='t7' class='stm run hide_run'><span class='nam'>urlpatterns</span> <span class='op'>=</span> <span class='op'>[</span><span class='strut'>&nbsp;</span></p>
 <p id='t8' class='pln'>&nbsp; &nbsp; <span class='nam'>url</span><span class='op'>(</span><span class='str'>r&#39;^profil$&#39;</span><span class='op'>,</span> <span class='nam'>login_required</span><span class='op'>(</span><span class='nam'>UserProfileView</span><span class='op'>.</span><span class='nam'>as_view</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>,</span> <span class='nam'>name</span><span class='op'>=</span><span class='str'>&#39;profile&#39;</span><span class='op'>)</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t9' class='pln'>&nbsp; &nbsp; <span class='nam'>url</span><span class='op'>(</span><span class='str'>r&#39;^logout$&#39;</span><span class='op'>,</span> <span class='nam'>LogoutView</span><span class='op'>.</span><span class='nam'>as_view</span><span class='op'>(</span><span class='op'>)</span><span class='op'>,</span> <span class='nam'>name</span><span class='op'>=</span><span class='str'>&#39;logout&#39;</span><span class='op'>)</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
-<p id='t10' class='pln'><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t10' class='pln'><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
