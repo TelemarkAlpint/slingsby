@@ -28,6 +28,6 @@ fileserver-nginx-site:
     - name: /etc/nginx/sites-enabled/media.ntnuica.local
     - source: salt://fileserver/fileserver-nginx-site
     - require:
-      - pkg: nginx
+      - cmd: nginx
     - watch_in:
       - service: nginx
