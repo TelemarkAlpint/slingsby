@@ -4,7 +4,7 @@ from .general.templatetags.revved_static import get_revved_url
 
 from django import http
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response

@@ -20,8 +20,6 @@ import collections
 import os
 import requests
 import sys
-import time
-import yaml
 
 try:
     import colorama
@@ -35,11 +33,11 @@ except ImportError:
 def _get_slingsby_tarball():
     """ Gets the latest tarball name from the build directory. """
     tarballs = []
-    Tarball = collections.namedtuple('Tarball', ['filename', 'mtime'])
-    for f in os.listdir('build'):
-        if f.startswith('slingsby-'):
-            mtime = os.stat(os.path.join('build', f)).st_mtime
-            tarballs.append(Tarball(f, mtime))
+    Tarball = collections.namedtuple('Tarball', ['filename', 'mtime']) # pylint: disable=invalid-name
+    for thing in os.listdir('build'):
+        if thing.startswith('slingsby-'):
+            mtime = os.stat(os.path.join('build', thing)).st_mtime
+            tarballs.append(Tarball(thing, mtime))
     tarballs.sort(key=lambda tarball: tarball.mtime)
     latest_tarball = tarballs[0]
     return latest_tarball.filename
@@ -80,7 +78,7 @@ def warm_up_workers(host, requests_to_send=4):
     headers = {
         'User-Agent': user_agent
     }
-    for i in range(requests_to_send):
+    for _ in range(requests_to_send):
         response = requests.head(host, timeout=10, headers=headers)
         response.raise_for_status()
 

@@ -1,5 +1,5 @@
 from .views import SingleArticlePageQuery, AllArticlesList, Frontpage, ArticleDetail
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect
 

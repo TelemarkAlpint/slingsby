@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from .views import UserProfileView, LogoutView
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [

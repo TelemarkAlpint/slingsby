@@ -1,6 +1,6 @@
 from .models import Song
 
-from django.contrib.webdesign.lorem_ipsum import words
+from django.utils.lorem_ipsum import words
 import random
 
 def bootstrap():

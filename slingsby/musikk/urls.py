@@ -1,5 +1,5 @@
 from .views import SongDetailView, AllSongsView, TopSongsView, TopSong, TopSongsList
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 

@@ -176,7 +176,7 @@ def register_new_url(sender, **kwargs):
     # pylint: disable=unused-variable
     from .urls import urlpatterns
     from .views import ArticleDetail
-    from django.conf.urls import patterns, url
+    from django.conf.urls import url
     subpage = kwargs['instance']
     urlpatterns += [
         url(r'^%s$' % subpage.slug, ArticleDetail.as_view(), {'article_id': subpage.id}),
