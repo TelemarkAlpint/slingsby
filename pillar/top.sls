@@ -7,3 +7,6 @@ base:
 
   'vagrant':
     - vagrant
+
+  'vagrant-fileserver':
+    - vagrant
