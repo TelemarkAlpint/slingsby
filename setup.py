@@ -3,6 +3,7 @@
 from setuptools import setup, find_packages
 import subprocess
 from os import path
+import os
 import sys
 
 def get_version():
@@ -15,7 +16,7 @@ def update_version():
     """ Set version to git hash for each build. This is used as a prefix for cache keys,
     to keep cached data separate between versions and preventing data bleed.
     """
-    version = subprocess.check_output('git rev-parse --short HEAD')
+    version = os.environ.get('TRAVIS_COMMIT', None) or subprocess.check_output('git rev-parse --short HEAD')
     version_file = path.join('slingsby', 'VERSION')
     with open(version_file, 'w') as fh:
         fh.write(version)
