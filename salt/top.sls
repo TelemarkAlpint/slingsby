@@ -1,6 +1,5 @@
 base:
   '*':
-    - iptables
     - ntp
     - pkg
     - sudo
@@ -8,6 +7,7 @@ base:
     - users
 
   'ntnuita.no':
+    - iptables
     - ssh
 
   'vagrant':
