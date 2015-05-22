@@ -3,7 +3,7 @@
 
 upstream slingsby {
   least_conn;
-  server unix:///tmp/slingsby.socket;
+  server unix:///tmp/slingsby.socket fail_timeout=0;
 }
 
 # Redirect www.nnuita.no -> ntnuita.no
@@ -27,26 +27,15 @@ server {
     # Redirect urls with trailing slash to one without
     rewrite ^/(.*)/$ /$1 permanent;
 
-    include uwsgi_params;
-
-    uwsgi_pass slingsby;
-
-    uwsgi_param Host $host;
-    uwsgi_param X-Real-IP $remote_addr;
-    uwsgi_param X-Forwarded-For $proxy_add_x_forwarded_for;
-    uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
+    include proxy_params;
+    proxy_pass http://slingsby;
   }
 
-  location ~ ^/(login|complete|admin) {
-    # Identical as the location above, but without the redirect, since the social auth app
-    # requires trailing slashes. An issue has been filed for social auth:
-    # https://github.com/omab/python-social-auth/issues/505
-    include uwsgi_params;
-    uwsgi_pass slingsby;
-    uwsgi_param Host $host;
-    uwsgi_param X-Real-IP $remote_addr;
-    uwsgi_param X-Forwarded-For $proxy_add_x_forwarded_for;
-    uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
+  location ~ ^/(admin|__debug__) {
+    # Identical as the location above, but without the redirect, since the admin app
+    # requires trailing slashes
+    include proxy_params;
+    proxy_pass http://slingsby;
   }
 
   location /static {
@@ -61,14 +50,5 @@ server {
     alias /srv/ntnuita.no/media/;
   }
   {% endif %}
-
-  # Restrict access to the tasks, so that they can only be accessed locally
-  location ~ ^/tasks {
-    allow 127.0.0.1;
-    deny all;
-
-    include uwsgi_params;
-    uwsgi_pass slingsby;
-  }
 
 }

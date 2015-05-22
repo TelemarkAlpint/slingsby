@@ -1,36 +1,37 @@
 {% set old_sites = pillar.get('old_sites', []) %}
+{% set nginx = pillar.get('nginx', {}) %}
 
-nginx:
-  pkgrepo.managed:
-   - ppa: nginx/stable
 
-  pkg.installed:
-    - require:
-      - pkgrepo: nginx
-      - user: nginx
+nginx-systemuser:
+  user.present:
+    - name: nginx
+    - fullname: nginx worker
+    - system: True
+    - createhome: False
+    - shell: /usr/sbin/nologin
+    - groups:
+        - shadow
+    - optional_groups:
+        - phpworker
 
+
+include:
+  - nginx.source
+
+nginx-conf:
   file.managed:
     - name: /etc/nginx/nginx.conf
     - source: salt://nginx/nginx.conf
-    - mode: 644
+    - template: jinja
+    - mode: 640
     - user: root
-    - group: root
+    - group: nginx
     - require:
-      - pkg: nginx
-      - user: nginx
+      - cmd: nginx
+      - user: nginx-systemuser
+    - watch_in:
+      - service: nginx
 
-  service.running:
-    - watch:
-      - file: nginx
-      - file: nginx-default-site
-
-  user.present:
-    - name: nginx
-    - systemuser: True
-    - fullname: Nginx worker
-    - createhome: False
-    - shell: /usr/sbin/nologin
-    - home: /nonexistent
 
 # Make sure nginx log dir has correct users and permissions
 nginx-log-dir:
@@ -59,4 +60,35 @@ nginx-default-site:
   file.absent:
     - name: /etc/nginx/sites-enabled/default
     - require:
-      - pkg: nginx
+      - cmd: nginx
+
+
+nginx-sites-enabled:
+  file.directory:
+    - name: /etc/nginx/sites-enabled
+    - user: root
+    - group: nginx
+    - mode: 755
+    - require:
+      - file: nginx-conf
+      - user: nginx-systemuser
+
+nginx-proxy-params:
+  file.managed:
+    - name: /etc/nginx/proxy_params
+    - source: salt://nginx/proxy_params
+    - require:
+      - file: nginx-conf
+    - watch_in:
+      - service: nginx
+
+nginx-firewall:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - proto: tcp
+    - match: comment
+    - dport: 80
+    - comment: "nginx: Allow incoming HTTP"
+    - jump: ACCEPT
+    - save: True

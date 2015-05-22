@@ -2,5 +2,10 @@
 -r requirements.txt
 
 # Add stuff needed in prod:
+gevent==1.0.1
+gunicorn==19.3.0
 MySQL-python==1.2.5
-python-memcached==1.53
+pylibmc==1.4.3
+
+# gevent dependencies
+greenlet==0.4.5

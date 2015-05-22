@@ -2,6 +2,7 @@ core-packages:
   pkg.installed:
     - order: 1
     - pkgs:
+      - at
       - curl
       - python-software-properties
       - vim

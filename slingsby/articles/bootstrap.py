@@ -6,7 +6,7 @@ from ..general.time import now
 
 from datetime import timedelta
 from django.contrib.auth.models import User
-from django.contrib.webdesign.lorem_ipsum import paragraphs
+from django.utils.lorem_ipsum import paragraphs
 
 def bootstrap():
     johnny, _ = User.objects.get_or_create(username='johnnydev', first_name='Johnny', last_name='Dev')

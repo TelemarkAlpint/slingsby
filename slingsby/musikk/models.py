@@ -73,11 +73,13 @@ class Vote(models.Model):
 class AdminVoteForm(ModelForm):
     class Meta:
         model = Vote
+        exclude = []
 
 
 class AdminSongForm(ModelForm):
     class Meta:
         model = Song
+        exclude = []
 
 
 class SongSuggestionForm(ModelForm):

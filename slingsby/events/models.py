@@ -92,10 +92,8 @@ class Event(models.Model):
 
     def seconds_until_registration_opens_for_user(self, user):
         registration_opens_for_user = self.registration_opens_for_user(user)
-        print 'Finding time until opening for user %s' % user
         if self.has_registration and registration_opens_for_user:
             ret = time.seconds_to(registration_opens_for_user)
-            print ret
             return ret
         else:
             return 0
@@ -223,6 +221,7 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         widgets = {'description': WidgEditorWidget()}
+        exclude = []
 
     def clean_summary(self):
         data = self.cleaned_data['summary']

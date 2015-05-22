@@ -3,8 +3,8 @@ description "Slingsby celery daemon"
 start on startup
 stop on runlevel [016]
 
-setuid uwsgi
-setgid uwsgi
+setuid slingsby
+setgid slingsby
 
 respawn
 

@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_config = "salt/vagrant-minion-web"
       salt.run_highstate = true
       salt.install_type = "git"
-      salt.install_args = "v2014.1.10"
+      salt.install_args = "v2015.5.0"
       salt.verbose = true
     end
     web.vm.network "private_network", ip: "10.10.10.10"
@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_config = "salt/vagrant-minion-fileserver"
       salt.run_highstate = true
       salt.install_type = "git"
-      salt.install_args = "v2014.1.10"
+      salt.install_args = "v2015.5.0"
       salt.verbose = true
     end
     fileserver.vm.network "private_network", ip: "10.10.10.11"

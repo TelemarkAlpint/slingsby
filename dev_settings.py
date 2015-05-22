@@ -7,6 +7,16 @@ from os import path
 import os
 import textwrap
 import yaml
+import warnings
+
+# Raise an exception on deprecated features to stay ahead in dev
+warnings.simplefilter('error', DeprecationWarning)
+
+# If you want to stay (far) ahead of the curve, enable warnings for features
+# that will be deprecated soon. Note that this will probably break some of the
+# external libraries we are using, so you might have to patch them to be able
+# to get to our own code that are using features that are pending deprecation
+# warnings.simplefilter('error', PendingDeprecationWarning)
 
 import sys
 if len(sys.argv) >= 2 and sys.argv[1] == 'test':
@@ -36,7 +46,7 @@ DATABASES = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         'LOCATION': 'slingsby_rel'
     }
 }

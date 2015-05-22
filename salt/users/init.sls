@@ -1,6 +1,15 @@
+# Make sure the admin group is present
+admin-group:
+    group.present:
+        - name: admin
+        - order: 1
+        - system: True
+
+
 {% for username, user in salt['pillar.get']('developers', {}).items() %}
-{{ username }}:
+{{ username }}-user:
   user.present:
+    - name: {{ username }}
     - fullname: {{ user['fullname'] }}
     - shell: {{ user.get('shell', '/bin/bash') }}
     - groups:
@@ -24,9 +33,8 @@
 {% endfor %}
 
 
-
 {% for absent_user in pillar.get('absent_users', []) %}
-{{ absent_user }}:
+{{ absent_user }}-user:
   user.absent:
     - purge: True
     - force: True

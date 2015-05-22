@@ -7,10 +7,10 @@ base:
     - users
 
   'ntnuita.no':
+    - iptables
     - ssh
 
   'vagrant':
-    - mysql.server
     - networking
 
   'vagrant-fileserver':
@@ -18,6 +18,7 @@ base:
 
   'roles:fileserver':
     - match: grain
+    - mysql.server
     - fileserver
 
   'roles:web':

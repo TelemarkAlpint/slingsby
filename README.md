@@ -15,15 +15,15 @@ Goals
 * Easy to get started for new developers
 * Deployment handled automatically
 * Well tested code
-* Site works on all devices (but not necessarily look the same or provide the same experience)
-* RESTful
 
 
 About
 -----
 
-Our server is running on AWS, with deployments handled automatically by Travis CI. User uploaded
-media is stored on our studorg server at org.ntnu.no/telemark.
+Our server is running on a Raspberry Pi 2 hosted by ITEM, with deployments handled automatically by
+Travis CI. User uploaded media is stored on our studorg server at org.ntnu.no/telemark. We utilize
+the studorg MySQL database at `mysql.stud.ntnu.no`, which means that the RPi doesn't contain any
+critical data and can thus easily be rebuilt if it crashes.
 
 
 Local development
@@ -143,7 +143,7 @@ Make sure you have the following entries in your hosts file:
     127.0.0.1 media.ntnuita.local
 
 You can now visit `http://ntnuita.local` in your webbrowser to test how the app runs behind nginx
-and uwsgi, with caching and the fileserver and all the bells and whistles.
+and gunicorn, with caching and the fileserver and all the bells and whistles.
 
 
 Dependencies
@@ -162,13 +162,13 @@ It doesn't work!
 
 Relax, take a deep breath, check the logs. Relevant logs to check include:
 
-**uwsgi**: `/var/log/uwsgi/uwsgi.log`
+**gunicorn**: `/var/log/slingsby.log`
 **nginx**: `/usr/share/nginx/logs/error.log`
 **slingsby**: `/var/log/slingsby/log.log`
 
-Try restarting uwsgi and nginx, to see if it makes a difference:
+Try restarting gunicorn and nginx, to see if it makes a difference:
 
-    $ sudo service uwsgi restart
+    $ sudo service slingsby restart
     $ sudo service nginx restart
 
 Try to see if you can import the settings without failure:

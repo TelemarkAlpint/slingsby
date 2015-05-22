@@ -3,6 +3,7 @@
 from slingsby.settings import *
 
 import django
+import pkg_resources
 
 SECRET_KEY = '{{ slingsby.secret_key }}'
 
@@ -10,17 +11,22 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '{{ pillar.get("SOCIAL_AUTH_FACEBOOK_SECRET", 'you
 
 ALLOWED_HOSTS = (
     '{{ slingsby.get('bind_url', 'ntnuita.no') }}',
-
-    # localhost needed so that curl can access /tasks/
-    'localhost',
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': '/tmp/memcached.socket',
+        'KEY_PREFIX': pkg_resources.require('slingsby')[0].version
+    }
+}
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'slingsby_rel',
-        'HOST': '{{ pillar['env']['db_uri'] }}',
-        'USER': 'slingsby',
+        'NAME': 'telemark_slingsby',
+        'HOST': '{{ slingsby.get('db_host', '') }}',
+        'USER': 'telemark_dbadmin',
         'PASSWORD': '{{ slingsby.db_password }}',
     },
 }

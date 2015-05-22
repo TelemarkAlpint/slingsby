@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from ..general import make_title
-from ..general.cache import CachedQuery, empty_on_changes_to
 from ..general.views import ActionView
 from .models import Quote, QuoteForm
 
@@ -14,11 +13,7 @@ from django.views.generic.base import TemplateView
 import logging
 
 _logger = logging.getLogger(__name__)
-
-@empty_on_changes_to(Quote)
-class AllQuotesQuery(CachedQuery):
-    queryset = Quote.objects.filter(accepted=True)
-
+_all_quotes = Quote.objects.filter(accepted=True)
 
 class QuoteDetailView(ActionView, TemplateView):
 
@@ -66,7 +61,7 @@ class QuoteDetailView(ActionView, TemplateView):
         to find fetch the quote instead of hitting the db.
         """
         found_quote = None
-        cached_quotes = AllQuotesQuery.get_cached()
+        cached_quotes = _all_quotes.all()
         for quote in cached_quotes:
             if quote.id == quote_id:
                 found_quote = quote
@@ -82,7 +77,7 @@ class AllQuotesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AllQuotesView, self).get_context_data(**kwargs)
-        quotes = AllQuotesQuery.get_cached()
+        quotes = _all_quotes.all()
         context = {
             'all_quotes': quotes,
             'title': make_title('Sitater'),

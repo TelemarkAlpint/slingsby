@@ -1,12 +1,11 @@
 from .models import Quote, QuoteForm
-from .views import AllQuotesQuery
-from random import choice as random_choice
+from random import randint
 
 
 def get_random_quote_or_default():
-    all_quotes = AllQuotesQuery.get_cached()
-    if all_quotes:
-        quote = random_choice(all_quotes)
+    number_of_quotes = Quote.objects.filter(accepted=True).count()
+    if number_of_quotes:
+        quote = Quote.objects.filter(accepted=True)[randint(0, number_of_quotes-1)]
     else:
         quote = Quote()
         quote.quote = 'Ingen quotes er lastet opp enda.'

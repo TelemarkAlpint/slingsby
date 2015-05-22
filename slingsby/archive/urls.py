@@ -1,7 +1,7 @@
 from .views import ArchiveView, EventDetailView
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', ArchiveView.as_view(), name='archive'),
     url(r'^/(?P<event_id>\d+)', EventDetailView.as_view(), name='event_details'),
-)
+]

@@ -2,7 +2,7 @@
 
 from .models import Quote
 
-from django.contrib.webdesign.lorem_ipsum import sentence
+from django.utils.lorem_ipsum import sentence
 from django.contrib.auth.models import User
 
 def bootstrap():

@@ -3,12 +3,10 @@
 {% set requirements_files = ['prod-requirements.txt', 'requirements.txt'] %}
 
 include:
-  - .cron
   - memcached
   - mysql
   - nginx
   - rabbitmq
-  - uwsgi
 
 
 slingsby-deps:
@@ -30,6 +28,23 @@ slingsby-requirements-{{ req_file }}:
 {% endfor %}
 
 slingsby:
+  user.present:
+    - system: True
+    - shell: /usr/sbin/nologin
+    - createhome: False
+    - fullname: slingsby worker
+    - groups:
+      - memcached
+
+  init_script.managed:
+    - upstart: salt://slingsby/slingsby-upstart
+    - sysvinit: salt://slingsby/slingsby-sysvinit
+
+  service.running:
+    - enable: True
+    - watch:
+      - init_script: slingsby
+
   virtualenv.managed:
     - name: /srv/ntnuita.no/venv
     - requirements: /srv/ntnuita.no/prod-requirements.txt
@@ -47,20 +62,13 @@ slingsby:
     - template: jinja
     - show_diff: False
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 640
     - require:
       - virtualenv: slingsby
-      - user: uwsgi-user
+      - user: slingsby
     - watch_in:
-      - service: uwsgi
-
-
-slingsby-uwsgi-conf:
-  file.managed:
-    - name: /opt/apps/slingsby.ini
-    - source: salt://slingsby/uwsgi_conf
-    - makedirs: True
+      - serivce: slingsby
 
 
 slingsby-log-dir:
@@ -68,10 +76,10 @@ slingsby-log-dir:
     - name: /var/log/slingsby
     - makedirs: True
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 775
     - require:
-      - user: uwsgi-user
+      - user: slingsby
 
 
 slingsby-static-dir:
@@ -79,10 +87,10 @@ slingsby-static-dir:
     - name: /srv/ntnuita.no/static
     - makedirs: True
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 755
     - require:
-      - user: uwsgi-user
+      - user: slingsby
 
 
 slingsby-media-dir:
@@ -90,20 +98,21 @@ slingsby-media-dir:
     - name: /srv/ntnuita.no/media
     - makedirs: True
     - user: root
-    - group: uwsgi
+    - group: slingsby
     - mode: 775
     - require:
-      - user: uwsgi-user
+      - user: slingsby
 
 
 slingsby-celery:
-  file.managed:
-    - name: /etc/init/slingsby-celery.conf
-    - source: salt://slingsby/celery_job_conf
+  init_script.managed:
+    - upstart: salt://slingsby/celery_job_conf-upstart
+    - sysvinit: salt://slingsby/celery_job_conf-sysvinit
 
   service.running:
+    - enable: True
     - watch:
-      - file: slingsby-celery
+      - init_script: slingsby-celery
       - file: slingsby
 
 
@@ -113,16 +122,19 @@ slingsby-nginx-site:
     - source: salt://slingsby/slingsby-nginx-site
     - template: jinja
     - require:
-      - pkg: nginx
+      - cmd: nginx
     - watch_in:
       - service: nginx
 
 
 # Fix a bug in djecelery/mysql where index keys can't be longer than some arbitrary mysql limit
-djcelery-mysql-fix:
+{% for dir in ('', 'local/') %}
+djcelery-mysql-fix{{ dir }}:
   file.replace:
-    - name: /srv/ntnuita.no/venv/lib/python2.7/site-packages/djcelery/models.py
+    - name: /srv/ntnuita.no/venv/{{ dir }}lib/python2.7/site-packages/djcelery/models.py
     - pattern: max_length=2\d\d
     - repl: max_length=191
+    - onlyif: test -f /srv/ntnuita.no/venv/{{ dir }}lib/python2.7/site-packages/djcelery/models.py
     - watch:
       - virtualenv: slingsby
+{% endfor %}

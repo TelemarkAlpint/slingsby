@@ -12,8 +12,6 @@ import json
 
 DEBUG = False
 
-TEMPLATE_DEBUG = DEBUG
-
 USE_TZ = True
 
 LANGUAGE_CODE = 'nb-NO'
@@ -28,13 +26,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'slingsby_rel.sqlite',
-    }
-}
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'unix:/tmp/memcached.socket',
     }
 }
 
@@ -69,9 +60,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
 
     'slingsby.general.middleware.HttpAcceptMiddleware',
     'slingsby.general.middleware.HttpMethodOverride',
+    'slingsby.general.middleware.ProfileMiddleware',
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
@@ -82,27 +75,36 @@ AUTHENTICATION_BACKENDS = (
   'django.contrib.auth.backends.ModelBackend',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-    'django.core.context_processors.media',
-    'django.core.context_processors.debug',
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
+    'OPTIONS': {
+        'loaders': [
+            ('django.template.loaders.cached.Loader', [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ])
+        ],
+        'context_processors': (
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+            'django.core.context_processors.request',
+            'django.core.context_processors.media',
+            'django.core.context_processors.debug',
 
-    'slingsby.general.context_processors.default',
-    'slingsby.general.context_processors.slingsby_urls',
-    'slingsby.general.context_processors.slingsby_config',
-    'slingsby.quotes.context_processors.default',
+            'slingsby.general.context_processors.default',
+            'slingsby.general.context_processors.slingsby_urls',
+            'slingsby.general.context_processors.slingsby_config',
+            'slingsby.quotes.context_processors.default',
 
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
-)
+            'social.apps.django_app.context_processors.backends',
+            'social.apps.django_app.context_processors.login_redirect',
+        ),
+        'debug': DEBUG
+    }
+}]
 
 LOGIN_URL = reverse_lazy('social:begin', kwargs={'backend': 'facebook'})
-
-TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates'),
-)
 
 ROOT_URLCONF = 'slingsby.urls'
 
@@ -129,6 +131,8 @@ with open(_log_config_path) as log_conf_file:
 ########################################
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+
+SOCIAL_AUTH_TRAILING_SLASH = False
 
 SOCIAL_AUTH_UID_LENGTH = 16
 

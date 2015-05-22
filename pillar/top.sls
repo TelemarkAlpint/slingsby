@@ -1,10 +1,12 @@
 base:
   '*':
-    - env
     - old-sites
     - secure
     - slingsby
     - users
 
   'vagrant':
+    - vagrant
+
+  'vagrant-fileserver':
     - vagrant

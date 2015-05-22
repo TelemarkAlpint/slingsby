@@ -2,14 +2,14 @@
 # The base requirements is under the salt directory, so that it can be installed by salt
 -r salt/slingsby/requirements.txt
 
-django-debug-toolbar==1.2.1
-fabric==1.8.3
+django-debug-toolbar==1.3.0
+fabric==1.10.1
 
 # Add test tools
-django-nose==1.2
+django-nose==1.4
 coverage==3.7.1
 
 # django-nose dependencies
-nose==1.3.3
+nose==1.3.6
 
 # fabric dependencies already included by paramiko
