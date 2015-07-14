@@ -13,8 +13,6 @@ from django.views.static import serve as static_serve
 
 admin.autodiscover()
 
-handler500 = lambda req: render_to_response('500.html')
-
 urlpatterns = [
     url(r'^', include('slingsby.articles.urls')),
     url(r'^', include('slingsby.users.urls')),
