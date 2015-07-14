@@ -1,101 +1,108 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          slingsby-celery
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
+# Required-Start:    $remote_fs $syslog $network
+# Required-Stop:     $remote_fs $syslog $network
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start daemon at boot time
-# Description:       Enable service provided by daemon.
+# Short-Description: slingsby-celery daemon
+# Description:       A daemon that runs the celery task queue for slingsby
 ### END INIT INFO
 
-dir=""
-user="slingsby"
+export DJANGO_SETTINGS_MODULE=prod_settings
+export PYTHONPATH=/srv/ntnuita.no/
 
-cmd="DJANGO_SETTINGS_MODULE=prod_settings \
-    PYTHONPATH=/srv/ntnuita.no/ \
-    /srv/ntnuita.no/venv/bin/celery worker \
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="slingsby-celery daemon"
+NAME=slingsby-celery
+DAEMON=/srv/ntnuita.no/venv/bin/celery
+USER=slingsby
+DAEMON_ARGS="worker \
     --app slingsby.settings:celery_app \
     -B --scheduler djcelery.schedulers.DatabaseScheduler \
     -P processes \
     --autoscale=20,0"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
 
-name=`basename $0`
-pid_file="/var/run/$name.pid"
-stdout_log="/var/log/$name.log"
-stderr_log="/var/log/$name.err"
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || (printf 'Daemon not installed, quitting.' >&2 && exit 0)
 
-get_pid() {
-    cat "$pid_file"
+. /lib/lsb/init-functions
+
+do_start() {
+    # Return
+    #   0 if daemon has been started
+    #   1 if daemon was already running
+    #   2 if daemon could not be started
+    pid=$(pidofproc -p $PIDFILE $DAEMON)
+    if [ -n "$pid" ] ; then
+        return 1
+    fi
+
+    start-stop-daemon --start --quiet --background --pidfile $PIDFILE --chuid $USER \
+            --exec $DAEMON -- $DAEMON_ARGS \
+            || return 2
 }
 
-is_running() {
-    [ -f "$pid_file" ] && ps `get_pid` > /dev/null 2>&1
+do_stop() {
+    # Return
+    #   0 if daemon has been stopped
+    #   1 if daemon was already stopped
+    #   2 if daemon could not be stopped
+    #   other if a failure occurred
+    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+    RETVAL="$?"
+    [ "$RETVAL" = 2 ] && return 2
+    rm -f $PIDFILE
+    return "$RETVAL"
 }
 
 case "$1" in
     start)
-    if is_running; then
-        echo "Already started"
-    else
-        echo "Starting $name"
-        cd "$dir"
-        sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
-        echo $! > "$pid_file"
-        if ! is_running; then
-            echo "Unable to start, see $stdout_log and $stderr_log"
-            exit 1
-        fi
-    fi
-    ;;
+        [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+        do_start
+        case "$?" in
+            0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+              2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+        esac
+        ;;
     stop)
-    if is_running; then
-        echo -n "Stopping $name.."
-        kill `get_pid`
-        for i in {1..10}
-        do
-            sleep 1
-            if ! is_running; then
-                break
-            fi
-
-            echo -n "."
-        done
-        echo
-
-        if is_running; then
-            echo "Not stopped; may still be shutting down or shutdown may have failed"
-            exit 1
-        else
-            echo "Stopped"
-            if [ -f "$pid_file" ]; then
-                rm "$pid_file"
-            fi
-        fi
-    else
-        echo "Not running"
-    fi
-    ;;
-    restart)
-    $0 stop
-    if is_running; then
-        echo "Unable to stop, will not attempt to start"
-        exit 1
-    fi
-    $0 start
-    ;;
+        [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+        do_stop
+        case "$?" in
+            0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+              2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+        esac
+        ;;
     status)
-    if is_running; then
-        echo "Running"
-    else
-        echo "Stopped"
-        exit 1
-    fi
-    ;;
+        status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+        ;;
+    #reload)
+        # not implemented
+        #;;
+    restart|force-reload)
+        log_daemon_msg "Restarting $DESC" "$NAME"
+        do_stop
+        case "$?" in
+          0|1)
+              do_start
+              case "$?" in
+                  0) log_end_msg 0 ;;
+                  1) log_end_msg 1 ;; # Old process is still running
+                  *) log_end_msg 1 ;; # Failed to start
+              esac
+              ;;
+          *)
+              # Failed to stop
+              log_end_msg 1
+              ;;
+        esac
+        ;;
     *)
-    echo "Usage: $0 {start|stop|restart|status}"
-    exit 1
-    ;;
+        echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+        exit 3
+        ;;
 esac
 
 exit 0
