@@ -103,14 +103,63 @@ class HttpAcceptMiddlewareTest(TestCase):
         self.assertTrue(self.request.prefer_html)
         self.assertFalse(self.request.prefer_json)
 
-    def test_invalid_accept(self):
-        self.request.META['HTTP_ACCEPT'] = 'invalid'
+    def test_empty_values(self):
+        empty_values = (
+            '',
+            ',',
+            ',,',
+            ';q=1,',
+            ', text/plain,',
+        )
+        for empty_value in empty_values:
+            self.request.META['HTTP_ACCEPT'] = empty_value
+            self.middleware.process_request(self.request)
+            self.assertTrue(self.request.prefer_html)
+            self.assertFalse(self.request.prefer_json)
+
+    def test_both_media_type_and_accept_extensions(self):
+        self.request.META['HTTP_ACCEPT'] = 'text/plain; charset="utf-8"; q=.5; columns=80'
         self.middleware.process_request(self.request)
         self.assertTrue(self.request.prefer_html)
         self.assertFalse(self.request.prefer_json)
 
+    def test_invalid_accept(self):
+        invalid_headers = (
+            'invalid',
+            'text/',
+            'text/plain;',
+            'text/plain;q',
+            'text/plain; q',
+            'text/plain; q=',
+            'text/plain; q=; foo=bar',
+            'text/plain; q=foo',
+            'text/plain; q=-1',
+        )
+        for invalid_header in invalid_headers:
+            self.request.META['HTTP_ACCEPT'] = invalid_header
+            self.middleware.process_request(self.request)
+            self.assertTrue(self.request.prefer_html)
+            self.assertFalse(self.request.prefer_json)
+
     def test_wildcard_accept(self):
         self.request.META['HTTP_ACCEPT'] = '*/*'
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_html)
+        self.assertFalse(self.request.prefer_json)
+
+    def test_class_wildcard(self):
+        self.request.META['HTTP_ACCEPT'] = 'application/*, text/html; q=0.9'
+        self.middleware.process_request(self.request)
+        self.assertFalse(self.request.prefer_html)
+        self.assertTrue(self.request.prefer_json)
+
+    def test_wildcard_is_overridden(self):
+        self.request.META['HTTP_ACCEPT'] = 'application/json; q=0.9, application/*, text/html'
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_html)
+        self.assertFalse(self.request.prefer_json)
+
+        self.request.META['HTTP_ACCEPT'] = 'application/json; q=0.9, */*'
         self.middleware.process_request(self.request)
         self.assertTrue(self.request.prefer_html)
         self.assertFalse(self.request.prefer_json)

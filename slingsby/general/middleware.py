@@ -1,5 +1,7 @@
 import hotshot
 import hotshot.stats
+import httpheader
+import logging
 import os
 import re
 import StringIO
@@ -7,6 +9,27 @@ import sys
 import tempfile
 
 from django.conf import settings
+
+_logger = logging.getLogger(__name__)
+
+def _get_qvalue(accept_types, content_type_string):
+    content_type = httpheader.content_type(content_type_string)
+    class_qvalue = None
+    universal_wildcard_qvalue = None
+    for accept_content_type, qvalue, extensions in accept_types:
+        if accept_content_type == content_type:
+            return qvalue
+        elif accept_content_type.is_wildcard() and accept_content_type.major == content_type.major:
+            class_qvalue = qvalue
+        elif accept_content_type.is_universal_wildcard():
+            universal_wildcard_qvalue = qvalue
+
+    if class_qvalue is not None:
+        return class_qvalue
+    if universal_wildcard_qvalue is not None:
+        return universal_wildcard_qvalue
+    return 0
+
 
 class HttpAcceptMiddleware(object):
     """ Parse the HTTP_ACCEPT header and add two attributes to the request object,
@@ -17,26 +40,29 @@ class HttpAcceptMiddleware(object):
     """
 
     def process_request(self, request):
-        content_types = request.META.get('HTTP_ACCEPT')
-        content_types = content_types.split(',') if content_types else []
-        accepts = {}
-        for item in content_types:
-            params = item.split(';')
-            media_type = params.pop(0)
-            priority = 1.0
-            for param in params:
-                key, val = param.split('=')
-                if key == 'q':
-                    priority = float(val)
-                    continue
-            accepts[media_type] = priority
+        accept_header = request.META.get('HTTP_ACCEPT')
+        if accept_header:
+            try:
+                accept_types = httpheader.parse_accept_header(accept_header)
+                # print('Parsed headers: %s' % accept_types)
+                # from nose.tools import set_trace as f; f()
+            except httpheader.ParseError:
+                _logger.warning('Failed to parse HTTP Accept header, was %s', accept_header)
+                html_qvalue = 1
+                json_qvalue = 0
+            else:
+                html_qvalue = _get_qvalue(accept_types, 'text/html')
+                json_qvalue = _get_qvalue(accept_types, 'application/json')
+        else:
+            html_qvalue = 1
+            json_qvalue = 0
 
         # If not json or html requested explicitly, default to html
-        if not ('application/json' in accepts or 'text/html' in accepts):
-            accepts['text/html'] = 1.0
+        if html_qvalue == 0 and json_qvalue == 0:
+            html_qvalue = 1
 
-        request.prefer_html = bool(accepts.get('text/html', 0) >= accepts.get('application/json', 0))
-        request.prefer_json = bool(accepts.get('application/json', 0) > accepts.get('text/html', 0))
+        request.prefer_html = html_qvalue >= json_qvalue
+        request.prefer_json = not request.prefer_html
 
 
 class HttpMethodOverride(object):
