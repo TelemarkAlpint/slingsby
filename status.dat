@@ -348,7 +348,7 @@ I1
 sg19
 I0
 sg20
-I132
+I160
 sg21
 I0
 sg22
@@ -358,7 +358,7 @@ I0
 sg24
 I0
 sbssg25
-S'|t\x07\xf8N\x8fA\x94\\\xebL\x89\xe9\x95>W'
+S'vn\x8c\xf0\xcf\x997\x1b2\xd5sl\x89\xbf\x8a\xaf'
 p98
 ssS'slingsby_events_migrations_0002_auto_20150317_1139'
 p99
@@ -3000,7 +3000,7 @@ I1
 sg19
 I0
 sg20
-I91
+I109
 sg21
 I0
 sg22
@@ -3010,7 +3010,7 @@ I46
 sg24
 I0
 sbssg25
-S'\xda6\xd9\xc48\x1a\x8ap\x80&\x15\xc9\x18\xe4l\xa6'
+S'F(\xdd\xf8\xdb\xa6\x96\n}\xfa\x97\x1d\xa7\x92N\xc2'
 p722
 ssS'slingsby_articles_models'
 p723
