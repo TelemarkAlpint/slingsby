@@ -16,6 +16,9 @@ slingsby:
   fileserver: fileserver@10.10.10.11
   fileserver_media_root: /srv/fileserver/
 
+postfix:
+    domain: ntnuita.local
+
 # The password 'vagrant' salted and hashed
 TARJEI_PASSWORD: $6$rounds=10000$wiaOUFpq$p5ncFC9AvNNRou2am6SkRbMYyQO14oIa0evaphgOc7YCdVTRA1q0NyV3QSO5J0I76.ZXRlwxlsiC.rZub9jhJ0
 
