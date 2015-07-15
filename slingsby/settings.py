@@ -12,7 +12,14 @@ import json
 
 DEBUG = False
 
+ADMINS = (
+    ('NTNUI TA Webmasters', 'telemark-webmaster@ntnui.no'),
+    ('Tarjei Husøy', 'apps-telemarkwebmaster@thusoy.com'),
+)
+
 USE_TZ = True
+
+SERVER_EMAIL = 'noreply@ntnuita.no'
 
 LANGUAGE_CODE = 'nb-NO'
 
@@ -107,6 +114,8 @@ TEMPLATES = [{
 LOGIN_URL = reverse_lazy('social:begin', kwargs={'backend': 'facebook'})
 
 ROOT_URLCONF = 'slingsby.urls'
+
+EMAIL_SUBJECT_PREFIX = '[ntnuita.no] '
 
 FILE_UPLOAD_PERMISSIONS = 0664
 

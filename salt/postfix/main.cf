@@ -1,0 +1,70 @@
+{% set postfix = pillar.get('postfix', {}) -%}
+
+######################################
+# File managed by salt state postfix #
+# Local changes will be overridden   #
+######################################
+
+myhostname = {{ postfix.domain }}
+myorigin = $myhostname
+mydestination = $myhostname localhost
+relayhost = {{ postfix.get('relayhost', '') }}
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+mailbox_size_limit = 0
+inet_interfaces = loopback-only
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+readme_directory = no
+
+# Outgoing TLS params
+smtp_tls_security_level = may
+
+smtp_tls_mandatory_ciphers = high
+tls_high_cipherlist = {{ ':'.join([
+    'ECDHE-ECDSA-AES256-GCM-SHA384',
+    'ECDHE-RSA-AES256-GCM-SHA384',
+    'ECDHE-ECDSA-AES128-GCM-SHA256',
+    'ECDHE-RSA-AES128-GCM-SHA256',
+    'DHE-RSA-AES128-GCM-SHA256',
+    'DHE-DSS-AES128-GCM-SHA256',
+    'kEDH+AESGCM',
+    'ECDHE-ECDSA-AES256-SHA384',
+    'ECDHE-RSA-AES256-SHA384',
+    'ECDHE-ECDSA-AES256-SHA',
+    'ECDHE-RSA-AES256-SHA',
+    'ECDHE-ECDSA-AES128-SHA256',
+    'ECDHE-RSA-AES128-SHA256',
+    'ECDHE-ECDSA-AES128-SHA',
+    'ECDHE-RSA-AES128-SHA',
+    'DHE-RSA-AES256-SHA256',
+    'DHE-DSS-AES256-SHA',
+    'DHE-RSA-AES256-SHA',
+    'DHE-RSA-AES128-SHA256',
+    'DHE-RSA-AES128-SHA',
+    'DHE-DSS-AES128-SHA256',
+    'AES256-GCM-SHA384',
+    'AES128-GCM-SHA256',
+    'AES256',
+    'AES128',
+    'HIGH',
+    '!aNULL',
+    '!eNULL',
+    '!EXPORT',
+    '!DES',
+    '!3DES',
+    '!MD5',
+    '!PSKF',
+    ]) }}
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+biff = no
+
+{% if grains['id'] == 'vagrant' -%}
+# Don't send mail outwards when running in local vm
+canonical_maps = regexp:/etc/postfix/canonical-redirect
+{%- endif %}

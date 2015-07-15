@@ -2,6 +2,7 @@ base:
   '*':
     - ntp
     - pkg
+    - postfix
     - sudo
     - swap
     - users

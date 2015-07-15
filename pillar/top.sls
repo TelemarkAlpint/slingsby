@@ -1,6 +1,7 @@
 base:
   '*':
     - old-sites
+    - postfix
     - secure
     - slingsby
     - users

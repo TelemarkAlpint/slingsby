@@ -60,6 +60,10 @@ INTERNAL_IPS = ("127.0.0.1", "::1")
 
 STATIC_URL = '/static/'
 
+# Store sent email in file on dev
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = path.join(path.dirname(__file__), '.tmp', 'sent-mail')
+
 # This is where collectstatic gathers the static files from the installed apps
 STATIC_ROOT = path.join(path.dirname(__file__), '.tmp', 'static')
 
