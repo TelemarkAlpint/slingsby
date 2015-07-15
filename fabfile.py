@@ -67,20 +67,29 @@ def deploy():
     migrate_db()
     sudo('service slingsby restart')
     sudo('service slingsby-celery restart')
-    warm_up_workers('http://ntnuita.no')
+
+    # Wait for app to assemble itself, then warm it up
+    time.sleep(10)
+    warm_up_workers()
 
 
-def warm_up_workers(host, requests_to_send=4):
+def warm_up_workers():
     """ Send a couple of initial requests to the host to warm up the workers
     and lower the initial response times for the app.
     """
-    user_agent = 'python-requests/slingsby-warmup-request'
-    headers = {
-        'User-Agent': user_agent
-    }
-    for _ in range(requests_to_send):
-        response = requests.head(host, timeout=10, headers=headers)
-        response.raise_for_status()
+    run('for i in $(seq 1 10); do '
+        'curl localhost'
+        ' -H "Host: ntnuita.no"'
+        ' --head'
+        ' --retry 3'
+        ' --retry-delay 5'
+        ' --silent'
+        ' --show-error'
+        ' --max-time 5'
+        ' --user-agent "curl/warmup-request"'
+        ' --output /dev/null'
+        '; done'
+    )
 
 
 @hosts('vagrant@127.0.0.1:2222')
