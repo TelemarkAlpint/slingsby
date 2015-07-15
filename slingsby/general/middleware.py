@@ -1,3 +1,4 @@
+import collections
 import hotshot
 import hotshot.stats
 import httpheader
@@ -16,19 +17,21 @@ def _get_qvalue(accept_types, content_type_string):
     content_type = httpheader.content_type(content_type_string)
     class_qvalue = None
     universal_wildcard_qvalue = None
-    for accept_content_type, qvalue, extensions in accept_types:
+    ret = 0
+    for accept_content_type, qvalue, _ in accept_types:
         if accept_content_type == content_type:
-            return qvalue
+            ret = qvalue
+            break
         elif accept_content_type.is_wildcard() and accept_content_type.major == content_type.major:
             class_qvalue = qvalue
         elif accept_content_type.is_universal_wildcard():
             universal_wildcard_qvalue = qvalue
-
-    if class_qvalue is not None:
-        return class_qvalue
-    if universal_wildcard_qvalue is not None:
-        return universal_wildcard_qvalue
-    return 0
+    else:
+        if class_qvalue is not None:
+            ret = class_qvalue
+        if universal_wildcard_qvalue is not None:
+            ret = universal_wildcard_qvalue
+    return ret
 
 
 class HttpAcceptMiddleware(object):
@@ -83,9 +86,9 @@ class HttpMethodOverride(object):
 # Orignal version taken from http://www.djangosnippets.org/snippets/186/
 # Original author: udfalkso
 # Modified by: Shwagroo Team and Gun.io
-words_re = re.compile(r'\s+')
+WORDS_RE = re.compile(r'\s+')
 
-group_prefix_re = [
+GROUP_PREFIXES = [
     re.compile("^.*/django/[^/]+"),
     re.compile("^(.*)/[^/]+$"), # extract module path
     re.compile(".*"),           # catch strange entries
@@ -104,6 +107,7 @@ class ProfileMiddleware(object):
     WARNING: It uses hotshot profiler which is not thread safe.
     """
     def process_request(self, request):
+        # pylint: disable=attribute-defined-outside-init
         if (settings.DEBUG or request.user.is_superuser) and 'prof' in request.GET:
             self.tmpfile = tempfile.mktemp()
             self.prof = hotshot.Profile(self.tmpfile)
@@ -112,53 +116,63 @@ class ProfileMiddleware(object):
         if (settings.DEBUG or request.user.is_superuser) and 'prof' in request.GET:
             return self.prof.runcall(callback, request, *callback_args, **callback_kwargs)
 
-    def get_group(self, file):
-        for g in group_prefix_re:
-            name = g.findall(file)
+    def get_group(self, filename):
+        for group_prefix in GROUP_PREFIXES:
+            name = group_prefix.findall(filename)
             if name:
                 return name[0]
 
-    def get_summary(self, results_dict, sum):
-        list = [(item[1], item[0]) for item in results_dict.items()]
-        list.sort(reverse=True)
-        list = list[:40]
+    def get_summary(self, results_dict, total):
+        items = sorted(results_dict.items(), key=lambda t: (t[1], t[0]), reverse=True)
 
-        res = "      tottime\n"
-        for item in list:
-            res += "%4.1f%% %7.3f %s\n" % (100*item[0]/sum if sum else 0, item[0], item[1])
+        res = ["      tottime"]
+        for module, time in items[:40]:
+            res.append("%4.1f%% %7.3f %s" % (100*time/total if total else 0, time, module))
 
-        return res
+        return '\n'.join(res)
+
+    def _extract_filename_from_line_spec(self, line_spec):
+        """ A line spec is either on the form
+            "/path/to/module.py:<linenum>(<func_name>)"
+        on linux, or
+            "<drive_letter>:\\path\\to\\module.py:<linenum>(<func_name>)"
+        on windows. This func extracts /path/to/module.py from both forms.
+        """
+        parts = line_spec.split(':')
+        if len(parts) == 3:
+            # windows-style path
+            return parts[1].replace('\\', '/')
+        else:
+            return parts[0]
 
     def summary_for_files(self, stats_str):
         stats_str = stats_str.split("\n")[5:]
 
-        mystats = {}
-        mygroups = {}
+        mystats = collections.defaultdict(int)
+        mygroups = collections.defaultdict(int)
 
-        sum = 0
+        total = 0
 
-        for s in stats_str:
-            fields = words_re.split(s);
+        for stat in stats_str:
+            fields = WORDS_RE.split(stat)
             if len(fields) == 7:
                 time = float(fields[2])
-                sum += time
-                file = fields[6].split(":")[0]
+                total += time
+                filename = self._extract_filename_from_line_spec(fields[6])
 
-                if not file in mystats:
-                    mystats[file] = 0
-                mystats[file] += time
+                if time:
+                    mystats[filename] += time
 
-                group = self.get_group(file)
-                if not group in mygroups:
-                    mygroups[group] = 0
-                mygroups[group] += time
+                    group = self.get_group(filename)
+                    mygroups[group] += time
 
-        return "<pre>" + \
-               " ---- By file ----\n\n" + self.get_summary(mystats, sum) + "\n" + \
-               " ---- By group ---\n\n" + self.get_summary(mygroups, sum) + \
-               "</pre>"
+        return ("<pre>"
+               " ---- By file ----\n\n%s\n"
+               " ---- By group ---\n\n%s"
+               "</pre>") % (self.get_summary(mystats, total), self.get_summary(mygroups, total))
 
     def process_response(self, request, response):
+        print('Process response, debug=%s, get=%s' % (settings.DEBUG, request.GET))
         if (settings.DEBUG or request.user.is_superuser) and 'prof' in request.GET:
             self.prof.close()
 
@@ -174,7 +188,7 @@ class ProfileMiddleware(object):
             stats_str = out.getvalue()
 
             if response and response.content and stats_str:
-                response.content = "<pre>" + stats_str + "</pre>"
+                response.content = "<h1>Profiling results</h1><pre>" + stats_str + "</pre>"
 
             response.content = "\n".join(response.content.split("\n")[:40])
 

@@ -7,6 +7,7 @@ from .utils import _get_ssh_connection_params, slugify
 from .views import ActionView
 from .middleware import HttpAcceptMiddleware, HttpMethodOverride
 
+from django.contrib.auth.models import User
 from django.test import TestCase, Client, RequestFactory
 from django.http import HttpResponse
 from django.template import Template, Context
@@ -286,3 +287,16 @@ class ActionViewTest(TestCase):
 
     def test_invalid_action(self):
         self.assertRaises(TypeError, self.TestView.as_view, action='invalid')
+
+
+class ProfilerTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        User.objects.create_superuser(username='admin', password='admin', email='admin@site')
+        self.client.login(username='admin', password='admin')
+
+    def test_profiler_doesnt_crash(self):
+        response = self.client.get('/?prof')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Profiling results' in response.content.decode('utf-8'))
