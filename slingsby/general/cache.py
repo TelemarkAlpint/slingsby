@@ -11,7 +11,6 @@ from django.core.cache import cache
 from django.db.models.query import ValuesQuerySet
 from django.db.models.signals import post_save, post_delete
 from logging import getLogger
-import os
 
 _logger = getLogger(__name__)
 

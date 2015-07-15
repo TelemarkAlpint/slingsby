@@ -7,7 +7,6 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response
 from django.utils.cache import add_never_cache_headers
 from django.views.static import serve as static_serve
 
