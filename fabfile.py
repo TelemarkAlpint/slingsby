@@ -18,8 +18,8 @@ from fabric.api import run, sudo, put, cd, hosts, env, local
 from fabric.context_managers import shell_env
 import collections
 import os
-import requests
 import sys
+import time
 
 try:
     import colorama
