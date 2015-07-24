@@ -1,7 +1,15 @@
 language: python
+sudo: false
 
 python:
   - "2.7"
+
+# Install sox and lame (required for the musikk task tests)
+addons:
+  apt:
+    packages:
+      - sox
+      - lame
 
 before_install:
 
@@ -26,9 +34,6 @@ install:
   - npm install -g grunt-cli bower
   - npm install
   - bower install
-
-  # Install sox and lame (required for the musikk task tests)
-  - sudo apt-get install sox lame
 
 script: ./tools/test-and-deploy.sh
 
