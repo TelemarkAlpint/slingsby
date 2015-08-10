@@ -1,7 +1,7 @@
 Slingsby [![Build Status](https://travis-ci.org/TelemarkAlpint/slingsby.png?branch=master)](https://travis-ci.org/TelemarkAlpint/slingsby)
 ========
 
-The homepage for [NTNUI Telemark/Alpint](http://ntnuita.no).
+The homepage for [NTNUI Telemark-Alpint](http://ntnuita.no).
 
 [Slingsby](http://en.wikipedia.org/wiki/William_Slingsby) was also the first man to conquer Store
 Vengetind in Romsdalen, along with hundreds of summits in Jotunheimen. One of the hardest ski

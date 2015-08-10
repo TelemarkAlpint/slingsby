@@ -179,7 +179,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 MEDIA_URL = 'http://org.ntnu.no/telemark/media/'
 
-DEFAULT_TITLE = 'NTNUI Telemark/Alpint'
+DEFAULT_TITLE = 'NTNUI Telemark-Alpint'
 
 DISQUS_IDENTIFIER = 'telemarkalpint'
 

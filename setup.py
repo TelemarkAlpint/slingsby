@@ -29,10 +29,10 @@ if 'sdist' in sys.argv:
 setup(
     name='slingsby',
     version=get_version(),
-    author='NTNUI Telemark/Alpint',
+    author='NTNUI Telemark-Alpint',
     author_email='telemark-webmaster@ntnui.no',
     url='https://github.com/TelemarkAlpint/slingsby',
-    description='NTNUI Telemark/Alpints website',
+    description='NTNUI Telemark-Alpints website',
     packages=find_packages(),
     package_data={
         '': [

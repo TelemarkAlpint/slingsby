@@ -30,6 +30,6 @@ def validate_text(text):
 
 def make_title(subpage=None):
     if subpage:
-        return '%s :: NTNUI Telemark/Alpint' % strip_tags(subpage)
+        return '%s :: NTNUI Telemark-Alpint' % strip_tags(subpage)
     else:
-        return 'NTNUI Telemark/Alpint'
+        return 'NTNUI Telemark-Alpint'

@@ -39,8 +39,8 @@
 **    Replacements:
 **    -------------------------------------------------------------------------
 **
-**    The following modifications is done by Tarjei Husøy for 
-**    NTNUI Telemark/Alpint:
+**    The following modifications is done by Tarjei HusÃ¸y for
+**    NTNUI Telemark-Alpint:
 **
 **    * Removed some of the heading types (h4 and h5 left)
 **    * Set auto-clean on pasting to true
