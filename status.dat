@@ -518,7 +518,7 @@ I1
 sg19
 I0
 sg20
-I93
+I96
 sg21
 I12
 sg22
@@ -528,7 +528,7 @@ I9
 sg24
 I0
 sbssg25
-S'\x07\x85\x00\x96\x8c\xdd\xea\x8e\xcd\xa6a\xe1\xac\x9d\xbf\x9f'
+S'\x95(\x88\x06\x0b\xf3L\xf74\xef\x06\x822\t\xb5\x00'
 p138
 ssS'slingsby_events___init__'
 p139
