@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>
+    Hei {{ name }}, velkommen til telemarkgruppa!
+</p>
+
+<p>
+    Bekreft epostaddressen din ved å besøke denne lenken:
+</p>
+
+<a href="http://ntnuita.no{% url 'profile' %}?token={{ token }}">
+    ntnuita.no{% url 'profile' %}?token={{ token }}
+</a>
+
+<p>
+    Når du har klikket på lenken over så har du mulighet til å melde deg på
+    events som krever påmelding.
+</p>
+
+<p>
+    Hvis du ikke ønsker å være medlem lenger så kan du melde deg ut
+    <a href="{% url 'leave-group' %}">her</a>, ellers så vil du
+    automatisk meldes ut om du ikke har vært aktiv på ett år.
+</p>
+
+<p>
+    Håper du får en fin sesong med oss!
+</p>
+
+<p>
+    <small>
+        (Er du ikke {{ name }}? I så fall kan du ignorere denne eposten. Hvis du får flere av disse, si fra til webmaster på telemark-webmaster@ntnui.no).
+    </small>
+</p>
+
+--
+NTNUI Telemark-Alpint
+
+</p>
+
+</body>
+</html>

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load revved_static %}
+
 {% block content %}
 
     <h1>{{ user }}</h1>
@@ -7,10 +9,34 @@
     <table id="profile-info">
         <tr>
             <th>E-post:</th>
-            <td>{{ user.email }}</td>
+            <td>
+                {% if user.profile.email_confirmed_at %}
+                    {{ user.profile.chosen_email }}
+                {% elif user.profile.email_challenge %}
+                    <em>{{ user.profile.chosen_email }}</em>
+                    <img src="{% static 'gfx/mail.png' %}" title="Sjekk eposten din for koden">
+                    <!--<form method="post" action="{% url 'resend-email' %}">
+                        <input type="submit" value="Send kode på nytt">
+                    </form>-->
+                    <form method="get">
+                        <input type="text" name="token" placeholder="Lim inn koden her" class="key-input" size="24">
+                        <input type="submit" class="btn" value="Send inn">
+                    </form>
+                {% endif %}
+            </td>
         </tr>
         <tr>
-            <th>Tilgang til komitémedlempåmelding:</th>
+            <th>Medlem:</th>
+            <td>
+                {% if user.profile.email_challenge %}
+                    Nei (bekreft epost først)
+                {% else %}
+                    {{ user.profile.member_since|yesno:"Ja,Nei" }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Komitémedlem:</th>
             <td>{{ perms.events.early_signup|yesno:"Ja,Nei" }}</td>
         </tr>
     </table>

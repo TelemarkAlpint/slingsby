@@ -21,6 +21,8 @@ USE_TZ = True
 
 SERVER_EMAIL = 'noreply@ntnuita.no'
 
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
+
 LANGUAGE_CODE = 'nb-NO'
 
 TIME_ZONE = 'Europe/Oslo'
