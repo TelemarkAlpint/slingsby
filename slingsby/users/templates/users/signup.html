@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    Medlemsskap i telemarkgruppa er gratis og krever ingenting av deg annet enn at du sier deg villig til å få epost av oss innimellom når det skjer noe. Medlemsskap gir deg muligheten til å være med på arrangementene våre som krever påmelding, slik som turer og konkurranser.
+
+    {% if request.user.is_authenticated %}
+
+        <form action="{% url 'signup' %}" method="post">
+            <label for="signup-email">Epost:</label>
+            <input id="signup-email" type="email" name="email" value="{{ user.email }}">
+            <input type="submit" class="btn" value="Meld meg inn!">
+        </form>
+
+    {% else %}
+
+        For å bli med medlem i gruppa må du først <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">logge inn.</a>
+
+    {% endif %}
+
+{% endblock %}

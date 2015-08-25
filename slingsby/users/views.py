@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 
+from .exceptions import AlreadyVerifiedException, TokenExpiredException
 from ..general.time import now
 from ..general.views import ActionView
+from ..general.mail import send_templated_mail
 from ..events.models import Event
 from ..musikk.models import Vote, Song
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import logout as social_logout
-from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import timezone
 from django.views.generic.base import View, TemplateView
 from logging import getLogger
+from validate_email import validate_email
 
 _logger = getLogger(__name__)
 
@@ -29,7 +34,33 @@ class UserProfileView(ActionView, TemplateView):
 
 
     def get(self, request, **kwargs):
+        # This uses GET instead of POST since the link sent in the email
+        # should be clickable, which always results in a GET
         context = self.get_context_data(**kwargs)
+        email_token = request.GET.get('token')
+        if email_token:
+            try:
+                if request.user.profile.confirm_email(email_token):
+                    _logger.info('User %d confirmed email %s', request.user.id,
+                        request.user.profile.chosen_email)
+                    messages.success(request, 'Eposten din ble bekreftet, takk.')
+                    request.user.profile.member_since = timezone.now()
+                    request.user.profile.save()
+                else:
+                    messages.error(request, 'Ikke riktig kode, prøv på nytt.')
+                    _logger.info('Invalid response to challenge token for user %d',
+                        request.user.id)
+                    return self.render_to_response(context, status=400)
+            except AlreadyVerifiedException:
+                messages.warning(request, 'Du har allerede bekreftet denne epost-adressen.')
+                _logger.info('User %d tried to verify an already confirmed email',
+                    request.user.id)
+            except TokenExpiredException:
+                messages.warning(request, 'Denne koden har utløpt, klikk på knappen ved '
+                    'siden av eposten din for å sende en ny.')
+                _logger.info('User %d tried to confirm an email using an expired token',
+                    request.user.id)
+            return HttpResponseRedirect(reverse('profile'))
         return self.render_to_response(context)
 
 
@@ -67,6 +98,34 @@ class LogoutView(View):
             social_logout(request)
             messages.success(request, 'Du er nå logget ut, ha en fortsatt fin dag!')
         return HttpResponseRedirect('/')
+
+
+class JoinView(TemplateView):
+
+    template_name = 'users/signup.html'
+
+    def post(self, request, **kwargs):
+        chosen_email = request.POST.get('email')
+        valid_email = validate_email(chosen_email)
+        if not valid_email:
+            messages.warning(request, 'Eposten du oppgav ser ikke ut til å '
+                'være en gyldig epostadresse, prøv på nytt')
+            return self.render_to_response(request, status=400)
+        _logger.info('Sending email confirmation to %s', chosen_email)
+        profile = request.user.profile
+        profile.set_unconfirmed_email(chosen_email)
+        profile.save()
+        messages.success(request, 'Takk, sjekk eposten din for en mail fra oss, følg '
+            'instruksjonene der for å fullføre innmeldingen. Om du ikke har '
+            'fått mailen, sjekk spam-filteret ditt eller legg til '
+            'noreply@ntnuita.no i kontaktlisten din og be om en ny mail.')
+        send_templated_mail(subject='Bekreft eposten din for telemarkgruppa',
+            template='users/mail/signup', recipient_list=[chosen_email],
+            context={
+            'name': request.user.get_full_name(),
+            'token': profile.email_challenge,
+        })
+        return HttpResponseRedirect(reverse('profile'))
 
 
 class DevLogin(TemplateView): # pragma: no cover

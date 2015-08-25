@@ -6,6 +6,9 @@ Both DEBUG=True (url routing) and adding this to AUTHENTICATION_BACKENDS needs t
 for this to work.
 """
 
+# Import tasks for them to be discovered
+from . import tasks # pylint: ignore=unused-import
+
 from django.contrib.auth.models import User
 
 class DevAuthBackend(object): # pragma: no cover

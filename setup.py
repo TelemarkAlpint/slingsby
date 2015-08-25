@@ -38,6 +38,8 @@ setup(
         '': [
             path.join('templates', '*.html'),
             path.join('templates', '*', '*.html'),
+            path.join('templates', '*', 'mail', '*.html'),
+            path.join('templates', '*', 'mail', '*.txt'),
             path.join('server-assets', '*'),
             path.join('test-data', '*.json'),
             'log_conf.yaml',
