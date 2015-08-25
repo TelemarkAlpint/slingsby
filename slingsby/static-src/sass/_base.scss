@@ -85,10 +85,12 @@ h3 { font-size: 16px; }
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
     text-decoration: none;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         background-image: linear-gradient(to bottom, $button-color, darken($button-color, 4%));
         text-decoration: none;
-        color: #fff;
+        color: #fff !important;
     }
 
     &[disabled] {

@@ -30,8 +30,10 @@
             <td>
                 {% if user.profile.email_challenge %}
                     Nei (bekreft epost først)
+                {% elif user.profile.member_since %}
+                    Siden {{ user.profile.member_since|date:"d b, Y" }}
                 {% else %}
-                    {{ user.profile.member_since|yesno:"Ja,Nei" }}
+                    Nei <a href="{% url 'signup' %}" class="btn">Meld meg inn!</a>
                 {% endif %}
             </td>
         </tr>
