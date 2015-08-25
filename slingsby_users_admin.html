@@ -85,7 +85,7 @@
             </td>
             <td class='text' valign='top'>
 <p id='t1' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span> <span class='key'>import</span> <span class='nam'>admin</span><span class='strut'>&nbsp;</span></p>
-<p id='t2' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>auth</span><span class='op'>.</span><span class='nam'>admin</span> <span class='key'>import</span> <span class='nam'>UserAdmin</span><span class='strut'>&nbsp;</span></p>
+<p id='t2' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>auth</span><span class='op'>.</span><span class='nam'>admin</span> <span class='key'>import</span> <span class='nam'>UserAdmin</span> <span class='key'>as</span> <span class='nam'>_UserAdmin</span><span class='strut'>&nbsp;</span></p>
 <p id='t3' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>auth</span><span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>User</span><span class='strut'>&nbsp;</span></p>
 <p id='t4' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t5' class='stm run hide_run'><span class='key'>from</span> <span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>UserProfile</span><span class='strut'>&nbsp;</span></p>
@@ -98,7 +98,7 @@
 <p id='t12' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>verbose_name_plural</span> <span class='op'>=</span> <span class='str'>&#39;profiler&#39;</span><span class='strut'>&nbsp;</span></p>
 <p id='t13' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t14' class='pln'><span class='com'># Define a new User admin</span><span class='strut'>&nbsp;</span></p>
-<p id='t15' class='stm run hide_run'><span class='key'>class</span> <span class='nam'>UserAdmin</span><span class='op'>(</span><span class='nam'>UserAdmin</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t15' class='stm run hide_run'><span class='key'>class</span> <span class='nam'>UserAdmin</span><span class='op'>(</span><span class='nam'>_UserAdmin</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t16' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>inlines</span> <span class='op'>=</span> <span class='op'>(</span><span class='nam'>UserProfileInline</span><span class='op'>,</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t17' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t18' class='pln'><span class='com'># Re-register UserAdmin</span><span class='strut'>&nbsp;</span></p>
