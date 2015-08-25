@@ -172,7 +172,6 @@ class ProfileMiddleware(object):
                "</pre>") % (self.get_summary(mystats, total), self.get_summary(mygroups, total))
 
     def process_response(self, request, response):
-        print('Process response, debug=%s, get=%s' % (settings.DEBUG, request.GET))
         if (settings.DEBUG or request.user.is_superuser) and 'prof' in request.GET:
             self.prof.close()
 
