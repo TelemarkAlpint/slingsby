@@ -38,8 +38,16 @@
             </td>
         </tr>
         <tr>
-            <th>Komitémedlem:</th>
-            <td>{{ perms.events.early_signup|yesno:"Ja,Nei" }}</td>
+            <th>Komitéer:</th>
+            <td>
+                {% if request.user.groups.all %}
+                    {{ request.user.groups.all|join:", " }}
+                {% else %}
+                    Ikke medlem av noen komitée &mdash; meld deg inn for å
+                    gjøre en forskjell for gruppa! Du får også tilgang til å
+                    melde deg på events før alle andre.
+                {% endif %}
+            </td>
         </tr>
     </table>
 
