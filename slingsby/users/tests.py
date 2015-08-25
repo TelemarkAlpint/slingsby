@@ -37,6 +37,12 @@ class SignupTest(TestCase):
         User.objects.create_user(username='testuser', password='password')
         self.logged_in_user.login(username='testuser', password='password')
 
+        self.member = Client()
+        member = User.objects.create_user(username='member', password='password')
+        member.profile.member_since = timezone.now()
+        member.profile.save()
+        self.member.login(username='member', password='password')
+
 
     def test_get_signup_page(self):
         response = self.logged_in_user.get('/blimed')
@@ -68,6 +74,12 @@ class SignupTest(TestCase):
         self.assertTrue(response['location'].endswith('/profil'))
         user = User.objects.get(username='testuser')
         self.assertTrue(user.profile.email_confirmed_at is not None)
+
+
+    def test_members_are_redirected(self):
+        response = self.member.get('/blimed')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['location'].endswith('/profil'))
 
 
 class InvalidSignupFlowTest(TestCase):

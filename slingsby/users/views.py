@@ -128,6 +128,12 @@ class JoinView(TemplateView):
         return HttpResponseRedirect(reverse('profile'))
 
 
+    def get(self, request):
+        if request.user.profile.member_since:
+            return HttpResponseRedirect(reverse('profile'))
+        return self.render_to_response(request)
+
+
 class DevLogin(TemplateView): # pragma: no cover
 
     template_name = 'users/devlogin.html'

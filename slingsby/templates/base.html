@@ -121,9 +121,11 @@
                         <li>
                             <a href="{% url 'all_instagram' %}">Instagram</a>
                         </li>
-                        <li>
-                            <a href="{% url 'signup' %}">Bli med!</a>
-                        </li>
+                        {% if not request.user.profile.member_since %}
+                            <li>
+                                <a href="{% url 'signup' %}">Bli med!</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </nav>
 
