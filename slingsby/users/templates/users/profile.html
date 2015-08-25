@@ -64,8 +64,14 @@
     {% endfor %}
     </ul>
 
-    <span><i>* Etter 30. august 2012. Hvis du vil ha kred for noen sanger du har foreslått før den tid,
-        send en mail til telemark-webmaster@ntnui.no</i></span>
+    {# Only show heads-up to users that registered before this date #}
+    {% if should_see_song_creds_notice %}
+    <p>
+        <i>* Etter 30. august 2012. Hvis du vil ha kred for noen sanger du har
+            foreslått før den tid, send en mail til telemark-webmaster@ntnui.no
+        </i>
+    </p>
+    {% endif %}
 
     <h1>Sanger du har stemt mest på</h1>
     <ul class="most_voted_songs">

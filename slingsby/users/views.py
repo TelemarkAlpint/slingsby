@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .exceptions import AlreadyVerifiedException, TokenExpiredException
-from ..general.time import now
+from ..general.time import now, aware_time
 from ..general.views import ActionView
 from ..general.mail import send_templated_mail
 from ..events.models import Event
@@ -17,6 +17,7 @@ from django.utils import timezone
 from django.views.generic.base import View, TemplateView
 from logging import getLogger
 from validate_email import validate_email
+import datetime
 
 _logger = getLogger(__name__)
 
@@ -30,6 +31,8 @@ class UserProfileView(ActionView, TemplateView):
         context['events'] = self.get_events(user)
         context['top_voted_songs'] = self.get_favorite_songs(user)
         context['suggested_songs'] = self.get_suggested_songs(user)
+        song_creds_cutoff = aware_time(datetime.datetime(2012, 8, 10))
+        context['should_see_song_creds_notice'] = user.date_joined < song_creds_cutoff
         return context
 
 
