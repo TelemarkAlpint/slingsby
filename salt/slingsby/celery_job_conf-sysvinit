@@ -40,7 +40,7 @@ do_start() {
         return 1
     fi
 
-    start-stop-daemon --start --quiet --background --pidfile $PIDFILE
+    start-stop-daemon --start --quiet --background --pidfile $PIDFILE \
         --make-pidfile --chuid $USER --exec $DAEMON -- $DAEMON_ARGS \
         || return 2
 }
