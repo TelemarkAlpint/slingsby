@@ -64,6 +64,19 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 
 biff = no
 
+{% set smtpd_milters = salt['pillar.get']('postfix:smtpd_milters') %}
+{% if smtpd_milters %}
+# Milters used (not necessarily in order): {{ ', '.join(smtpd_milters.keys()) }}
+smtpd_milters = {{ ', '.join(smtpd_milters.values()) }}
+{% endif %}
+
+{% set non_smtpd_milters = salt['pillar.get']('postfix:non_smtpd_milters') %}
+{% if non_smtpd_milters %}
+# Milters used (not necessarily in order): {{ ', '.join(non_smtpd_milters.keys()) }}
+non_smtpd_milters = {{ ', '.join(non_smtpd_milters.values()) }}
+{% endif %}
+
+
 {% if grains['id'] == 'vagrant' -%}
 # Don't send mail outwards when running in local vm
 canonical_maps = regexp:/etc/postfix/canonical-redirect

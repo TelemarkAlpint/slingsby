@@ -5,11 +5,12 @@
 
 import argparse
 import base64
-import Crypto.Random
 import Crypto.Cipher
+import Crypto.Random
 import getpass
 import os
 import os.path
+import sys
 import yaml
 
 
@@ -36,8 +37,9 @@ def get_args():
         help='Choose whether to encrypt or decrypt. Default: %(default)s')
     parser.add_argument('values_to_encrypt', nargs='?',
         help='New value to encrypt. Format is KEY=VALUE, output will be ' +
-            'KEY=<base64-encoded encrypted data>. If you prefix the value with @, contents will ' +
-            'read from the filename following the @. (eg. SSH_KEY=@id_rsa)')
+            'KEY=<base64-encoded encrypted data>. If you prefix the value with @, contents will '
+            'read from the filename following the @. (eg. SSH_KEY=@id_rsa). Set the value to "-" '
+            'to read it from stdin.')
     parser.add_argument('-k', '--key',
         help='The secret key to use. Will be prompted for if not provided')
     return parser.parse_args()
@@ -49,6 +51,10 @@ def encrypt(secret_key, value):
     if val[0] == '@':
         with open(val[1:]) as plaintext_fh:
             plaintext = plaintext_fh.read()
+    elif val == '-':
+        # Read from stdin
+        print('Reading plaintext from stdin...')
+        plaintext = sys.stdin.read()
     else:
         plaintext = val
     ciphertext = aes_encrypt(secret_key, plaintext)
