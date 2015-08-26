@@ -25,5 +25,6 @@ base:
   'roles:web':
     - match: grain
     - old-sites
+    - opendkim
     - slingsby
     - sshfs
