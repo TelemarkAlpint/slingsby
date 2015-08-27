@@ -3,6 +3,13 @@ absent_users:
   - pi
 
 developers:
+  anders:
+    fullname: Anders Lysne
+    groups:
+      - admin
+    password_pillar: ANDERS_PASSWORD
+
+
   tarjei:
     fullname: Tarjei Husoy
     groups:
