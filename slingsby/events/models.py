@@ -138,11 +138,11 @@ class Event(models.Model):
     def can_user_register_now(self, user):
         if self.registration_opens is None:
             return True
+        opening_time_for_user = self.registration_opens_for_user(user) - timedelta(seconds=1)
         if self.registration_closes is None:
-            opening_time_for_user = self.registration_opens_for_user(user)
-            return time.is_past(opening_time_for_user - timedelta(seconds=1))
+            return time.is_past(opening_time_for_user)
         else:
-            return time.is_past(self.registration_opens) and time.is_future(self.registration_closes)
+            return time.is_past(opening_time_for_user) and time.is_future(self.registration_closes)
 
     def is_registration_closed(self):
         if self.registration_closes is None:
