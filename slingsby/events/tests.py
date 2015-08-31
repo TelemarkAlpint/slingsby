@@ -130,6 +130,7 @@ class EventSignupCommitteeTest(TestCase):
             startdate=(datetime.now() + timedelta(days=3)), enddate=(datetime.now() +
                 timedelta(days=3, hours=5)), has_registration=True, number_of_spots=3,
             registration_opens=(datetime.now() + timedelta(days=1)),
+            registration_closes=(datetime.now() + timedelta(days=2)),
             comittee_registration_opens=(datetime.now() - timedelta(hours=2)))
 
 
