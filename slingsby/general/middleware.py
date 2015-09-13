@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.messages.api import MessageFailure
+from django.shortcuts import redirect
+from django.utils.http import urlquote
+from social.exceptions import SocialAuthBaseException, AuthCanceled
+from social.apps.django_app.middleware import (
+    SocialAuthExceptionMiddleware as _SocialAuthExceptionMiddleware)
 import collections
 import hotshot
 import hotshot.stats
@@ -5,11 +16,10 @@ import httpheader
 import logging
 import os
 import re
+import six
 import StringIO
 import sys
 import tempfile
-
-from django.conf import settings
 
 _logger = logging.getLogger(__name__)
 
@@ -196,3 +206,57 @@ class ProfileMiddleware(object):
             os.unlink(self.tmpfile)
 
         return response
+
+
+class SocialAuthExceptionMiddleware(_SocialAuthExceptionMiddleware):
+    """Middleware that handles Social Auth AuthExceptions by providing the user
+    with a message, logging an error, and redirecting to some next location.
+
+    By default, the exception message itself is sent to the user and they are
+    redirected to the location specified in the SOCIAL_AUTH_LOGIN_ERROR_URL
+    setting.
+
+    NTNUITA: Overriden from what's included in python-social-auth to not show message back
+    to user as error, but as warning. Also redirects back to the page the user was on when
+    initializing the authentication, instead of root.
+
+    Note: This can be tested by using one of the Facebook test users and aborting the auth, go to
+    https://developers.facebook.com/apps/1416174671936188/roles/test-users/ to manage them.
+    """
+
+    def process_exception(self, request, exception):
+        strategy = getattr(request, 'social_strategy', None)
+        if strategy is None or self.raise_exception(request, exception):
+            return
+
+        if isinstance(exception, SocialAuthBaseException):
+            backend = getattr(request, 'backend', None)
+            backend_name = getattr(backend, 'name', 'unknown-backend')
+
+            message = self.get_message(request, exception)
+            _logger.warning('Auth cancelled by user')
+
+            url = self.get_redirect_uri(request, exception) or '/'
+            try:
+                messages.warning(request, message,
+                               extra_tags='social-auth ' + backend_name)
+            except MessageFailure:
+                url += ('?' in url and '&' or '?') + \
+                       'message={0}&backend={1}'.format(urlquote(message),
+                                                        backend_name)
+            return redirect(url)
+
+
+    def get_message(self, request, exception):
+        if isinstance(exception, AuthCanceled):
+            return 'Autentisering avbrutt, prøv igjen om du ombestemmer deg.'
+        return six.text_type(exception)
+
+
+    def get_redirect_uri(self, request, exception):
+        strategy = getattr(request, 'social_strategy', None)
+        if strategy:
+            next_param = strategy.session_get(REDIRECT_FIELD_NAME)
+            if next_param:
+                return next_param
+            return strategy.setting('LOGIN_ERROR_URL')
