@@ -11,7 +11,7 @@ _logger = getLogger('slingsby.general')
 
 _LEGAL_TAGS = set(['p', 'br', 'ol', 'li', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'a',
                   'b', 'strong', 'italic', 'i', 'em', 'div', 'iframe', 'table', 'tr', 'th', 'td',
-                  'tbody', 'thead', 'tfoot', 'span', 'q', 'blockquote', 'dd', 'dl', 'dt'])
+                  'tbody', 'thead', 'tfoot', 'span', 'q', 'blockquote', 'dd', 'dl', 'dt', 'style'])
 
 
 def validate_text(text):
