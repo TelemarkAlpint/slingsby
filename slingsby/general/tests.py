@@ -171,6 +171,18 @@ class HttpAcceptMiddlewareTest(TestCase):
         self.assertTrue(self.request.prefer_json)
         self.assertFalse(self.request.prefer_html)
 
+    def test_accept_found_in_the_wild1(self):
+        self.request.META['HTTP_ACCEPT'] = 'text/html,application/xhtml+xml,application/xml;image/png,image/jpeg,image/*;q=0.9,*/*;q=0.8'
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_html)
+        self.assertFalse(self.request.prefer_json)
+
+    def test_accept_found_in_the_wild_spaces(self):
+        self.request.META['HTTP_ACCEPT'] = 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2'
+        self.middleware.process_request(self.request)
+        self.assertTrue(self.request.prefer_html)
+        self.assertFalse(self.request.prefer_json)
+
 
 class HttpMethodOverrideTest(TestCase):
 
