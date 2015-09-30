@@ -51,8 +51,8 @@ def days_between(date1, date2):
     return days_passed
 
 def seconds_since(date):
-    return seconds_between(now(), date
-                           )
+    return seconds_between(now(), date)
+
 def seconds_between(date1, date2):
     dst_date1 = aware_time(date1)
     dst_date2 = aware_time(date2)
