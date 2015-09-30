@@ -7,7 +7,7 @@
             var countdown = setInterval(function () {
                 if (secondsRemaining <= 0) {
                     clearInterval(countdown);
-                    history.go(0);
+                    location.reload(true);
                 } else if (secondsRemaining < 1800) {
                     if (secondsRemaining % 180 === 0 && secondsRemaining >= 120) {
                         history.go(0);
