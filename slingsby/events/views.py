@@ -45,7 +45,7 @@ class EventDetailView(ActionView, TemplateView):
         if event.registration_opens:
             context['registration_opens_for_user_as_string'] = _format_date(time.utc_to_nor(
                 event.registration_opens_for_user(self.request.user)))
-            context['seconds_until_registration_opens_for_user'] = event.seconds_until_registration_opens_for_user(
+            context['signup_countdown_seconds'] = event.signup_countdown_seconds(
                 self.request.user)
         return context
 

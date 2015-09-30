@@ -131,7 +131,7 @@ class EventSignupCommitteeTest(TestCase):
                 timedelta(days=3, hours=5)), has_registration=True, number_of_spots=3,
             registration_opens=(datetime.now() + timedelta(days=1)),
             registration_closes=(datetime.now() + timedelta(days=2)),
-            comittee_registration_opens=(datetime.now() - timedelta(hours=2)))
+            _comittee_registration_opens=(datetime.now() - timedelta(hours=2)))
 
 
     def test_event_signup_for_committee_members(self):
@@ -152,7 +152,22 @@ class EventSignupCommitteeTest(TestCase):
         response = self.committee_member1.post('/program/1/join')
         self.assertEqual(response.status_code, 302)
         self.assertTrue('/program/1' in response.get('location'))
+        self.assertEqual(self.event.num_participants(), 1)
 
         # Should reject early signups if total percentage becomes more than 40%
         response = self.committee_member2.post('/program/1/join')
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(self.event.num_participants(), 1)
+
+        # If earlybird is full, committee members should have countdown to normal signup
+        self.assertTrue(self.event.signup_countdown_seconds(
+            User.objects.get(username='øverland')) > 0)
+
+        # øverland should see the single comittee member signup
+        self.assertEqual(len(self.event.get_participating_users(
+            User.objects.get(username='øverland'))), 1)
+
+        # normal users should not see any signups
+        self.assertEqual(len(self.event.get_participating_users(
+            User.objects.get(username='joe'))), 0)
+        self.assertEqual(len(self.event.get_participating_users()), 0)
