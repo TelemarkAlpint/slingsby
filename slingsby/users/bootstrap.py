@@ -13,6 +13,10 @@ def bootstrap():
         get_permission('events.add_event'),
         get_permission('events.change_event'),
         get_permission('events.delete_event'),
+        get_permission('events.early_signup'),
+        get_permission('events.add_signup'),
+        get_permission('events.change_signup'),
+        get_permission('events.delete_signup'),
     ]
     styret, _ = Group.objects.get_or_create(name='Styret')
     styret.permissions = [
