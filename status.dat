@@ -348,7 +348,7 @@ I1
 sg19
 I0
 sg20
-I180
+I170
 sg21
 I0
 sg22
@@ -358,7 +358,7 @@ I0
 sg24
 I0
 sbssg25
-S'B\xa6\xa9\xe2-\x94\xf6\xb1G\xb0$5\x9f\x06\xfc.'
+S'\xcd^\xdd \x04\xf7\xe3\x18T\xf9\x81\x00\xb5\xfdV\x96'
 p98
 ssS'slingsby_events_migrations_0002_auto_20150317_1139'
 p99
