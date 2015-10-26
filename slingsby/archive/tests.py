@@ -106,6 +106,11 @@ class ArchiveFrontPageTest(TestCase):
         self.assertTrue('web.jpg' in response.content.decode('utf-8'))
 
 
+    def test_invalid_show_event(self):
+        response = self.client.get('/arkiv?showEvent=/etc/passwd')
+        self.assertEqual(response.status_code, 200)
+
+
 class ArchiveBaseTest(TestCase):
 
     def test_invalid_event_dates(self):

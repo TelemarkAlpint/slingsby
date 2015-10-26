@@ -24,7 +24,14 @@ class ArchiveView(TemplateView):
         context['events'] = events
         context['title'] = make_title('Arkiv')
         context['event_form'] = EventForm()
-        context['show_event'] = int(self.request.GET.get('showEvent', '0'))
+        try:
+            context['show_event'] = int(self.request.GET.get('showEvent', '0'))
+        except:
+            # Should preferably have returned a 400, but since we can't return
+            # HTTP responses directly from this method, we'll just ignore the
+            # failure and show the first event
+            _logger.warning('Got invalid showEvent data: %s', self.request.GET.get('showEvent'))
+            context['show_event'] = 0
         return context
 
 
