@@ -70,33 +70,38 @@
             <div id="status">
             {% block status %}
 
-                {% if user.is_authenticated %}
+                <span class="clickable">
+                    {% if user.is_authenticated %}
+                        {{ user.username|truncatechars:30 }}
+                    {% else %}
+                        Login
+                    {% endif %}
+                    <span class="click_symbol">&#9664;</span>
+                </span>
 
-                    <span class="clickable">
-                        {{ user.username|truncatechars:30 }} <span class="click_symbol">&#9664;</span>
-                    </span>
 
                 <ul style="display: none;" class="menu-dropdown">
+                    {% if user.is_authenticated %}
                         {% if user.is_staff %}
                             <li><a href="{% url 'admin:index' %}">Administrer</a></li>
                         {% endif %}
 
                         <li><a href="{% url 'profile' %}">Profil</a></li>
-
                         <li><a href="{% url 'logout' %}">Logout</a></li>
-                </ul>
-                {% else %}
-                    <span class="clickable">
-                        Login <span class="click_symbol">&#9664;</span>
-                    </span>
 
-                <ul style="display: none">
-                    <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">Login via facebook</a></li>
-                    {% if debug %}
-                        <li><a href="{% url 'devlogin' %}">Developer login</a></li>
+                    {% else %}
+
+                        <li>
+                            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path|urlencode }}">
+                                Login via facebook
+                            </a>
+                        </li>
+
+                        {% if debug %}
+                            <li><a href="{% url 'devlogin' %}">Developer login</a></li>
+                        {% endif %}
                     {% endif %}
                 </ul>
-                {% endif %}
             {% endblock %}
             </div>
         </div>
