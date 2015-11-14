@@ -163,6 +163,9 @@ class EventSignupCommitteeTest(TestCase):
         self.assertTrue(self.event.signup_countdown_seconds(
             User.objects.get(username='øverland')) > 0)
 
+        # If earlybird is full, commitee members should not be able to sign up
+        self.assertFalse(self.event.can_user_register_now(User.objects.get(username='øverland')))
+
         # øverland should see the single comittee member signup
         self.assertEqual(len(self.event.get_participating_users(
             User.objects.get(username='øverland'))), 1)

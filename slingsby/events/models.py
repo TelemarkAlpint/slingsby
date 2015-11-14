@@ -142,11 +142,11 @@ class Event(models.Model):
     def can_user_register_now(self, user):
         if self.registration_opens is None:
             return True
-        opening_time_for_user = self.registration_opens_for_user(user) - timedelta(seconds=1)
+        signup_countdown = self.signup_countdown_seconds(user)
         if self.registration_closes is None:
-            return time.is_past(opening_time_for_user)
+            return signup_countdown <= 0
         else:
-            return time.is_past(opening_time_for_user) and time.is_future(self.registration_closes)
+            return signup_countdown <= 0 and time.is_future(self.registration_closes)
 
     def is_registration_closed(self):
         if self.registration_closes is None:
@@ -280,4 +280,5 @@ class NotRegisteredError(EventError):
         self.message = message
 
     def __str__(self):
-        return 'User is not signed up for %s, so the following could not be performed: %s' % (self.event, self.message)
+        return 'User is not signed up for %s, so the following could not be performed: %s' % (
+            self.event, self.message)
