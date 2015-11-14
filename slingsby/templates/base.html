@@ -76,7 +76,7 @@
                         {{ user.username|truncatechars:30 }} <span class="click_symbol">&#9664;</span>
                     </span>
 
-                <ul style="display: none;">
+                <ul style="display: none;" class="menu-dropdown">
                         {% if user.is_staff %}
                             <li><a href="{% url 'admin:index' %}">Administrer</a></li>
                         {% endif %}
