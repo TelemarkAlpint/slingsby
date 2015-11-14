@@ -90,10 +90,14 @@ class Event(models.Model):
             return 'Fra %s til %s' % (_format_date(time.utc_to_nor(self.startdate)),
                 time.utc_to_nor(self.enddate).strftime('%H:%M'))
 
-    def seconds_until_registration_opens_for_user(self, user):
+    def signup_countdown_seconds(self, user):
         registration_opens_for_user = self.registration_opens_for_user(user)
         if self.has_registration and registration_opens_for_user:
-            ret = time.seconds_to(registration_opens_for_user)
+            if (user.has_perm('events.early_signup') and
+                    self.is_early_signup_full()):
+                ret = time.seconds_to(self.registration_opens)
+            else:
+                ret = time.seconds_to(registration_opens_for_user)
             return ret
         else:
             return 0
@@ -156,8 +160,11 @@ class Event(models.Model):
             return self.num_participants() >= self.number_of_spots
 
     def is_early_signup_full(self):
-        # Add one to check whether adding a user will push us over the 40% limit
-        return ((self.num_participants() + 1) / float(self.number_of_spots)) > Event.committee_member_percentage
+        if self.number_of_spots:
+            # Add one to check whether adding a user will push us over the 40% limit
+            next_fill_status = (self.num_participants() + 1) / float(self.number_of_spots)
+            return next_fill_status > Event.committee_member_percentage
+        return False
 
     def _add_user(self, user):
         Signup.objects.create(event=self, user=user)

@@ -5,7 +5,7 @@
 {% block og_description %}{{ event.summary }}{% endblock %}
 
 {% block content %}
-    <div class="event" data-time-remaining-to-signup-opens="{{ seconds_until_registration_opens_for_user }}">
+    <div class="event" data-time-remaining-to-signup-opens="{{ signup_countdown_seconds }}">
         {% include "events/event_header.html" %}
 
         {% autoescape off %}
