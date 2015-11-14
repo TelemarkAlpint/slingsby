@@ -2190,11 +2190,11 @@ I0
 sg22
 I0
 sg23
-I36
+I37
 sg24
 I0
 sbssg25
-S',\x82\xe2\xc3\xb4\xcb\xe4ws\x97L\x0f\xf6\xef\x80\xd2'
+S'\xfa\x0f-pm\x8b\xde$\tw-}\xd7H,\xed'
 p530
 ssS'slingsby_archive___init__'
 p531
@@ -2320,7 +2320,7 @@ I1
 sg19
 I0
 sg20
-I108
+I109
 sg21
 I0
 sg22
@@ -2330,7 +2330,7 @@ I0
 sg24
 I0
 sbssg25
-S'\x10\xb4\xb5s\xec\x8bX}F\x86\x1f\x86\x85\x07\xe8\xce'
+S'\xabK\xf1U\xe0\xd8g\x04\xcc\x83\xe2-&MV.'
 p562
 ssS'slingsby_celery'
 p563
