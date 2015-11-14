@@ -26,10 +26,6 @@ install:
   # Dump vagrant pubkey to .ssh/authorized_keys for SSH tests
   - python -c "import yaml; fh = open('pillar/vagrant.sls'); d = yaml.load(fh); print d['developers']['vagrant']['ssh_keys'][0]" >> ~/.ssh/authorized_keys
 
-  # Install compass
-  - gem update --system
-  - gem install compass
-
   # Install grunt-cli, grunt plugins and bower dependencies
   - npm install -g grunt-cli bower
   - npm install

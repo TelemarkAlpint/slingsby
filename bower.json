@@ -7,6 +7,7 @@
     "handlebars": "3.0.0",
     "moment": "2.9.0",
     "bootstrap-sass-official": "3.3.4",
-    "blueimp-gallery": "2.15.2"
+    "blueimp-gallery": "2.15.2",
+    "compass-mixins": "1.0.2"
   }
 }

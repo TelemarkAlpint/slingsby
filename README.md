@@ -77,11 +77,6 @@ plugins and frontend dependencies:
     $ npm install -g grunt-cli
     $ npm install
 
-You also need Compass for the stylesheets, which can be installed with
-[RubyGems](https://rubygems.org/):
-
-    $ gem install compass
-
 Great! Now you can compile all the static files:
 
     $ grunt prep watch
@@ -149,12 +144,11 @@ and gunicorn, with caching and the fileserver and all the bells and whistles.
 Dependencies
 ------------
 
-Handled by four (!) different package managers for three different purposes: `pip` handles python
-libraries we use, defined in `salt/slingsby/requirements.txt`. `bower` handles frontend
-dependencies like jQuery and Handlebars, defined in `bower.json`. `npm` handles build dependencies
-like grunt and the grunt plugins for SASS transiling and js minification, defined in
-`package.json`. And lastly, you also need RubyGems (`gem`) be able to install compass, which is
-needed by grunt-compass.
+Handled by three (!) different package managers for three different purposes:
+  * `pip` handles python libraries we use, defined in `salt/slingsby/requirements.txt`.
+  * `bower` handles frontend dependencies like jQuery and Handlebars, defined in `bower.json`.
+  * `npm` handles build dependencies like grunt and the grunt plugins for SASS transiling and
+    js minification, defined in `package.json`.
 
 
 It doesn't work!
