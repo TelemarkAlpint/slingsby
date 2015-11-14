@@ -61,18 +61,22 @@ module.exports = function (grunt) {
     /*
     * Compile SASS stylesheets.
     */
-    compass: {
+    sass: {
       dist: {
         options: {
-          sassDir: 'slingsby/static-src/sass/',
-          cssDir: '.tmp/static/stylesheets',
           outputStyle: 'compressed',
-          importPath: [
+          includePaths: [
             '.tmp/sass',
             'bower_components/bootstrap-sass-official/assets/stylesheets',
             'bower_components/blueimp-gallery/css',
+            'bower_components/compass-mixins/lib',
           ],
-        }
+        },
+        files: {
+          '.tmp/static/stylesheets/styles.css': 'slingsby/static-src/sass/styles.scss',
+          '.tmp/static/stylesheets/archive.css': 'slingsby/static-src/sass/archive.scss',
+          '.tmp/static/stylesheets/widgEditor.css': 'slingsby/static-src/sass/widgEditor.scss',
+        },
       }
     },
 
@@ -110,7 +114,7 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['slingsby/static-src/sass/*.scss'],
-        tasks: ['compass', 'clean:build', 'copy:tmpToBuild']
+        tasks: ['sass', 'clean:build', 'copy:tmpToBuild']
       },
       js: {
         files: ['<%= jshint.all %>'],
@@ -136,17 +140,6 @@ module.exports = function (grunt) {
           ignore: 'migrations',
         },
         src: ['slingsby', '*.py', 'tools/*.py'],
-      }
-    },
-
-    rename: {
-      blueimp_gallery: {
-        files: [
-          {
-            src: 'bower_components/blueimp-gallery/css/blueimp-gallery.min.css',
-            dest: 'bower_components/blueimp-gallery/css/_blueimp-gallery.scss'
-          }
-        ]
       }
     },
 
@@ -344,7 +337,7 @@ module.exports = function (grunt) {
   ]);
   grunt.registerTask('buildStyles', [
     'cssUrlEmbed',
-    'compass',
+    'sass',
   ]);
   grunt.registerTask('buildScripts', [
     'handlebars',
@@ -352,6 +345,5 @@ module.exports = function (grunt) {
   ]);
   grunt.registerTask('init-bower-deps', [
     'bower',
-    'rename:blueimp_gallery',
   ]);
 };
