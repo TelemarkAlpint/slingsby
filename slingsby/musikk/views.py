@@ -2,7 +2,7 @@
 
 from ..general import make_title, time
 from ..general.views import ActionView
-from .models import Song, SongSuggestionForm, ReadySongForm, Vote
+from .models import Song, SongSuggestionForm, ReadySongForm, Vote, TopSongMeta
 from .tasks import process_new_song, count_votes
 
 
@@ -14,11 +14,9 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, RedirectView, View
-from dateutil.parser import parse
 from time import time as get_timestamp
 import json
 import logging
-import requests
 
 _SONGS_IN_TOP_SONGS = 36
 _EXPONENTIAL_BASE = 0.9917
@@ -176,18 +174,26 @@ class AllSongsView(TemplateView):
         return forms
 
 
-class TopSongsView(TemplateView):
+class TopSongsView(ActionView, TemplateView):
 
     template_name = 'musikk/top.html'
+    actions = ('update_top_song',)
 
     def get_context_data(self, **kwargs):
         context = super(TopSongsView, self).get_context_data(**kwargs)
         song_metadata = get_top_song_metadata()
-        last_updated = parse(song_metadata['last_updated'])
-        context['last_updated'] = last_updated.strftime("%d.%m.%y %H:%M")
+        last_updated = song_metadata['last_updated']
+        context['last_updated'] = last_updated.strftime("%d.%m.%y %H:%M") if last_updated else 'Aldri'
         context['num_songs'] = _SONGS_IN_TOP_SONGS
         context['top_song_url'] = song_metadata['url']
         return context
+
+
+    @method_decorator(permission_required('musikk.update_top_song'))
+    def update_top_song(self, request, **kwargs):
+        messages.info(request, 'Genererer ny toppliste-sang, vent et øyeblikk...')
+        _logger.info('Creating new top song')
+        return self.render_to_response(request, status=202)
 
 
 class TopSong(RedirectView):
@@ -211,7 +217,14 @@ class TopSongsList(View):
 
 
 def get_top_song_metadata():
-    """ Fetch the JSON metadata about the latest top song from the fileserver. """
-    cache_buster = '?v=%s' % get_timestamp()
-    response = requests.get(settings.MEDIA_URL + 'musikk/top_meta.json' + cache_buster)
-    return response.json()
+    """ Fetch metadata about the latest top song. """
+    top_song_meta = TopSongMeta.objects.first()
+    if top_song_meta is None:
+        return {
+            'url': '',
+            'last_updated': None,
+        }
+    return {
+        'url': top_song_meta.url,
+        'last_updated': top_song_meta.date_modified,
+    }

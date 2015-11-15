@@ -1,6 +1,6 @@
 from .views import SongDetailView, AllSongsView, TopSongsView, TopSong, TopSongsList
 from django.conf.urls import url
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
         name='approve_song'),
 
     url(r'^/top$', TopSongsView.as_view()),
+    url(r'^/top/update-now', TopSongsView.as_view(action='update_top_song'), name='update_top_song'),
     url(r'^/top/list$', TopSongsList.as_view(), name='top_list'),
     url(r'^/top/song$', TopSong.as_view(), name='top_song'),
 ]
