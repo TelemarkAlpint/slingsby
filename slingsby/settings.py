@@ -183,6 +183,10 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 MEDIA_URL = 'http://org.ntnu.no/telemark/media/'
 
+GOOGLE_CALENDAR_ID = 'telemark.styret@gmail.com'
+
+GOOGLE_API_EMAIL = "account-1@ntnuita.iam.gserviceaccount.com"
+
 DEFAULT_TITLE = 'NTNUI Telemark-Alpint'
 
 DISQUS_IDENTIFIER = 'telemarkalpint'

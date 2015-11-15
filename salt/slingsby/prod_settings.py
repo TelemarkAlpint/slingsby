@@ -41,6 +41,8 @@ MEDIA_ROOT = '/srv/ntnuita.no/media'
 
 EXTERNAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'external')
 
+GOOGLE_API_PRIVATE_KEY = "{{ pillar.GOOGLE_API_PRIVATE_KEY }}"
+
 {% if slingsby.get('media_url') %}
 MEDIA_URL = '{{ slingsby.media_url }}'
 {% endif %}

@@ -4,6 +4,7 @@ from .models import Event, UserAddError, EventError, _format_date
 from ..general import make_title, time
 from ..general.views import ActionView
 
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -21,6 +22,7 @@ class EventListView(TemplateView):
         events = Event.objects.filter(enddate__gte=time.now())
         context['events'] = events
         context['title'] = make_title('Program')
+        context['calendar_id'] = settings.GOOGLE_CALENDAR_ID
         return context
 
     def get(self, request, **kwargs):

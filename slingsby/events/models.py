@@ -4,9 +4,13 @@ from __future__ import unicode_literals
 
 from ..general import time, validate_text
 from ..general.widgets import WidgEditorWidget
+from .tasks import update_google_calendar_event, add_google_calender_event, delete_google_calendar_event
+
 from datetime import timedelta
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from django.db import models
 from django.forms.models import ModelForm
 from django.utils.safestring import SafeUnicode
@@ -40,6 +44,8 @@ class Event(models.Model):
     summary = models.TextField('sammendrag')
     description = models.TextField('beskrivelse')
     location = models.CharField('sted', max_length=100)
+    google_calendar_id = models.CharField('Google Calendar ID', max_length=50, blank=True,
+        null=True)
 
     class Meta:
         ordering = ['startdate']
@@ -224,11 +230,27 @@ class Event(models.Model):
         return emails
 
 
+@receiver(post_save, sender=Event, dispatch_uid='save-event-google-calendar')
+def add_event_to_calendar(sender, instance=None, created=False, **kwargs):
+    if created:
+        add_google_calender_event.delay(instance.id)
+    else:
+        update_google_calendar_event.delay(instance.id)
+
+
+@receiver(post_delete, sender=Event, dispatch_uid='delete-event-google-calendar')
+def event_deleted_callback(sender, instance=None, **kwargs):
+    if instance.google_calendar_id:
+        delete_google_calendar_event.delay(instance.google_calendar_id)
+
+
 class EventForm(ModelForm):
     class Meta:
         model = Event
         widgets = {'description': WidgEditorWidget()}
-        exclude = []
+        exclude = [
+            'google_calendar_id',
+        ]
 
     def clean_summary(self):
         data = self.cleaned_data['summary']
