@@ -16,6 +16,8 @@ def create_events_calendar():
     creating calendars for dev environments, not used in prod.
     """
     service = get_calendar_service()
+    if not service:
+        return
     calendar = {
         'summary': 'Ting som skjer i Telemarkgruppa',
         'timeZone': 'Europe/Oslo',
@@ -35,6 +37,13 @@ def get_calendar_service():
     name = 'calendar'
     version = 'v3'
     scope = 'https://www.googleapis.com/auth/calendar'
+
+    # Provide a mock fallback for test environments where real interaction with
+    # Google calendar is not needed
+    if not hasattr(settings, 'GOOGLE_API_PRIVATE_KEY'):
+        _logger.info('Skipping Google calendar integration due to missing GOOGLE_API_PRIVATE_KEY '
+            'in settings.')
+        return
 
     # Prepare credentials, and authorize HTTP object with them.
     credentials = SignedJwtAssertionCredentials(settings.GOOGLE_API_EMAIL,
@@ -61,6 +70,9 @@ def update_google_calendar_event(event_id):
     # Authenticate and construct service.
     service = get_calendar_service()
 
+    if not service:
+        return
+
     payload = get_google_calendar_payload_for_event(event)
     results = service.events().update(calendarId=settings.GOOGLE_CALENDAR_ID,
         eventId=event.google_calendar_id, body=payload).execute()
@@ -79,6 +91,9 @@ def add_google_calender_event(event_id):
 
     google_payload = get_google_calendar_payload_for_event(event)
     service = get_calendar_service()
+    if not service:
+        return
+
     results = service.events().insert(calendarId=settings.GOOGLE_CALENDAR_ID,
         body=google_payload).execute()
     if results.get('id'):
@@ -93,6 +108,9 @@ def add_google_calender_event(event_id):
 @log_errors
 def delete_google_calendar_event(google_calendar_event_id):
     service = get_calendar_service()
+    if not service:
+        return
+
     result = service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID,
         eventId=google_calendar_event_id).execute()
     _logger.info('Google calendar event %s deleted: %s', google_calendar_event_id, result)
