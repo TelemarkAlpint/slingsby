@@ -5,7 +5,7 @@
 {% block content %}
     {% block calendar %}
         <div id="calendar">
-            <iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showPrint=0&amp;showCalendars=0&amp;showTz=0&amp;height=400&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=telemark.styret%40gmail.com&amp;color=%232952A3&amp;ctz=Europe%2FOslo" style="border-width:0" width="690" height="400">
+            <iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showPrint=0&amp;showCalendars=0&amp;showTz=0&amp;height=400&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src={{ calendar_id|iriencode }}&amp;color=%232952A3&amp;ctz=Europe%2FOslo" style="border-width:0" width="690" height="400">
             </iframe>
         </div>
     {% endblock %}
