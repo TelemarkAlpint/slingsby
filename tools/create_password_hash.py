@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # Get a password hash in crypt form
-# This script must be run in a *nix environment (the studorg server works)
 
 from __future__ import print_function
 
-import crypt
-import os
-import base64
+import pcrypt
 import getpass
 
 # How much we should slow down the hash computation. The higher the number of
@@ -24,8 +21,7 @@ def main():
         if password != password_repeat:
             print('Passwords do not match, try again.')
 
-    salt = base64.b64encode(os.urandom(6))
-    print(crypt.crypt(password, "$6$rounds={rounds}${salt}".format(rounds=ROUNDS, salt=salt)))
+    print(pcrypt.crypt(password, rounds=ROUNDS))
 
 if __name__ == '__main__':
     main()
