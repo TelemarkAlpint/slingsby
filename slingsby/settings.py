@@ -142,6 +142,7 @@ with open(_log_config_path) as log_conf_file:
 ########################################
 ### python-social-auth specific settings
 ########################################
+
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = reverse_lazy('signup')
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
