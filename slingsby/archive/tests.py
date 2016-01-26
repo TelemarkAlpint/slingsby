@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.files import File
 from django.db.models.signals import post_save
 from mock import patch
+import datetime
 import os.path
 import shutil
 
@@ -126,9 +127,9 @@ class ArchiveBaseTest(TestCase):
             '2014-14-13',
             '2014-10-33',
             '2014-00-12',
-            '2016-01-12',
             '2014-10-120',
             '2014-10-12 23:15',
+            (datetime.datetime.utcnow() + datetime.timedelta(days=366)).strftime('%Y-%m-%d'),
         )
         form_data = {'name': 'Event name'}
         for datestring in invalid_strings:
