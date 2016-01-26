@@ -67,6 +67,15 @@ def encrypt(secret_key, value):
     print 'Done. The encrypted data has been appended to salt/secure/init.sls'
 
 
+def plaintext_data_passes_sanity_check(plaintexts):
+    """Try to detect invalid secrets by checking that the output should be ascii and not
+    binary.
+    """
+    for plaintext in plaintexts.values():
+        if any(ord(char) > 127 for char in plaintext):
+            return False
+    return True
+
 def decrypt(secret_key):
     print 'Decrypting...'
     source_file = os.path.join(os.path.dirname(__file__), '..', 'salt', 'secure', 'init.sls')
@@ -75,6 +84,9 @@ def decrypt(secret_key):
     plaintext_data = {}
     for key, val in encrypted_data.items():
         plaintext_data[key] = aes_decrypt(secret_key, val)
+    if not plaintext_data_passes_sanity_check(plaintext_data):
+        sys.stderr.write('Wrong key. (use the one called "repo secret key" in the KeePass file)\n')
+        sys.exit(1)
     output_file = os.path.join(os.path.dirname(__file__), '..', 'pillar', 'secure', 'init.sls')
     output_dir = os.path.dirname(output_file)
     if not os.path.exists(output_dir):
