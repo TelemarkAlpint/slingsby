@@ -26,7 +26,7 @@ def _format_date(date):
 
 
 class Event(models.Model):
-    committee_member_percentage = 0.4
+    committee_member_percentage = 0.5
     name = models.CharField('navn', max_length=100)
     startdate = models.DateTimeField('startdato')
     enddate = models.DateTimeField('sluttdato')
