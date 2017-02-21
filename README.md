@@ -174,7 +174,7 @@ Or, that you can import slingsby without failure:
     $ /srv/ntnuita.no/venv/bin/python -c "import slingsby"
 
 If you're truly dumbfounded and have no idea what's going on and just need to fix something
-quick, send Tarjei a mail (or call if it's urgent) at tarjei (at) roms.no, 90765431. He built most of
+quick, send Tarjei a mail at hello (at) thusoy.com. He built most of
 the mess and can probably help. And yes he's old and probably graduated, but he's (hopefully) still
 alive, and will happily give you a hand.
 
