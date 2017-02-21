@@ -14,7 +14,6 @@ DEBUG = False
 
 ADMINS = (
     ('NTNUI TA Webmasters', 'telemark-webmaster@ntnui.no'),
-    ('Tarjei Husøy', 'apps-telemarkwebmaster@thusoy.com'),
     ('Anders Lysne', 'lysne@live.no')
 )
 
