@@ -73,7 +73,9 @@ case $diff in
 
                 disable_expanded_output
                 #--quiet is important here to avoid outputting the repo URL, which may contain a secret token
-                git push --quiet $repo $deploy_branch
+                # Completely silencing this due to https://blog.travis-ci.com/2017-05-08-security-advisory
+                # to prevent leak on network issues
+                git push --quiet $repo $deploy_branch >/dev/null 2>&1
                 enable_expanded_output
                 ;;
         *)
