@@ -41,7 +41,7 @@ env:
     - secure: "WotSK+0oCrqTbl10TQAVGfye5u1ToCihec/rAuslUoWJsj+iu0LVXX2yKseGWO6OTwTc4mAXSPFx53aHF/YBybT8fy/Q/mphWUBgEyMsBADAJRhZfDjSgpp0LScEUiYFdgJGd+CbhmleBD5jvd8N0oL4pXNDjTGZzIx8/uD6by8="
 
     # GITHUB_TOKEN that grants access to thusoy's account. Used for deploying code coverage to gh-pages branch.
-    - secure: "cLKqj6oYucS0mt0FT4+lxrTZZrvRf/Ob81RaUqv4NfbMXrtZgTpGoyJBjo/NBOW5Bu4kLjargZvWsoANzIiDBq/usKzuV4GyPouZmksr8aPzUN/VYclOgGxMog99GZ3xe1eS+UWFexeIVD+NB66JRfvOJ+LvgE1iw1537PZLuFI="
+    - secure: "JOiIVn3G4+66IpTr+nHboKLxpkgRB6F9y+fCCbnPUk6gea0Ugtiv/b3ztgTXDrpm0GH4glvGa2LDmfqqtH1dATbPjO2RCdj5fNiTV+qhfLLc/81ncDJmRV3rYa1MuZ2oKPDIyWEwrQjYF7IPOf2VYBf49wBDJN7vLcwAMmR79k8="
 
     # Private part of Travis' SSH key, keyed $id_rsa_00-$id_rsa_43
     - secure: "Wbt4g0eJlM7UW+2ORKAxSViWd7ZDybQ3BSB2smkNzHeRblFeE2UaGxhZIP9G8fJDKbjFfClXEHNTWzRpcCdt1roh2eBoa630Of20q1vZuAutNtzarO3v95JxBxftSnPDJo2/PwcBxmj/HB/6bB52t83HpkIyLkZ5eWQV3k7MLu4="
