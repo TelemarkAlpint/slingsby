@@ -94,6 +94,7 @@ class SongDetailView(ActionView, TemplateView):
             Vote.objects.create(user=request.user, song=context['song'])
             logging.info('%s voted on %s.', request.user, context['song'])
             count_votes.delay()
+            update_top_songs()
             return HttpResponse('Vote registered on %s.' % context['song'])
         else:
             logging.info('%s tried to vote more than once on %s.',
@@ -101,6 +102,9 @@ class SongDetailView(ActionView, TemplateView):
             return HttpResponse("Du har allerede stemt på denne sangen i dag!",
                 content_type='text/plain', status=403)
 
+
+def update_top_songs(self):
+    self.top_songs = Song.objects.filter(ready=True).filter(votes__gt=0)[:_SONGS_IN_TOP_SONGS]
 
 def get_votes_from_today(user):
     """ Find the ids of the songs the user has voted on today. """
@@ -205,7 +209,7 @@ class TopSongsList(View):
 
     def get(self, request):
         top_songs_data = {
-            'songs': [song.to_json() for song in top_songs.all()],
+            'songs': [song.to_json() for song in top_sontopgs.all()],
         }
         return HttpResponse(json.dumps(top_songs_data, indent=2), content_type='application/json')
 
