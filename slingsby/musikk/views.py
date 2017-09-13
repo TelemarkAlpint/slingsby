@@ -205,7 +205,7 @@ class TopSongsList(View):
 
     def get(self, request):
         top_songs_data = {
-            'songs': [song.to_json() for song in top_sontopgs.all()],
+            'songs': [song.to_json() for song in top_songs.all()],
         }
         return HttpResponse(json.dumps(top_songs_data, indent=2), content_type='application/json')
 
