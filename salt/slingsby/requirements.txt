@@ -37,7 +37,7 @@ pycrypto==2.6.1
 # celery dependencies:
 billiard==3.3.0.20
 amqp==1.4.6
-kombu==3.0.26
+kombu==3.0.30
 anyjson==0.3.3
 
 # google-api-python-client dependencies
