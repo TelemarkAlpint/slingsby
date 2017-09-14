@@ -70,6 +70,11 @@ class Vote(models.Model):
         return '(%s) %s: %s' % (date, username, self.song)
 
 
+class TopSongMeta(models.Model):
+    url = models.URLField('url')
+    date_modified = models.DateTimeField(auto_now_add=True)
+
+
 class AdminVoteForm(ModelForm):
     class Meta:
         model = Vote

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .models import Song, Vote
+from .models import Song, Vote, TopSongMeta
 from .tasks import process_new_song, count_votes
 
 from django.conf import settings
@@ -159,25 +159,36 @@ class SongActionsTest(TestCase):
 class TopSongsTest(TestCase):
 
     def setUp(self):
+        TopSongMeta.objects.create(url='/mysong.mp3', date_modified=datetime.datetime.utcnow())
         self.client = Client()
+        self.admin_client = Client()
+        adminuser = User.objects.create_user(username='testadmin', password='adminpw')
+        adminuser.is_staff = True
+        adminuser.is_superuser = True
+        adminuser.save()
+        self.admin_client.login(username='testadmin', password='adminpw')
 
 
     def test_top_musikk_pages(self):
-        requests_mock = mock.Mock()
-        requests_mock.get.return_value.json.return_value = {
-            'last_updated': datetime.datetime.now().strftime("%d.%m.%y %H:%M"),
-            'url': '/popular-song',
-        }
-        with mock.patch('slingsby.musikk.views.requests', requests_mock):
-            response = self.client.get('/musikk/top')
-            self.assertEqual(response.status_code, 200)
+        response = self.client.get('/musikk/top')
+        self.assertEqual(response.status_code, 200)
 
-            response = self.client.get('/musikk/top/song')
-            self.assertEqual(response.status_code, 302)
+        response = self.client.get('/musikk/top/song')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['location'].endswith('/mysong.mp3'))
 
         response = self.client.get('/musikk/top/list')
         self.assertEqual(response.status_code, 200)
 
+
+    def test_update_top_song_admin_only(self):
+        response = self.client.post('/musikk/top/update-now')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_create_new_top_song(self):
+        response = self.admin_client.post('/musikk/top/update-now')
+        self.assertEqual(response.status_code, 202)
 
 
 class VoteCountTest(TestCase):

@@ -19,6 +19,9 @@
 
     <p>
         Sist oppdatert: {{ last_updated }}.
+        <form action="{% url 'update_top_song' %}" method="post">
+            <input type="submit" value="Oppdater nå" class="btn">
+        </form>
     </p>
 
 {% endblock %}
